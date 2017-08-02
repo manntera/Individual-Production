@@ -9,7 +9,3 @@ int MakeHash(const char* string);
 
 #include <stdio.h>
 #include <string.h>
-
-extern LPDIRECT3D9			g_pD3D;
-extern LPDIRECT3DDEVICE9	g_pD3DDevice;
-extern EffectManager*		g_effectManager;

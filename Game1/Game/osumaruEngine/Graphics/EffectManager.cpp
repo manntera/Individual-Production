@@ -1,9 +1,10 @@
 #include "EffectManager.h"
+#include "../Engine.h"
 
 int MakeHash(const char* string)
 {
 	int hash = 0;
-	int len = strlen(string);
+	int len = (int)strlen(string);
 	for (int i = 0;i < len;i++)
 	{
 		hash = hash * 37 + string[i];
@@ -31,7 +32,7 @@ LPD3DXEFFECT EffectManager::LoadEffect(const char* filePath)
 	{
 		LPD3DXBUFFER compileErrorBuffer = nullptr;
 		HRESULT hr = D3DXCreateEffectFromFile(
-			g_pD3DDevice,
+			GetEngine().GetDevice(),
 			filePath,
 			NULL,
 			NULL,

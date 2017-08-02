@@ -2,9 +2,9 @@
 
 
 
-void InitD3D(HWND hWnd);
-
-LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+//void InitD3D(HWND hWnd);
+//
+//LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 //extern void Init();
 //extern void Update();

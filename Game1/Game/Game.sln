@@ -4,11 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{FEA57FAD-ED42-4698-B18D-3BD69B59F59F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{42C6FE88-23A2-4C58-8B18-5ED8EEA3D9F0} = {42C6FE88-23A2-4C58-8B18-5ED8EEA3D9F0}
-	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osumaruEngine", "..\osumaruEngine\osumaruEngine.vcxproj", "{42C6FE88-23A2-4C58-8B18-5ED8EEA3D9F0}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "osumaruEngine", "osumaruEngine\osumaruEngine.vcxproj", "{42C6FE88-23A2-4C58-8B18-5ED8EEA3D9F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
