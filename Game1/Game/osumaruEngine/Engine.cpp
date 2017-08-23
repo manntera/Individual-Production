@@ -84,28 +84,9 @@ void Engine::GameLoop()
 		}
 		else
 		{
-			Update();
-			Render();
+			m_objectManager.Execute(m_pD3DDevice);
 		}
 	}
 
 	UnregisterClass("shader Tutorial", m_wc.hInstance);
-}
-
-void Engine::Update() 
-{
-
-}
-
-void Engine::Render()
-{
-	// 画面をクリア。
-	m_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
-	//シーンの描画開始。
-	m_pD3DDevice->BeginScene();
-
-	// シーンの描画終了。
-	m_pD3DDevice->EndScene();
-	// バックバッファとフロントバッファを入れ替える。
-	m_pD3DDevice->Present(NULL, NULL, NULL, NULL);
 }

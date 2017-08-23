@@ -45,6 +45,15 @@
     <ClCompile Include="Graphics\SkinModel\SkinModelData.cpp">
       <Filter>ソース ファイル\Graphics\SkinModel</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\SkinModel\Animation.cpp">
+      <Filter>ソース ファイル\Graphics\SkinModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Sprite.cpp">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system.h">
@@ -70,6 +79,15 @@
     </ClInclude>
     <ClInclude Include="Graphics\SkinModel\SkinModelData.h">
       <Filter>ソース ファイル\Graphics\SkinModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\SkinModel\Animation.h">
+      <Filter>ソース ファイル\Graphics\SkinModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Sprite.h">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

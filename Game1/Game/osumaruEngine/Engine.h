@@ -1,6 +1,7 @@
 #pragma once
 #include "common.h"
 #include "GameObject/GameObjectManager.h"
+#include "Graphics\Sprite.h"
 const int FRAME_BUFFER_WIDTH = 1280;
 const int FRAME_BUFFER_HEIGHT = 720;
 
@@ -9,23 +10,15 @@ class GameObject;
 
 class Engine
 {
-public:
-
+private:
 	Engine();
 
 	~Engine();
-
-
+public:
 	//DirectXÇèâä˙âª
 	void InitD3D(HINSTANCE& hInst);
 
-
 	void GameLoop();
-
-	void Update();
-
-	void Render();
-
 
 	LPDIRECT3D9& GetDirect3D()
 	{
@@ -34,6 +27,17 @@ public:
 	LPDIRECT3DDEVICE9& GetDevice()
 	{
 		return m_pD3DDevice;
+	}
+
+	EffectManager* GetEffectManager()
+	{
+		return m_effectManager;
+	}
+
+	static Engine& GetEngine()
+	{
+		static Engine engine;
+		return engine;
 	}
 
 	void Release()
@@ -58,6 +62,7 @@ public:
 	{
 		m_objectManager.Delete(deleteObject);
 	}
+
 private:
 	LPDIRECT3D9			m_pD3D;
 	LPDIRECT3DDEVICE9	m_pD3DDevice;
@@ -68,17 +73,16 @@ private:
 
 static Engine& GetEngine()
 {
-	static Engine engine;
-	return engine;
+	return Engine::GetEngine();
 }
 
 template <class T>
-static T* New()
+static inline T* New()
 {
 	return GetEngine().New<T>();
 }
 
-static void Delete(GameObject* deleteObject)
+static inline void Delete(GameObject* deleteObject)
 {
 	GetEngine().Delete(deleteObject);
 }

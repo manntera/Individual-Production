@@ -1,20 +1,9 @@
 #include "GameObjectManager.h"
 #include "GameObject.h"
 
-void GameObjectManager::Delete(GameObject* deleteObject)
-{
-	
-}
 
-template <class T>
-T* GameObjectManager::New()
-{
-	T* newObject = new T;
-	m_objectVector.push_back(newObject);
-	return newObject;
-}
 
-void GameObjectManager::Execute()
+void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 {
 	//更新
 	for (GameObject* object : m_objectVector)
@@ -22,10 +11,19 @@ void GameObjectManager::Execute()
 		object->Update();
 	}
 	//描画
+	// 画面をクリア。
+	pDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+	//シーンの描画開始。
+	pDevice->BeginScene();
 	for (GameObject* object : m_objectVector)
 	{
 		object->Render();
 	}
+	// シーンの描画終了。
+	pDevice->EndScene();
+	// バックバッファとフロントバッファを入れ替える。
+	pDevice->Present(NULL, NULL, NULL, NULL);
+
 	//最後にオブジェクトを消去
 	DeleteExecute();
 }
