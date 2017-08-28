@@ -13,9 +13,9 @@ public:
 	エフェクトのロード
 	読み込み済みのエフェクトはロードせずに既存のエフェクトが返ってくる
 	*/
-	ID3DXEffect* LoadEffect(const char* filePath);
+	LPD3DXEFFECT LoadEffect(const char* filePath);
 
 	void Release();
 private:
-	std::map<int, ID3DXEffect*> effectDictionary;
+	std::map<int, LPD3DXEFFECT> effectDictionary;
 };

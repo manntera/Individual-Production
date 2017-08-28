@@ -172,11 +172,13 @@
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
     <ClCompile Include="graphics\EffectManager.cpp" />
+    <ClCompile Include="Graphics\Primitive.cpp" />
     <ClCompile Include="Graphics\SkinModel\Animation.cpp" />
     <ClCompile Include="Graphics\SkinModel\SkinModel.cpp" />
     <ClCompile Include="Graphics\SkinModel\SkinModelData.cpp" />
     <ClCompile Include="Graphics\Sprite.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="system.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -185,11 +187,13 @@
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />
     <ClInclude Include="graphics\EffectManager.h" />
+    <ClInclude Include="Graphics\Primitive.h" />
     <ClInclude Include="Graphics\SkinModel\Animation.h" />
     <ClInclude Include="Graphics\SkinModel\SkinModel.h" />
     <ClInclude Include="Graphics\SkinModel\SkinModelData.h" />
     <ClInclude Include="Graphics\Sprite.h" />
     <ClInclude Include="Graphics\Texture.h" />
+    <ClInclude Include="Graphics\VertexCommon.h" />
     <ClInclude Include="system.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

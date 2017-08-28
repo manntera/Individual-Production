@@ -7,3 +7,4 @@
 #include "../osumaruEngine/GameObject/GameObjectManager.h"
 #include "../osumaruEngine/Engine.h"
 #include "../osumaruEngine/Graphics/Sprite.h"
+#include "../osumaruEngine/Graphics/Primitive.h"

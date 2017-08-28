@@ -51,8 +51,14 @@
     <ClCompile Include="Graphics\Sprite.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Texture.cpp">
+    <ClCompile Include="Source.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Primitive.cpp">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture.cpp">
+      <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,8 +92,14 @@
     <ClInclude Include="Graphics\Sprite.h">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Primitive.h">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\Texture.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\VertexCommon.h">
+      <Filter>ソース ファイル\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

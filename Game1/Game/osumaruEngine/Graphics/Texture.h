@@ -14,6 +14,7 @@ public:
 		return m_pTexture;
 	}
 
+
 	int GetWidth()
 	{
 		return m_srcInfo.Width;

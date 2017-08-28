@@ -77,12 +77,12 @@ static Engine& GetEngine()
 }
 
 template <class T>
-static inline T* New()
+static T* New()
 {
 	return GetEngine().New<T>();
 }
 
-static inline void Delete(GameObject* deleteObject)
+static void Delete(GameObject* deleteObject)
 {
 	GetEngine().Delete(deleteObject);
 }
