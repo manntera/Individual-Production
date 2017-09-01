@@ -1,5 +1,4 @@
 #pragma once
-#include "common.h"
 #include "GameObject/GameObjectManager.h"
 #include "Graphics\Sprite.h"
 const int FRAME_BUFFER_WIDTH = 1280;

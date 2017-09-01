@@ -24,9 +24,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="system.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="graphics\EffectManager.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
@@ -51,25 +48,25 @@
     <ClCompile Include="Graphics\Sprite.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Primitive.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Texture.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Light.cpp">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="engineStdafx.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="system.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="graphics\EffectManager.h">
       <Filter>ソース ファイル\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="common.h">
-      <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>ソース ファイル</Filter>
@@ -100,6 +97,15 @@
     </ClInclude>
     <ClInclude Include="Graphics\VertexCommon.h">
       <Filter>ソース ファイル\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Light.h">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="engineStdafx.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

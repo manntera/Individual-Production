@@ -1,3 +1,4 @@
+#include "engineStdafx.h"
 #include "Sprite.h"
 #include "../Engine.h"
 #include "Texture.h"
@@ -21,6 +22,7 @@ void Sprite::Init(char *filePath)
 {
 	m_pTexture = new Texture;
 	m_pTexture->Load(filePath);
+	D3DXCreateSprite(GetEngine().GetDevice(), &m_spite);
 	float centerPosx = m_pTexture->GetWidth() / 2.0f;
 	float centerPosy = m_pTexture->GetHeight() / 2.0f;
 
@@ -86,5 +88,6 @@ void Sprite::Draw()
 
 	m_pEffect->EndPass();
 	m_pEffect->End();
+
 }
 

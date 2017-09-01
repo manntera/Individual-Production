@@ -24,12 +24,18 @@
     <ClCompile Include="HUD.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="GameCamera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="HUD.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

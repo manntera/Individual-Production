@@ -1,3 +1,4 @@
+#include "engineStdafx.h"
 #include "Primitive.h"
 #include "../Engine.h"
 #include "EffectManager.h"

@@ -1,5 +1,4 @@
 #pragma once
-#include "../common.h"
 #include "Primitive.h"
 class Texture;
 class Sprite
@@ -43,4 +42,5 @@ private:
 	D3DXVECTOR2		m_size;
 	LPD3DXEFFECT	m_pEffect;
 	Primitive		m_primitive;
+	LPD3DXSPRITE	m_spite;
 };

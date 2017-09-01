@@ -45,6 +45,6 @@ technique Sprite
 	pass p0
 	{
 		VertexShader	= compile vs_3_0 VSMain();
-		PixelShader		= compile ps_3_0 PSMain();
+		PixelShader	= compile ps_3_0 PSMain();
 	}
 }

@@ -1,3 +1,4 @@
+#include "engineStdafx.h"
 #include "GameObject.h"
 
 GameObject::GameObject()

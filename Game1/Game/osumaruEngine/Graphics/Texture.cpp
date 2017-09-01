@@ -1,3 +1,4 @@
+#include "engineStdafx.h"
 #include "Texture.h"
 #include "../Engine.h"
 
@@ -23,7 +24,7 @@ void Texture::Load(char *filePath)
 		0,
 		0,
 		0,
-		D3DUSAGE_DYNAMIC,
+		0,
 		D3DFMT_UNKNOWN,
 		D3DPOOL_DEFAULT,
 		D3DX_DEFAULT,

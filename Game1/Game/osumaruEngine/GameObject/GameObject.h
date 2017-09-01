@@ -20,7 +20,7 @@ public:
 	//更新関数
 	virtual void Update() = 0;
 	//描画関数
-	virtual void Render() {}
+	virtual void Render() {};
 
 private:
 	//インスタンスを消す時に建てるフラグ

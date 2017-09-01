@@ -1,5 +1,6 @@
-#include "GameObjectManager.h"
+#include "engineStdafx.h"
 #include "GameObject.h"
+#include "GameObjectManager.h"
 
 
 

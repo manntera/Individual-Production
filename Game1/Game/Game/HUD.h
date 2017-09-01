@@ -9,6 +9,10 @@ public:
 
 	void Render() override;
 private:
-	Sprite sprite;
+	//Sprite			sprite;
+	SkinModel		skinModel;
+	SkinModelData	skinModelData;
+	Light			light;
 
+	D3DXQUATERNION	rotation;
 };
