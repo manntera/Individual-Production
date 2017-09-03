@@ -4,6 +4,11 @@
 class Primitive
 {
 public:
+
+	Primitive();
+
+	~Primitive();
+
 	void Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum,  int vertexStride, WORD *indexBuffer, int indexNum);
 
 	//頂点バッファのゲッター
@@ -22,6 +27,8 @@ public:
 	{
 		return m_vertexNum;
 	}
+	//メモリを解放する関数
+	void Release();
 private:
 	LPDIRECT3DVERTEXBUFFER9			m_pVertexBuffer;
 	LPDIRECT3DINDEXBUFFER9			m_pIndexBuffer;

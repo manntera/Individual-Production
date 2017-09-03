@@ -1,4 +1,5 @@
 #pragma once
+//テクスチャのクラス
 class Texture
 {
 public:
@@ -24,6 +25,8 @@ public:
 		return m_srcInfo.Height;
 	}
 	
+	void Release();
+
 private:
 	LPDIRECT3DTEXTURE9 m_pTexture;
 	D3DXIMAGE_INFO m_srcInfo;

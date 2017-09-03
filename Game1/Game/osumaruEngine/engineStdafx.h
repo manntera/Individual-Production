@@ -11,3 +11,6 @@ class EffectManager;
 
 #include <stdio.h>
 #include <string.h>
+
+#include "btBulletDynamicsCommon.h"
+#include "BulletCollision\CollisionDispatch\btGhostObject.h"

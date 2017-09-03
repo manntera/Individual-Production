@@ -22,6 +22,9 @@
     <Filter Include="ソース ファイル\Graphics\SkinModel">
       <UniqueIdentifier>{c0d3a0fd-4bd9-4b2c-8206-315519e5d035}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Physics">
+      <UniqueIdentifier>{0b7879f1-6223-4138-907c-002f3303c1bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graphics\EffectManager.cpp">
@@ -61,6 +64,12 @@
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="engineStdafx.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Physics.cpp">
+      <Filter>ソース ファイル\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\RigidBody.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -106,6 +115,12 @@
     </ClInclude>
     <ClInclude Include="engineStdafx.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Physics.h">
+      <Filter>ソース ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\RigidBody.h">
+      <Filter>ソース ファイル\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

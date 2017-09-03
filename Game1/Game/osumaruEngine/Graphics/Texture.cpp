@@ -9,15 +9,12 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture->Release();
-		delete m_pTexture;
-	}
+	Release();
 }
 
 void Texture::Load(char *filePath)
 {
+	Release();
 	D3DXCreateTextureFromFileEx(
 		GetEngine().GetDevice(),
 		filePath,
@@ -34,4 +31,14 @@ void Texture::Load(char *filePath)
 		NULL,
 		&m_pTexture
 	);
+}
+
+void Texture::Release()
+{
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->Release();
+		delete m_pTexture;
+		m_pTexture = nullptr;
+	}
 }

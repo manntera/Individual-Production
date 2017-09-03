@@ -12,14 +12,12 @@ Sprite::Sprite()
 
 Sprite::~Sprite()
 {
-	if (m_pTexture != nullptr)
-	{
-		delete m_pTexture;
-	}
+	Release();
 }
 
 void Sprite::Init(char *filePath)
 {
+	Release();
 	m_pTexture = new Texture;
 	m_pTexture->Load(filePath);
 	D3DXCreateSprite(GetEngine().GetDevice(), &m_spite);
@@ -91,3 +89,13 @@ void Sprite::Draw()
 
 }
 
+void Sprite::Release()
+{
+	if (m_pTexture != nullptr)
+	{
+		m_pTexture->Release();
+		delete m_pTexture;
+		m_pTexture = nullptr;
+	}
+	m_primitive.Release();
+}

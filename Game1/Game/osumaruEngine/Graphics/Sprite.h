@@ -1,12 +1,13 @@
 #pragma once
 #include "Primitive.h"
 class Texture;
+
+//スプライトのクラス
 class Sprite
 {
 public:
 
 	Sprite();
-
 
 	~Sprite();
 	//初期化
@@ -21,19 +22,25 @@ public:
 		m_position = position;
 	}
 
+	//座標を取得
 	D3DXVECTOR2 GetPosition()
 	{
 		return m_position;
 	}
 
+	//サイズを設定
 	void SetSize(D3DXVECTOR2 size)
 	{
 		m_size = size;
 	}
+
+	//サイズを取得
 	D3DXVECTOR2 GetSize()
 	{
 		return m_size;
 	}
+	//メモリを解放
+	void Release();
 
 private:
 	Texture*		m_pTexture;			//テクスチャ
