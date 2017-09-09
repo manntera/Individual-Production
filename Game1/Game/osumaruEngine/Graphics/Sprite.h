@@ -2,7 +2,8 @@
 #include "Primitive.h"
 class Texture;
 
-//スプライトのクラス
+//スプライトクラス
+
 class Sprite
 {
 public:
@@ -46,8 +47,7 @@ private:
 	Texture*		m_pTexture;			//テクスチャ
 	D3DXVECTOR2		m_position;			//スプライトのウィンドウ上での座標
 	D3DXVECTOR2		m_centerPosition;	//スプライトの基点を表す座標
-	D3DXVECTOR2		m_size;
-	LPD3DXEFFECT	m_pEffect;
-	Primitive		m_primitive;
-	LPD3DXSPRITE	m_spite;
+	D3DXVECTOR2		m_size;				//スプライトのサイズ
+	LPD3DXEFFECT	m_pEffect;			//スプライト用のエフェクト
+	Primitive		m_primitive;		//プリミティブ
 };

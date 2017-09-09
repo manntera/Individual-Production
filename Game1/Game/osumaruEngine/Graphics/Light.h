@@ -5,10 +5,13 @@ class Light
 public:
 	static const int	DIFFUSE_LIGHT_NUM = 4;	//平行光源の数。
 public:
+	//コンストラクタ
 	Light()
 	{
 		memset(this, 0, sizeof(Light));
 	}
+
+	//デストラクタ
 	~Light()
 	{
 
@@ -46,17 +49,23 @@ public:
 	{
 		diffuseLightColor[lightNo] = color;
 	}
+
+	/*
+	アンビエントライトを設定。
+	ambient		色
+	*/
 	void SetAmbiemtLight(const D3DXVECTOR4& ambient)
 	{
 		ambientLight = ambient;
 	}
 
-	const D3DXVECTOR4& GetAmbientLight() const
+	//アンビエントライトを取得。
+	D3DXVECTOR4 GetAmbientLight()
 	{
 		return ambientLight;
 	}
 private:
-	D3DXVECTOR4			diffuseLightDirection[DIFFUSE_LIGHT_NUM];
-	D3DXVECTOR4			diffuseLightColor[DIFFUSE_LIGHT_NUM];
-	D3DXVECTOR4			ambientLight;
+	D3DXVECTOR4			diffuseLightDirection[DIFFUSE_LIGHT_NUM];		//ディフューズライトの方向
+	D3DXVECTOR4			diffuseLightColor[DIFFUSE_LIGHT_NUM];			//ディフューズライトの色
+	D3DXVECTOR4			ambientLight;									//アンビエントの色
 };

@@ -18,3 +18,5 @@ private:
 	Camera camera;
 
 };
+
+extern GameCamera *g_camera;

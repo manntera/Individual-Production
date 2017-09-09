@@ -21,6 +21,8 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	delete m_effectManager;
+	delete m_physicsWorld;
 }
 
 
@@ -65,7 +67,8 @@ void Engine::InitD3D(HINSTANCE& hInst)
 		std::abort();
 	}
 	m_effectManager = new EffectManager;
-
+	m_physicsWorld = new PhysicsWorld;
+	m_physicsWorld->Init();
 	// show the window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	UpdateWindow(hWnd);
@@ -86,6 +89,7 @@ void Engine::GameLoop()
 		else
 		{
 			m_objectManager.Execute(m_pD3DDevice);
+			m_physicsWorld->Update();
 		}
 	}
 

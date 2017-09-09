@@ -22,7 +22,9 @@ void Primitive::Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int 
 {
 	Release();
 	m_vertexNum = vertexNum;
+	//デバイスを取得
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
+	//頂点バッファを作成
 	pD3DDevice->CreateVertexBuffer(
 		m_vertexNum * vertexStride,
 		0,
@@ -31,11 +33,14 @@ void Primitive::Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int 
 		&m_pVertexBuffer,
 		NULL
 	);
+	//レイアウトをもとに頂点定義を作成。
 	pD3DDevice->CreateVertexDeclaration(vertexLayout, &m_pVertexDecaration);
+	//作った頂点バッファに書き込み。
 	void* pVertex;
 	m_pVertexBuffer->Lock(0, 0, &pVertex, 0);
 	memcpy(pVertex, vertexBuffer, m_vertexNum * vertexStride);
 	m_pVertexBuffer->Unlock();
+	//インデックスバッファを作成
 	pD3DDevice->CreateIndexBuffer(
 		sizeof(WORD) * indexNum,
 		0,
@@ -44,6 +49,7 @@ void Primitive::Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int 
 		&m_pIndexBuffer,
 		NULL
 	);
+	//作ったインデックスバッファに書き込み。
 	void* pIndex;
 	m_pIndexBuffer->Lock(0, 0, &pIndex, 0);
 	memcpy(pIndex, indexBuffer, sizeof(WORD) * indexNum);

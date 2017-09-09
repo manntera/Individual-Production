@@ -25,6 +25,9 @@
     <Filter Include="ソース ファイル\Physics">
       <UniqueIdentifier>{0b7879f1-6223-4138-907c-002f3303c1bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Physics\Collider">
+      <UniqueIdentifier>{4a76f7be-446c-4535-87d2-0a56864be2e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graphics\EffectManager.cpp">
@@ -69,8 +72,20 @@
     <ClCompile Include="Physics\Physics.cpp">
       <Filter>ソース ファイル\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\Collider\ICollider.cpp">
+      <Filter>ソース ファイル\Physics\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Collider\MeshCollider.cpp">
+      <Filter>ソース ファイル\Physics\Collider</Filter>
+    </ClCompile>
     <ClCompile Include="Physics\RigidBody.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\Collider\CapsuleCollider.cpp">
+      <Filter>ソース ファイル\Physics\Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Physics\CharacterController.cpp">
+      <Filter>ソース ファイル\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,7 +134,22 @@
     <ClInclude Include="Physics\Physics.h">
       <Filter>ソース ファイル\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Collider\ICollider.h">
+      <Filter>ソース ファイル\Physics\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collider\MeshCollider.h">
+      <Filter>ソース ファイル\Physics\Collider</Filter>
+    </ClInclude>
     <ClInclude Include="Physics\RigidBody.h">
+      <Filter>ソース ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collider\CapsuleCollider.h">
+      <Filter>ソース ファイル\Physics\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CharacterController.h">
+      <Filter>ソース ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\CollisionAttr.h">
       <Filter>ソース ファイル\Physics</Filter>
     </ClInclude>
   </ItemGroup>

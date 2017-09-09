@@ -18,19 +18,19 @@ Sprite::~Sprite()
 void Sprite::Init(char *filePath)
 {
 	Release();
+	//テクスチャを読み込み
 	m_pTexture = new Texture;
 	m_pTexture->Load(filePath);
-	D3DXCreateSprite(GetEngine().GetDevice(), &m_spite);
+
+	//スプライトの座標を初期化
 	float centerPosx = m_pTexture->GetWidth() / 2.0f;
 	float centerPosy = m_pTexture->GetHeight() / 2.0f;
-
-
 	m_centerPosition = { centerPosx, centerPosy};
 	SetPosition({ 0.0f, 0.0f});
 
+	//エフェクトをロード
 	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("../Game/Assets/shader/sprite.fx");
-	float width = m_pTexture->GetWidth();
-	float height = m_pTexture->GetHeight();
+	//頂点バッファを作成
 	VERTEX_PT elements[4] =
 	{
 		{ -0.5f,	0.5f,	0.0f,	1.0f,	0.0f ,	0.0f },
@@ -38,9 +38,11 @@ void Sprite::Init(char *filePath)
 		{ 0.5f,		-0.5f,	0.0f,	1.0f,	1.0f ,	1.0f },
 		{ -0.5f,	-0.5f,	0.0f,	1.0f,	0.0f ,	1.0f },
 	};
-
+	//インデックスバッファーを作成
 	WORD indexElements[6] = { 0, 2, 3, 0, 1, 2 };
+	//プリミティブを作成
 	m_primitive.Create(vertex_PT, elements, 4, sizeof(VERTEX_PT), indexElements, 6);
+
 	m_size.x = m_pTexture->GetWidth();
 	m_size.y = m_pTexture->GetHeight();
 }

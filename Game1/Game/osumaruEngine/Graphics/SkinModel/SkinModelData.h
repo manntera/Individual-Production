@@ -1,5 +1,7 @@
 #pragma once
 
+//スキンモデルデータ
+
 struct D3DXFRAME_DERIVED : public D3DXFRAME
 {
 	D3DXMATRIXA16	CombinedTransformationMatrix;		//合成済み行列。
@@ -25,9 +27,10 @@ class Animation;
 class SkinModelData
 {
 public:
-
+	//コンストラクタ
 	SkinModelData();
 
+	//デストラクタ
 	~SkinModelData();
 
 	/*
@@ -37,7 +40,9 @@ public:
 	*/
 	void LoadModelData(const char* filePath, Animation* anim);
 
+	//リリース関数
 	void Release();
+
 
 	LPD3DXFRAME GetFrameRoot()
 	{
@@ -56,8 +61,9 @@ public:
 		return &frameDer->CombinedTransformationMatrix;
 	}
 private:
+	//一番最初に見つかったオリジナルメッシュを取得。
 	LPD3DXMESH GetOrgMesh(LPD3DXFRAME frame);
 private:
-	LPD3DXFRAME					frameRoot;
-	ID3DXAnimationController*	pAnimController;
+	LPD3DXFRAME					frameRoot;			//フレームルート。
+	ID3DXAnimationController*	pAnimController;	//アニメーションコントローラ。
 };

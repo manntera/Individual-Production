@@ -33,6 +33,12 @@ public:
 	{
 		this->light = light;
 	}
+
+	//ワールド行列を取得。
+	D3DXMATRIX GetWorldMatrix()
+	{
+		return worldMatrix;
+	}
 	/*
 	オリジナルメッシュの先頭を取得する
 	*/

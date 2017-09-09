@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject/GameObjectManager.h"
 #include "Graphics\Sprite.h"
+#include "Physics\Physics.h"
 const int FRAME_BUFFER_WIDTH = 1280;
 const int FRAME_BUFFER_HEIGHT = 720;
 
@@ -31,6 +32,10 @@ public:
 	EffectManager* GetEffectManager()
 	{
 		return m_effectManager;
+	}
+	PhysicsWorld* GetPhysicsWorld()
+	{
+		return m_physicsWorld;
 	}
 
 	static Engine& GetEngine()
@@ -68,6 +73,7 @@ private:
 	EffectManager*		m_effectManager;
 	WNDCLASSEX			m_wc;
 	GameObjectManager	m_objectManager;
+	PhysicsWorld*		m_physicsWorld;
 };
 
 static Engine& GetEngine()
