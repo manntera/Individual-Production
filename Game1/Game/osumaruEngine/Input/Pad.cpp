@@ -1,7 +1,9 @@
 #include "engineStdafx.h"
 #include "Pad.h"
 
-const int triggerMax = 255;
+const int triggerMax = 255;			//トリガーの入力値が0～255なので正規化するときに使う
+
+const float inputDeadZone = 0.2f;	//入力量の誤差の範囲
 
 struct CorrespondencePad
 {
@@ -97,6 +99,11 @@ void Pad::Update()
 			}
 			//スティックの入力量を-1.0～1.0に正規化
 			*padOutput[i] = padInput[i] / inputNormalize;
+			//入力量が小さい場合誤差とみなして値を0にする
+			if (*padOutput[i] < inputDeadZone && -inputDeadZone < *padOutput[i])
+			{
+				*padOutput[i] = 0.0f;
+			}
 		}
 
 	}

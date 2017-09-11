@@ -15,8 +15,7 @@ public:
 		return camera;
 	}
 private:
-	Camera camera;
+	D3DXQUATERNION	rotation;
+	Camera			camera;
 
 };
-
-extern GameCamera *g_camera;

@@ -2,6 +2,7 @@
 #include "MeshCollider.h"
 #include "../../Graphics/SkinModel/SkinModel.h"
 
+
 MeshCollider::MeshCollider()
 {
 	m_stridingMeshInterface = nullptr;

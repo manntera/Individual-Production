@@ -15,4 +15,5 @@ private:
 	Light			light;
 	RigidBody		rigidBody;
 	MeshCollider	meshCollider;
+	D3DXVECTOR3 trans;
 };

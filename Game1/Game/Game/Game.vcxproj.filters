@@ -22,18 +22,15 @@
     <Filter Include="ソース ファイル\Scene\GameScene">
       <UniqueIdentifier>{6ca931f2-0316-40b6-9869-093f750ae0be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameCamera">
+      <UniqueIdentifier>{0c980480-4a2c-40e2-9d73-5409834043fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="test.cpp">
@@ -45,15 +42,12 @@
     <ClCompile Include="Scene\GameScene\GameScene.cpp">
       <Filter>ソース ファイル\Scene\GameScene</Filter>
     </ClCompile>
+    <ClCompile Include="GameCamera\GameCamera.cpp">
+      <Filter>ソース ファイル\GameCamera</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameCamera.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="test.h">
@@ -64,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="Scene\GameScene\GameScene.h">
       <Filter>ソース ファイル\Scene\GameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCamera\GameCamera.h">
+      <Filter>ソース ファイル\GameCamera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

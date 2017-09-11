@@ -5,7 +5,7 @@
 Camera::Camera()
 {
 	m_Near = 0.1f;
-	m_Far = 100.0f;
+	m_Far = 1000.0f;
 	m_Aspect = (float)FRAME_BUFFER_WIDTH / (float)FRAME_BUFFER_HEIGHT;
 }
 
