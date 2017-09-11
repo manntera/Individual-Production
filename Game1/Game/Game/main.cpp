@@ -22,6 +22,5 @@ int WINAPI wWinMain(
 	g_camera = New<GameCamera>();
 	g_camera->Init();
 	GetEngine().GameLoop();
-
 	return 0;
 }

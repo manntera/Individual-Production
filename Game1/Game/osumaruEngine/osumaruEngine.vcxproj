@@ -77,7 +77,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(ProjectDir);$(ProjectDir)../exlib/bulletPhysics/src;$(ProjectDir)../bulletPhysics/src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)x64/Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -87,7 +87,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;$(ProjectDir);$(ProjectDir)../bulletPhysics/src;$(ProjectDir)../exlib/bulletPhysics/src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x64;$(SolutionDir)x64/Release;$(LibraryPath)</LibraryPath>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
     <ExtensionsToDeleteOnClean>C:\Users\kbc16\Documents\github\Individual-Production\Game1\Game\x64\Release\osumaruEngine.lib.manifest;C:\Users\kbc16\Documents\github\Individual-Production\Game1\Game\x64\Release\osumaruEngine.tlb;C:\Users\kbc16\Documents\github\Individual-Production\Game1\Game\x64\Release\osumaruEngine.pdb;C:\Users\kbc16\Documents\github\Individual-Production\Game1\Game\x64\Release\osumaruEngine.bsc;C:\Users\kbc16\Documents\github\Individual-Production\Game1\Game\x64\Release\osumaruEngine.ilk;C:\Users\kbc16\Documents\github\Individual-Production\Game1\Game\x64\Release\osumaruEngine.lib.intermediate.manifest</ExtensionsToDeleteOnClean>
   </PropertyGroup>
@@ -118,13 +118,14 @@
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>engineStdafx.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;XInput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;XInput.lib;%(AdditionalDependencies);LinearMath_Debug.lib;BulletSoftBody_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
@@ -170,7 +171,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>XInput.lib;d3dx9.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>XInput.lib;d3dx9.lib;d3d9.lib;%(AdditionalDependencies);LinearMath.lib;BulletSoftBody.lib;BulletDynamics.lib;BulletCollision.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>

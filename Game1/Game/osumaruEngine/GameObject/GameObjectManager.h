@@ -8,10 +8,7 @@ public:
 	void Execute(LPDIRECT3DDEVICE9 pDevice);
 
 	//ゲームのオブジェクトを消去する関数
-	void Delete(GameObject* deleteObject)
-	{
-
-	}
+	void Delete(GameObject* deleteObject);
 
 
 	//ゲームのオブジェクトを生成する

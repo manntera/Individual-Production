@@ -29,6 +29,11 @@ void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 	DeleteExecute();
 }
 
+void GameObjectManager::Delete(GameObject* deleteObject)
+{
+	deleteObject->Delete();
+}
+
 void GameObjectManager::DeleteExecute()
 {
 	std::vector<GameObject*>::iterator it = m_objectVector.begin();
