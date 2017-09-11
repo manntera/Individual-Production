@@ -104,7 +104,7 @@ void MeshCollider::CreateFromSkinModel(SkinModel* model, const D3DXMATRIX* offse
 		btIndexedMesh indexedMesh;
 		IndexBuffer* ib = m_indexBufferArray.back();
 		VertexBuffer* vb = m_vertexBufferArray.back();
-		//indexedMesh.m_numTriangles = (int)ib->size / 3;
+		indexedMesh.m_numTriangles = (int)ib->size() / 3;
 		indexedMesh.m_triangleIndexBase = (unsigned char*)(&ib->front());
 		indexedMesh.m_triangleIndexStride = 12;
 		indexedMesh.m_numVertices = (unsigned int)vb->size();
