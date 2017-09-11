@@ -20,13 +20,13 @@ public:
 	//平行光源の方向を取得。
 	const D3DXVECTOR4* GetDiffuseLightDirection() const
 	{
-		return diffuseLightDirection;
+		return m_diffuseLightDirection;
 	}
 
 	//平行光源の色を取得。
 	const D3DXVECTOR4* GetDiffuseLightColor() const
 	{
-		return diffuseLightColor;
+		return m_diffuseLightColor;
 	}
 
 	/*
@@ -36,7 +36,7 @@ public:
 	*/
 	void SetDiffuseLightDirection(int lightNo, const D3DXVECTOR4& dir)
 	{
-		diffuseLightDirection[lightNo] = dir;
+		m_diffuseLightDirection[lightNo] = dir;
 	}
 
 
@@ -47,25 +47,25 @@ public:
 	*/
 	void SetDiffuseLightColor(int lightNo, const D3DXVECTOR4& color)
 	{
-		diffuseLightColor[lightNo] = color;
+		m_diffuseLightColor[lightNo] = color;
 	}
 
 	/*
 	アンビエントライトを設定。
 	ambient		色
 	*/
-	void SetAmbiemtLight(const D3DXVECTOR4& ambient)
+	void SetAmbiemtLight(D3DXVECTOR4 ambient)
 	{
-		ambientLight = ambient;
+		m_ambientLight = ambient;
 	}
 
 	//アンビエントライトを取得。
 	D3DXVECTOR4 GetAmbientLight()
 	{
-		return ambientLight;
+		return m_ambientLight;
 	}
 private:
-	D3DXVECTOR4			diffuseLightDirection[DIFFUSE_LIGHT_NUM];		//ディフューズライトの方向
-	D3DXVECTOR4			diffuseLightColor[DIFFUSE_LIGHT_NUM];			//ディフューズライトの色
-	D3DXVECTOR4			ambientLight;									//アンビエントの色
+	D3DXVECTOR4			m_diffuseLightDirection[DIFFUSE_LIGHT_NUM];		//ディフューズライトの方向
+	D3DXVECTOR4			m_diffuseLightColor[DIFFUSE_LIGHT_NUM];			//ディフューズライトの色
+	D3DXVECTOR4			m_ambientLight;									//アンビエントの色
 };

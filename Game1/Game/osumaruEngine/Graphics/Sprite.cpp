@@ -74,6 +74,7 @@ void Sprite::Draw()
 	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &scale);
 	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &transform);
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
+	//•`‰æ
 	m_pEffect->SetTechnique("Sprite");
 	m_pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 	m_pEffect->BeginPass(0);

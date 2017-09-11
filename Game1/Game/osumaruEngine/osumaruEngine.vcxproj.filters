@@ -28,6 +28,9 @@
     <Filter Include="ソース ファイル\Physics\Collider">
       <UniqueIdentifier>{4a76f7be-446c-4535-87d2-0a56864be2e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Input">
+      <UniqueIdentifier>{a78c6bd2-f4e4-486c-8bb1-c3edea8ddac1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graphics\EffectManager.cpp">
@@ -86,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="Physics\CharacterController.cpp">
       <Filter>ソース ファイル\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Input\Pad.cpp">
+      <Filter>ソース ファイル\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="Physics\CollisionAttr.h">
       <Filter>ソース ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Input\Pad.h">
+      <Filter>ソース ファイル\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

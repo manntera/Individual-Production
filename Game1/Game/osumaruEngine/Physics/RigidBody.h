@@ -21,28 +21,38 @@ struct RigidBodyInfo
 class RigidBody
 {
 public:
-
+	//コンストラクタ
 	RigidBody()
 	{
-		rigidBody = nullptr;
-		myMotionState = nullptr;
+		m_rigidBody = nullptr;
+		m_myMotionState = nullptr;
 	}
 
+	//デストラクタ
 	~RigidBody()
 	{
 		Release();
 	}
 
+	/*
+	初期化関数
+	rbInfo.pos		座標(D3DXVECTOR3)
+	rbInfo.rot		回転(D3DXQUATERNION)
+	rbInfo.collider	コライダー(ICollider*)
+	mass			質量(float)
+	*/
 	void Create(RigidBodyInfo& rbInfo);
 
+	//リリース関数
 	void Release();
 
+	//剛体を取得
 	btRigidBody* GetBody()
 	{
-		return rigidBody;
+		return m_rigidBody;
 	}
 
 private:
-	btDefaultMotionState*	myMotionState;
-	btRigidBody*			rigidBody;
+	btDefaultMotionState*	m_myMotionState;		//モーションステイト
+	btRigidBody*			m_rigidBody;			//剛体
 };

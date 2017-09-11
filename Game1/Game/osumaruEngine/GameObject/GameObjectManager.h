@@ -28,6 +28,6 @@ private:
 	void DeleteExecute();
 
 private:
-	std::vector<GameObject*> m_objectVector;
+	std::vector<GameObject*> m_objectVector;	//オブジェクトのリスト
 
 };

@@ -12,7 +12,7 @@ void HUD::Init()
 	skinModel.SetLight(&light);
 
 	D3DXQuaternionIdentity(&rotation);
-	trans = { 0.0f, 17.0f, 0.0f };
+	trans = { 0.0f, 7.0f, 0.0f };
 	scale = { 1.0f, 1.0f, 1.0f };
 	skinModel.UpdateWorldMatrix(trans, rotation, scale);
 	capsuleCollider.Create(1.0f, 1.0f);
@@ -26,36 +26,39 @@ void HUD::Init()
 	rigidBody.Create(RBInfo);
 	rigidBody.GetBody()->getWorldTransform().setOrigin(btVector3(trans.x, trans.y, trans.z));
 	//rigidBody.GetBody()->setGravity(btVector3(0.0f, 0.0f, 0.0f));
+	characterController.Init(1.0f, 1.0f, trans);
+	characterController.SetMoveSpeed({0.0f, 0.0f, 0.0f});
+	characterController.SetGravity(0.0f);
 }
 
 void HUD::Update()
 {
-	btRigidBody* rig = rigidBody.GetBody();
-	btVector3 moveSpeed(0.0f, 0.0f, 0.0f);
-	float x = moveSpeed.x();
-	float z = moveSpeed.z();
-	if (GetAsyncKeyState(VK_LEFT))
-	{
-		x -= 3.0f;
-	}
-	else if(GetAsyncKeyState(VK_RIGHT))
-	{
-		x += 3.0f;
-	}
+	D3DXVECTOR3 moveSpeed = characterController.GetMoveSpeed();
+	moveSpeed.x = 0.0f;
+	moveSpeed.z = 0.0f;
+	//if (GetPad().IsPressButton(padButtonLStickPush))
+	//{
+	//	moveSpeed.x = -30.0f;
+	//}
+	//else if(GetPad().IsPressButton(padButtonRStickPush))
+	//{
+	//	moveSpeed.x = 30.0f;
+	//}
 
-	if (GetAsyncKeyState(VK_UP))
-	{
-		z += 3.0f;
-	}
-	else if (GetAsyncKeyState(VK_DOWN))
-	{
-		z -= 3.0f;
-	}
-	moveSpeed.setX(x);
-	moveSpeed.setZ(z);
-	rig->applyForce(moveSpeed, btVector3(0.0f, 0.0f, 0.0));
+	//if (0 < GetPad().GetLeftTrigger())
+	//{
+	//	moveSpeed.z = 30.0f;
+	//}
+	//else if (0 < GetPad().GetRightTrigger())
+	//{
+	//	moveSpeed.z = -30.0f;
+	//}
+	moveSpeed.x = GetPad().GetRightStickX() * 30.0f;
+	moveSpeed.z = GetPad().GetRightStickY() * 30.0f;
 
-	trans = D3DXVECTOR3(rig->getWorldTransform().getOrigin());
+	characterController.SetMoveSpeed(moveSpeed);
+	characterController.Execute();
+	trans = characterController.GetPosition();
 	skinModel.UpdateWorldMatrix(trans, rotation, scale);
 }
 

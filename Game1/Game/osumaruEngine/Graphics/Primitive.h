@@ -11,7 +11,15 @@ public:
 	//デストラクタ
 	~Primitive();
 
-	//
+	/*
+	プリミティブを作る関数
+	vertexLayout		頂点定義のレイアウト
+	vertexBuffer		頂点バッファ
+	vertexNum			頂点数
+	vertexStride		頂点データのサイズ
+	indexBuffer			インデックスバッファ
+	indexNum			インデックス数
+	*/
 	void Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum,  int vertexStride, WORD *indexBuffer, int indexNum);
 
 	//頂点バッファを取得。

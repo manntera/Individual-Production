@@ -2,8 +2,10 @@
 class Camera
 {
 public:
+	//コンストラクタ
 	Camera();
 
+	//デストラクタ
 	~Camera();
 
 	//アスペクト比を設定
@@ -61,12 +63,12 @@ public:
 	void Update();
 
 private:
-	D3DXMATRIX			viewMatrix;			//ビュー行列。カメラ行列とも言う。
-	D3DXMATRIX			projectionMatrix;	//プロジェクション行列。ビュー空間から射影空間に変換する。
-	D3DXVECTOR3			m_position;			//カメラの視点。
-	D3DXVECTOR3			m_target;			//カメラの注視点
-	D3DXVECTOR3			m_up;				//カメラの上方向
-	float				Far;				//遠平面
-	float				Near;				//近平面
-	float				Aspect;				//アスペクト比
+	D3DXMATRIX			m_viewMatrix;			//ビュー行列。カメラ行列とも言う。
+	D3DXMATRIX			m_projectionMatrix;		//プロジェクション行列。ビュー空間から射影空間に変換する。
+	D3DXVECTOR3			m_position;				//カメラの視点。
+	D3DXVECTOR3			m_target;				//カメラの注視点
+	D3DXVECTOR3			m_up;					//カメラの上方向
+	float				m_Far;					//遠平面
+	float				m_Near;					//近平面
+	float				m_Aspect;				//アスペクト比
 };

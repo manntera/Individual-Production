@@ -90,6 +90,7 @@ void Engine::GameLoop()
 		{
 			m_objectManager.Execute(m_pD3DDevice);
 			m_physicsWorld->Update();
+			m_pad.Update();
 		}
 	}
 

@@ -175,9 +175,9 @@ void DrawFrame(
 
 SkinModel::SkinModel()
 {
-	skinModelData = nullptr;
-	light = nullptr;
-	pEffect = nullptr;
+	m_skinModelData = nullptr;
+	m_light = nullptr;
+	m_pEffect = nullptr;
 }
 
 SkinModel::~SkinModel()
@@ -187,46 +187,46 @@ SkinModel::~SkinModel()
 
 void SkinModel::Init(SkinModelData* modelData)
 {
-	pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/Shader/Model.fx");
-	skinModelData = modelData;
+	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/Shader/Model.fx");
+	m_skinModelData = modelData;
 }
 
-void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale)
+void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
 {
 	D3DXMATRIX mTrans, mScale;
 	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
 	D3DXMatrixTranslation(&mTrans, trans.x, trans.y, trans.z);
-	D3DXMatrixRotationQuaternion(&rotationMatrix, &rot);
-	worldMatrix = mScale * rotationMatrix * mTrans;
+	D3DXMatrixRotationQuaternion(&m_rotationMatrix, &rot);
+	m_worldMatrix = mScale * m_rotationMatrix * mTrans;
 
-	if (skinModelData)
+	if (m_skinModelData)
 	{
-		skinModelData->UpdateBoneMatrix(worldMatrix);		//ボーン行列を更新
+		m_skinModelData->UpdateBoneMatrix(m_worldMatrix);		//ボーン行列を更新
 	}
 }
 
 void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 {
-	if (skinModelData)
+	if (m_skinModelData)
 	{
 		DrawFrame(
 			GetEngine().GetDevice(),
-			skinModelData->GetFrameRoot(),
-			pEffect,
-			&worldMatrix,
-			&rotationMatrix,
+			m_skinModelData->GetFrameRoot(),
+			m_pEffect,
+			&m_worldMatrix,
+			&m_rotationMatrix,
 			viewMatrix,
 			projMatrix,
-			light
+			m_light
 		);
 	}
 }
 
 LPD3DXMESH SkinModel::GetOrgMeshFirst()
 {
-	if (skinModelData != nullptr)
+	if (m_skinModelData != nullptr)
 	{
-		return skinModelData->GetOrgMeshFirst();
+		return m_skinModelData->GetOrgMeshFirst();
 	}
 	return nullptr;
 }

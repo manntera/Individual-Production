@@ -18,4 +18,5 @@ private:
 	CapsuleCollider	capsuleCollider;
 	RigidBody		rigidBody;
 	Sprite			sprite;
+	CharacterController characterController;
 };

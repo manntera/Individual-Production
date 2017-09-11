@@ -4,20 +4,12 @@
 class Animation
 {
 public:
-	Animation()
-	{
-		pAnimController = nullptr;
-		numAnimSet = 0;
-		isBlending = false;
-		isInterpolate = false;
-		numMaxTracks = 0;
-		interpolateEndTime = 0.0f;
-		interpolateTime = 0.0f;
-	}
-	~Animation()
-	{
+	//コンストラクタ
+	Animation();
 
-	}
+	//デストラクタ
+	~Animation();
+
 	/*
 	初期化
 	anim		アニメーションコントローラー
@@ -31,7 +23,7 @@ public:
 	*/
 	void SetAnimationEndTime(int animationSetIndex, double endTime)
 	{
-		animationEndTime[animationSetIndex] = endTime;
+		m_animationEndTime[animationSetIndex] = endTime;
 	}
 	/*
 	アニメーションの再生
@@ -57,7 +49,7 @@ public:
 	*/
 	int GetNumAnimationSet() const
 	{
-		return numAnimSet;
+		return m_numAnimSet;
 	}
 	/*
 	アニメーションの更新
@@ -67,18 +59,18 @@ public:
 
 private:
 
-	ID3DXAnimationController*				pAnimController;			//アニメーションコントローラー
-	int										numAnimSet;					//アニメーションセットの数
-	std::unique_ptr<ID3DXAnimationSet*[]>	animationSets;				//アニメーションの配列。
-	std::unique_ptr<float[]>				blendRateTable;				//ブレンディングレートのテーブル。
-	std::unique_ptr<double[]>				animationEndTime;			//アニメーションの終了タイム。デフォルトは-1.0が入っていて、-1.0が入っている場合はID3DXAnimationSetのアニメーション終了タイムが優先される。
+	ID3DXAnimationController*				m_pAnimController;			//アニメーションコントローラー
+	int										m_numAnimSet;					//アニメーションセットの数
+	std::unique_ptr<ID3DXAnimationSet*[]>	m_animationSets;				//アニメーションの配列。
+	std::unique_ptr<float[]>				m_blendRateTable;				//ブレンディングレートのテーブル。
+	std::unique_ptr<double[]>				m_animationEndTime;			//アニメーションの終了タイム。デフォルトは-1.0が入っていて、-1.0が入っている場合はID3DXAnimationSetのアニメーション終了タイムが優先される。
 																		//DirectX9のアニメーションセットに1秒以下のアニメーションを入れる方法が見つからない。一秒以下のアニメーションはこいつを適時設定。
-	double									localAnimationTime;			//ローカルアニメーションタイム
-	int										currentAnimationSetNo;		//現在再生中のアニメーショントラックの番号
-	int										currentTrackNo;				//現在のトラックの番号
-	int										numMaxTracks;				//アニメーショントラックの最大数
-	bool									isBlending;					//アニメーションブレンディング中？
-	bool									isInterpolate;				//補間中？
-	float									interpolateEndTime;			//補間終了時間
-	float									interpolateTime;			//補間時間
+	double									m_localAnimationTime;			//ローカルアニメーションタイム
+	int										m_currentAnimationSetNo;		//現在再生中のアニメーショントラックの番号
+	int										m_currentTrackNo;				//現在のトラックの番号
+	int										m_numMaxTracks;				//アニメーショントラックの最大数
+	bool									m_isBlending;					//アニメーションブレンディング中？
+	bool									m_isInterpolate;				//補間中？
+	float									m_interpolateEndTime;			//補間終了時間
+	float									m_interpolateTime;			//補間時間
 };	

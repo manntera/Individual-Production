@@ -608,8 +608,8 @@ HRESULT AllocateHierarchy::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContain
 
 SkinModelData::SkinModelData()
 {
-	frameRoot = nullptr;
-	pAnimController = nullptr;
+	m_frameRoot = nullptr;
+	m_pAnimController = nullptr;
 }
 
 SkinModelData::~SkinModelData()
@@ -619,13 +619,13 @@ SkinModelData::~SkinModelData()
 
 void SkinModelData::Release()
 {
-	if (pAnimController)
+	if (m_pAnimController)
 	{
-		pAnimController->Release();
-		pAnimController = nullptr;
+		m_pAnimController->Release();
+		m_pAnimController = nullptr;
 	}
-	ReleaseFrame(frameRoot);
-	frameRoot = nullptr;
+	ReleaseFrame(m_frameRoot);
+	m_frameRoot = nullptr;
 }
 
 void SkinModelData::LoadModelData(const char* filePath, Animation* anim)
@@ -638,24 +638,24 @@ void SkinModelData::LoadModelData(const char* filePath, Animation* anim)
 		GetEngine().GetDevice(),
 		&alloc,
 		nullptr,
-		&frameRoot,
-		&pAnimController
+		&m_frameRoot,
+		&m_pAnimController
 	);
-	SetupBoneMatrixPointers(frameRoot, frameRoot);
-	if (anim && pAnimController)
+	SetupBoneMatrixPointers(m_frameRoot, m_frameRoot);
+	if (anim && m_pAnimController)
 	{
-		anim->Init(pAnimController);
+		anim->Init(m_pAnimController);
 	}
 }
 
 void SkinModelData::UpdateBoneMatrix(const D3DXMATRIX& matWorld)
 {
-	UpdateFrameMatrices(frameRoot, &matWorld);
+	UpdateFrameMatrices(m_frameRoot, &matWorld);
 }
 
 LPD3DXMESH SkinModelData::GetOrgMeshFirst()
 {
-	return GetOrgMesh(frameRoot);
+	return GetOrgMesh(m_frameRoot);
 }
 
 LPD3DXMESH SkinModelData::GetOrgMesh(LPD3DXFRAME frame)

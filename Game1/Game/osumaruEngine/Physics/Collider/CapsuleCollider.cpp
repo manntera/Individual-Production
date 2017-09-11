@@ -3,10 +3,10 @@
 
 CapsuleCollider::CapsuleCollider()
 {
-	shape = nullptr;
+	m_shape = nullptr;
 }
 
 CapsuleCollider::~CapsuleCollider()
 {
-	delete shape;
+	delete m_shape;
 }

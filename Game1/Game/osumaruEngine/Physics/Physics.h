@@ -6,24 +6,28 @@ class RigidBody;
 
 class PhysicsWorld
 {
-	btDefaultCollisionConfiguration*		collisionConfig;
-	btCollisionDispatcher*					collisionDispatcher;		//衝突解決処理
-	btBroadphaseInterface*					overlappingPairCache;		//ブロードフェーズ。
-	btSequentialImpulseConstraintSolver*	constraintSolver;			//コンストレイントソルバー。拘束条件の解決処理
-	btDiscreteDynamicsWorld*				dynamicWorld;				//ワールド
+	btDefaultCollisionConfiguration*		m_collisionConfig;
+	btCollisionDispatcher*					m_collisionDispatcher;		//衝突解決処理
+	btBroadphaseInterface*					m_overlappingPairCache;		//ブロードフェーズ。
+	btSequentialImpulseConstraintSolver*	m_constraintSolver;			//コンストレイントソルバー。拘束条件の解決処理
+	btDiscreteDynamicsWorld*				m_dynamicWorld;				//ワールド
 public:
+	//コンストラクタ
 	PhysicsWorld();
-
+	
+	//デストラクタ
 	~PhysicsWorld();
 
+	//初期化関数
 	void Init();
 
+	//更新関数
 	void Update();
 
 	//ダイナミックワールドを取得。
 	btDiscreteDynamicsWorld* GetDynamicWorld()
 	{
-		return dynamicWorld;
+		return m_dynamicWorld;
 	}
 	//剛体を物理ワールドに追加
 	void AddRigidBody(btRigidBody* rb);
@@ -38,6 +42,6 @@ public:
 		btCollisionWorld::ConvexResultCallback& resultCallback,
 		btScalar allowedCcdPenetration = 0.0f)
 	{
-		dynamicWorld->convexSweepTest(castShape, convexFromWorld, convexToWorld, resultCallback, allowedCcdPenetration);
+		m_dynamicWorld->convexSweepTest(castShape, convexFromWorld, convexToWorld, resultCallback, allowedCcdPenetration);
 	}
 };

@@ -4,27 +4,27 @@
 
 MeshCollider::MeshCollider()
 {
-	stridingMeshInterface = nullptr;
-	meshShape = nullptr;
+	m_stridingMeshInterface = nullptr;
+	m_meshShape = nullptr;
 }
 
 MeshCollider::~MeshCollider()
 {
-	for (auto& vb : vertexBufferArray)
+	for (auto& vb : m_vertexBufferArray)
 	{
 		delete vb;
 	}
-	for (auto& ib : indexBufferArray)
+	for (auto& ib : m_indexBufferArray)
 	{
 		delete ib;
 	}
-	delete stridingMeshInterface;
-	delete meshShape;
+	delete m_stridingMeshInterface;
+	delete m_meshShape;
 }
 
 void MeshCollider::CreateFromSkinModel(SkinModel* model, const D3DXMATRIX* offsetMatrix)
 {
-	stridingMeshInterface = new btTriangleIndexVertexArray;
+	m_stridingMeshInterface = new btTriangleIndexVertexArray;
 	LPD3DXMESH mesh = model->GetOrgMeshFirst();
 	if (mesh != NULL)
 	{
@@ -56,7 +56,7 @@ void MeshCollider::CreateFromSkinModel(SkinModel* model, const D3DXMATRIX* offse
 			}
 			vb->Unlock();
 			vb->Release();
-			vertexBufferArray.push_back(vertexBuffer);
+			m_vertexBufferArray.push_back(vertexBuffer);
 		}
 		{
 			//続いてインデックスバッファを作成
@@ -98,21 +98,21 @@ void MeshCollider::CreateFromSkinModel(SkinModel* model, const D3DXMATRIX* offse
 			}
 			ib->Unlock();
 			ib->Release();
-			indexBufferArray.push_back(indexBuffer);
+			m_indexBufferArray.push_back(indexBuffer);
 		}
 		//インデックスメッシュを作成
 		btIndexedMesh indexedMesh;
-		IndexBuffer* ib = indexBufferArray.back();
-		VertexBuffer* vb = vertexBufferArray.back();
+		IndexBuffer* ib = m_indexBufferArray.back();
+		VertexBuffer* vb = m_vertexBufferArray.back();
 		//indexedMesh.m_numTriangles = (int)ib->size / 3;
 		indexedMesh.m_triangleIndexBase = (unsigned char*)(&ib->front());
 		indexedMesh.m_triangleIndexStride = 12;
 		indexedMesh.m_numVertices = (unsigned int)vb->size();
 		indexedMesh.m_vertexBase = (unsigned char*)(&vb->front());
 		indexedMesh.m_vertexStride = sizeof(D3DXVECTOR3);
-		stridingMeshInterface->addIndexedMesh(indexedMesh);
+		m_stridingMeshInterface->addIndexedMesh(indexedMesh);
 	}
-	meshShape = new btBvhTriangleMeshShape(stridingMeshInterface, true);
+	m_meshShape = new btBvhTriangleMeshShape(m_stridingMeshInterface, true);
 }
 
 

@@ -4,9 +4,9 @@
 
 Camera::Camera()
 {
-	Near = 0.1f;
-	Far = 100.0f;
-	Aspect = (float)FRAME_BUFFER_WIDTH / (float)FRAME_BUFFER_HEIGHT;
+	m_Near = 0.1f;
+	m_Far = 100.0f;
+	m_Aspect = (float)FRAME_BUFFER_WIDTH / (float)FRAME_BUFFER_HEIGHT;
 }
 
 Camera::~Camera()
@@ -15,32 +15,32 @@ Camera::~Camera()
 
 void Camera::SetAspect(float _aspect)
 {
-	Aspect = _aspect;
+	m_Aspect = _aspect;
 }
 
 float Camera::GetAspect()
 {
-	return Aspect;
+	return m_Aspect;
 }
 
 void  Camera::SetFar(float _far)
 {
-	Far = _far;
+	m_Far = _far;
 }
 
 float Camera::GetFar()
 {
-	return Far;
+	return m_Far;
 }
 
 void Camera::SetNear(float _near)
 {
-	Near = _near;
+	m_Near = _near;
 }
 
 float Camera::GetNear()
 {
-	return Near;
+	return m_Near;
 }
 
 void Camera::SetTarget(D3DXVECTOR3 target)
@@ -75,28 +75,28 @@ D3DXVECTOR3 Camera::GetUp()
 
 void Camera::SetViewMatrix(D3DXMATRIX view)
 {
-	viewMatrix = view;
+	m_viewMatrix = view;
 }
 
 D3DXMATRIX Camera::GetViewMatrix()
 {
-	return viewMatrix;
+	return m_viewMatrix;
 }
 
 void Camera::SetProjectionMatrix(D3DXMATRIX projection)
 {
-	projectionMatrix = projection;
+	m_projectionMatrix = projection;
 }
 
 D3DXMATRIX Camera::GetProjectionMatrix()
 {
-	return projectionMatrix;
+	return m_projectionMatrix;
 }
 
 void Camera::Update()
 {
-	D3DXMatrixLookAtLH(&viewMatrix, &m_position, &m_target, &m_up);
-	D3DXMatrixPerspectiveFovLH(&projectionMatrix, D3DX_PI / 4, Aspect, Near, Far);
+	D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_target, &m_up);
+	D3DXMatrixPerspectiveFovLH(&m_projectionMatrix, D3DX_PI / 4, m_Aspect, m_Near, m_Far);
 }
 
 void Camera::Init()

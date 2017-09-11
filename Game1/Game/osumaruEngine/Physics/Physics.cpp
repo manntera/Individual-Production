@@ -4,51 +4,51 @@
 
 PhysicsWorld::PhysicsWorld()
 {
-	collisionConfig = NULL;
-	collisionDispatcher = NULL;
-	overlappingPairCache = NULL;
-	constraintSolver = NULL;
-	dynamicWorld = NULL;
+	m_collisionConfig = NULL;
+	m_collisionDispatcher = NULL;
+	m_overlappingPairCache = NULL;
+	m_constraintSolver = NULL;
+	m_dynamicWorld = NULL;
 }
 
 PhysicsWorld::~PhysicsWorld()
 {
-	delete dynamicWorld;
-	delete collisionConfig;
-	delete collisionDispatcher;
-	delete constraintSolver;
-	delete overlappingPairCache;
+	delete m_dynamicWorld;
+	delete m_collisionConfig;
+	delete m_collisionDispatcher;
+	delete m_constraintSolver;
+	delete m_overlappingPairCache;
 }
 
 
 void PhysicsWorld::Init()
 {
 	//•¨—ƒGƒ“ƒWƒ“‚ð‰Šú‰»
-	collisionConfig = new btDefaultCollisionConfiguration;
-	collisionDispatcher = new btCollisionDispatcher(collisionConfig);
-	overlappingPairCache = new btDbvtBroadphase();
-	constraintSolver = new btSequentialImpulseConstraintSolver();
+	m_collisionConfig = new btDefaultCollisionConfiguration;
+	m_collisionDispatcher = new btCollisionDispatcher(m_collisionConfig);
+	m_overlappingPairCache = new btDbvtBroadphase();
+	m_constraintSolver = new btSequentialImpulseConstraintSolver();
 
-	dynamicWorld = new btDiscreteDynamicsWorld(
-		collisionDispatcher,
-		overlappingPairCache,
-		constraintSolver,
-		collisionConfig
+	m_dynamicWorld = new btDiscreteDynamicsWorld(
+		m_collisionDispatcher,
+		m_overlappingPairCache,
+		m_constraintSolver,
+		m_collisionConfig
 		);
-	dynamicWorld->setGravity(btVector3(0, -10, 0));
+	m_dynamicWorld->setGravity(btVector3(0, -10, 0));
 }
 
 void PhysicsWorld::Update()
 {
-	dynamicWorld->stepSimulation(1.0f / 60.0f);
+	m_dynamicWorld->stepSimulation(1.0f / 60.0f);
 }
 
 void PhysicsWorld::AddRigidBody(btRigidBody* rb)
 {
-	dynamicWorld->addRigidBody(rb);
+	m_dynamicWorld->addRigidBody(rb);
 }
 
 void PhysicsWorld::RemoveRigidBody(btRigidBody* rb)
 {
-	dynamicWorld->removeRigidBody(rb);
+	m_dynamicWorld->removeRigidBody(rb);
 }

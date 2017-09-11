@@ -7,10 +7,12 @@ class Texture;
 class Sprite
 {
 public:
-
+	//コンストラクタ
 	Sprite();
 
+	//デストラクタ
 	~Sprite();
+
 	//初期化
 	void Init(char *filePath);
 
@@ -40,6 +42,7 @@ public:
 	{
 		return m_size;
 	}
+
 	//メモリを解放
 	void Release();
 

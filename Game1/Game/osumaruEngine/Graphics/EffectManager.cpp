@@ -14,12 +14,12 @@ EffectManager::~EffectManager()
 	Release();
 }
 
-LPD3DXEFFECT EffectManager::LoadEffect(const char* filePath)
+LPD3DXEFFECT EffectManager::LoadEffect(char* filePath)
 {
 	LPD3DXEFFECT effect = nullptr;
 	int hash = MakeHash(filePath);
-	auto it = effectDictionary.find(hash);
-	if (it == effectDictionary.end())
+	auto it = m_effectDictionary.find(hash);
+	if (it == m_effectDictionary.end())
 	{
 		LPD3DXBUFFER compileErrorBuffer = nullptr;
 		HRESULT hr = D3DXCreateEffectFromFile(
@@ -41,7 +41,7 @@ LPD3DXEFFECT EffectManager::LoadEffect(const char* filePath)
 			//“Ç‚Ýž‚ÝŽ¸”s
 			std::abort();
 		}
-		effectDictionary.insert({ hash, effect });
+		m_effectDictionary.insert({ hash, effect });
 	}
 	else
 	{
@@ -51,7 +51,7 @@ LPD3DXEFFECT EffectManager::LoadEffect(const char* filePath)
 	return effect;
 }
 
-int EffectManager::MakeHash(const char* string)
+int EffectManager::MakeHash(char* string)
 {
 	int hash = 0;
 	int len = (int)strlen(string);
@@ -65,9 +65,9 @@ int EffectManager::MakeHash(const char* string)
 
 void EffectManager::Release()
 {
-	for (auto it : effectDictionary)
+	for (auto it : m_effectDictionary)
 	{
 		it.second->Release();
 	}
-	effectDictionary.clear();
+	m_effectDictionary.clear();
 }

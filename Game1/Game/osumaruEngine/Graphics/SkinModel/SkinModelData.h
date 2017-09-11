@@ -43,10 +43,10 @@ public:
 	//リリース関数
 	void Release();
 
-
+	//フレームルートを取得
 	LPD3DXFRAME GetFrameRoot()
 	{
-		return frameRoot;
+		return m_frameRoot;
 	}
 	//ボーン行列を更新
 	void UpdateBoneMatrix(const D3DXMATRIX& matWorld);
@@ -57,13 +57,13 @@ public:
 	//ルートのボーンを取得
 	D3DXMATRIX* GetRootBoneWorldMatrix()
 	{
-		D3DXFRAME_DERIVED* frameDer = (D3DXFRAME_DERIVED*)frameRoot;
+		D3DXFRAME_DERIVED* frameDer = (D3DXFRAME_DERIVED*)m_frameRoot;
 		return &frameDer->CombinedTransformationMatrix;
 	}
 private:
 	//一番最初に見つかったオリジナルメッシュを取得。
 	LPD3DXMESH GetOrgMesh(LPD3DXFRAME frame);
 private:
-	LPD3DXFRAME					frameRoot;			//フレームルート。
-	ID3DXAnimationController*	pAnimController;	//アニメーションコントローラ。
+	LPD3DXFRAME					m_frameRoot;			//フレームルート。
+	ID3DXAnimationController*	m_pAnimController;	//アニメーションコントローラ。
 };

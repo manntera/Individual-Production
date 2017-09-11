@@ -24,7 +24,7 @@ void Test::Init()
 	D3DXQuaternionIdentity(&rot);
 	RBInfo.rot = rot;
 	rigidBody.Create(RBInfo);
-	rigidBody.GetBody()->getWorldTransform().setOrigin(btVector3(0.0f, 0.0f, 0.0f));
+	//rigidBody.GetBody()->getWorldTransform().setOrigin(btVector3(0.0f, 0.0f, 0.0f));
 }
 
 void Test::Update()

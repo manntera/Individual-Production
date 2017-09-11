@@ -50,6 +50,7 @@ struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 		return 0.0f;
 	}
 };
+
 //衝突したときに呼ばれる関数オブジェクト(壁用)
 struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 {
@@ -114,6 +115,7 @@ CharacterController::~CharacterController()
 void CharacterController::Init(float radius, float height, const D3DXVECTOR3& position)
 {
 	m_position = position;
+	m_moveSpeed = {0.0f, 0.0f, 0.0f};
 	//コリジョン作成。
 	m_radius = radius;
 	m_height = height;
