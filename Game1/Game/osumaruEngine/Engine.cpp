@@ -1,6 +1,7 @@
 #include "engineStdafx.h"
 #include "Engine.h"
 #include "graphics/EffectManager.h"
+extern Texture* g_pNormalTexture;
 
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -76,6 +77,8 @@ void Engine::InitD3D(HINSTANCE& hInst)
 
 void Engine::GameLoop()
 {
+	g_pNormalTexture = new Texture;
+	g_pNormalTexture->Load("Assets/modelData/utc_nomal.tga");
 	//ƒQ[ƒ€ƒ‹[ƒv
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));

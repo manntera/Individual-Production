@@ -4,8 +4,11 @@
 #include "../../Engine.h"
 #include "../EffectManager.h"
 #include "../Light.h"
+#include "../Texture.h"
+
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices;
+Texture* g_pNormalTexture;
 
 void DrawMeshContainer(
 	LPDIRECT3DDEVICE9 pd3dDevice,
@@ -72,7 +75,8 @@ void DrawMeshContainer(
 			pEffect->SetInt("g_numBone", pMeshContainer->NumInfi);
 			//ディフューズテクスチャ
 			pEffect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
-
+			pEffect->SetTexture("g_normalTexture", g_pNormalTexture->GetBody());
+			pEffect->SetBool("g_isHasNormalMap", true);
 			//ボーン数。
 			pEffect->SetInt("CurNumBones", pMeshContainer->NumInfi - 1);
 			D3DXMATRIX viewRotInv;
@@ -103,7 +107,11 @@ void DrawMeshContainer(
 		{
 			mWorld = *worldMatrix;
 		}
+		D3DXMATRIX mInvWorld;
+		D3DXMatrixInverse(&mInvWorld, NULL, &mWorld);
+		pEffect->SetBool("g_isHasNormalMap", false);
 		pEffect->SetMatrix("g_worldMatrix", &mWorld);
+		pEffect->SetMatrix("g_invWorldMatrix", &mInvWorld);
 		pEffect->SetMatrix("g_rotationMatrix", rotationMatrix);
 		pEffect->Begin(0, D3DXFX_DONOTSAVESTATE);
 		pEffect->BeginPass(0);
@@ -182,12 +190,12 @@ SkinModel::SkinModel()
 
 SkinModel::~SkinModel()
 {
-
 }
 
 void SkinModel::Init(SkinModelData* modelData)
 {
 	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/Shader/Model.fx");
+	g_pNormalTexture = new Texture;
 	m_skinModelData = modelData;
 }
 

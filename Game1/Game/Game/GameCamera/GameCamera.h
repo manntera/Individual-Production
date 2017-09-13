@@ -14,6 +14,7 @@ public:
 	{
 		return camera;
 	}
+
 private:
 	D3DXQUATERNION	rotation;
 	Camera			camera;

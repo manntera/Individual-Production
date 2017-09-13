@@ -15,5 +15,7 @@ private:
 	Light			light;
 	RigidBody		rigidBody;
 	MeshCollider	meshCollider;
+	BoxCollider		boxCollider;
 	D3DXVECTOR3 trans;
+	D3DXQUATERNION rotation;
 };

@@ -24,12 +24,15 @@ void GameCamera::Init()
 
 void GameCamera::Update()
 {
-	float angleX = GetPad().GetRightStickX() * 2 / 180.0f * cPI;
-	float angleY = -GetPad().GetRightStickY() * 2 / 180.0f * cPI;
+	float angleY = GetPad().GetRightStickX() * 2 / 180.0f * cPI;
+	float angleX = GetPad().GetRightStickY() * 2 / 180.0f * cPI;
 	D3DXQUATERNION multi;
-	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), angleX);
+	D3DXVECTOR3 axisX = camera.GetTarget() - camera.GetPosition();
+	D3DXVec3Cross(&axisX, &axisX, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	D3DXVec3Normalize(&axisX, &axisX);
+	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), angleY);
 	D3DXQuaternionMultiply(&rotation, &rotation, &multi);
-	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(1.0f, 0.0f, 0.0f), angleY);
+	D3DXQuaternionRotationAxis(&multi, &axisX, angleX);
 	D3DXQuaternionMultiply(&rotation, &rotation, &multi);
 	D3DXMATRIX rotMatrix;
 	D3DXMatrixRotationQuaternion(&rotMatrix, &rotation);
@@ -37,7 +40,7 @@ void GameCamera::Update()
 	D3DXVECTOR3 target = player->GetPosition();
 	camera.SetTarget(target);
 	D3DXVECTOR3 position = {0.0f, 0.0f, 0.0f};
-	position.z -= 15.0f;
+	position.z -= 25.0f;
 	D3DXVec3TransformCoord(&position, &position, &rotMatrix);
 	position += target;
 	camera.SetPosition(position);

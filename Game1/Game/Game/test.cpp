@@ -6,32 +6,35 @@
 void Test::Init()
 {
 	light.SetAmbiemtLight({ 1.0f, 1.0f, 1.0f, 1.0f });
-	skinModelData.LoadModelData("../Game/Assets/modelData/Box.X", NULL);
+	skinModelData.LoadModelData("Assets/modelData/Box.X", NULL);
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
-	D3DXQUATERNION rotation;
 	D3DXQuaternionIdentity(&rotation);
 	D3DXVECTOR3 scale;
 	trans = { 10.0f, 0.0f, 0.0f };
 	scale = { 1.0f, 1.0f, 1.0f };
-	skinModel.UpdateWorldMatrix(trans, rotation, scale);
-	meshCollider.CreateFromSkinModel(&skinModel, NULL);
+	//meshCollider.CreateFromSkinModel(&skinModel, NULL);
+	boxCollider.Create(btVector3(10.0f, 3.0f, 10.0f));
 	RigidBodyInfo RBInfo;
-	RBInfo.collider = &meshCollider;
+	RBInfo.collider = &boxCollider;
 	RBInfo.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	RBInfo.mass = 0.0f;
 
-	D3DXQUATERNION rot;
-	D3DXQuaternionIdentity(&rot);
-	RBInfo.rot = rot;
+	D3DXQuaternionIdentity(&rotation);
+	D3DXQUATERNION multi;
+	float angle = 00.0f / 180.0f * cPI;
+	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(1.0f, 0.0f, 0.0f), angle);
+	D3DXQuaternionMultiply(&rotation, &rotation, &multi);
+	skinModel.UpdateWorldMatrix(trans, rotation, scale);
+	RBInfo.rot = rotation;
 	rigidBody.Create(RBInfo);
 	rigidBody.GetBody()->getWorldTransform().setOrigin(btVector3(trans.x, trans.y, trans.z));
+	rigidBody.GetBody()->getWorldTransform().setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 }
 
 void Test::Update()
 {
-	D3DXQUATERNION rotation;
-	D3DXQuaternionIdentity(&rotation);
+
 	D3DXVECTOR3 scale;
 	scale = { 1.0f, 1.0f, 1.0f };
 	skinModel.UpdateWorldMatrix(trans, rotation, scale);

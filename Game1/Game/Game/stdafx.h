@@ -16,6 +16,7 @@
 #include "../osumaruEngine/Physics/RigidBody.h"
 #include "../osumaruEngine/Physics/Collider/CapsuleCollider.h"
 #include "../osumaruEngine/Physics/Collider/MeshCollider.h"
+#include "../osumaruEngine/Physics/Collider/BoxCollider.h"
 #include "../osumaruEngine/Physics/Collider/ICollider.h"
 #include "../osumaruEngine/Physics/CharacterController.h"
 #include "../osumaruEngine/Input/Pad.h"

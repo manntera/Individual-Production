@@ -11,6 +11,7 @@ float		g_numBone;			//骨の数。
 float4x4	g_worldMatrix;			//ワールド行列
 float4x4	g_rotationMatrix;		//回転行列。
 float4x4	g_viewMatrixRotInv;		//カメラの回転行列
+float4x4	g_invWorldMatrix;
 
 bool	g_isHasNormalMap;			//法線マップ保持している？
 texture g_diffuseTexture;			//ディフューズテクスチャ
@@ -56,6 +57,7 @@ struct VS_OUTPUT
 	float3 Normal		: NORMAL;
 	float2 Tex0			: TEXCOORD0;
 	float3 Tangent		: TEXCOORD1;	//接ベクトル
+	float4 LightDir		: TEXCOORD2;
 };
 
 /*
@@ -126,8 +128,22 @@ VS_OUTPUT VSMain(VS_INPUT In, uniform bool hasSkin)
 		CalcWorldPosAndNormal(In, Pos, Normal, Tangent);
 	}
 	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
+	float3 biNormal;
+	biNormal = cross(Normal, Tangent);
+	biNormal = normalize(biNormal);
 	Out.Normal = normalize(Normal);
 	Out.Tangent = normalize(Tangent);
+	float4x4 mat = {
+		float4(Out.Tangent, 0.0f),
+		float4(biNormal, 0.0f),
+		float4(Out.Normal, 0.0f),
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+	mat = transpose(mat);
+	float4 lightDir = -g_light.diffuseLightDir[0];
+	lightDir = mul(lightDir, g_invWorldMatrix);
+	Out.LightDir = mul(lightDir, mat);
+	Out.LightDir.xyz = normalize(Out.LightDir.xyz);
 	Out.Tex0 = In.Tex0;
 	return Out;
 }
@@ -137,10 +153,18 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 {
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
-
 	float4 lig = DiffuseLight(normal);
 	color *= lig;
+	if (g_isHasNormalMap)
+	{
+		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
+		float3 normalVector = normalColor * 2 - 1.0f;
+		normalVector = normalize(normalVector);
 
+		float light = max(0, dot(In.LightDir.xyz, normalVector));
+		color *= light;
+	}
+	//color += g_light.ambient;
 	return color;
 }
 

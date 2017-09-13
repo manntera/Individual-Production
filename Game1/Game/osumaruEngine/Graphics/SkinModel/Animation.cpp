@@ -10,6 +10,8 @@ Animation::Animation()
 	m_numMaxTracks = 0;
 	m_interpolateEndTime = 0.0f;
 	m_interpolateTime = 0.0f;
+	m_currentAnimationSetNo = 0;
+	m_currentTrackNo = 0;
 }
 
 Animation::~Animation()
@@ -35,9 +37,9 @@ void Animation::Init(ID3DXAnimationController* anim)
 	for (int i = 0; i < m_numAnimSet; i++)
 	{
 		m_pAnimController->GetAnimationSet(i, &m_animationSets[i]);
-		m_animationEndTime[i] = 0.0f;
+		m_animationEndTime[i] = -1.0;
 	}
-	m_localAnimationTime = 0.0f;
+	m_localAnimationTime = 0.0;
 }
 
 void Animation::PlayAnimation(int animationSetIndex)
@@ -81,6 +83,7 @@ void Animation::PlayAnimation(int animationSetIndex, float interpolateTime)
 			m_pAnimController->SetTrackAnimationSet(m_currentTrackNo, m_animationSets[animationSetIndex]);
 			m_pAnimController->SetTrackEnable(m_currentTrackNo, TRUE);
 			m_pAnimController->SetTrackSpeed(m_currentTrackNo, 0.0f);
+			m_pAnimController->SetTrackPosition(m_currentTrackNo, 0.0f);
 			m_localAnimationTime = 0.0;
 			m_currentAnimationSetNo = animationSetIndex;
 		}
@@ -97,6 +100,7 @@ void Animation::Update(float deltaTime)
 	if (m_pAnimController)
 	{
 		m_localAnimationTime += deltaTime;
+
 		if (m_animationEndTime[m_currentAnimationSetNo] > 0.0//アニメーションの終了時間が設定されている
 			&& m_localAnimationTime > m_animationEndTime[m_currentAnimationSetNo])//アニメーションの終了時間を超えた
 		{
@@ -111,8 +115,8 @@ void Animation::Update(float deltaTime)
 		}
 		if (m_isInterpolate)
 		{
-			ID3DXAnimationSet* animSet = m_animationSets[2];
-			float period = (float)animSet->GetPeriod();
+			ID3DXAnimationSet* animSet = m_animationSets[m_currentAnimationSetNo];
+			float period = (float)(animSet->GetPeriod());
 			//補間中
 			m_interpolateTime += deltaTime;
 			float weight = 0.0f;

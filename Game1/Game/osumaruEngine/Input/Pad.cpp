@@ -109,6 +109,47 @@ void Pad::Update()
 	}
 	else
 	{
+		//接続されてない場合キーボードで入力。
+		for (const CorrespondencePad& pad : correspondencePad)
+		{
+			if (GetAsyncKeyState(pad.keyCode))
+			{
+				m_isPadPress[pad.padButton] = true;
+			}
+			else
+			{
+				m_isPadPress[pad.padButton] = false;
+			}
+		}
+		m_leftStickX = 0.0f;
+		m_leftStickY = 0.0f;
+		m_rightStickX = 0.0f;
+		m_rightStickY = 0.0f;
 
+		if (GetAsyncKeyState(VK_LEFT)) {
+			m_rightStickX = -1.0f;
+		}
+		else if (GetAsyncKeyState(VK_RIGHT)) {
+			m_rightStickX = 1.0f;
+		}
+		if (GetAsyncKeyState(VK_UP)) {
+			m_rightStickY = 1.0f;
+		}
+		else if (GetAsyncKeyState(VK_DOWN)) {
+			m_rightStickY = -1.0f;
+		}
+
+		if (GetAsyncKeyState('A')) {
+			m_leftStickX = -1.0f;
+		}
+		else if (GetAsyncKeyState('D')) {
+			m_leftStickX = 1.0f;
+		}
+		if (GetAsyncKeyState('W')) {
+			m_leftStickY = 1.0f;
+		}
+		else if (GetAsyncKeyState('S')) {
+			m_leftStickY = -1.0f;
+		}
 	}
 }

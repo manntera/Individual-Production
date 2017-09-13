@@ -19,5 +19,6 @@ private:
 	D3DXQUATERNION	rotation;
 	D3DXVECTOR3		trans;
 	D3DXVECTOR3		scale;
+	Animation		anim;
 	CharacterController characterController;
 };

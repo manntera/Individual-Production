@@ -93,6 +93,9 @@
     <ClCompile Include="Input\Pad.cpp">
       <Filter>ソース ファイル\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\Collider\BoxCollider.cpp">
+      <Filter>ソース ファイル\Physics\Collider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics\EffectManager.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Input\Pad.h">
       <Filter>ソース ファイル\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\Collider\BoxCollider.h">
+      <Filter>ソース ファイル\Physics\Collider</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
