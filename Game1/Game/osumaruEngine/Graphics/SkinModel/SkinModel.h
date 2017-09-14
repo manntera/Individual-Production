@@ -1,10 +1,11 @@
 #pragma once
 #include "Animation.h"
 
+class Camera;
 class SkinModelData;
 class RenderContext;
 class Light;
-
+class Texture;
 class SkinModel
 {
 public:
@@ -43,6 +44,7 @@ public:
 		this->m_light = light;
 	}
 
+
 	//ワールド行列を取得。
 	D3DXMATRIX GetWorldMatrix()
 	{
@@ -53,7 +55,25 @@ public:
 	*/
 	LPD3DXMESH GetOrgMeshFirst();
 
+	//法線マップをセット
+	void SetNormalMap(Texture* texture)
+	{
+		m_pNormalMap = texture;
+		m_isHasNormalMap = true;
+	}
+
+	//スペキュラマップを設定
+	void SetSpecularMap(Texture* texture)
+	{
+		m_pSpecularMap = texture;
+		m_isHasSpecularMap = true;
+	}
+
 private:
+	Texture*		m_pNormalMap;
+	Texture*		m_pSpecularMap;
+	bool			m_isHasNormalMap;
+	bool			m_isHasSpecularMap;
 	D3DXMATRIX		m_worldMatrix;				//ワールド行列
 	D3DXMATRIX		m_rotationMatrix;				//回転行列
 	SkinModelData*	m_skinModelData;				//スキンモデルデータ

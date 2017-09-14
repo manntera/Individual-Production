@@ -11,7 +11,7 @@ void Test::Init()
 	skinModel.SetLight(&light);
 	D3DXQuaternionIdentity(&rotation);
 	D3DXVECTOR3 scale;
-	trans = { 10.0f, 0.0f, 0.0f };
+	trans = { 0.0f, 0.0f, 0.0f };
 	scale = { 1.0f, 1.0f, 1.0f };
 	//meshCollider.CreateFromSkinModel(&skinModel, NULL);
 	boxCollider.Create(btVector3(10.0f, 3.0f, 10.0f));
@@ -42,5 +42,5 @@ void Test::Update()
 
 void Test::Render()
 {
-	skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix());
+	//skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix());
 }

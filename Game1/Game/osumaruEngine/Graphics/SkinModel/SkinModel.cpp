@@ -5,10 +5,14 @@
 #include "../EffectManager.h"
 #include "../Light.h"
 #include "../Texture.h"
+#include "../../Camera.h"
 
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices;
 Texture* g_pNormalTexture;
+Texture* g_pSpecularTexture;
+Camera*			g_pCamera;
+
 
 void DrawMeshContainer(
 	LPDIRECT3DDEVICE9 pd3dDevice,
@@ -19,8 +23,11 @@ void DrawMeshContainer(
 	D3DXMATRIX* rotationMatrix,
 	D3DXMATRIX* viewMatrix,
 	D3DXMATRIX* projMatrix,
-	Light* light
-)
+	Light* light,
+	bool isHasNormal,
+	Texture* normalMap,
+	bool isHasSpecular,
+	Texture* specularMap)
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
 	D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
@@ -50,6 +57,17 @@ void DrawMeshContainer(
 		pEffect->SetMatrix("g_mViewProj", &viewProj);
 		//ライト
 		pEffect->SetValue("g_light", light, sizeof(Light));
+		if (isHasNormal && normalMap != nullptr)
+		{
+			pEffect->SetTexture("g_normalTexture", normalMap->GetBody());
+		}
+		if (isHasSpecular && specularMap != nullptr)
+		{
+			pEffect->SetTexture("g_specularTexture", specularMap->GetBody());
+		}
+
+		pEffect->SetBool("g_isHasNormalMap", isHasNormal);
+		pEffect->SetBool("g_isHasSpecularMap", isHasSpecular);
 	}
 	if (pMeshContainer->pSkinInfo != NULL)
 	{
@@ -75,8 +93,7 @@ void DrawMeshContainer(
 			pEffect->SetInt("g_numBone", pMeshContainer->NumInfi);
 			//ディフューズテクスチャ
 			pEffect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
-			pEffect->SetTexture("g_normalTexture", g_pNormalTexture->GetBody());
-			pEffect->SetBool("g_isHasNormalMap", true);
+			pEffect->SetFloatArray("g_cameraPos", g_pCamera->GetPosition(), 3);
 			//ボーン数。
 			pEffect->SetInt("CurNumBones", pMeshContainer->NumInfi - 1);
 			D3DXMATRIX viewRotInv;
@@ -134,7 +151,11 @@ void DrawFrame(
 	D3DXMATRIX* rotationMatrix,
 	D3DXMATRIX* viewMatrix,
 	D3DXMATRIX* projMatrix,
-	Light* light)
+	Light* light,
+	bool isHasNormal,
+	Texture* normalMap,
+	bool isHasSpecular,
+	Texture* specularMap)
 {
 	LPD3DXMESHCONTAINER pMeshContainer;
 	pMeshContainer = pFrame->pMeshContainer;
@@ -149,7 +170,11 @@ void DrawFrame(
 			rotationMatrix,
 			viewMatrix,
 			projMatrix,
-			light);
+			light,
+			isHasNormal,
+			normalMap,
+			isHasSpecular,
+			specularMap);
 
 		pMeshContainer = pMeshContainer->pNextMeshContainer;
 	}
@@ -164,7 +189,11 @@ void DrawFrame(
 			rotationMatrix,
 			viewMatrix,
 			projMatrix,
-			light
+			light,
+			isHasNormal,
+			normalMap,
+			isHasSpecular,
+			specularMap
 			);
 	}
 	if (pFrame->pFrameFirstChild != NULL)
@@ -177,7 +206,11 @@ void DrawFrame(
 			rotationMatrix,
 			viewMatrix,
 			projMatrix,
-			light);
+			light,
+			isHasNormal,
+			normalMap,
+			isHasSpecular,
+			specularMap);
 	}
 }
 
@@ -186,6 +219,10 @@ SkinModel::SkinModel()
 	m_skinModelData = nullptr;
 	m_light = nullptr;
 	m_pEffect = nullptr;
+	m_isHasNormalMap = false;
+	m_isHasSpecularMap = false;
+	m_pNormalMap = nullptr;
+	m_pSpecularMap = nullptr;
 }
 
 SkinModel::~SkinModel()
@@ -195,7 +232,6 @@ SkinModel::~SkinModel()
 void SkinModel::Init(SkinModelData* modelData)
 {
 	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/Shader/Model.fx");
-	g_pNormalTexture = new Texture;
 	m_skinModelData = modelData;
 }
 
@@ -225,7 +261,11 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			&m_rotationMatrix,
 			viewMatrix,
 			projMatrix,
-			m_light
+			m_light,
+			m_isHasNormalMap,
+			m_pNormalMap,
+			m_isHasSpecularMap,
+			m_pSpecularMap
 		);
 	}
 }

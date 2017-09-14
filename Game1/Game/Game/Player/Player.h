@@ -21,4 +21,6 @@ private:
 	D3DXVECTOR3		scale;
 	Animation		anim;
 	CharacterController characterController;
+	Texture			m_modelNormalMap;
+	Texture			m_modelSpecularMap;
 };

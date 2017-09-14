@@ -5,26 +5,27 @@
 
 void Player::Init()
 {
-	float ambient = 1.0f;
-	float diffuseColor = 0.0f;
+	float ambient = 0.6f;
+	float diffuseColor = 0.3f;
 	light.SetAmbiemtLight({ ambient, ambient, ambient, 1.0f });
 	light.SetDiffuseLightColor(0, { diffuseColor, diffuseColor, diffuseColor, 1.0f });
-	light.SetDiffuseLightDirection(0, { 0.707f, 0.0f, -0.707f, 1.0f });
+	light.SetDiffuseLightDirection(0, { 0.707f, 0.0f, 0.707f, 1.0f });
 	skinModelData.LoadModelData("Assets/modelData/Unitychan.X", &anim);
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
-
+	m_modelNormalMap.Load("Assets/modelData/utc_normal.tga");
+	m_modelSpecularMap.Load("Assets/modelData/utc_spec.tga");
+	skinModel.SetNormalMap(&m_modelNormalMap);
+	skinModel.SetSpecularMap(&m_modelSpecularMap);
 
 	D3DXQuaternionIdentity(&rotation);
 
-	
 	trans = { 0.0f, 7.0f, 0.0f };
 	scale = { 1.0f, 1.0f, 1.0f };
 	anim.SetAnimationEndTime(0, 0.8f);
 	skinModel.UpdateWorldMatrix(trans, rotation, scale);
 	characterController.Init(1.0f, 1.0f, trans);
 	characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
-	//characterController.SetGravity(0.0f);
 }
 
 void Player::Update()
