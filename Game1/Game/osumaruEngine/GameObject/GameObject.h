@@ -9,6 +9,16 @@ public:
 	//仮想デストラクタ(基底クラスのデストラクタは仮想関数でなくてはならない。)
 	virtual ~GameObject();
 
+	//初期化関数
+	virtual void Start() {};
+
+	//更新関数
+	virtual void Update() = 0;
+
+	//描画関数
+	virtual void Render() {};
+
+
 	//死んでいるか？
 	bool IsDelete()
 	{
@@ -21,13 +31,19 @@ public:
 		m_isDelete = true;
 	}
 
-	//更新関数
-	virtual void Update() = 0;
-
-	//描画関数
-	virtual void Render() {};
+	//初期化が終わった時に呼ぶ関数
+	void FinishStart()
+	{
+		m_isStart = true;
+	}
+	//初期化済みか？
+	bool IsStart()
+	{
+		return m_isStart;
+	}
 
 private:
-	//インスタンスを消す時に建てるフラグ
-	bool m_isDelete;
+	
+	bool m_isDelete;	//インスタンスを消す時に建てるフラグ
+	bool m_isStart;		//初期化してるかのフラグ
 };

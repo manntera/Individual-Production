@@ -63,9 +63,10 @@ public:
 	}
 
 	//スペキュラマップを設定
-	void SetSpecularMap(Texture* texture)
+	void SetSpecularMap(Texture* texture, Camera* camera)
 	{
 		m_pSpecularMap = texture;
+		m_pCamera = camera;
 		m_isHasSpecularMap = true;
 	}
 
@@ -80,4 +81,6 @@ private:
 	ID3DXEffect*	m_pEffect;					//エフェクト
 	Animation		m_animation;					//アニメーション
 	Light*			m_light;						//ライト
+	Camera*			m_pCamera;
+
 };

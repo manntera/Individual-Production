@@ -36,7 +36,7 @@ public:
 	void SetPosition(D3DXVECTOR3 position);
 
 	//À•W‚ğæ“¾
-	D3DXVECTOR3 GetPosition();
+	D3DXVECTOR3& GetPosition();
 
 	//ƒJƒƒ‰‚Ìã•ûŒü‚ğİ’è
 	void SetUp(D3DXVECTOR3 up);

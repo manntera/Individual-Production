@@ -58,7 +58,7 @@ void Camera::SetPosition(D3DXVECTOR3 position)
 	m_position = position;
 }
 
-D3DXVECTOR3 Camera::GetPosition()
+D3DXVECTOR3& Camera::GetPosition()
 {
 	return m_position;
 }

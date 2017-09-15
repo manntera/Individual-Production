@@ -6,6 +6,15 @@
 
 void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 {
+	//‰Šú‰»
+	for (GameObject* object : m_objectVector)
+	{
+		if (!object->IsStart())
+		{
+			object->Start();
+			object->FinishStart();
+		}
+	}
 	//XV
 	for (GameObject* object : m_objectVector)
 	{

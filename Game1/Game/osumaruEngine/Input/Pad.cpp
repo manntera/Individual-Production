@@ -36,6 +36,10 @@ Pad::Pad()
 	{
 		isPad = false;
 	}
+	for (bool& isPad : m_isPadTrigger)
+	{
+		isPad = false;
+	}
 	m_rightStickX = 0.0f;
 	m_rightStickY = 0.0f;
 	m_leftStickX = 0.0f; 
@@ -59,6 +63,14 @@ void Pad::Update()
 		{
 			if (m_state.Gamepad.wButtons & pad.padCode)
 			{
+				if (!m_isPadPress[pad.padButton])
+				{
+					m_isPadTrigger[pad.padButton] = true;
+				}
+				else
+				{
+					m_isPadTrigger[pad.padButton] = false;
+				}
 				m_isPadPress[pad.padButton] = true;
 			}
 			else

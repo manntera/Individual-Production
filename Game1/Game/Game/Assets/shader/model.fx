@@ -177,22 +177,24 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		float3 normalVector = normalColor * 2 - 1.0f;
 		normalVector = normalize(normalVector);
 
-		float light = max(0, dot(In.LightDir.xyz, normalVector));
-		lig *= light;
+		float3 light = max(0, dot(In.LightDir.xyz, normalVector)) * g_light.diffuseLightColor[0].xyz;
+		lig.xyz *= light;
 		lig += g_light.ambient;
 		lig.w = 1.0f;
 	}
 	if (g_isHasSpecularMap)
 	{
 		float3 textureNormal = In.Normal;
+		textureNormal = normalize(textureNormal);
 		float3 gaze = In.WorldPos - g_cameraPos;
-		textureNormal *= dot(textureNormal, gaze);
+		textureNormal *= dot(textureNormal, -gaze);
 		gaze += textureNormal * 2.0f;
 		gaze = normalize(gaze);
 		float3 lightDir = -g_light.diffuseLightDir[0].xyz;
 		lightDir = normalize(lightDir);
-		float4 specColor = tex2D(g_specularMapSampler, In.Tex0);
-		lig.xyz += pow(max(0, dot(gaze, lightDir)), 18.0f) * g_light.diffuseLightColor[0].xyz * 4.0f * length(specColor);
+		float3 specColor = tex2D(g_specularMapSampler, In.Tex0).xyz;
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[0].xyz * length(specColor) * 3.0f;
+		lig.w = 1.0f;
 	}
 	color *= lig;
 	return color;

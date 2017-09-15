@@ -9,10 +9,6 @@
 
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices;
-Texture* g_pNormalTexture;
-Texture* g_pSpecularTexture;
-Camera*			g_pCamera;
-
 
 void DrawMeshContainer(
 	LPDIRECT3DDEVICE9 pd3dDevice,
@@ -27,7 +23,8 @@ void DrawMeshContainer(
 	bool isHasNormal,
 	Texture* normalMap,
 	bool isHasSpecular,
-	Texture* specularMap)
+	Texture* specularMap,
+	D3DXVECTOR3* cameraPos)
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
 	D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
@@ -61,9 +58,10 @@ void DrawMeshContainer(
 		{
 			pEffect->SetTexture("g_normalTexture", normalMap->GetBody());
 		}
-		if (isHasSpecular && specularMap != nullptr)
+		if (isHasSpecular && specularMap != nullptr && cameraPos != nullptr)
 		{
 			pEffect->SetTexture("g_specularTexture", specularMap->GetBody());
+			pEffect->SetFloatArray("g_cameraPos", *cameraPos, 3);
 		}
 
 		pEffect->SetBool("g_isHasNormalMap", isHasNormal);
@@ -93,7 +91,6 @@ void DrawMeshContainer(
 			pEffect->SetInt("g_numBone", pMeshContainer->NumInfi);
 			//ディフューズテクスチャ
 			pEffect->SetTexture("g_diffuseTexture", pMeshContainer->ppTextures[pBoneComb[iAttrib].AttribId]);
-			pEffect->SetFloatArray("g_cameraPos", g_pCamera->GetPosition(), 3);
 			//ボーン数。
 			pEffect->SetInt("CurNumBones", pMeshContainer->NumInfi - 1);
 			D3DXMATRIX viewRotInv;
@@ -155,7 +152,8 @@ void DrawFrame(
 	bool isHasNormal,
 	Texture* normalMap,
 	bool isHasSpecular,
-	Texture* specularMap)
+	Texture* specularMap,
+	D3DXVECTOR3* cameraPos)
 {
 	LPD3DXMESHCONTAINER pMeshContainer;
 	pMeshContainer = pFrame->pMeshContainer;
@@ -174,7 +172,8 @@ void DrawFrame(
 			isHasNormal,
 			normalMap,
 			isHasSpecular,
-			specularMap);
+			specularMap,
+			cameraPos);
 
 		pMeshContainer = pMeshContainer->pNextMeshContainer;
 	}
@@ -193,7 +192,8 @@ void DrawFrame(
 			isHasNormal,
 			normalMap,
 			isHasSpecular,
-			specularMap
+			specularMap,
+			cameraPos
 			);
 	}
 	if (pFrame->pFrameFirstChild != NULL)
@@ -210,7 +210,8 @@ void DrawFrame(
 			isHasNormal,
 			normalMap,
 			isHasSpecular,
-			specularMap);
+			specularMap,
+			cameraPos);
 	}
 }
 
@@ -223,6 +224,7 @@ SkinModel::SkinModel()
 	m_isHasSpecularMap = false;
 	m_pNormalMap = nullptr;
 	m_pSpecularMap = nullptr;
+	m_pCamera = nullptr;
 }
 
 SkinModel::~SkinModel()
@@ -251,6 +253,11 @@ void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVEC
 
 void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 {
+	D3DXVECTOR3* cameraPos = nullptr;
+	if (m_pCamera != nullptr)
+	{
+		cameraPos = &m_pCamera->GetPosition();
+	}
 	if (m_skinModelData)
 	{
 		DrawFrame(
@@ -265,8 +272,8 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			m_isHasNormalMap,
 			m_pNormalMap,
 			m_isHasSpecularMap,
-			m_pSpecularMap
-		);
+			m_pSpecularMap,
+			cameraPos);
 	}
 }
 
