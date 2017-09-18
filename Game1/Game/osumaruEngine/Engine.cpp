@@ -42,7 +42,7 @@ void Engine::InitD3D(HINSTANCE& hInst)
 
 	//ウィンドウを作成
 	HWND hWnd = CreateWindow("Game", "Game",
-		WS_OVERLAPPEDWINDOW, 50, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT,
+		WS_OVERLAPPEDWINDOW, 0, 0, FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT,
 		NULL, NULL, m_wc.hInstance, NULL);
 
 	//D3Dオブジェクトを作成する
@@ -79,6 +79,17 @@ void Engine::GameLoop()
 	//ゲームループ
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
+	m_pD3DDevice->CreateTexture(
+		FRAME_BUFFER_WIDTH,
+		FRAME_BUFFER_HEIGHT,
+		1,
+		D3DUSAGE_RENDERTARGET,
+		D3DFMT_A8R8G8B8,
+		D3DPOOL_DEFAULT,
+		&m_pShadowMap,
+		NULL
+	);
+
 	while (msg.message != WM_QUIT)
 	{
 		if (PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))

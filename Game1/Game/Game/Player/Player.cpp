@@ -2,11 +2,11 @@
 #include "Player.h"
 #include "../GameCamera/GameCamera.h"
 #include "../Scene/GameScene/GameScene.h"
-
+extern bool flg;
 void Player::Init()
 {
-	float ambient = 0.3f;
-	float diffuseColor = 0.7f;
+	float ambient = 0.6f;
+	float diffuseColor = 0.3f;
 	m_light.SetAmbiemtLight({ ambient, ambient, ambient, 1.0f });
 	m_light.SetDiffuseLightColor(0, { diffuseColor, diffuseColor, diffuseColor, 1.0f });
 	m_light.SetDiffuseLightDirection(0, { 0.707f, 0.0f, 0.707f, 1.0f });
@@ -18,6 +18,8 @@ void Player::Init()
 	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(1.0f, 1.0f, m_position);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
+	m_skinModel.m_isShadowMapCaster = true;
+	//m_skinModel.m_isShadowMapReceiver = true;
 }
 
 void Player::Start()
@@ -35,6 +37,10 @@ void Player::Start()
 
 void Player::Update()
 {
+	if (GetPad().IsTriggerButton(padButtonX))
+	{
+		flg = !flg;
+	}
 	D3DXVECTOR3 moveSpeed = m_characterController.GetMoveSpeed();
 	moveSpeed.x = 0.0f;
 	moveSpeed.z = 0.0f;
@@ -89,7 +95,7 @@ void Player::Update()
 	m_anim.Update(1.0f / 60.0f);
 }
 
-void Player::Render()
+void Player::Render(int num)
 {
-	m_skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix());
+	m_skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix(), num);
 }

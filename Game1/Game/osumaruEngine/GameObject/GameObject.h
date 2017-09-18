@@ -16,7 +16,7 @@ public:
 	virtual void Update() = 0;
 
 	//•`‰æŠÖ”
-	virtual void Render() {};
+	virtual void Render(int num) {};
 
 
 	//€‚ñ‚Å‚¢‚é‚©H

@@ -8,12 +8,14 @@ GameScene *g_gameScene;
 
 void GameScene::Init()
 {
+	m_test = New<Test>();
+	m_test->Init();
+
 	m_player = New<Player>();
 	m_camera = New<GameCamera>();
 	m_camera->Init();
 	m_player->Init();
-	m_test = New<Test>();
-	m_test->Init();
+
 
 }
 

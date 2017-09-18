@@ -85,7 +85,12 @@ public:
 		return m_pad;
 	}
 
+public:
+
+	LPDIRECT3DTEXTURE9	m_pShadowMap;
 private:
+
+
 	LPDIRECT3D9			m_pD3D;
 	LPDIRECT3DDEVICE9	m_pD3DDevice;			//デバイス
 	EffectManager*		m_effectManager;		//エフェクトマネージャー

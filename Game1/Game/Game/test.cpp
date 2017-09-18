@@ -9,6 +9,7 @@ void Test::Init()
 	skinModelData.LoadModelData("Assets/modelData/Box.X", NULL);
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
+	skinModel.m_isShadowMapReceiver = true;
 	D3DXQuaternionIdentity(&rotation);
 	D3DXVECTOR3 scale;
 	trans = { 0.0f, 0.0f, 0.0f };
@@ -22,7 +23,7 @@ void Test::Init()
 
 	D3DXQuaternionIdentity(&rotation);
 	D3DXQUATERNION multi;
-	float angle = 00.0f / 180.0f * cPI;
+	float angle = 0.0f / 180.0f * cPI;
 	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(1.0f, 0.0f, 0.0f), angle);
 	D3DXQuaternionMultiply(&rotation, &rotation, &multi);
 	skinModel.UpdateWorldMatrix(trans, rotation, scale);
@@ -40,7 +41,7 @@ void Test::Update()
 	skinModel.UpdateWorldMatrix(trans, rotation, scale);
 }
 
-void Test::Render()
+void Test::Render(int num)
 {
-	skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix());
+	skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix(), num);
 }

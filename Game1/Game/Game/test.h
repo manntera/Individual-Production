@@ -8,7 +8,7 @@ public:
 
 	void Update()override;
 
-	void Render();
+	void Render(int num);
 private:
 	SkinModel		skinModel;
 	SkinModelData	skinModelData;

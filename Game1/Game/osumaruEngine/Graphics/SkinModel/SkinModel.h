@@ -26,7 +26,7 @@ public:
 	viewMatrix		カメラのビュー行列
 	projMatrix		カメラのプロジェクション行列
 	*/
-	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix);
+	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, int num);
 
 	/*
 	ワールド行列を更新。
@@ -69,6 +69,11 @@ public:
 		m_pCamera = camera;
 		m_isHasSpecularMap = true;
 	}
+public:
+
+
+	bool			m_isShadowMapCaster;
+	bool			m_isShadowMapReceiver;
 
 private:
 	Texture*		m_pNormalMap;

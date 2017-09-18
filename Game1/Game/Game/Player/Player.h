@@ -10,7 +10,7 @@ public:
 
 	void Start() override;
 
-	void Render() override;
+	void Render(int num) override;
 
 	D3DXVECTOR3 GetPosition()
 	{

@@ -6,9 +6,10 @@
 #include "../Light.h"
 #include "../Texture.h"
 #include "../../Camera.h"
-
+bool flg = false;
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices;
+Light						g_light;
 
 void DrawMeshContainer(
 	LPDIRECT3DDEVICE9 pd3dDevice,
@@ -24,7 +25,10 @@ void DrawMeshContainer(
 	Texture* normalMap,
 	bool isHasSpecular,
 	Texture* specularMap,
-	D3DXVECTOR3* cameraPos)
+	D3DXVECTOR3* cameraPos,
+	int num,
+	bool isShadowReceiver,
+	bool isShadowCaster)
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
 	D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
@@ -41,11 +45,25 @@ void DrawMeshContainer(
 	{
 		if (pMeshContainer->pSkinInfo != NULL)
 		{
-			pEffect->SetTechnique("SkinModel");
+			if (num == 0)
+			{
+				pEffect->SetTechnique("SkinShadowMap");
+			}
+			else
+			{
+				pEffect->SetTechnique("SkinModel");
+			}
 		}
 		else
 		{
-			pEffect->SetTechnique("NoSkinModel");
+			if (num == 0)
+			{
+				pEffect->SetTechnique("NoSkinShadowMap");
+			}
+			else
+			{
+				pEffect->SetTechnique("NoSkinModel");
+			}
 		}
 	}
 	//‹¤’Ê‚Ì’è”ƒŒƒWƒXƒ^‚ðÝ’è
@@ -63,6 +81,27 @@ void DrawMeshContainer(
 			pEffect->SetTexture("g_specularTexture", specularMap->GetBody());
 			pEffect->SetFloatArray("g_cameraPos", *cameraPos, 3);
 		}
+		if (num == 1)
+		{
+			pEffect->SetTexture("g_shadowMapTexture", GetEngine().m_pShadowMap);
+
+		}
+		D3DXMATRIX m_viewMat;
+		D3DXMATRIX m_projMat;
+		float m_Near = 0.1f;
+		float m_Far = 1000.0f;
+		float m_Aspect = (float)FRAME_BUFFER_WIDTH / (float)FRAME_BUFFER_HEIGHT;
+		D3DXMatrixPerspectiveFovLH(&m_projMat, D3DX_PI / 4, m_Aspect, m_Near, m_Far);
+		D3DXVECTOR3 position;
+		position.x = -30.0f;
+		position.y =20.0f;
+		position.z = 0.0f;
+		D3DXVECTOR3 target = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		D3DXMatrixLookAtLH(&m_viewMat, &position, &target, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+		D3DXMATRIX viewProjMat;
+		D3DXMatrixMultiply(&viewProjMat, &m_viewMat, &m_projMat);
+		pEffect->SetMatrix("g_lightViewProjMatrix", &viewProjMat);
+		pEffect->SetBool("g_isShadowMapReceiver", isShadowReceiver);
 
 		pEffect->SetBool("g_isHasNormalMap", isHasNormal);
 		pEffect->SetBool("g_isHasSpecularMap", isHasSpecular);
@@ -153,7 +192,10 @@ void DrawFrame(
 	Texture* normalMap,
 	bool isHasSpecular,
 	Texture* specularMap,
-	D3DXVECTOR3* cameraPos)
+	D3DXVECTOR3* cameraPos,
+	int num,
+	bool isShadowReceiver,
+	bool isShadowCaster)
 {
 	LPD3DXMESHCONTAINER pMeshContainer;
 	pMeshContainer = pFrame->pMeshContainer;
@@ -173,7 +215,10 @@ void DrawFrame(
 			normalMap,
 			isHasSpecular,
 			specularMap,
-			cameraPos);
+			cameraPos,
+			num,
+			isShadowReceiver,
+			isShadowCaster);
 
 		pMeshContainer = pMeshContainer->pNextMeshContainer;
 	}
@@ -193,7 +238,10 @@ void DrawFrame(
 			normalMap,
 			isHasSpecular,
 			specularMap,
-			cameraPos
+			cameraPos,
+			num,
+			isShadowReceiver,
+			isShadowCaster
 			);
 	}
 	if (pFrame->pFrameFirstChild != NULL)
@@ -211,7 +259,10 @@ void DrawFrame(
 			normalMap,
 			isHasSpecular,
 			specularMap,
-			cameraPos);
+			cameraPos,
+			num,
+			isShadowReceiver,
+			isShadowCaster);
 	}
 }
 
@@ -225,6 +276,14 @@ SkinModel::SkinModel()
 	m_pNormalMap = nullptr;
 	m_pSpecularMap = nullptr;
 	m_pCamera = nullptr;
+
+	float ambient = 0.6f;
+	float diffuseColor = 0.3f;
+	g_light.SetDiffuseLightColor(0, { diffuseColor, diffuseColor, diffuseColor, 1.0f });
+	g_light.SetDiffuseLightDirection(0, { 1.0f, 0.0f, 0.0f, 1.0f });
+	m_isShadowMapCaster = false;
+	m_isShadowMapReceiver = false;
+
 }
 
 SkinModel::~SkinModel()
@@ -251,29 +310,35 @@ void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVEC
 	}
 }
 
-void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
+void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, int num)
 {
 	D3DXVECTOR3* cameraPos = nullptr;
 	if (m_pCamera != nullptr)
 	{
 		cameraPos = &m_pCamera->GetPosition();
 	}
-	if (m_skinModelData)
+	if (num != 0 || m_isShadowMapCaster)
 	{
-		DrawFrame(
-			GetEngine().GetDevice(),
-			m_skinModelData->GetFrameRoot(),
-			m_pEffect,
-			&m_worldMatrix,
-			&m_rotationMatrix,
-			viewMatrix,
-			projMatrix,
-			m_light,
-			m_isHasNormalMap,
-			m_pNormalMap,
-			m_isHasSpecularMap,
-			m_pSpecularMap,
-			cameraPos);
+		if (m_skinModelData)
+		{
+			DrawFrame(
+				GetEngine().GetDevice(),
+				m_skinModelData->GetFrameRoot(),
+				m_pEffect,
+				&m_worldMatrix,
+				&m_rotationMatrix,
+				viewMatrix,
+				projMatrix,
+				m_light,
+				m_isHasNormalMap,
+				m_pNormalMap,
+				m_isHasSpecularMap,
+				m_pSpecularMap,
+				cameraPos,
+				num,
+				m_isShadowMapReceiver,
+				m_isShadowMapCaster);
+		}
 	}
 }
 
