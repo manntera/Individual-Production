@@ -9,7 +9,7 @@ void Test::Init()
 	skinModelData.LoadModelData("Assets/modelData/Box.X", NULL);
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
-	skinModel.m_isShadowMapReceiver = true;
+	skinModel.SetShadowReceiverFlg(true);
 	D3DXQuaternionIdentity(&rotation);
 	D3DXVECTOR3 scale;
 	trans = { 0.0f, 0.0f, 0.0f };
@@ -41,7 +41,7 @@ void Test::Update()
 	skinModel.UpdateWorldMatrix(trans, rotation, scale);
 }
 
-void Test::Render(int num)
+void Test::Render()
 {
-	skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix(), num);
+	skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix(), enPreRenderNormal);
 }

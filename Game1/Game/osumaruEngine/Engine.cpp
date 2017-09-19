@@ -69,6 +69,8 @@ void Engine::InitD3D(HINSTANCE& hInst)
 	m_effectManager = new EffectManager;
 	m_physicsWorld = new PhysicsWorld;
 	m_physicsWorld->Init();
+	m_shadowMap.Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
+	m_shadowMap.SetPosition({ 0.0f, 20.0f, 20.0f });
 	// show the window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	UpdateWindow(hWnd);
@@ -79,16 +81,6 @@ void Engine::GameLoop()
 	//ƒQ[ƒ€ƒ‹[ƒv
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
-	m_pD3DDevice->CreateTexture(
-		FRAME_BUFFER_WIDTH,
-		FRAME_BUFFER_HEIGHT,
-		1,
-		D3DUSAGE_RENDERTARGET,
-		D3DFMT_A8R8G8B8,
-		D3DPOOL_DEFAULT,
-		&m_pShadowMap,
-		NULL
-	);
 
 	while (msg.message != WM_QUIT)
 	{
@@ -101,7 +93,9 @@ void Engine::GameLoop()
 		{
 			m_objectManager.Execute(m_pD3DDevice);
 			m_physicsWorld->Update();
+			m_shadowMap.Update();
 			m_pad.Update();
+
 		}
 	}
 

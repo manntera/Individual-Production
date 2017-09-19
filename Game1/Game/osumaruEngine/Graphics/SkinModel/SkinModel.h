@@ -6,6 +6,14 @@ class SkinModelData;
 class RenderContext;
 class Light;
 class Texture;
+
+enum EnPreRender
+{
+	enPreRenderNormal,		//普通に描画するとき
+	enPreRenderShadowMap,	//シャドウマップノテクスチャに書き込む時
+	enPreRenderNum,
+
+};
 class SkinModel
 {
 public:
@@ -26,7 +34,7 @@ public:
 	viewMatrix		カメラのビュー行列
 	projMatrix		カメラのプロジェクション行列
 	*/
-	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, int num);
+	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, EnPreRender preRender);
 
 	/*
 	ワールド行列を更新。
@@ -69,13 +77,20 @@ public:
 		m_pCamera = camera;
 		m_isHasSpecularMap = true;
 	}
-public:
 
+	void SetShadowCasterFlg(bool isShadowCaster)
+	{
+		m_isShadowMapCaster = isShadowCaster;
+	}
 
+	void SetShadowReceiverFlg(bool isShadowReceiver)
+	{
+		m_isShadowMapReceiver = isShadowReceiver;
+	}
+private:
 	bool			m_isShadowMapCaster;
 	bool			m_isShadowMapReceiver;
 
-private:
 	Texture*		m_pNormalMap;
 	Texture*		m_pSpecularMap;
 	bool			m_isHasNormalMap;

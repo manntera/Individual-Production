@@ -96,6 +96,9 @@
     <ClCompile Include="Physics\Collider\BoxCollider.cpp">
       <Filter>ソース ファイル\Physics\Collider</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\ShadowMap.cpp">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics\EffectManager.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="Physics\Collider\BoxCollider.h">
       <Filter>ソース ファイル\Physics\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ShadowMap.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

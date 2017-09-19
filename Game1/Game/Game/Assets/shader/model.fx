@@ -13,8 +13,6 @@ float4x4	g_rotationMatrix;		//回転行列。
 float4x4	g_viewMatrixRotInv;		//カメラの回転行列
 float3		g_cameraPos;			//スペキュラ用のカメラ視点
 float4x4	g_invWorldMatrix;
-float4x4	g_lightViewMatrix;
-float4x4	g_lightProjMatrix;
 float4x4	g_lightViewProjMatrix;
 bool	g_flg;
 
@@ -249,7 +247,7 @@ VS_OUTPUT ShadowMapVSMain(VS_INPUT In, uniform bool hasSkin)
 		//スキン無し
 		CalcWorldPosAndNormal(In, Pos, Normal, Tangent);
 	}
-	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_lightViewProjMatrix);
+	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
 	return Out;
 }
 

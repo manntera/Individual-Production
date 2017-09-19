@@ -18,7 +18,7 @@ void Player::Init()
 	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(1.0f, 1.0f, m_position);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
-	m_skinModel.m_isShadowMapCaster = true;
+	m_skinModel.SetShadowCasterFlg(true);
 	//m_skinModel.m_isShadowMapReceiver = true;
 }
 
@@ -95,7 +95,7 @@ void Player::Update()
 	m_anim.Update(1.0f / 60.0f);
 }
 
-void Player::Render(int num)
+void Player::Render()
 {
-	m_skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix(), num);
+	m_skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix(), enPreRenderNormal);
 }

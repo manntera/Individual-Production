@@ -3,6 +3,7 @@
 #include "Graphics\Sprite.h"
 #include "Physics\Physics.h"
 #include "Input\Pad.h"
+#include "Graphics\ShadowMap.h"
 
 //エンジンクラス
 
@@ -48,6 +49,12 @@ public:
 	{
 		return m_physicsWorld;
 	}
+
+	//シャドウマップを取得
+	ShadowMap& GetShadowMap()
+	{
+		return m_shadowMap;
+	}
 	//自分のインスタンスを取得
 	static Engine& GetEngine()
 	{
@@ -84,20 +91,15 @@ public:
 	{
 		return m_pad;
 	}
-
-public:
-
-	LPDIRECT3DTEXTURE9	m_pShadowMap;
 private:
-
-
 	LPDIRECT3D9			m_pD3D;
 	LPDIRECT3DDEVICE9	m_pD3DDevice;			//デバイス
 	EffectManager*		m_effectManager;		//エフェクトマネージャー
 	WNDCLASSEX			m_wc;
 	GameObjectManager	m_objectManager;		//オブジェクトマネージャー
 	PhysicsWorld*		m_physicsWorld;			//物理ワールド
-	Pad					m_pad;					//パッドの入力を
+	Pad					m_pad;					//パッドの入力
+	ShadowMap			m_shadowMap;			//シャドウマップ
 };
 //エンジンクラスのインスタンスを取得。
 static Engine& GetEngine()
@@ -121,4 +123,9 @@ static void Delete(GameObject* deleteObject)
 static Pad& GetPad()
 {
 	return GetEngine().GetPad();
+}
+
+static ShadowMap& GetShadowMap()
+{
+	return GetEngine().GetShadowMap();
 }
