@@ -3,22 +3,23 @@
 #include "GameCamera/GameCamera.h"
 #include "Scene\GameScene\GameScene.h"
 
-void Test::Init()
+void Test::Init(D3DXVECTOR3 position)
 {
 	light.SetAmbiemtLight({ 1.0f, 1.0f, 1.0f, 1.0f });
 	skinModelData.LoadModelData("Assets/modelData/Box.X", NULL);
 	skinModel.Init(&skinModelData);
 	skinModel.SetLight(&light);
 	skinModel.SetShadowReceiverFlg(true);
+	//skinModel.SetShadowCasterFlg(true);
 	D3DXQuaternionIdentity(&rotation);
 	D3DXVECTOR3 scale;
-	trans = { 0.0f, 0.0f, 0.0f };
+	trans = position;
 	scale = { 1.0f, 1.0f, 1.0f };
 	//meshCollider.CreateFromSkinModel(&skinModel, NULL);
 	boxCollider.Create(btVector3(10.0f, 3.0f, 10.0f));
 	RigidBodyInfo RBInfo;
 	RBInfo.collider = &boxCollider;
-	RBInfo.pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	RBInfo.pos = position;
 	RBInfo.mass = 0.0f;
 
 	D3DXQuaternionIdentity(&rotation);

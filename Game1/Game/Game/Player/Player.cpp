@@ -18,8 +18,9 @@ void Player::Init()
 	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(1.0f, 1.0f, m_position);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
+	m_characterController.SetGravity(-20.0f);
 	m_skinModel.SetShadowCasterFlg(true);
-	//m_skinModel.m_isShadowMapReceiver = true;
+	m_skinModel.SetShadowReceiverFlg(true);
 }
 
 void Player::Start()
@@ -56,7 +57,7 @@ void Player::Update()
 	moveSpeed += front * GetPad().GetLeftStickY() * speed;
 	if (GetPad().IsTriggerButton(padButtonA))
 	{
-		moveSpeed.y += 7.0f;
+		moveSpeed.y += 15.0f;
 	}
 	
 	if (GetPad().IsPressButton(padButtonB))

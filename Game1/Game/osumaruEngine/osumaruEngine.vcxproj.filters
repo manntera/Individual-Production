@@ -137,9 +137,6 @@
     <ClInclude Include="Graphics\Light.h">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="engineStdafx.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
@@ -170,8 +167,11 @@
     <ClInclude Include="Physics\Collider\BoxCollider.h">
       <Filter>ソース ファイル\Physics\Collider</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Graphics\ShadowMap.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソース ファイル\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

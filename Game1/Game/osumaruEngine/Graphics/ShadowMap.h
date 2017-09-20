@@ -36,22 +36,32 @@ public:
 	//シャドウマップのテクスチャを取得
 	LPDIRECT3DTEXTURE9 GetShadowMapTexture();
 
+	//ライトの注視点を設定
 	void SetTarget(D3DXVECTOR3 target)
 	{
 		m_target = target;
 	}
 
+	//座標を設定
+	void SetUp(D3DXVECTOR3 up)
+	{
+		m_up = up;
+	}
+	
+	//座標を設定
 	void SetPosition(D3DXVECTOR3 position)
 	{
 		m_position = position;
 	}
 
+	//ライトカメラのビュー行列を取得
 	D3DXMATRIX GetViewMatrix()
 	{
 		return m_viewMatrix;
 	}
 
-	D3DXMATRIX GetProjMatrix()
+	//ライトカメラのプロジェクション行列を取得
+	D3DXMATRIX GetProjectionMatrix()
 	{
 		return m_projMatrix;
 	}
@@ -60,13 +70,14 @@ public:
 
 
 private:
-	LPDIRECT3DTEXTURE9		m_pShadowMap;
-	D3DXVECTOR3				m_position;
-	D3DXVECTOR3				m_target;
-	D3DXVECTOR3				m_up;
-	D3DXMATRIX				m_viewMatrix;
-	D3DXMATRIX				m_projMatrix;
-	int						m_width;
-	int						m_height;
-	std::vector<SkinModel*> m_models;
+	LPDIRECT3DTEXTURE9		m_pShadowMap;		//シャドウマップのテクスチャ
+	LPDIRECT3DSURFACE9		m_pDepthBuffer;		//深度ステンシルバッファ
+	D3DXVECTOR3				m_position;			//ライトの座標
+	D3DXVECTOR3				m_target;			//ライトの注視点
+	D3DXVECTOR3				m_up;				//ライトの上向き
+	D3DXMATRIX				m_viewMatrix;		//ライトのビュー行列
+	D3DXMATRIX				m_projMatrix;		//ライトのプロジェクション行列
+	int						m_width;			//ウィンドウの幅
+	int						m_height;			//ウィンドウの高さ
+	std::vector<SkinModel*> m_models;			//シャドウマップに描画するモデル
 };

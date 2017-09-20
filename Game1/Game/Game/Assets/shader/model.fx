@@ -86,13 +86,13 @@ struct VS_INPUT
 //出力頂点。
 struct VS_OUTPUT
 {
-	float4 Pos			: POSITION;
-	float3 Normal		: NORMAL;
-	float2 Tex0			: TEXCOORD0;
-	float3 Tangent		: TEXCOORD1;	//接ベクトル
-	float4 LightDir		: TEXCOORD2;
-	float3 WorldPos		: TEXCOORD3; 
-	float4 LightPos		: TEXCOORD4;
+	float4 Pos					: POSITION;
+	float3 Normal				: NORMAL;
+	float2 Tex0					: TEXCOORD0;
+	float3 Tangent				: TEXCOORD1;	//接ベクトル
+	float4 LightDir				: TEXCOORD2;
+	float3 WorldPos				: TEXCOORD3; 
+	float4 ShadowSpacePos		: TEXCOORD4;
 };
 
 /*
@@ -136,6 +136,7 @@ Pos		ワールド座標の格納先。
 Normal	ワールド法線の格納先。
 Tangent	ワールド接ベクトルの格納先。
 */
+
 void CalcWorldPosAndNormal(VS_INPUT In, out float3 Pos, out float3 Normal, out float3 Tangent)
 {
 	Pos = mul(In.Pos, g_worldMatrix);
@@ -181,7 +182,7 @@ VS_OUTPUT VSMain(VS_INPUT In, uniform bool hasSkin)
 	Out.LightDir.xyz = normalize(Out.LightDir.xyz);
 	Out.Tex0 = In.Tex0;
 	Out.WorldPos = Pos.xyz;
-	Out.LightPos = mul(float4(Pos.xyz, 1.0f), g_lightViewProjMatrix);
+	Out.ShadowSpacePos = mul(float4(Pos.xyz, 1.0f), g_lightViewProjMatrix);
 	return Out;
 }
 
@@ -216,13 +217,21 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	//	lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[0].xyz * length(specColor) * 3.0f;
 	//	lig.w = 1.0f;
 	//}
+
 	if (g_isShadowMapReceiver)
 	{
-		float2 uv = In.LightPos.xy / In.LightPos.w;
+		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
 		uv += 1.0f;
-		uv /= 2.0f;
+		uv *= 0.5f;
 		uv.y = 1.0f - uv.y;
-		lig *= tex2D(g_shadowMapSampler, uv);
+		float4 shadow = tex2D(g_shadowMapSampler, uv);
+		float depth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+		depth = min(1.0f, depth);
+		if (shadow.x < depth-0.01f)
+		{
+			lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+		}
+
 	}
 	color *= lig;
 	return color;
@@ -248,13 +257,18 @@ VS_OUTPUT ShadowMapVSMain(VS_INPUT In, uniform bool hasSkin)
 		CalcWorldPosAndNormal(In, Pos, Normal, Tangent);
 	}
 	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
+	Out.ShadowSpacePos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
 	return Out;
 }
 
 
 float4 ShadowMapPSMain(VS_OUTPUT In) : COLOR
 {
-	return float4(0.7f, 0.7f, 0.7f, 1.0f);
+	float4 color;
+	color.x = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+	color.yz = 0.0f;
+	color.w = 1.0f;
+	return color;
 }
 
 

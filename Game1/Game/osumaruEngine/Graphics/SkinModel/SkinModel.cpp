@@ -82,7 +82,7 @@ void DrawMeshContainer(
 		}
 		pEffect->SetTexture("g_shadowMapTexture", GetShadowMap().GetShadowMapTexture());
 		D3DXMATRIX viewProjMatrix;
-		D3DXMatrixMultiply(&viewProjMatrix, &GetShadowMap().GetViewMatrix(), &GetShadowMap().GetProjMatrix());
+		D3DXMatrixMultiply(&viewProjMatrix, &GetShadowMap().GetViewMatrix(), &GetShadowMap().GetProjectionMatrix());
 		pEffect->SetMatrix("g_lightViewProjMatrix", &viewProjMatrix);
 		pEffect->SetBool("g_isShadowMapReceiver", isShadowReceiver);
 

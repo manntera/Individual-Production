@@ -32,15 +32,24 @@ void ShadowMap::Create(int width, int height)
 		D3DPOOL_DEFAULT,
 		&m_pShadowMap,
 		NULL
-	);
+		);
+
+	GetEngine().GetDevice()->CreateDepthStencilSurface(
+		m_width,
+		m_height,
+		D3DFMT_D16,
+		D3DMULTISAMPLE_NONE,
+		0,
+		TRUE,
+		&m_pDepthBuffer,
+		NULL
+		);
 }
 
 void ShadowMap::Update()
 {
-	float Near = 0.1f;
-	float Far = 1000.0f;
 	float Aspect = (float)m_width / (float)m_height;
-	D3DXMatrixPerspectiveFovLH(&m_projMatrix, D3DX_PI / 4, Aspect, Near, Far);
+	D3DXMatrixPerspectiveFovLH(&m_projMatrix, D3DXToRadian(60.0f), Aspect, 1.0f, 1000.0f);
 	D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_target, &m_up);
 }
 
@@ -51,27 +60,26 @@ void ShadowMap::Entry(SkinModel* model)
 
 void ShadowMap::Draw()
 {
-	LPDIRECT3DSURFACE9 renderTarget;
+	LPDIRECT3DSURFACE9 renderTargetBackup;
+	LPDIRECT3DSURFACE9 depthBufferBackup;
 	LPDIRECT3DSURFACE9 shadowTarget;
+
 	m_pShadowMap->GetSurfaceLevel(0, &shadowTarget);
-	GetEngine().GetDevice()->GetRenderTarget(0, &renderTarget);
-
+	GetEngine().GetDevice()->GetRenderTarget(0, &renderTargetBackup);
+	GetEngine().GetDevice()->GetDepthStencilSurface(&depthBufferBackup);
 	GetEngine().GetDevice()->SetRenderTarget(0, shadowTarget);
-
+	GetEngine().GetDevice()->SetDepthStencilSurface(m_pDepthBuffer);
 	//描画
 	// 画面をクリア。
 	GetEngine().GetDevice()->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(255, 255, 255), 1.0f, 0);
-	//pDevice->Present(NULL, NULL, NULL, NULL);
-	//シーンの描画開始。
 	GetEngine().GetDevice()->BeginScene();
 	for (SkinModel* model : m_models)
 	{
 		model->Draw(&m_viewMatrix, &m_projMatrix, enPreRenderShadowMap);
 	}
-	// シーンの描画終了。
 	GetEngine().GetDevice()->EndScene();
-
-	GetEngine().GetDevice()->SetRenderTarget(0, renderTarget);
+	GetEngine().GetDevice()->SetRenderTarget(0, renderTargetBackup);
+	GetEngine().GetDevice()->SetDepthStencilSurface(depthBufferBackup);
 	m_models.clear();
 }
 

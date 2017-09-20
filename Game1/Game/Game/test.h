@@ -4,7 +4,7 @@ class Test : public GameObject
 {
 public:
 
-	void Init();
+	void Init(D3DXVECTOR3 position);
 
 	void Update()override;
 

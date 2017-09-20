@@ -70,7 +70,9 @@ void Engine::InitD3D(HINSTANCE& hInst)
 	m_physicsWorld = new PhysicsWorld;
 	m_physicsWorld->Init();
 	m_shadowMap.Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT);
-	m_shadowMap.SetPosition({ 0.0f, 20.0f, 20.0f });
+	m_shadowMap.SetTarget({ 0.0f, 0.0f, 0.0f });
+	m_shadowMap.SetPosition({ 0.0f, 20.0f, 0.0f });
+	m_shadowMap.SetUp({ 1.0f, 0.0f, 0.0f });
 	// show the window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	UpdateWindow(hWnd);
