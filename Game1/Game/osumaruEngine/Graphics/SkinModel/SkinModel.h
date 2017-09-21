@@ -7,12 +7,18 @@ class RenderContext;
 class Light;
 class Texture;
 
-enum EnPreRender
+struct ShaderTechnique
 {
-	enPreRenderNormal,		//普通に描画するとき
-	enPreRenderShadowMap,	//シャドウマップノテクスチャに書き込む時
-	enPreRenderNum,
+	D3DXHANDLE NoSkinModelTechnique;		//スキンあり
+	D3DXHANDLE SkinModelTechnique;			//スキンなし
+};
 
+//シェーダーテクニック
+enum EnSkinModelShaderTechnique
+{
+	enShaderTechniqueNormal,				//普通に描画するときのテクニック
+	enShaderTechniqueShadow,				//影を書く時のテクニック
+	enShaderTechniqueNum,
 };
 class SkinModel
 {
@@ -34,7 +40,7 @@ public:
 	viewMatrix		カメラのビュー行列
 	projMatrix		カメラのプロジェクション行列
 	*/
-	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, EnPreRender preRender);
+	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix);
 
 	/*
 	ワールド行列を更新。
@@ -78,29 +84,53 @@ public:
 		m_isHasSpecularMap = true;
 	}
 
+	/*
+	影を落とすかを設定
+	isShadowCaster		trueならシャドウマップに登録、falseならシャドウマップから削除
+	*/
 	void SetShadowCasterFlg(bool isShadowCaster)
 	{
 		m_isShadowMapCaster = isShadowCaster;
 	}
 
+	/*
+	影を落とされるかを設定
+	isShadowReceiver	trueなら影を落とされる、falseなら影を落とさない
+	*/
 	void SetShadowReceiverFlg(bool isShadowReceiver)
 	{
 		m_isShadowMapReceiver = isShadowReceiver;
 	}
-private:
-	bool			m_isShadowMapCaster;
-	bool			m_isShadowMapReceiver;
 
-	Texture*		m_pNormalMap;
-	Texture*		m_pSpecularMap;
-	bool			m_isHasNormalMap;
-	bool			m_isHasSpecularMap;
-	D3DXMATRIX		m_worldMatrix;				//ワールド行列
-	D3DXMATRIX		m_rotationMatrix;				//回転行列
-	SkinModelData*	m_skinModelData;				//スキンモデルデータ
-	ID3DXEffect*	m_pEffect;					//エフェクト
-	Animation		m_animation;					//アニメーション
-	Light*			m_light;						//ライト
-	Camera*			m_pCamera;
+	/*
+	シェーダーテクニックを設定
+	shaderTechnique		設定するシェーダーテクニック
+	*/
+	void SetShaderTechnique(EnSkinModelShaderTechnique shaderTechnique)
+	{
+		m_currentShaderTechnique = shaderTechnique;
+	}
+
+	//今のシェーダーテクニックを取得
+	EnSkinModelShaderTechnique GetCurrentShaderTechnique()
+	{
+		return m_currentShaderTechnique;
+	}
+private:
+	bool						m_isShadowMapCaster;						//影を落とすか？
+	bool						m_isShadowMapReceiver;						//影を落とされるか？
+	ShaderTechnique				m_shaderTechnique[enShaderTechniqueNum];	//シェーダーテクニックの配列
+	EnSkinModelShaderTechnique	m_currentShaderTechnique;					//現在のシェーダーテクニック
+	Texture*					m_pNormalMap;								//法線マップ
+	Texture*					m_pSpecularMap;								//スペキュラマップ
+	bool						m_isHasNormalMap;							//法線マップを持っているか？
+	bool						m_isHasSpecularMap;							//スペキュラマップを持っているか？	
+	D3DXMATRIX					m_worldMatrix;								//ワールド行列
+	D3DXMATRIX					m_rotationMatrix;							//回転行列
+	SkinModelData*				m_skinModelData;							//スキンモデルデータ
+	ID3DXEffect*				m_pEffect;									//エフェクト
+	Animation					m_animation;								//アニメーション
+	Light*						m_light;									//ライト
+	Camera*						m_pCamera;									//スペキュラで使うカメラ
 
 };

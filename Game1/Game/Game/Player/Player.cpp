@@ -98,5 +98,5 @@ void Player::Update()
 
 void Player::Render()
 {
-	m_skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix(), enPreRenderNormal);
+	m_skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix());
 }

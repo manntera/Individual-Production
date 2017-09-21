@@ -43,6 +43,7 @@ public:
 	//リリース関数
 	void Release();
 
+
 	//フレームルートを取得
 	LPD3DXFRAME GetFrameRoot()
 	{

@@ -27,7 +27,8 @@ void DrawMeshContainer(
 	D3DXVECTOR3* cameraPos,
 	bool isShadowReceiver,
 	bool isShadowCaster,
-	EnPreRender preRender)
+	ShaderTechnique* shaderTechnique,
+	EnSkinModelShaderTechnique shaderTechniqueNum)
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
 	D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
@@ -44,25 +45,11 @@ void DrawMeshContainer(
 	{
 		if (pMeshContainer->pSkinInfo != NULL)
 		{
-			if (preRender == enPreRenderNormal)
-			{
-				pEffect->SetTechnique("SkinModel");
-			}
-			else if(preRender == enPreRenderShadowMap)
-			{
-				pEffect->SetTechnique("SkinShadowMap");
-			}
+			pEffect->SetTechnique(shaderTechnique[shaderTechniqueNum].SkinModelTechnique);
 		}
 		else
 		{
-			if (preRender == enPreRenderNormal)
-			{
-				pEffect->SetTechnique("NoSkinModel");
-			}
-			else if (preRender == enPreRenderShadowMap)
-			{
-				pEffect->SetTechnique("NoSkinShadowMap");
-			}
+			pEffect->SetTechnique(shaderTechnique[shaderTechniqueNum].NoSkinModelTechnique);
 		}
 	}
 	//‹¤’Ê‚Ì’è”ƒŒƒWƒXƒ^‚ðÝ’è
@@ -178,7 +165,8 @@ void DrawFrame(
 	D3DXVECTOR3* cameraPos,
 	bool isShadowReceiver,
 	bool isShadowCaster,
-	EnPreRender preRender)
+	ShaderTechnique* shaderTechnique,
+	EnSkinModelShaderTechnique shaderTechniqueNum)
 {
 	LPD3DXMESHCONTAINER pMeshContainer;
 	pMeshContainer = pFrame->pMeshContainer;
@@ -201,7 +189,8 @@ void DrawFrame(
 			cameraPos,
 			isShadowReceiver,
 			isShadowCaster,
-			preRender);
+			shaderTechnique,
+			shaderTechniqueNum);
 
 		pMeshContainer = pMeshContainer->pNextMeshContainer;
 	}
@@ -224,7 +213,8 @@ void DrawFrame(
 			cameraPos,
 			isShadowReceiver,
 			isShadowCaster,
-			preRender
+			shaderTechnique,
+			shaderTechniqueNum
 			);
 	}
 	if (pFrame->pFrameFirstChild != NULL)
@@ -245,7 +235,8 @@ void DrawFrame(
 			cameraPos,
 			isShadowReceiver,
 			isShadowCaster,
-			preRender);
+			shaderTechnique,
+			shaderTechniqueNum);
 	}
 }
 
@@ -272,6 +263,12 @@ void SkinModel::Init(SkinModelData* modelData)
 {
 	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/Shader/Model.fx");
 	m_skinModelData = modelData;
+	m_currentShaderTechnique = enShaderTechniqueNormal;
+	m_shaderTechnique[enShaderTechniqueNormal].SkinModelTechnique = m_pEffect->GetTechniqueByName("SkinModel");
+	m_shaderTechnique[enShaderTechniqueNormal].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("NoSkinModel");
+	m_shaderTechnique[enShaderTechniqueShadow].SkinModelTechnique = m_pEffect->GetTechniqueByName("SkinShadowMap");
+	m_shaderTechnique[enShaderTechniqueShadow].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("NoSkinShadowMap");
+
 }
 
 void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
@@ -292,7 +289,7 @@ void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVEC
 	}
 }
 
-void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, EnPreRender preRender)
+void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 {
 	D3DXVECTOR3* cameraPos = nullptr;
 	if (m_pCamera != nullptr)
@@ -317,7 +314,8 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix, EnPreRender
 			cameraPos,
 			m_isShadowMapReceiver,
 			m_isShadowMapCaster,
-			preRender);
+			m_shaderTechnique,
+			m_currentShaderTechnique);
 	}
 }
 

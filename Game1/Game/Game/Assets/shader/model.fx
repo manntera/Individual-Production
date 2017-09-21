@@ -192,53 +192,59 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
 	float4 lig = DiffuseLight(normal);
-	//if (g_isHasNormalMap)
-	//{
-	//	float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
-	//	float3 normalVector = normalColor * 2 - 1.0f;
-	//	normalVector = normalize(normalVector);
-
-	//	float3 light = max(0, dot(In.LightDir.xyz, normalVector)) * g_light.diffuseLightColor[0].xyz;
-	//	lig.xyz *= light;
-	//	lig += g_light.ambient;
-	//	lig.w = 1.0f;
-	//}
-	//if (g_isHasSpecularMap)
-	//{
-	//	float3 textureNormal = In.Normal;
-	//	textureNormal = normalize(textureNormal);
-	//	float3 gaze = In.WorldPos - g_cameraPos;
-	//	textureNormal *= dot(textureNormal, -gaze);
-	//	gaze += textureNormal * 2.0f;
-	//	gaze = normalize(gaze);
-	//	float3 lightDir = -g_light.diffuseLightDir[0].xyz;
-	//	lightDir = normalize(lightDir);
-	//	float3 specColor = tex2D(g_specularMapSampler, In.Tex0).xyz;
-	//	lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[0].xyz * length(specColor) * 3.0f;
-	//	lig.w = 1.0f;
-	//}
+	if (g_isHasNormalMap)
+	{
+		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
+		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
+		float3 normalVector = normalColor * 2.0f - 1.0f;
+		normalVector = normalize(normalVector);
+		//法線マップからとってきたベクトルとライトの方向の内積を取る
+		float3 light = max(0, dot(In.LightDir.xyz, normalVector)) * g_light.diffuseLightColor[0].xyz;
+		lig.xyz *= light;
+		lig += g_light.ambient;
+		lig.w = 1.0f;
+	}
+	if (g_isHasSpecularMap)
+	{
+		//反射ベクトルを求める
+		float3 textureNormal = In.Normal;
+		textureNormal = normalize(textureNormal);
+		float3 gaze = In.WorldPos - g_cameraPos;
+		textureNormal *= dot(textureNormal, -gaze);
+		gaze += textureNormal * 2.0f;
+		gaze = normalize(gaze);
+		float3 lightDir = -g_light.diffuseLightDir[0].xyz;
+		lightDir = normalize(lightDir);
+		float3 specColor = tex2D(g_specularMapSampler, In.Tex0).xyz;
+		//スペキュラマップを張って絞り(pow)計算をする。
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[0].xyz * length(specColor) * 3.0f;
+		lig.w = 1.0f;
+	}
 
 	if (g_isShadowMapReceiver)
 	{
+		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
 		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
+		//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
 		uv += 1.0f;
 		uv *= 0.5f;
 		uv.y = 1.0f - uv.y;
 		float4 shadow = tex2D(g_shadowMapSampler, uv);
+		//ライトカメラから見た深度値を計算
 		float depth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
 		depth = min(1.0f, depth);
-		if (shadow.x < depth-0.01f)
+		//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+		if (shadow.x < depth - 0.015f)
 		{
 			lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
 		}
-
 	}
 	color *= lig;
 	return color;
 }
 
 /*
-頂点シェーダー
+シャドウマップ書き込み用の頂点シェーダー
 In		入力頂点
 hasSkin	スキンあり？
 */
@@ -261,10 +267,11 @@ VS_OUTPUT ShadowMapVSMain(VS_INPUT In, uniform bool hasSkin)
 	return Out;
 }
 
-
+//シャドウマップ書き込み用のピクセルシェーダー
 float4 ShadowMapPSMain(VS_OUTPUT In) : COLOR
 {
 	float4 color;
+	//深度値を書き込み
 	color.x = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
 	color.yz = 0.0f;
 	color.w = 1.0f;
@@ -292,6 +299,7 @@ technique NoSkinModel
 	}
 }
 
+//スキンありモデルのシャドウマップ書き込み用テクニック
 technique SkinShadowMap
 {
 	pass p0
@@ -301,6 +309,7 @@ technique SkinShadowMap
 	}
 }
 
+//スキンなしモデルのシャドウマップ書き込み用テクニック
 technique NoSkinShadowMap
 {
 	pass p0
