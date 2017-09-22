@@ -25,6 +25,12 @@
     <Filter Include="ソース ファイル\GameCamera">
       <UniqueIdentifier>{0c980480-4a2c-40e2-9d73-5409834043fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Map">
+      <UniqueIdentifier>{b5db00fd-86a2-4b7e-ba68-1c3918346e8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Map\MapChip">
+      <UniqueIdentifier>{1a7e3104-4569-477b-8260-746b580b958a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,6 +51,18 @@
     <ClCompile Include="GameCamera\GameCamera.cpp">
       <Filter>ソース ファイル\GameCamera</Filter>
     </ClCompile>
+    <ClCompile Include="Map\Sky.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\Map.cpp">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\MapChip\MapChip.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\MapChip\StaticMapObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -61,6 +79,18 @@
     </ClInclude>
     <ClInclude Include="GameCamera\GameCamera.h">
       <Filter>ソース ファイル\GameCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\Sky.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\Map.h">
+      <Filter>ソース ファイル\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\MapChip\MapChip.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\MapChip\StaticMapObject.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

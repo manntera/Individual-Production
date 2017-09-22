@@ -15,10 +15,10 @@ void Test::Init(D3DXVECTOR3 position)
 	D3DXVECTOR3 scale;
 	trans = position;
 	scale = { 1.0f, 1.0f, 1.0f };
-	//meshCollider.CreateFromSkinModel(&skinModel, NULL);
+	meshCollider.CreateFromSkinModel(&skinModel, NULL);
 	boxCollider.Create(btVector3(10.0f, 3.0f, 10.0f));
 	RigidBodyInfo RBInfo;
-	RBInfo.collider = &boxCollider;
+	RBInfo.collider = &meshCollider;
 	RBInfo.pos = position;
 	RBInfo.mass = 0.0f;
 
@@ -44,5 +44,5 @@ void Test::Update()
 
 void Test::Render()
 {
-	skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix());
+	skinModel.Draw(&g_gameScene->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera().GetProjectionMatrix());
 }

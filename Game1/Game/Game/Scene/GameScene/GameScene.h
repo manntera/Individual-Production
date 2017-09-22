@@ -1,7 +1,9 @@
 #pragma once
-class Player;
+class Map;
 class GameCamera;
 class Test;
+class Sky;
+class Player;
 
 class GameScene : public GameObject
 {
@@ -10,20 +12,15 @@ public:
 
 	void Update()override;
 	
-	GameCamera* GetCamera()
-	{
-		return m_camera;
-	}
+	Camera& GetCamera();
 
-	Player* GetPlayer()
-	{
-		return m_player;
-	}
+	Player* GetPlayer();
 
 private:
-	Player*			m_player;
+	Map*			m_map;
 	GameCamera*		m_camera;
 	Test*			m_test;
+	Sky*			m_sky;
 };
 
 extern GameScene *g_gameScene;

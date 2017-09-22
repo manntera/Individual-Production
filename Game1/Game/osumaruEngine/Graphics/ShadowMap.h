@@ -37,19 +37,19 @@ public:
 	LPDIRECT3DTEXTURE9 GetShadowMapTexture();
 
 	//ライトの注視点を設定
-	void SetTarget(D3DXVECTOR3 target)
+	void SetLightCameraTarget(D3DXVECTOR3 target)
 	{
 		m_target = target;
 	}
 
 	//座標を設定
-	void SetUp(D3DXVECTOR3 up)
+	void SetLightCameraUp(D3DXVECTOR3 up)
 	{
 		m_up = up;
 	}
 	
 	//座標を設定
-	void SetPosition(D3DXVECTOR3 position)
+	void SetLightCameraPosition(D3DXVECTOR3 position)
 	{
 		m_position = position;
 	}

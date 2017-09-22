@@ -2,9 +2,12 @@
 class Player : public GameObject
 {
 public:
-	void Init();
 
+	Player();
 
+	~Player();
+
+	void Init(D3DXVECTOR3 position, D3DXQUATERNION rotation);
 
 	void Update() override;
 

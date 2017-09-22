@@ -6,7 +6,6 @@
 #include "../Light.h"
 #include "../Texture.h"
 #include "../../Camera.h"
-bool flg = false;
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices;
 

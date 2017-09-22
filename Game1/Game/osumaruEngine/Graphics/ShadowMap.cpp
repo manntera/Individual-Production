@@ -52,7 +52,7 @@ void ShadowMap::Update()
 {
 	D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_target, &m_up);
 	//D3DXMatrixPerspectiveFovLH(&m_projMatrix, D3DXToRadian(60.0f), Aspect, 1.0f, 1000.0f);
-	D3DXMatrixOrthoLH(&m_projMatrix, 30.0f, 30.0f, 0.0f, 100.0f);
+	D3DXMatrixOrthoLH(&m_projMatrix, 200.0f, 200.0f, 0.0f, 100.0f);
 }
 
 void ShadowMap::Entry(SkinModel* model)

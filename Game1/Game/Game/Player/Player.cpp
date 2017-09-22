@@ -2,8 +2,18 @@
 #include "Player.h"
 #include "../GameCamera/GameCamera.h"
 #include "../Scene/GameScene/GameScene.h"
-extern bool flg;
-void Player::Init()
+
+Player::Player()
+{
+
+}
+
+Player::~Player()
+{
+
+}
+
+void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 {
 	float ambient = 0.6f;
 	float diffuseColor = 0.3f;
@@ -11,10 +21,8 @@ void Player::Init()
 	m_light.SetDiffuseLightColor(0, { diffuseColor, diffuseColor, diffuseColor, 1.0f });
 	m_light.SetDiffuseLightDirection(0, { 0.707f, 0.0f, 0.707f, 1.0f });
 
-
-	D3DXQuaternionIdentity(&m_rotation);
-
-	m_position = { 0.0f, 7.0f, 0.0f };
+	m_rotation = rotation;
+	m_position = position;
 	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(1.0f, 1.0f, m_position);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
@@ -31,21 +39,17 @@ void Player::Start()
 	m_modelNormalMap.Load("Assets/modelData/utc_normal.tga");
 	m_modelSpecularMap.Load("Assets/modelData/utc_spec.tga");
 	m_skinModel.SetNormalMap(&m_modelNormalMap);
-	m_skinModel.SetSpecularMap(&m_modelSpecularMap, &g_gameScene->GetCamera()->GetCamera());
+	m_skinModel.SetSpecularMap(&m_modelSpecularMap, &g_gameScene->GetCamera());
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 	m_anim.SetAnimationEndTime(0, 0.8f);
 }
 
 void Player::Update()
 {
-	if (GetPad().IsTriggerButton(padButtonX))
-	{
-		flg = !flg;
-	}
 	D3DXVECTOR3 moveSpeed = m_characterController.GetMoveSpeed();
 	moveSpeed.x = 0.0f;
 	moveSpeed.z = 0.0f;
-	Camera& camera = g_gameScene->GetCamera()->GetCamera();
+	Camera& camera = g_gameScene->GetCamera();
 	D3DXVECTOR3 front = camera.GetTarget() - camera.GetPosition();
 	front.y = 0.0f;
 	D3DXVec3Normalize(&front, &front);
@@ -98,5 +102,5 @@ void Player::Update()
 
 void Player::Render()
 {
-	m_skinModel.Draw(&g_gameScene->GetCamera()->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera()->GetCamera().GetProjectionMatrix());
+	m_skinModel.Draw(&g_gameScene->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera().GetProjectionMatrix());
 }
