@@ -14,6 +14,7 @@ struct VS_OUTPUT
 };
 
 float4x4 g_world;
+float g_alpha;
 
 texture g_tex;
 sampler TextureSampler =
@@ -37,6 +38,7 @@ VS_OUTPUT VSMain(VS_INPUT In)
 float4 PSMain(VS_OUTPUT In) : COLOR
 {
 	float4 color = tex2D(TextureSampler, In.uv);
+	color.w *= g_alpha;
 	return color;
 }
 

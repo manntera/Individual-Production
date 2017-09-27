@@ -8,6 +8,7 @@
 Sprite::Sprite()
 {
 	m_pTexture = nullptr;
+	m_alpha = 1.0f;
 }
 
 Sprite::~Sprite()
@@ -74,12 +75,21 @@ void Sprite::Draw()
 	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &scale);
 	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &transform);
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
+	DWORD srcBackup;
+	DWORD destBackup;
+	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &srcBackup);
+	pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &destBackup);
+
+	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	//•`‰æ
 	m_pEffect->SetTechnique("Sprite");
 	m_pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 	m_pEffect->BeginPass(0);
 	m_pEffect->SetTexture("g_tex", m_pTexture->GetBody());
 	m_pEffect->SetValue("g_world", worldMatrix, sizeof(worldMatrix));
+	m_pEffect->SetFloat("g_alpha", m_alpha);
 	m_pEffect->CommitChanges();
 	pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 	pD3DDevice->SetStreamSource(0, m_primitive.GetVertexBuffer(), 0, sizeof(VERTEX_PT));
@@ -89,6 +99,10 @@ void Sprite::Draw()
 
 	m_pEffect->EndPass();
 	m_pEffect->End();
+
+	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	//pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup); 
+	//pD3DDevice->SetRenderState(D3DRS_DESTBLEND, destBackup);
 
 }
 

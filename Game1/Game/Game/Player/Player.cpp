@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "../GameCamera/GameCamera.h"
 #include "../Scene/GameScene.h"
+#include  "../Scene/Fade.h"
 
 Player::Player()
 {
@@ -15,11 +16,35 @@ Player::~Player()
 
 void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 {
-	float ambient = 0.6f;
-	float diffuseColor = 0.3f;
-	m_light.SetAmbiemtLight({ ambient, ambient, ambient, 1.0f });
-	m_light.SetDiffuseLightColor(0, { diffuseColor, diffuseColor, diffuseColor, 1.0f });
-	m_light.SetDiffuseLightDirection(0, { 0.707f, 0.0f, 0.707f, 1.0f });
+	//float ambient = 0.6f;
+	//float diffuseColor = 0.3f;
+	//m_light.SetAmbiemtLight({ ambient, ambient, ambient, 1.0f });
+	//m_light.SetDiffuseLightColor(0, { diffuseColor, diffuseColor, diffuseColor, 1.0f });
+	//m_light.SetDiffuseLightDirection(0, { 0.707f, 0.0f, 0.707f, 1.0f });
+
+	float ambientLightColor = 0.6f;
+	float diffuseLightColor0 = 0.3f;
+	float diffuseLightColor1 = 0.3f;
+	float diffuseLightColor2 = 0.2f;
+	float diffuseLightColor3 = 0.15f;
+	m_light.SetAmbiemtLight({ ambientLightColor, ambientLightColor, ambientLightColor, 1.0f });
+	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(diffuseLightColor0, diffuseLightColor0, diffuseLightColor0, 1.0f));
+	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(diffuseLightColor1, diffuseLightColor1, diffuseLightColor1, 1.0f));
+	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(diffuseLightColor2, diffuseLightColor2, diffuseLightColor2, 1.0f));
+	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(diffuseLightColor3, diffuseLightColor3, diffuseLightColor3, 1.0f));
+	D3DXVECTOR3 lightDirection;
+	lightDirection = { -7.0f, -4.5f, -5.0f };
+	D3DXVec3Normalize(&lightDirection, &lightDirection);
+	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
+	lightDirection = { 2.0f, 0.0f, 10.0f };
+	D3DXVec3Normalize(&lightDirection, &lightDirection);
+	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
+	lightDirection = { 10.0f, -3.0f, -4.0f };
+	D3DXVec3Normalize(&lightDirection, &lightDirection);
+	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
+	lightDirection = { -5.0f, -5.0f, 5.0f };
+	D3DXVec3Normalize(&lightDirection, &lightDirection);
+	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
 
 	m_rotation = rotation;
 	m_position = position;
@@ -28,7 +53,7 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 	m_characterController.SetGravity(-20.0f);
 	m_skinModel.SetShadowCasterFlg(true);
-	m_skinModel.SetShadowReceiverFlg(true);
+	//m_skinModel.SetShadowReceiverFlg(true);
 }
 
 void Player::Start()
@@ -63,6 +88,7 @@ void Player::Update()
 	{
 		g_gameScene->GameOver();
 	}
+
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 	m_anim.Update(1.0f / 60.0f);
 }
@@ -88,7 +114,6 @@ void Player::Move()
 	{
 		moveSpeed.y += 15.0f;
 	}
-
 	m_characterController.SetMoveSpeed(moveSpeed);
 	m_characterController.Execute();
 	m_position = m_characterController.GetPosition();

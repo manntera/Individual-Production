@@ -32,7 +32,7 @@ public:
 	}
 
 private:
-	std::vector<MapChip*> m_mapChip;
-	Player*	m_player;
+	std::vector<MapChip*> m_mapChip;	//マップチップ
+	Player*	m_player;					//プレイヤー
 	
 };

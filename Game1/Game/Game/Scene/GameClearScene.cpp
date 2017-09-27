@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameClearScene.h"
 #include "GameScene.h"
+#include "Fade.h"
 
 GameClearScene::GameClearScene()
 {
@@ -10,21 +11,34 @@ GameClearScene::GameClearScene()
 
 GameClearScene::~GameClearScene()
 {
-
+	g_pFade->FadeOut();
 }
 
 void GameClearScene::Start()
 {
 	m_sprite.Init("Assets/sprite/CLEAR.png");
 	m_sprite.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
+	g_pFade->FadeIn();
 }
 
 void GameClearScene::Update()
 {
-	if (GetPad().IsTriggerButton(padButtonA))
+	if (!g_pFade->IsExcute())
 	{
-		g_gameScene = New<GameScene>();
-		Delete(this);
+		if (g_pFade->GetCurrentState() == enFadeOut)
+		{
+			g_gameScene = New<GameScene>();
+			Delete(this);
+		}
+	}
+	else
+	{
+		return;
+	}
+	if (GetPad().IsPressButton(padButtonA))
+	{
+
+		g_pFade->FadeOut();
 	}
 }
 

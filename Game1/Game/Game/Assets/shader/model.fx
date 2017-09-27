@@ -198,6 +198,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
 		float3 normalVector = normalColor * 2.0f - 1.0f;
 		normalVector = normalize(normalVector);
+
 		//法線マップからとってきたベクトルとライトの方向の内積を取る
 		float3 light = max(0, dot(In.LightDir.xyz, normalVector)) * g_light.diffuseLightColor[0].xyz;
 		lig.xyz *= light;

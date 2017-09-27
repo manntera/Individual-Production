@@ -45,9 +45,6 @@
     <ClCompile Include="Map\Sky.cpp">
       <Filter>ソース ファイル\Map</Filter>
     </ClCompile>
-    <ClCompile Include="Map\Map.cpp">
-      <Filter>ソース ファイル\Map</Filter>
-    </ClCompile>
     <ClCompile Include="Map\MapChip\MapChip.cpp">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClCompile>
@@ -64,6 +61,12 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Scene\GameClearScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\Map.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Fade.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="Player\Player.h">
       <Filter>ソース ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Fade.h">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

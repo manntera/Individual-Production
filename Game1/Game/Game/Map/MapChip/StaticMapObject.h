@@ -1,6 +1,8 @@
 #pragma once
 #include "MapChip.h"
 
+//背景オブジェクト
+
 class StaticMapObject : public MapChip
 {
 public:
@@ -12,10 +14,10 @@ public:
 	*/
 	void Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName)override;
 
-
+	//初期化関数
 	void Start()override;
 
 private:
-	RigidBody		m_rigidBody;
-	MeshCollider	m_meshCollider;
+	RigidBody		m_rigidBody;		//剛体
+	MeshCollider	m_meshCollider;		//コライダー
 };

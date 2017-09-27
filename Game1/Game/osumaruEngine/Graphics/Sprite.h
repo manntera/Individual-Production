@@ -37,6 +37,11 @@ public:
 		m_size = size;
 	}
 
+	void SetAlpha(float alpha)
+	{
+		m_alpha = alpha;
+	}
+
 	//サイズを取得
 	D3DXVECTOR2 GetSize()
 	{
@@ -47,6 +52,7 @@ public:
 	void Release();
 
 private:
+	float			m_alpha;
 	Texture*		m_pTexture;			//テクスチャ
 	D3DXVECTOR2		m_position;			//スプライトのウィンドウ上での座標
 	D3DXVECTOR2		m_centerPosition;	//スプライトの基点を表す座標

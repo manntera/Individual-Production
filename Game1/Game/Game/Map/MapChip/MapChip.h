@@ -30,9 +30,9 @@ public:
 
 
 protected:
-	SkinModelData	m_skinModelData;
-	SkinModel		m_skinModel;
-	Light			m_light;
-	D3DXVECTOR3		m_position;
-	D3DXQUATERNION	m_rotation;
+	SkinModelData	m_skinModelData;	//スキンンモデルデータ
+	SkinModel		m_skinModel;		//スキンモデル
+	Light			m_light;			//モデルのライト
+	D3DXVECTOR3		m_position;			//座標
+	D3DXQUATERNION	m_rotation;			//回転
 };

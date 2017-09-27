@@ -38,6 +38,9 @@ public:
 	void GameOver();
 
 private:
+
+	bool			m_isGameOver;
+	bool			m_isGameClear;
 	Map*			m_map;		//マップ
 	GameCamera*		m_camera;	//カメラ
 	Sky*			m_sky;		//スカイボックス

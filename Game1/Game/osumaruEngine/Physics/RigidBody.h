@@ -14,7 +14,7 @@ struct RigidBodyInfo
 	D3DXVECTOR3 pos;			//座標
 	D3DXQUATERNION rot;			//回転
 	ICollider* collider;		//コライダー
-	float mass;					//質量
+	float mass;					//質量、動かないものは0.0fでいい
 };
 
 //剛体のクラス

@@ -4,11 +4,16 @@
 void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName)
 {
 	MapChip::Init(position, rotation, modelName);
+
+	//メッシュコライダーを作成
 	m_meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
+
 	RigidBodyInfo rInfo;
 	rInfo.collider = &m_meshCollider;
 	rInfo.mass = 0.0f;
-	rInfo.pos = m_position;
+	rInfo.pos = m_position;	
+	
+	//剛体を作成
 	rInfo.rot = m_rotation;
 	m_rigidBody.Create(rInfo);
 	m_rigidBody.GetBody()->getWorldTransform().setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
