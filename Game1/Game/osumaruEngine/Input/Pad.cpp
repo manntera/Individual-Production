@@ -75,11 +75,12 @@ void Pad::Update()
 			}
 			else
 			{
+				m_isPadTrigger[pad.padButton] = false;
 				m_isPadPress[pad.padButton] = false;
 			}
 		}
 		float inputNormalize;
-		inputNormalize = triggerMax;
+		inputNormalize = (float)triggerMax;
 		//ƒgƒŠƒK[‚Ì‰Ÿ‚µ‚İ—Ê‚ğ0.0`1.0‚É³‹K‰»
 		m_leftTrigger = (float)m_state.Gamepad.bLeftTrigger / inputNormalize;
 		m_rightTrigger = (float)m_state.Gamepad.bRightTrigger / inputNormalize;
@@ -126,6 +127,14 @@ void Pad::Update()
 		{
 			if (GetAsyncKeyState(pad.keyCode))
 			{
+				if (!m_isPadPress[pad.padButton])
+				{
+					m_isPadTrigger[pad.padButton] = true;
+				}
+				else
+				{
+					m_isPadTrigger[pad.padButton] = false;
+				}
 				m_isPadPress[pad.padButton] = true;
 			}
 			else

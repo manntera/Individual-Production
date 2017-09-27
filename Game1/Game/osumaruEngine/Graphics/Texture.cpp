@@ -38,7 +38,6 @@ void Texture::Release()
 	if (m_pTexture != nullptr)
 	{
 		m_pTexture->Release();
-		delete m_pTexture;
 		m_pTexture = nullptr;
 	}
 }

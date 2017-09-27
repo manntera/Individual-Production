@@ -19,9 +19,6 @@
     <Filter Include="ソース ファイル\Scene">
       <UniqueIdentifier>{a229b346-199c-448f-b5fc-f8288c5bfe1d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Scene\GameScene">
-      <UniqueIdentifier>{6ca931f2-0316-40b6-9869-093f750ae0be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameCamera">
       <UniqueIdentifier>{0c980480-4a2c-40e2-9d73-5409834043fe}</UniqueIdentifier>
     </Filter>
@@ -39,14 +36,8 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="test.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Player\Player.cpp">
       <Filter>ソース ファイル\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\GameScene\GameScene.cpp">
-      <Filter>ソース ファイル\Scene\GameScene</Filter>
     </ClCompile>
     <ClCompile Include="GameCamera\GameCamera.cpp">
       <Filter>ソース ファイル\GameCamera</Filter>
@@ -63,19 +54,22 @@
     <ClCompile Include="Map\MapChip\StaticMapObject.cpp">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClCompile>
+    <ClCompile Include="Map\MapChip\Goal.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GameClearScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="test.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Player\Player.h">
-      <Filter>ソース ファイル\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\GameScene\GameScene.h">
-      <Filter>ソース ファイル\Scene\GameScene</Filter>
     </ClInclude>
     <ClInclude Include="GameCamera\GameCamera.h">
       <Filter>ソース ファイル\GameCamera</Filter>
@@ -91,6 +85,21 @@
     </ClInclude>
     <ClInclude Include="Map\MapChip\StaticMapObject.h">
       <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\MapChip\Goal.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameOverScene.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameClearScene.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player\Player.h">
+      <Filter>ソース ファイル\Player</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

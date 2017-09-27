@@ -61,19 +61,16 @@ void Primitive::Release()
 	if (m_pIndexBuffer != nullptr)
 	{
 		m_pIndexBuffer->Release();
-		delete m_pIndexBuffer;
 		m_pIndexBuffer = nullptr;
 	}
 	if (m_pVertexBuffer != nullptr)
 	{
 		m_pVertexBuffer->Release();
-		delete m_pVertexBuffer;
 		m_pVertexBuffer = nullptr;
 	}
 	if (m_pVertexDecaration != nullptr)
 	{
 		m_pVertexDecaration->Release();
-		delete m_pVertexDecaration;
 		m_pVertexDecaration = nullptr;
 	}
 }

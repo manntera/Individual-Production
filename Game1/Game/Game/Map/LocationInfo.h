@@ -40,3 +40,10 @@
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagMapChip, //タグ
 },
+//testGoal
+{
+	"testGoal",
+	D3DXVECTOR3(42.70f, 0.80f, 36.50f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagGoal, //タグ
+},

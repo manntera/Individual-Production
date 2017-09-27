@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Sky.h"
 #include "../GameCamera/GameCamera.h"
-#include "../Scene/GameScene/GameScene.h"
+#include "../Scene/GameScene.h"
 
 Sky::Sky()
 {
@@ -30,7 +30,7 @@ void Sky::Update()
 	m_skinModel.UpdateWorldMatrix(position, rotation, scale);
 }
 
-void Sky::Render()
+void Sky::Draw()
 {
 	DWORD cullModeBackup;
 	GetEngine().GetDevice()->GetRenderState(D3DRS_CULLMODE, &cullModeBackup);

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include "../GameCamera/GameCamera.h"
-#include "../Scene/GameScene/GameScene.h"
+#include "../Scene/GameScene.h"
 
 Player::Player()
 {
@@ -46,14 +46,39 @@ void Player::Start()
 
 void Player::Update()
 {
-	D3DXVECTOR3 moveSpeed = m_characterController.GetMoveSpeed();
-	moveSpeed.x = 0.0f;
-	moveSpeed.z = 0.0f;
+	if (g_gameScene == nullptr)
+	{
+		return;
+	}
+
+	Move();
+	Rotation();
+	
+	if (GetPad().IsPressButton(padButtonB))
+	{
+		m_anim.PlayAnimation(0);
+	}
+
+	if (m_position.y < -10.0f)
+	{
+		g_gameScene->GameOver();
+	}
+	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+	m_anim.Update(1.0f / 60.0f);
+}
+
+void Player::Move()
+{
+	//ˆÚ“®
+	D3DXVECTOR3 moveSpeed = {0.0f, 0.0f, 0.0f};
+	moveSpeed.y = m_characterController.GetMoveSpeed().y;
 	Camera& camera = g_gameScene->GetCamera();
+	//ƒJƒƒ‰‚ÌŒü‚«‚ğˆÚ“®•ûŒü‚Æ‚µ‚ÄˆÚ“®
 	D3DXVECTOR3 front = camera.GetTarget() - camera.GetPosition();
 	front.y = 0.0f;
 	D3DXVec3Normalize(&front, &front);
 	D3DXVECTOR3 side;
+	//‰¡‚Ö‚ÌˆÚ“®•ûŒü‚ÍŠOÏ‚ğæ‚Á‚Ä‹‚ß‚é
 	D3DXVec3Cross(&side, &front, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	D3DXVec3Normalize(&side, &side);
 	float speed = 30.0f;
@@ -63,44 +88,39 @@ void Player::Update()
 	{
 		moveSpeed.y += 15.0f;
 	}
-	
-	if (GetPad().IsPressButton(padButtonB))
-	{
-		m_anim.PlayAnimation(0);
-	}
 
-	D3DXVECTOR3 moveDir = moveSpeed;
+	m_characterController.SetMoveSpeed(moveSpeed);
+	m_characterController.Execute();
+	m_position = m_characterController.GetPosition();
+}
+
+void Player::Rotation()
+{
+	D3DXVECTOR3 moveDir = m_characterController.GetMoveSpeed();
 	moveDir.y = 0.0f;
+	//ƒ‚ƒfƒ‹‚ğ‰ñ“]
 	if (0.0f < D3DXVec3Length(&moveDir))
 	{
 		D3DXMATRIX worldMat = m_skinModel.GetWorldMatrix();
-		D3DXVECTOR3 playerFront;
-		playerFront.x = 0.0f;
-		playerFront.y = 0.0f;
-		playerFront.z = 1.0f;
+		D3DXVECTOR3 front;
+		front.x = 0.0f;
+		front.y = 0.0f;
+		front.z = 1.0f;
 		D3DXVec3Normalize(&moveDir, &moveDir);
-		D3DXVec3Normalize(&playerFront, &playerFront);
-		float rad = acos(D3DXVec3Dot(&playerFront, &moveDir));
+		D3DXVec3Normalize(&front, &front);
+		float rad = acos(D3DXVec3Dot(&front, &moveDir));
 		D3DXVECTOR3 cross;
-		D3DXVec3Cross(&cross, &playerFront, &moveDir);
+		D3DXVec3Cross(&cross, &front, &moveDir);
 		if (cross.y < 0.0f)
 		{
 			rad = -rad;
 		}
 		D3DXQUATERNION multi;
 		D3DXQuaternionRotationAxis(&m_rotation, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
-		//D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
 	}
-
-
-	m_characterController.SetMoveSpeed(moveSpeed);
-	m_characterController.Execute();
-	m_position = m_characterController.GetPosition();
-	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-	m_anim.Update(1.0f / 60.0f);
 }
 
-void Player::Render()
+void Player::Draw()
 {
 	m_skinModel.Draw(&g_gameScene->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera().GetProjectionMatrix());
 }

@@ -16,19 +16,15 @@ public:
 	virtual void Update() = 0;
 
 	//描画関数
-	virtual void Render() {};
+	virtual void Draw() {};
 
+	//死ぬ前に一回だけ呼ばれる関数
+	virtual void BeforeDead() {};
 
 	//死んでいるか？
 	bool IsDelete()
 	{
 		return m_isDelete;
-	}
-
-	//消去関数
-	void Delete()
-	{
-		m_isDelete = true;
 	}
 
 	//初期化が終わった時に呼ぶ関数
@@ -42,6 +38,36 @@ public:
 		return m_isStart;
 	}
 
+
+	void Dead()
+	{
+		m_isDelete = true;
+	}
+
+	void Starter()
+	{
+		if (!m_isStart && !m_isDelete)
+		{
+			Start();
+			m_isStart = true;
+		}
+	}
+
+	void Updater()
+	{
+		if (m_isStart && !m_isDelete)
+		{
+			Update();
+		}
+	}
+
+	void Drawer()
+	{
+		if (m_isStart && !m_isDelete)
+		{
+			Draw();
+		}
+	}
 private:
 	
 	bool m_isDelete;	//インスタンスを消す時に建てるフラグ

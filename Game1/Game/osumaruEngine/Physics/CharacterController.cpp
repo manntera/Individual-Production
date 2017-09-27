@@ -272,7 +272,7 @@ void CharacterController::Execute()
 		callback.me = m_rigidBody.GetBody();
 		callback.startPos = D3DXVECTOR3(start.getOrigin());
 		//Õ“ËŒŸoB
-		if (fabsf(addPosY.y) > FLT_EPSILON)
+		if (fabsf(addPosY.y) > FLT_EPSILON && (start.getOrigin().y() - end.getOrigin().y() != 0.0f))
 		{
 			physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 		}

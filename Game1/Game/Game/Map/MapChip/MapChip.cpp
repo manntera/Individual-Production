@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MapChip.h"
 #include "../../GameCamera/GameCamera.h"
-#include "../../Scene/GameScene/GameScene.h"
+#include "../../Scene/GameScene.h"
 
 MapChip::MapChip()
 {
@@ -35,11 +35,10 @@ void MapChip::Start()
 
 void MapChip::Update()
 {
-	D3DXVECTOR3 scale = { 1.0f, 1.0f, 1.0f };
-	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, scale);
+	m_skinModel.ShadowMapEntry();
 }
 
-void MapChip::Render()
+void MapChip::Draw()
 {
 	Camera& camera = g_gameScene->GetCamera();
 	m_skinModel.Draw(&camera.GetViewMatrix(), &camera.GetProjectionMatrix());

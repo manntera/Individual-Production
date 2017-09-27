@@ -9,16 +9,12 @@ void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 	//初期化
 	for (GameObject* object : m_objectVector)
 	{
-		if (!object->IsStart())
-		{
-			object->Start();
-			object->FinishStart();
-		}
+		object->Starter();
 	}
 	//更新
 	for (GameObject* object : m_objectVector)
 	{
-		object->Update();
+		object->Updater();
 	}
 
 	GetShadowMap().Draw();
@@ -29,7 +25,7 @@ void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 	pDevice->BeginScene();
 	for (GameObject* object : m_objectVector)
 	{
-		object->Render();
+		object->Drawer();
 	}
 	// シーンの描画終了。
 	pDevice->EndScene();
@@ -42,12 +38,13 @@ void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 
 void GameObjectManager::Delete(GameObject* deleteObject)
 {
-	deleteObject->Delete();
+	deleteObject->BeforeDead();
+	deleteObject->Dead();
 }
 
 void GameObjectManager::DeleteExecute()
 {
-	std::vector<GameObject*>::iterator it = m_objectVector.begin();
+	std::list<GameObject*>::iterator it = m_objectVector.begin();
 	while (it != m_objectVector.end())
 	{
 		if ((*it)->IsDelete())

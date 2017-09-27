@@ -270,12 +270,17 @@ void SkinModel::Init(SkinModelData* modelData)
 
 }
 
-void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
+void SkinModel::ShadowMapEntry()
 {
 	if (m_isShadowMapCaster)
 	{
 		GetShadowMap().Entry(this);
 	}
+}
+
+void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
+{
+	ShadowMapEntry();
 	D3DXMATRIX mTrans, mScale;
 	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
 	D3DXMatrixTranslation(&mTrans, trans.x, trans.y, trans.z);

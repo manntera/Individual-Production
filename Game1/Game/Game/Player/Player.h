@@ -1,33 +1,53 @@
 #pragma once
+//プレイヤークラス
+
 class Player : public GameObject
 {
 public:
-
+	//コンストラクタ
 	Player();
 
+	//デストラクタ
 	~Player();
 
+	/*
+	初期化関数
+	position	プレイヤーの座標
+	rotation	プレイヤーの回転
+	*/
 	void Init(D3DXVECTOR3 position, D3DXQUATERNION rotation);
-
-	void Update() override;
-
+	
+	//初期化関数
 	void Start() override;
 
-	void Render() override;
+	//更新関数
+	void Update() override;
 
+	//描画関数
+	void Draw() override;
+
+	//座標を取得
 	D3DXVECTOR3 GetPosition()
 	{
 		return m_position;
 	}
+
 private:
-	SkinModel			m_skinModel;
-	SkinModelData		m_skinModelData;
-	Light				m_light;
-	D3DXQUATERNION		m_rotation;
-	D3DXVECTOR3			m_position;
-	D3DXVECTOR3			m_scale;
-	Animation			m_anim;
-	CharacterController m_characterController;
-	Texture				m_modelNormalMap;
-	Texture				m_modelSpecularMap;
+	//移動処理をする関数
+	void Move();
+
+	//モデルを移動方向に合わせて回転させる関数
+	void Rotation();
+
+private:
+	SkinModel			m_skinModel;			//スキンモデル
+	SkinModelData		m_skinModelData;		//スキンモデルデータ
+	Light				m_light;				//モデルのライト
+	D3DXQUATERNION		m_rotation;				//モデルの回転
+	D3DXVECTOR3			m_position;				//座標
+	D3DXVECTOR3			m_scale;				//モデルのサイズ
+	Animation			m_anim;					//アニメーション
+	CharacterController m_characterController;	//キャラクターコントローラー
+	Texture				m_modelNormalMap;		//モデルの法線マップ
+	Texture				m_modelSpecularMap;		//モデルのスペキュラマップ
 };

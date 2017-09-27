@@ -4,6 +4,7 @@
 #include "MapChip\StaticMapObject.h"
 #include "../Player/Player.h"
 #include "MapTagEnum.h"
+#include "MapChip\Goal.h"
 
 struct MapChipInfo
 {
@@ -25,7 +26,6 @@ Map::Map()
 
 Map::~Map()
 {
-
 }
 
 void Map::Init()
@@ -39,6 +39,9 @@ void Map::Init()
 		case enMapTagPlayer:
 			m_player = New<Player>();
 			m_player->Init(mInfo.m_position, mInfo.m_rotation);
+			break;
+		case enMapTagGoal:
+			mapChip = New<Goal>();
 			break;
 		default:
 			mapChip = New<StaticMapObject>();
@@ -64,3 +67,12 @@ void Map::Update()
 
 }
 
+void Map::BeforeDead()
+{
+	Delete(m_player);
+	for (MapChip* mapchip : m_mapChip)
+	{
+		Delete(mapchip);
+	}
+	m_mapChip.clear();
+}

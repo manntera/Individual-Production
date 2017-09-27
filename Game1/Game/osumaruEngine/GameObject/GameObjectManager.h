@@ -25,6 +25,6 @@ private:
 	void DeleteExecute();
 
 private:
-	std::vector<GameObject*> m_objectVector;	//オブジェクトのリスト
+	std::list<GameObject*> m_objectVector;	//オブジェクトのリスト
 
 };

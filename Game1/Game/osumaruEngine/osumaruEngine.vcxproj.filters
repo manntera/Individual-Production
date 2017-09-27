@@ -63,9 +63,6 @@
     <ClCompile Include="Graphics\Texture.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Light.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
@@ -97,6 +94,9 @@
       <Filter>ソース ファイル\Physics\Collider</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\ShadowMap.cpp">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
   </ItemGroup>

@@ -26,7 +26,7 @@ public:
 	virtual void Update()override;
 
 	//•`‰æŠÖ”
-	virtual void Render()override;
+	virtual void Draw()override;
 
 
 protected:

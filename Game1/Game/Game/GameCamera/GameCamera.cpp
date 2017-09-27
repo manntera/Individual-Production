@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GameCamera.h"
-#include "../Scene/GameScene/GameScene.h"
+#include "../Scene/GameScene.h"
 #include "../Player/Player.h"
 
 GameCamera::GameCamera()
@@ -9,7 +9,6 @@ GameCamera::GameCamera()
 }
 
 GameCamera::~GameCamera()
-
 {
 
 }
@@ -24,6 +23,10 @@ void GameCamera::Init()
 
 void GameCamera::Update()
 {
+	if (g_gameScene == nullptr)
+	{
+		return;
+	}
 	float angleY = GetPad().GetRightStickX() * 2 / 180.0f * cPI;
 	float angleX = GetPad().GetRightStickY() * 2 / 180.0f * cPI;
 	D3DXQUATERNION multi;

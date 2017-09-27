@@ -1,7 +1,6 @@
 #include "stdafx.h"
-#include "test.h"
 #include "GameCamera\GameCamera.h"
-#include "Scene\GameScene\GameScene.h"
+#include "Scene/GameScene.h"
 
 int WINAPI wWinMain(
 	HINSTANCE hInst,
@@ -15,7 +14,6 @@ int WINAPI wWinMain(
 	//Direct3D‚ğ‰Šú‰»
 	GetEngine().InitD3D(hInst);
 	g_gameScene = New<GameScene>();
-	g_gameScene->Init();
 	GetEngine().GameLoop();
 	return 0;
 }

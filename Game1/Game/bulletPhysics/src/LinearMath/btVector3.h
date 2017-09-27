@@ -956,6 +956,7 @@ SIMD_FORCE_INLINE btVector3 btVector3::normalized() const
 	return nrm.normalize();
 } 
 
+
 SIMD_FORCE_INLINE btVector3 btVector3::rotate( const btVector3& wAxis, const btScalar _angle ) const
 {
 	// wAxis must be a unit lenght vector

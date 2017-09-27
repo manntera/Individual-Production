@@ -50,6 +50,10 @@ public:
 	*/
 	void UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale);
 
+	//シャドウマップに登録
+	void ShadowMapEntry();
+
+
 	/*
 	ライトを設定
 	*/
@@ -57,7 +61,6 @@ public:
 	{
 		this->m_light = light;
 	}
-
 
 	//ワールド行列を取得。
 	D3DXMATRIX GetWorldMatrix()

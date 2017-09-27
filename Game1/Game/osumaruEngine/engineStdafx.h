@@ -9,6 +9,7 @@ class EffectManager;
 #include <memory>
 #include <vector>
 #include <map>
+#include <list>
 
 #include <stdio.h>
 #include <string.h>

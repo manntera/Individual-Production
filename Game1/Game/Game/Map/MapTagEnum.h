@@ -2,5 +2,6 @@
 {
 	enMapTagMapChip,
 	enMapTagPlayer,
+	enMapTagGoal,
 	enMapTagNum,
 };
