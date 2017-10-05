@@ -94,6 +94,21 @@ public:
 	//剛体を削除。
 	void RemovedRigidBody();
 
+	const btCollisionObject* GetGroundCollisionObject()
+	{
+		return m_groundHitObject;
+	}
+
+	const btCollisionObject* GetWallCollisionObject()
+	{
+		return m_wallHitObject;
+	}
+
+	D3DXVECTOR3 GetWallNormal()
+	{
+		return m_wallNormal;
+	}
+
 private:
 	D3DXVECTOR3		m_position;			//座標
 	D3DXVECTOR3		m_moveSpeed;		//移動速度
@@ -104,4 +119,7 @@ private:
 	float			m_height;			//高さ
 	RigidBody		m_rigidBody;		//剛体
 	float			m_gravity;			//重力
+	const btCollisionObject* m_groundHitObject;
+	const btCollisionObject* m_wallHitObject;
+	D3DXVECTOR3		m_wallNormal;
 };

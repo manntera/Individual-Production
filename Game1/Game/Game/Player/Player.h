@@ -1,6 +1,16 @@
 #pragma once
 //プレイヤークラス
 
+enum EnAnimationSet
+{
+	enAnimSetRun,
+	enAnimSetWait,
+	enAnimSetWallShear,
+	enAnimSetWallJump,
+	enAnimSetJump,
+	enAnimSetNum,
+};
+
 class Player : public GameObject
 {
 public:
@@ -32,9 +42,17 @@ public:
 		return m_position;
 	}
 
+	/*
+	ステージギミックによりプレイヤーが動かされる時の移動速度を設定。
+	moveSpeed	プレイヤーを動かす方向と速度
+	*/
+	void SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed);
+
 private:
 	//移動処理をする関数
 	void Move();
+
+	void Jump();
 
 	//モデルを移動方向に合わせて回転させる関数
 	void Rotation();
@@ -50,4 +68,11 @@ private:
 	CharacterController m_characterController;	//キャラクターコントローラー
 	Texture				m_modelNormalMap;		//モデルの法線マップ
 	Texture				m_modelSpecularMap;		//モデルのスペキュラマップ
+	D3DXVECTOR3			m_stageGimmickMoveSpeed;//ステージギミックによってプレイヤーを動かされる時の移動速度
+	int					m_jumpCount;
+	bool				m_isWallShear;
+	float				m_wallShearGravity;
+	float				m_defaultGravity;
+	D3DXVECTOR3			m_wallJumpDirection;
+	EnAnimationSet		m_currentAnim;
 };

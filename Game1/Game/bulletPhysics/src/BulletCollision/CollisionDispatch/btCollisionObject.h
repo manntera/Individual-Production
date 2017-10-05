@@ -51,6 +51,8 @@ ATTRIBUTE_ALIGNED16(class)	btCollisionObject
 
 protected:
 
+	bool		m_playerCollisionFlg = false;
+
 	btTransform	m_worldTransform;
 
 	///m_interpolationWorldTransform is used for CCD and interpolation
@@ -393,6 +395,16 @@ public:
 	const btVector3&	getInterpolationAngularVelocity() const
 	{
 		return m_interpolationAngularVelocity;
+	}
+
+	void setPlayerCollisionFlg(bool flg)
+	{
+		m_playerCollisionFlg = flg;
+	}
+
+	bool getPlayerCollisionFlg()
+	{
+		return m_playerCollisionFlg;
 	}
 
 	SIMD_FORCE_INLINE int getIslandTag() const

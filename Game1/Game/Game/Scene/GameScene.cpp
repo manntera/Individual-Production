@@ -25,10 +25,10 @@ GameScene::~GameScene()
 
 void GameScene::Start()
 {
-	m_sky = New<Sky>();
-	m_map = New<Map>();
+	m_sky = New<Sky>(0);
+	m_map = New<Map>(0);
 	m_map->Init();
-	m_camera = New<GameCamera>();
+	m_camera = New<GameCamera>(cameraPriority);
 	m_camera->Init();
 	g_pFade->FadeIn();
 }
@@ -41,11 +41,11 @@ void GameScene::Update()
 		{
 			if (m_isGameClear)
 			{
-				New<GameClearScene>();
+				New<GameClearScene>(0);
 			}
 			else if (m_isGameOver)
 			{
-				New<GameOverScene>();
+				New<GameOverScene>(0);
 			}
 			Delete(this);
 			g_gameScene = nullptr;

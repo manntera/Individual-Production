@@ -76,9 +76,9 @@ public:
 	}
 	//インスタンスの生成
 	template<class T> 
-	T* New()
+	T* New(int priority)
 	{
-		return m_objectManager.New<T>();
+		return m_objectManager.New<T>(priority);
 	}
 	//インスタンスの削除
 	void Delete(GameObject* deleteObject)
@@ -109,9 +109,9 @@ static Engine& GetEngine()
 
 //インスタンスの生成
 template <class T>
-static T* New()
+static T* New(int priority)
 {
-	return GetEngine().New<T>();
+	return GetEngine().New<T>(priority);
 }
 //インスタンスの削除
 static void Delete(GameObject* deleteObject)

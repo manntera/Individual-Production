@@ -30,14 +30,14 @@ void Sprite::Init(char *filePath)
 	SetPosition({ 0.0f, 0.0f});
 
 	//エフェクトをロード
-	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("../Game/Assets/shader/sprite.fx");
+	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/shader/sprite.fx");
 	//頂点バッファを作成
 	VERTEX_PT elements[4] =
 	{
-		{ -0.5f,	0.5f,	0.0f,	1.0f,	0.0f ,	0.0f },
-		{ 0.5f,		0.5f,	0.0f,	1.0f,	1.0f ,	0.0f },
-		{ 0.5f,		-0.5f,	0.0f,	1.0f,	1.0f ,	1.0f },
-		{ -0.5f,	-0.5f,	0.0f,	1.0f,	0.0f ,	1.0f },
+		{ -1.0f,	1.0f,	0.0f,	1.0f,	0.0f ,	0.0f },
+		{ 1.0f,		1.0f,	0.0f,	1.0f,	1.0f ,	0.0f },
+		{ 1.0f,		-1.0f,	0.0f,	1.0f,	1.0f ,	1.0f },
+		{ -1.0f,	-1.0f,	0.0f,	1.0f,	0.0f ,	1.0f },
 	};
 	//インデックスバッファーを作成
 	WORD indexElements[6] = { 0, 2, 3, 0, 1, 2 };
@@ -50,17 +50,15 @@ void Sprite::Init(char *filePath)
 
 void Sprite::Draw()
 {
-	float windowWidthHalf = FRAME_BUFFER_WIDTH / 2;
-	float windowHeightHalf = FRAME_BUFFER_HEIGHT / 2;
 	//座標のスケールを変換
 	D3DXVECTOR3 position;
-	position.x = m_position.x / windowWidthHalf;
-	position.y = m_position.y / windowHeightHalf;
+	position.x = m_position.x / FRAME_BUFFER_WIDTH;
+	position.y = m_position.y / FRAME_BUFFER_HEIGHT;
 	position.z = 0.0f;
 	//拡大のスケールを変換
 	D3DXVECTOR3 size;
-	size.x = m_size.x / windowWidthHalf;
-	size.y = m_size.y / windowHeightHalf;
+	size.x = m_size.x / FRAME_BUFFER_WIDTH;
+	size.y = m_size.y / FRAME_BUFFER_HEIGHT;
 	size.z = 0.0f;
 
 	//移動行列を作成
@@ -77,9 +75,11 @@ void Sprite::Draw()
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
 	DWORD srcBackup;
 	DWORD destBackup;
+	DWORD cullModeBackup;
 	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &srcBackup);
 	pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &destBackup);
+	pD3DDevice->GetRenderState(D3DRS_CULLMODE, &cullModeBackup);
 
 	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -103,6 +103,7 @@ void Sprite::Draw()
 	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 	//pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup); 
 	//pD3DDevice->SetRenderState(D3DRS_DESTBLEND, destBackup);
+	pD3DDevice->SetRenderState(D3DRS_CULLMODE, cullModeBackup);
 
 }
 

@@ -4,17 +4,28 @@
 #include "../Engine.h"
 
 
+void GameObjectManager::Init()
+{
+	m_objectVector.resize(priorityMax);
+}
+
 void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 {
 	//初期化
-	for (GameObject* object : m_objectVector)
+	for (GameObjectList& objList : m_objectVector)
 	{
-		object->Starter();
+		for (GameObject* object : objList)
+		{
+			object->Starter();
+		}
 	}
 	//更新
-	for (GameObject* object : m_objectVector)
+	for (GameObjectList& objList : m_objectVector)
 	{
-		object->Updater();
+		for (GameObject* object : objList)
+		{
+			object->Updater();
+		}
 	}
 
 	GetShadowMap().Draw();
@@ -23,14 +34,20 @@ void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 	pDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 	//シーンの描画開始。
 	pDevice->BeginScene();
-	for (GameObject* object : m_objectVector)
+	for (GameObjectList& objList : m_objectVector)
 	{
-		object->Drawer();
+		for (GameObject* object : objList)
+		{
+			object->Drawer();
+		}
 	}
 
-	for (GameObject* object : m_objectVector)
+	for (GameObjectList& objList : m_objectVector)
 	{
-		object->AfterDrawer();
+		for (GameObject* object : objList)
+		{
+			object->AfterDrawer();
+		}
 	}
 	// シーンの描画終了。
 	pDevice->EndScene();
@@ -49,18 +66,21 @@ void GameObjectManager::Delete(GameObject* deleteObject)
 
 void GameObjectManager::DeleteExecute()
 {
-	std::list<GameObject*>::iterator it = m_objectVector.begin();
-	while (it != m_objectVector.end())
+	for (GameObjectList& objList : m_objectVector)
 	{
-		if ((*it)->IsDelete())
+		std::list<GameObject*>::iterator it = objList.begin();
+		while (it != objList.end())
 		{
-			GameObject *deleteObject = *it;
-			it = m_objectVector.erase(it);
-			delete deleteObject;
-		}
-		else
-		{
-			it++;
+			if ((*it)->IsDelete())
+			{
+				GameObject *deleteObject = *it;
+				it = objList.erase(it);
+				delete deleteObject;
+			}
+			else
+			{
+				it++;
+			}
 		}
 	}
 	

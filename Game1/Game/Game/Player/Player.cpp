@@ -3,10 +3,17 @@
 #include "../GameCamera/GameCamera.h"
 #include "../Scene/GameScene.h"
 #include  "../Scene/Fade.h"
+#include "../Map/MapChip/MoveFloor.h"
 
 Player::Player()
 {
-
+	m_jumpCount = 0;
+	m_stageGimmickMoveSpeed = { 0.0f, 0.0f, 0.0f };
+	m_isWallShear = false;
+	m_wallShearGravity = -40.0f;
+	m_defaultGravity = -90.0f;
+	m_wallJumpDirection = { 0.0f, 0.0f, 0.0f };
+	m_currentAnim = enAnimSetWait;
 }
 
 Player::~Player()
@@ -51,9 +58,10 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(1.0f, 1.0f, m_position);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
-	m_characterController.SetGravity(-20.0f);
+	m_characterController.SetGravity(-90.0f);
 	m_skinModel.SetShadowCasterFlg(true);
-	//m_skinModel.SetShadowReceiverFlg(true);
+	m_skinModel.SetShadowReceiverFlg(true);
+
 }
 
 void Player::Start()
@@ -66,10 +74,17 @@ void Player::Start()
 	m_skinModel.SetNormalMap(&m_modelNormalMap);
 	m_skinModel.SetSpecularMap(&m_modelSpecularMap, &g_gameScene->GetCamera());
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-	m_anim.SetAnimationEndTime(0, 0.8f);
+	m_anim.SetAnimationEndTime(enAnimSetRun, 0.8f);
+	m_anim.SetAnimationEndTime(enAnimSetWallJump, 0.9f);
+	m_anim.SetAnimationLoopFlg(enAnimSetWallJump, false);
+	m_anim.SetAnimationEndTime(enAnimSetJump, 0.7f);
+	m_anim.SetAnimationLoopFlg(enAnimSetJump, false);
+	m_anim.PlayAnimation(enAnimSetWait);
 }
 
+
 void Player::Update()
+
 {
 	if (g_gameScene == nullptr)
 	{
@@ -77,15 +92,20 @@ void Player::Update()
 	}
 
 	Move();
-	Rotation();
+	Jump();
+	if (m_characterController.IsOnGround() && (GetPad().GetLeftStickX() != 0.0f || GetPad().GetLeftStickY() != 0.0f))
+	{
+		Rotation();
+	}
 	
 	if (GetPad().IsPressButton(padButtonB))
 	{
 		m_anim.PlayAnimation(0);
 	}
 
-	if (m_position.y < -10.0f)
+	if (m_position.y < 0.0f)
 	{
+
 		g_gameScene->GameOver();
 	}
 
@@ -97,7 +117,12 @@ void Player::Move()
 {
 	//ˆÚ“®
 	D3DXVECTOR3 moveSpeed = {0.0f, 0.0f, 0.0f};
-	moveSpeed.y = m_characterController.GetMoveSpeed().y;
+	moveSpeed = m_characterController.GetMoveSpeed();
+	if (m_characterController.IsOnGround())
+	{
+		moveSpeed.x = 0.0f;
+		moveSpeed.z = 0.0f;
+	}
 	Camera& camera = g_gameScene->GetCamera();
 	//ƒJƒƒ‰‚ÌŒü‚«‚ğˆÚ“®•ûŒü‚Æ‚µ‚ÄˆÚ“®
 	D3DXVECTOR3 front = camera.GetTarget() - camera.GetPosition();
@@ -107,16 +132,148 @@ void Player::Move()
 	//‰¡‚Ö‚ÌˆÚ“®•ûŒü‚ÍŠOÏ‚ğæ‚Á‚Ä‹‚ß‚é
 	D3DXVec3Cross(&side, &front, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	D3DXVec3Normalize(&side, &side);
-	float speed = 30.0f;
-	moveSpeed += -side * GetPad().GetLeftStickX() * speed;
-	moveSpeed += front * GetPad().GetLeftStickY() * speed;
-	if (GetPad().IsTriggerButton(padButtonA))
+	float speed = 25.0f;
+	const float speedLimit = speed;
+	if (!m_characterController.IsOnGround())
 	{
-		moveSpeed.y += 15.0f;
+		speed *= 0.01f;
+	}
+	D3DXVECTOR3 moveDirectionSide = -side * GetPad().GetLeftStickX();
+	D3DXVECTOR3 moveDirectionFront = front * GetPad().GetLeftStickY();
+	moveSpeed += moveDirectionSide * speed;
+	moveSpeed += moveDirectionFront * speed;
+	if (moveSpeed.x < -speedLimit)
+	{
+		moveSpeed.x = -speedLimit;
+	}
+	else if (speedLimit < moveSpeed.x)
+	{
+		moveSpeed.x = speedLimit;
+	}
+	if (moveSpeed.z < -speedLimit)
+	{
+		moveSpeed.z = -speedLimit;
+	}
+	else if (speedLimit < moveSpeed.z)
+	{
+		moveSpeed.z = speedLimit;
+	}
+	if (GetPad().IsTriggerButton(padButtonA) && m_jumpCount < 2)
+	{
+		moveSpeed.y = 0.0f;
+		if (m_jumpCount != 0)
+		{
+
+			moveSpeed.x = (moveDirectionSide.x + moveDirectionFront.x) * speedLimit;
+			moveSpeed.z = (moveDirectionSide.z + moveDirectionFront.z) * speedLimit;
+			//moveSpeed.y += 15.0f * m_jumpCount;
+
+		}
+		moveSpeed.y += 50.0f;
+		m_characterController.SetMoveSpeed(moveSpeed);
+		Rotation();
+		m_jumpCount++;
+		//if (m_currentAnim != enAnimSetJump)
+		//{
+
+		//	m_currentAnim = enAnimSetJump;
+		//	m_anim.PlayAnimation(enAnimSetJump);
+		//}
+		m_anim.PlayAnimation(enAnimSetJump);
+	}
+
+	if (m_characterController.IsOnGround())
+	{
+		m_jumpCount = 0;
+		if (moveSpeed.x == 0.0f && moveSpeed.z == 0.0f)
+		{
+			if (m_currentAnim != enAnimSetWait)
+			{
+				m_currentAnim = enAnimSetWait;
+				m_anim.PlayAnimation(enAnimSetWait);
+			}
+		}
+		else
+		{
+			if (m_currentAnim != enAnimSetRun)
+			{
+				m_currentAnim = enAnimSetRun;
+				m_anim.PlayAnimation(enAnimSetRun);
+			}
+		}
+	}
+	moveSpeed += m_stageGimmickMoveSpeed;
+	if (m_characterController.IsJump() )
+	{
+		if (m_characterController.GetWallCollisionObject() != nullptr)
+		{
+			m_isWallShear = true;
+			D3DXVECTOR3 wallNormal = m_characterController.GetWallNormal();
+			wallNormal.y = 0.0f;
+			D3DXVec3Normalize(&wallNormal, &wallNormal);
+			D3DXVECTOR3 playerDirection = moveSpeed;
+			playerDirection.y = 0.0f;
+			playerDirection *= -1.0f;
+
+			float dot = D3DXVec3Dot(&playerDirection, &wallNormal);
+			playerDirection *= -1.0f;
+			wallNormal *= dot * 2.0f;
+			playerDirection += wallNormal;
+			m_wallJumpDirection = playerDirection;
+			D3DXVec3Normalize(&m_wallJumpDirection, &m_wallJumpDirection);
+			m_wallJumpDirection *= speedLimit;
+			m_wallJumpDirection.y = 50.0f;
+			if (m_currentAnim != enAnimSetWallShear)
+			{
+				m_currentAnim = enAnimSetWallShear;
+				m_anim.PlayAnimation(enAnimSetWallShear);
+			}
+			m_characterController.SetMoveSpeed(-wallNormal);
+			Rotation();
+		}
+	}
+	else
+	{
+		m_isWallShear = false;
+	}
+	if (m_isWallShear)
+	{
+		moveSpeed = { 0.0f, 0.0f, 0.0f };
+		m_characterController.SetGravity(m_wallShearGravity);
+		if (GetPad().IsTriggerButton(padButtonA))
+		{
+			moveSpeed = m_wallJumpDirection;
+			m_characterController.SetGravity(m_defaultGravity);
+			m_characterController.SetMoveSpeed(moveSpeed);
+			Rotation();
+			m_jumpCount = 1;
+			m_isWallShear = false;
+			if (m_currentAnim != enAnimSetWallJump)
+			{
+				m_currentAnim = enAnimSetWallJump;
+				m_anim.PlayAnimation(enAnimSetWallJump);
+			}
+
+		}
+	}
+	else
+	{
+		m_characterController.SetGravity(m_defaultGravity);
 	}
 	m_characterController.SetMoveSpeed(moveSpeed);
 	m_characterController.Execute();
 	m_position = m_characterController.GetPosition();
+	m_stageGimmickMoveSpeed = { 0.0f, 0.0f, 0.0f };
+}
+
+void Player::Jump()
+{
+
+}
+
+void Player::SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed)
+{
+	m_stageGimmickMoveSpeed += moveSpeed * 60.0f;
 }
 
 void Player::Rotation()
@@ -144,6 +301,7 @@ void Player::Rotation()
 		D3DXQuaternionRotationAxis(&m_rotation, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
 	}
 }
+
 
 void Player::Draw()
 {

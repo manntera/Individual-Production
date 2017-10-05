@@ -12,12 +12,10 @@ int WINAPI wWinMain(
 	int nCmdShow
 	)
 {
-
-
 	//Direct3D‚ğ‰Šú‰»
 	GetEngine().InitD3D(hInst);
-	g_gameScene = New<GameScene>();
-	g_pFade = New<Fade>();
+	g_gameScene = New<GameScene>(0);
+	g_pFade = New<Fade>(0);
 	g_pFade->Init();
 	GetEngine().GameLoop();
 	return 0;

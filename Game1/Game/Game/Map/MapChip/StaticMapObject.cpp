@@ -18,6 +18,7 @@ void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* 
 	m_rigidBody.Create(rInfo);
 	m_rigidBody.GetBody()->getWorldTransform().setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
 	m_rigidBody.GetBody()->getWorldTransform().setRotation(btQuaternion(m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w));
+	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
 }
 
 void StaticMapObject::Start()

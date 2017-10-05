@@ -26,9 +26,11 @@ void Animation::Init(ID3DXAnimationController* anim)
 	m_pAnimController->GetAnimationSet(0, &animSet);
 	m_numAnimSet = m_pAnimController->GetMaxNumAnimationSets();
 	m_numMaxTracks = m_pAnimController->GetMaxNumTracks();
+
 	m_blendRateTable.reset(new float[m_numMaxTracks]);
 	m_animationEndTime.reset(new double[m_numAnimSet]);
 	m_animationSets.reset(new ID3DXAnimationSet*[m_numAnimSet]);
+	m_isAnimationLoop.reset(new bool[m_numAnimSet]);
 	for (int i = 0; i < m_numMaxTracks; i++)
 	{
 		m_blendRateTable[i] = 1.0f;
@@ -38,6 +40,7 @@ void Animation::Init(ID3DXAnimationController* anim)
 	{
 		m_pAnimController->GetAnimationSet(i, &m_animationSets[i]);
 		m_animationEndTime[i] = -1.0;
+		m_isAnimationLoop[i] = true;
 	}
 	m_localAnimationTime = 0.0;
 }
@@ -104,14 +107,21 @@ void Animation::Update(float deltaTime)
 		if (m_animationEndTime[m_currentAnimationSetNo] > 0.0//アニメーションの終了時間が設定されている
 			&& m_localAnimationTime > m_animationEndTime[m_currentAnimationSetNo])//アニメーションの終了時間を超えた
 		{
-			m_localAnimationTime -= m_animationEndTime[m_currentAnimationSetNo];
-			m_pAnimController->SetTrackPosition(m_currentTrackNo, m_localAnimationTime);
-			m_pAnimController->AdvanceTime(0, NULL);
+			if (m_isAnimationLoop[m_currentAnimationSetNo])
+			{
+				m_localAnimationTime -= m_animationEndTime[m_currentAnimationSetNo];
+				m_pAnimController->SetTrackPosition(m_currentTrackNo, m_localAnimationTime);
+				m_pAnimController->AdvanceTime(0, NULL);
+			}
 		}
 		else
 		{
-			//普通に再生
-			m_pAnimController->AdvanceTime(deltaTime, NULL);
+			if (m_localAnimationTime < m_animationSets[m_currentAnimationSetNo]->GetPeriod() ||
+				m_isAnimationLoop[m_currentAnimationSetNo])
+			{
+				//普通に再生
+				m_pAnimController->AdvanceTime(deltaTime, NULL);
+			}
 		}
 		if (m_isInterpolate)
 		{

@@ -19,4 +19,10 @@
 #include "../osumaruEngine/Physics/Collider/BoxCollider.h"
 #include "../osumaruEngine/Physics/Collider/ICollider.h"
 #include "../osumaruEngine/Physics/CharacterController.h"
+#include "../osumaruEngine/Physics/CollisionAttr.h"
 #include "../osumaruEngine/Input/Pad.h"
+
+
+const int playerPriority = 1;
+const int stageGimmickPriority = 0;
+const int cameraPriority = 2;

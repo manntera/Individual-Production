@@ -57,6 +57,25 @@ public:
 	*/
 	void Update(float deltaTime);
 
+	/*
+	アニメーションのループフラグを設定
+	animationNum		設定したいアニメーションの番号
+	flg					ループさせるか？
+	*/
+	void SetAnimationLoopFlg(int animationNum, bool flg)
+	{
+		m_isAnimationLoop[animationNum] = flg;
+	}
+
+	/*
+	アニメーションのループフラグを取得
+	animationNum		ループフラグを取得したいアニメーションの番号
+	*/
+	bool GetAnimationLoopFlg(int animationNum)
+	{
+		return m_isAnimationLoop[animationNum];
+	}
+
 private:
 
 	ID3DXAnimationController*				m_pAnimController;			//アニメーションコントローラー
@@ -65,6 +84,7 @@ private:
 	std::unique_ptr<float[]>				m_blendRateTable;				//ブレンディングレートのテーブル。
 	std::unique_ptr<double[]>				m_animationEndTime;			//アニメーションの終了タイム。デフォルトは-1.0が入っていて、-1.0が入っている場合はID3DXAnimationSetのアニメーション終了タイムが優先される。
 																		//DirectX9のアニメーションセットに1秒以下のアニメーションを入れる方法が見つからない。一秒以下のアニメーションはこいつを適時設定。
+	std::unique_ptr<bool[]>					m_isAnimationLoop;
 	double									m_localAnimationTime;			//ローカルアニメーションタイム
 	int										m_currentAnimationSetNo;		//現在再生中のアニメーショントラックの番号
 	int										m_currentTrackNo;				//現在のトラックの番号

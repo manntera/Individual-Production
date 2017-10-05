@@ -1,9 +1,14 @@
 #pragma once
 class GameObject;
 
+const int priorityMax = 16;
 class GameObjectManager
 {
 public:
+
+	//初期化関数
+	void Init();
+
 	//ゲームの1ループを実行する関数
 	void Execute(LPDIRECT3DDEVICE9 pDevice);
 
@@ -13,10 +18,14 @@ public:
 
 	//ゲームのオブジェクトを生成する
 	template<class T>
-	T* New()
+	T* New(int priority)
 	{
+		if (priority < 0 || priorityMax <= priority)
+		{
+			return nullptr;
+		}
 		T* newObject = new T;
-		m_objectVector.push_back(newObject);
+		m_objectVector[priority].push_back(newObject);
 		return newObject;
 	}
 
@@ -25,6 +34,6 @@ private:
 	void DeleteExecute();
 
 private:
-	std::list<GameObject*> m_objectVector;	//オブジェクトのリスト
-
+	typedef std::list<GameObject*> GameObjectList;	//オブジェクトのリスト
+	std::vector<GameObjectList> m_objectVector;
 };

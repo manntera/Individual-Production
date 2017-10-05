@@ -171,6 +171,8 @@
     <ClCompile Include="Map\Map.cpp" />
     <ClCompile Include="Map\MapChip\Goal.cpp" />
     <ClCompile Include="Map\MapChip\MapChip.cpp" />
+    <ClCompile Include="Map\MapChip\MoveFloor.cpp" />
+    <ClCompile Include="Map\MapChip\SpringObject.cpp" />
     <ClCompile Include="Map\MapChip\StaticMapObject.cpp" />
     <ClCompile Include="Map\Sky.cpp" />
     <ClCompile Include="Player\Player.cpp" />
@@ -190,6 +192,8 @@
     <ClInclude Include="Map\Map.h" />
     <ClInclude Include="Map\MapChip\Goal.h" />
     <ClInclude Include="Map\MapChip\MapChip.h" />
+    <ClInclude Include="Map\MapChip\MoveFloor.h" />
+    <ClInclude Include="Map\MapChip\SpringObject.h" />
     <ClInclude Include="Map\MapChip\StaticMapObject.h" />
     <ClInclude Include="Map\Sky.h" />
     <ClInclude Include="Player\Player.h" />

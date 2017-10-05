@@ -27,7 +27,7 @@ void GameClearScene::Update()
 	{
 		if (g_pFade->GetCurrentState() == enFadeOut)
 		{
-			g_gameScene = New<GameScene>();
+			g_gameScene = New<GameScene>(0);
 			Delete(this);
 		}
 	}

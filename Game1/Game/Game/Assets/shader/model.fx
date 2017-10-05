@@ -195,6 +195,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	if (g_isHasNormalMap)
 	{
 		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
+
 		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
 		float3 normalVector = normalColor * 2.0f - 1.0f;
 		normalVector = normalize(normalVector);
@@ -206,6 +207,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		lig.w = 1.0f;
 	}
 	if (g_isHasSpecularMap)
+
 	{
 		//反射ベクトルを求める
 		float3 textureNormal = In.Normal;

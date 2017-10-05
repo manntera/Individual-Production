@@ -47,7 +47,7 @@ void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelNam
 	m_position = position;
 	m_rotation = rotation;
 	m_skinModel.SetShadowCasterFlg(true);
-	//m_skinModel.SetShadowReceiverFlg(true);
+	m_skinModel.SetShadowReceiverFlg(true);
 	D3DXVECTOR3 scale = { 1.0f, 1.0f, 1.0f };
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, scale);
 }

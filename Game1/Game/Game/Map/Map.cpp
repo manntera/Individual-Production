@@ -3,14 +3,17 @@
 #include "MapChip/MapChip.h"
 #include "MapChip\StaticMapObject.h"
 #include "../Player/Player.h"
-#include "MapTagEnum.h"
 #include "MapChip\Goal.h"
+#include "MapChip\MoveFloor.h"
+#include "MapChip/SpringObject.h"
+#include "MapTagEnum.h"
 
 struct MapChipInfo
 {
 	char*			m_modelName;
 	D3DXVECTOR3		m_position;
 	D3DXQUATERNION	m_rotation;
+
 	EnMapChipTag	m_tag;
 };
 MapChipInfo mapChipInfo[] = 
@@ -37,14 +40,24 @@ void Map::Init()
 		switch (mInfo.m_tag)
 		{
 		case enMapTagPlayer:
-			m_player = New<Player>();
+			m_player = New<Player>(playerPriority);
 			m_player->Init(mInfo.m_position, mInfo.m_rotation);
 			break;
+
 		case enMapTagGoal:
-			mapChip = New<Goal>();
+			mapChip = New<Goal>(stageGimmickPriority);
 			break;
+
+		case enMapTagMoveFloor:
+			mapChip = New<MoveFloor>(stageGimmickPriority);
+			break;
+
+		case enMapTagSpring:
+			mapChip = New<SpringObject>(stageGimmickPriority);
+			break;
+
 		default:
-			mapChip = New<StaticMapObject>();
+			mapChip = New<StaticMapObject>(stageGimmickPriority);
 			break;
 
 		}

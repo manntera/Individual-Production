@@ -11,6 +11,7 @@ struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 	D3DXVECTOR3 hitPos = { 0.0f, 0.0f, 0.0f };		//衝突点。
 	D3DXVECTOR3 startPos = { 0.0f, 0.0f, 0.0f };	//レイの始点。
 	D3DXVECTOR3 hitNormal = { 0.0f, 0.0f, 0.0f };	//衝突点の法線
+	const btCollisionObject* hitObject = nullptr;
 	btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
 	float dist = FLT_MAX;							//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
 													//衝突したときに呼ばれるコールバック関数。
@@ -22,6 +23,7 @@ struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 			//自分に衝突した。orキャラクタ属性のコリジョンと衝突した。
 			return 0.0f;
 		}
+		hitObject = convexResult.m_hitCollisionObject;
 		//衝突点の法線を引っ張ってくる
 		D3DXVECTOR3	hitNormalTmp = D3DXVECTOR3(convexResult.m_hitNormalLocal);
 		//上方向と法線のなす角度を求める。
@@ -59,6 +61,7 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 	float dist = FLT_MAX;							//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
 	D3DXVECTOR3	hitNormal = { 0.0f, 0.0f, 0.0f };	//衝突点の法線
 	btCollisionObject* me = NULL;					//自分自身。自分自身との衝突を除外するためのメンバ。
+	const btCollisionObject* hitObject = NULL;
 													//衝突したときに呼ばれるコールバック関数
 	virtual btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
@@ -67,6 +70,7 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 			//自分に衝突した。or地面に衝突した。
 			return 0.0f;
 		}
+		hitObject = convexResult.m_hitCollisionObject;
 		//衝突点の法線を引っ張ってくる。
 		D3DXVECTOR3 hitNormalTmp;
 		hitNormalTmp = D3DXVECTOR3(convexResult.m_hitNormalLocal);
@@ -104,6 +108,9 @@ CharacterController::CharacterController()
 	m_radius = 0.0f;
 	m_height = 0.0f;
 	m_gravity = -9.8f;
+	m_wallHitObject = nullptr;
+	m_groundHitObject = nullptr;
+	m_wallNormal = { 0.0f, 0.0f, 0.0f };
 }
 
 CharacterController::~CharacterController()
@@ -151,6 +158,8 @@ void CharacterController::Execute()
 	//XZ平面での衝突検出と衝突解決を行う。
 	{
 		int loopCount = 0;
+		const btCollisionObject* wallCollisionObject = nullptr;
+		D3DXVECTOR3 hitNormal = { 0.0f, 0.0f, 0.0f };
 		while (true)
 		{
 			//現在の座標から次の移動先へ向かうベクトルを求める。
@@ -183,6 +192,8 @@ void CharacterController::Execute()
 			physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 			if (callback.isHit)
 			{
+				wallCollisionObject = callback.hitObject;
+				hitNormal = callback.hitNormal;
 				//当たった。
 				//壁。
 				D3DXVECTOR3 vT0, vT1;
@@ -192,6 +203,7 @@ void CharacterController::Execute()
 				//めり込みが発生している移動ベクトルを求める。
 				D3DXVECTOR3 vMerikomi;
 				vMerikomi = vT1 - vT0;
+				
 				//XZ平面での衝突した壁の法線を求める。
 				D3DXVECTOR3 hitNormalXZ = callback.hitNormal;
 				hitNormalXZ.y = 0.0f;
@@ -222,12 +234,19 @@ void CharacterController::Execute()
 				//どことも当たらないので終わり。
 				break;
 			}
+			m_wallHitObject = callback.hitObject;
 			loopCount++;
 			if (loopCount == 5)
 			{
 				break;
 			}
+			if (callback.hitObject != nullptr && m_rigidBody.GetBody()->getUserIndex() == enCollisionAttr_Character)
+			{
+				const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionFlg(true);
+			}
 		}
+		m_wallNormal = hitNormal;
+		m_wallHitObject = wallCollisionObject;
 	}
 	//XZの移動は確定。
 	m_position.x = nextPosition.x;
@@ -248,7 +267,6 @@ void CharacterController::Execute()
 		//地面上にいなくて降下中の場合はそのまま落下先を調べる。
 		D3DXVECTOR3 endPos;
 		endPos = D3DXVECTOR3(start.getOrigin());
-
 		if (!m_isOnGround)
 		{
 			if (addPosY.y > 0.0f)
@@ -288,6 +306,11 @@ void CharacterController::Execute()
 		{
 			//地面上にいない
 			m_isOnGround = false;
+		}
+		m_groundHitObject = callback.hitObject;
+		if (callback.hitObject != nullptr && m_rigidBody.GetBody()->getUserIndex() == enCollisionAttr_Character)
+		{
+			const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionFlg(true);
 		}
 	}
 	//移動確定。
