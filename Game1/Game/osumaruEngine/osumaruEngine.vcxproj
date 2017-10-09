@@ -125,7 +125,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>d3d9.lib;d3dx9.lib;XInput.lib;%(AdditionalDependencies);LinearMath_Debug.lib;BulletSoftBody_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;d3dx9.lib;XInput.lib;x3daudio.lib;%(AdditionalDependencies);LinearMath_Debug.lib;BulletSoftBody_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
     </Lib>
@@ -201,6 +201,8 @@
     <ClCompile Include="Physics\Collider\CapsuleCollider.cpp" />
     <ClCompile Include="Physics\Collider\ICollider.cpp" />
     <ClCompile Include="Physics\Collider\MeshCollider.cpp" />
+    <ClCompile Include="Physics\Collider\SphereCollider.cpp" />
+    <ClCompile Include="Physics\CollisionDetection.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Physics\RigidBody.cpp" />
   </ItemGroup>
@@ -226,7 +228,9 @@
     <ClInclude Include="Physics\Collider\CapsuleCollider.h" />
     <ClInclude Include="Physics\Collider\ICollider.h" />
     <ClInclude Include="Physics\Collider\MeshCollider.h" />
+    <ClInclude Include="Physics\Collider\SphereCollider.h" />
     <ClInclude Include="Physics\CollisionAttr.h" />
+    <ClInclude Include="Physics\CollisionDetection.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\RigidBody.h" />
   </ItemGroup>

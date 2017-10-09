@@ -19,6 +19,7 @@
 #include "../osumaruEngine/Physics/Collider/BoxCollider.h"
 #include "../osumaruEngine/Physics/Collider/ICollider.h"
 #include "../osumaruEngine/Physics/CharacterController.h"
+#include "../osumaruEngine/Physics/CollisionDetection.h"
 #include "../osumaruEngine/Physics/CollisionAttr.h"
 #include "../osumaruEngine/Input/Pad.h"
 

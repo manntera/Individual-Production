@@ -30,6 +30,13 @@ void MeshCollider::CreateFromSkinModel(SkinModel* model, const D3DXMATRIX* offse
 	if (mesh != NULL)
 	{
 		{
+			m_aabbMax.x = -FLT_MAX;
+			m_aabbMax.y = -FLT_MAX;
+			m_aabbMax.z = -FLT_MAX;
+			m_aabbMin.x = FLT_MAX;
+			m_aabbMin.y = FLT_MAX;
+			m_aabbMin.z = FLT_MAX;
+
 			//頂点ストライドを取得
 			DWORD stride = D3DXGetFVFVertexSize(mesh->GetFVF());
 			//頂点バッファを取得。
@@ -51,6 +58,12 @@ void MeshCollider::CreateFromSkinModel(SkinModel* model, const D3DXMATRIX* offse
 					D3DXVec3TransformCoord(&posTmp, pos, offsetMatrix);
 				}
 				vertexBuffer->push_back(posTmp);
+				m_aabbMax.x = max(posTmp.x, m_aabbMax.x);
+				m_aabbMax.y = max(posTmp.y, m_aabbMax.y);
+				m_aabbMax.z = max(posTmp.z, m_aabbMax.z);
+				m_aabbMin.x = min(posTmp.x, m_aabbMin.x);
+				m_aabbMin.y = min(posTmp.y, m_aabbMin.y);
+				m_aabbMin.z = min(posTmp.z, m_aabbMin.z);
 				char* p = (char*)pos;
 				p += stride;
 				pos = (D3DXVECTOR3*)p;

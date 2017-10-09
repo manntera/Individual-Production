@@ -12,6 +12,7 @@ Animation::Animation()
 	m_interpolateTime = 0.0f;
 	m_currentAnimationSetNo = 0;
 	m_currentTrackNo = 0;
+	m_isPlay = false;
 }
 
 Animation::~Animation()
@@ -63,6 +64,7 @@ void Animation::PlayAnimation(int animationSetIndex)
 			m_pAnimController->SetTrackEnable(0, TRUE);
 			m_pAnimController->SetTrackPosition(0, 0.0f);
 			m_localAnimationTime = 0.0;
+			m_isPlay = true;
 		}
 	}
 	else
@@ -122,6 +124,11 @@ void Animation::Update(float deltaTime)
 				//•’Ê‚ÉÄ¶
 				m_pAnimController->AdvanceTime(deltaTime, NULL);
 			}
+			else
+			{
+				m_isPlay = false;
+			}
+
 		}
 		if (m_isInterpolate)
 		{

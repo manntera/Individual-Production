@@ -44,4 +44,18 @@ public:
 	{
 		m_dynamicWorld->convexSweepTest(castShape, convexFromWorld, convexToWorld, resultCallback, allowedCcdPenetration);
 	}
+
+	void ContactTest(
+		btCollisionObject* collisionObject,
+		btCollisionWorld::ContactResultCallback& resultCallback)
+	{
+		m_dynamicWorld->contactTest(collisionObject, resultCallback);
+	}
+
+	void  DebugDraw(
+		btTransform& worldTrans,
+		btCollisionShape* colShape)
+	{
+		m_dynamicWorld->debugDrawObject(worldTrans, colShape, {0.0f, 0.0f, 1.0f});
+	}
 };

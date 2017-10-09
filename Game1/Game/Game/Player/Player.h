@@ -1,5 +1,6 @@
 #pragma once
 //プレイヤークラス
+#include "PlayerGraspCliff.h"
 
 enum EnAnimationSet
 {
@@ -8,6 +9,7 @@ enum EnAnimationSet
 	enAnimSetWallShear,
 	enAnimSetWallJump,
 	enAnimSetJump,
+	enAnimSetCliffRise,
 	enAnimSetNum,
 };
 
@@ -48,6 +50,42 @@ public:
 	*/
 	void SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed);
 
+	void SetActiveFlg(bool active)
+	{
+		m_isActive = active;
+	}
+
+	void PlayAnimation(EnAnimationSet animeNum)
+	{
+		m_anim.PlayAnimation(animeNum);
+		m_currentAnim = animeNum;
+	}
+
+	bool IsPlay()
+	{
+		return m_anim.IsPlay();
+	}
+
+	bool IsActive()
+	{
+		return m_isActive;
+	}
+
+	D3DXVECTOR3 GetMoveSpeed()
+	{
+		return m_characterController.GetMoveSpeed();
+	}
+	void CriffRise();
+
+	D3DXMATRIX* FindBoneWorldMatrix(char* boneName)
+	{
+		return m_skinModelData.GetFindBoneWorldMatrix(boneName);
+	}
+
+	D3DXMATRIX GetWorldMatrix()
+	{
+		return m_skinModel.GetWorldMatrix();
+	}
 private:
 	//移動処理をする関数
 	void Move();
@@ -75,4 +113,7 @@ private:
 	float				m_defaultGravity;
 	D3DXVECTOR3			m_wallJumpDirection;
 	EnAnimationSet		m_currentAnim;
+	bool				m_isJump;
+	bool				m_isActive;
+	PlayerGraspCliff	m_graspCliff;
 };

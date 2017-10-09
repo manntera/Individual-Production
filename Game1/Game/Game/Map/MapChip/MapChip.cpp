@@ -13,7 +13,7 @@ MapChip::~MapChip()
 
 }
 
-void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName)
+void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
 {
 	float ambientLightColor = 0.4f;
 	float diffuseLightColor0 = 0.3f;
@@ -41,7 +41,7 @@ void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelNam
 
 	char filePath[64];
 	sprintf(filePath, "Assets/modelData/%s.X", modelName);
-	m_skinModelData.LoadModelData(filePath, NULL);
+	m_skinModelData.LoadModelData(filePath, anim);
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
 	m_position = position;

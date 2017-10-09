@@ -1,13 +1,11 @@
 #include "engineStdafx.h"
 #include "Sprite.h"
 #include "../Engine.h"
-#include "Texture.h"
 #include "VertexCommon.h"
 #include "EffectManager.h"
 
 Sprite::Sprite()
 {
-	m_pTexture = nullptr;
 	m_alpha = 1.0f;
 }
 
@@ -20,12 +18,11 @@ void Sprite::Init(char *filePath)
 {
 	Release();
 	//テクスチャを読み込み
-	m_pTexture = new Texture;
-	m_pTexture->Load(filePath);
+	m_texture.Load(filePath);
 
 	//スプライトの座標を初期化
-	float centerPosx = m_pTexture->GetWidth() / 2.0f;
-	float centerPosy = m_pTexture->GetHeight() / 2.0f;
+	float centerPosx = m_texture.GetWidth() / 2.0f;
+	float centerPosy = m_texture.GetHeight() / 2.0f;
 	m_centerPosition = { centerPosx, centerPosy};
 	SetPosition({ 0.0f, 0.0f});
 
@@ -44,8 +41,8 @@ void Sprite::Init(char *filePath)
 	//プリミティブを作成
 	m_primitive.Create(vertex_PT, elements, 4, sizeof(VERTEX_PT), indexElements, 6);
 
-	m_size.x = m_pTexture->GetWidth();
-	m_size.y = m_pTexture->GetHeight();
+	m_size.x = m_texture.GetWidth();
+	m_size.y = m_texture.GetHeight();
 }
 
 void Sprite::Draw()
@@ -87,7 +84,7 @@ void Sprite::Draw()
 	m_pEffect->SetTechnique("Sprite");
 	m_pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 	m_pEffect->BeginPass(0);
-	m_pEffect->SetTexture("g_tex", m_pTexture->GetBody());
+	m_pEffect->SetTexture("g_tex", m_texture.GetBody());
 	m_pEffect->SetValue("g_world", worldMatrix, sizeof(worldMatrix));
 	m_pEffect->SetFloat("g_alpha", m_alpha);
 	m_pEffect->CommitChanges();
@@ -109,11 +106,6 @@ void Sprite::Draw()
 
 void Sprite::Release()
 {
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture->Release();
-		delete m_pTexture;
-		m_pTexture = nullptr;
-	}
+	m_texture.Release();
 	m_primitive.Release();
 }

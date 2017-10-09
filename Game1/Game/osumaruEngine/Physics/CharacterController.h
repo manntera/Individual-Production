@@ -109,6 +109,11 @@ public:
 		return m_wallNormal;
 	}
 
+	void SetUserIndex(int userNum)
+	{
+		m_rigidBody.GetBody()->setUserIndex(userNum);
+	}
+
 private:
 	D3DXVECTOR3		m_position;			//À•W
 	D3DXVECTOR3		m_moveSpeed;		//ˆÚ“®‘¬“x

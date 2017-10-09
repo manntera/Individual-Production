@@ -76,6 +76,10 @@ public:
 		return m_isAnimationLoop[animationNum];
 	}
 
+	bool IsPlay()
+	{
+		return m_isPlay;
+	}
 private:
 
 	ID3DXAnimationController*				m_pAnimController;			//アニメーションコントローラー
@@ -93,4 +97,5 @@ private:
 	bool									m_isInterpolate;				//補間中？
 	float									m_interpolateEndTime;			//補間終了時間
 	float									m_interpolateTime;			//補間時間
+	bool									m_isPlay;					//再生中か？
 };	

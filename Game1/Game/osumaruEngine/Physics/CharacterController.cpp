@@ -18,7 +18,8 @@ struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 	virtual btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
 		if (convexResult.m_hitCollisionObject == me ||
-			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character ||
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_CliffDetection)
 		{
 			//自分に衝突した。orキャラクタ属性のコリジョンと衝突した。
 			return 0.0f;
@@ -65,7 +66,8 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 													//衝突したときに呼ばれるコールバック関数
 	virtual btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
-		if (convexResult.m_hitCollisionObject == me)
+		if (convexResult.m_hitCollisionObject == me ||
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_CliffDetection)
 		{
 			//自分に衝突した。or地面に衝突した。
 			return 0.0f;

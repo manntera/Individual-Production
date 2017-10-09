@@ -61,9 +61,12 @@ public:
 		D3DXFRAME_DERIVED* frameDer = (D3DXFRAME_DERIVED*)m_frameRoot;
 		return &frameDer->CombinedTransformationMatrix;
 	}
+	D3DXMATRIX* GetFindBoneWorldMatrix(char *boneName);
 private:
 	//一番最初に見つかったオリジナルメッシュを取得。
 	LPD3DXMESH GetOrgMesh(LPD3DXFRAME frame);
+
+	D3DXMATRIX* FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName);
 private:
 	LPD3DXFRAME					m_frameRoot;			//フレームルート。
 	ID3DXAnimationController*	m_pAnimController;	//アニメーションコントローラ。

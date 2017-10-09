@@ -1,5 +1,6 @@
 #pragma once
 #include "Primitive.h"
+#include "Texture.h"
 class Texture;
 
 //スプライトクラス
@@ -53,7 +54,7 @@ public:
 
 private:
 	float			m_alpha;
-	Texture*		m_pTexture;			//テクスチャ
+	Texture			m_texture;			//テクスチャ
 	D3DXVECTOR2		m_position;			//スプライトのウィンドウ上での座標
 	D3DXVECTOR2		m_centerPosition;	//スプライトの基点を表す座標
 	D3DXVECTOR2		m_size;				//スプライトのサイズ

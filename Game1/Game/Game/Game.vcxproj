@@ -176,6 +176,7 @@
     <ClCompile Include="Map\MapChip\StaticMapObject.cpp" />
     <ClCompile Include="Map\Sky.cpp" />
     <ClCompile Include="Player\Player.cpp" />
+    <ClCompile Include="Player\PlayerGraspCliff.cpp" />
     <ClCompile Include="Scene\Fade.cpp" />
     <ClCompile Include="Scene\GameClearScene.cpp" />
     <ClCompile Include="Scene\GameOverScene.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Map\MapChip\StaticMapObject.h" />
     <ClInclude Include="Map\Sky.h" />
     <ClInclude Include="Player\Player.h" />
+    <ClInclude Include="Player\PlayerGraspCliff.h" />
     <ClInclude Include="Scene\Fade.h" />
     <ClInclude Include="Scene\GameClearScene.h" />
     <ClInclude Include="Scene\GameOverScene.h" />

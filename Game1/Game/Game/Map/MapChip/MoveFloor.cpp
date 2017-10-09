@@ -3,23 +3,24 @@
 #include "../../Scene/GameScene.h"
 #include "../../Player/Player.h"
 
-void MoveFloor::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelName)
+void MoveFloor::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
 
-	//メッシュコライダーを作成
-	m_meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
+	//メッシュコライダーからaabbを作成	
+	MeshCollider meshCollider;
+	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
+	D3DXVECTOR3 boxSize = meshCollider.GetAabbMax();
+	m_boxCollider.Create({ boxSize.x, boxSize.y, boxSize.z });
 
 	RigidBodyInfo rInfo;
-	rInfo.collider = &m_meshCollider;
+	rInfo.collider = &m_boxCollider;
 	rInfo.mass = 0.0f;
 	rInfo.pos = m_position;
 
 	//剛体を作成
 	rInfo.rot = m_rotation;
 	m_rigidBody.Create(rInfo);
-	m_rigidBody.GetBody()->getWorldTransform().setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
-	m_rigidBody.GetBody()->getWorldTransform().setRotation(btQuaternion(m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w));
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
 	m_timer = 0.0f;

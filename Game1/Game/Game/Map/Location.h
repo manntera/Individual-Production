@@ -21,7 +21,7 @@
 },
 //test
 {
-	"test",
+	"Spring",
 	D3DXVECTOR3(13.49f, -0.01f, -32.74f),             //平行移動
 	D3DXQUATERNION(0.13f, 0.18f, -0.02f, 0.97f ),  //回転
 	enMapTagSpring, //タグ

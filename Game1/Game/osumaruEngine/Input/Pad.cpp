@@ -139,6 +139,7 @@ void Pad::Update()
 			}
 			else
 			{
+				m_isPadTrigger[pad.padButton] = false;
 				m_isPadPress[pad.padButton] = false;
 			}
 		}

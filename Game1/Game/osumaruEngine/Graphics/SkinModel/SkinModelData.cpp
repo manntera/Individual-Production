@@ -684,3 +684,35 @@ LPD3DXMESH SkinModelData::GetOrgMesh(LPD3DXFRAME frame)
 	}
 	return NULL;
 }
+
+D3DXMATRIX* SkinModelData::GetFindBoneWorldMatrix(char* boneName)
+{
+	return FindBoneWorldMatrix(m_frameRoot, boneName);
+}
+
+D3DXMATRIX* SkinModelData::FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName)
+{
+	if (frame->Name != NULL && !strcmp(frame->Name, boneName))
+	{
+		D3DXFRAME_DERIVED* frameDer = (D3DXFRAME_DERIVED*)frame;
+		return &frameDer->CombinedTransformationMatrix;
+	}
+	if (frame->pFrameSibling != NULL)
+	{
+		//ŒZ’í
+		D3DXMATRIX* matrix = FindBoneWorldMatrix(frame->pFrameSibling, boneName);
+		if (matrix != nullptr)
+		{
+			return matrix;
+		}
+	}
+	if (frame->pFrameFirstChild != NULL)
+	{
+		D3DXMATRIX* matrix = FindBoneWorldMatrix(frame->pFrameFirstChild, boneName);
+		if (matrix != nullptr)
+		{
+			return matrix;
+		}
+	}
+	return nullptr;
+}
