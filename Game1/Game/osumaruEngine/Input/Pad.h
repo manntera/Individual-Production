@@ -1,23 +1,23 @@
 #pragma once
 //パッドの入力を取得するクラス
 
-enum PadButton
+enum EnPadButton
 {
-	padButtonUp,
-	padButtonDown,
-	padButtonLeft,
-	padButtonRight,
-	padButtonA,
-	padButtonB,
-	padButtonX,
-	padButtonY,
-	padButtonSelect,
-	padButtonStart,
-	padButtonRB,
-	padButtonRStickPush,
-	padButtonLB,
-	padButtonLStickPush,
-	padButtonNum,
+	enButtonUp,
+	enButtonDown,
+	enButtonLeft,
+	enButtonRight,
+	enButtonA,
+	enButtonB,
+	enButtonX,
+	enButtonY,
+	enButtonSelect,
+	enButtonStart,
+	enButtonRB,
+	enButtonRStickPush,
+	enButtonLB,
+	enButtonLStickPush,
+	enButtonNum,
 
 };
 
@@ -38,7 +38,7 @@ public:
 	ボタンを押しているか調べる関数
 	button			押されているか調べたいボタンのenum
 	*/
-	bool IsTriggerButton(PadButton button)
+	bool IsTriggerButton(EnPadButton button)
 	{
 		return m_isPadTrigger[button];
 	}
@@ -47,7 +47,7 @@ public:
 	ボタンを押しているか調べる関数
 	button			押されているか調べたいボタンのenum
 	*/
-	bool IsPressButton(PadButton button)
+	bool IsPressButton(EnPadButton button)
 	{
 		return m_isPadPress[button];
 	}
@@ -95,7 +95,7 @@ private:
 	float			m_leftStickY;					//左スティックのY軸の入力量
 	float			m_rightTrigger;					//右トリガーの入力量
 	float			m_leftTrigger;					//左トリガーの入力量
-	bool			m_isPadPress[padButtonNum];		//各ボタンが押されているか？
-	bool			m_isPadTrigger[padButtonNum];	//各ボタンが押されているか？(トリガー)
+	bool			m_isPadPress[enButtonNum];		//各ボタンが押されているか？
+	bool			m_isPadTrigger[enButtonNum];	//各ボタンが押されているか？(トリガー)
 	XINPUT_STATE	m_state;						//パッドの入力状態
 };

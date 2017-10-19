@@ -1,6 +1,6 @@
 #pragma once
 
-class GameObject
+class GameObject : Uncopyable
 {
 public:
 	//コンストラクタ

@@ -17,11 +17,13 @@
 #include "../osumaruEngine/Physics/Collider/CapsuleCollider.h"
 #include "../osumaruEngine/Physics/Collider/MeshCollider.h"
 #include "../osumaruEngine/Physics/Collider/BoxCollider.h"
+#include "../osumaruEngine/Physics/Collider/SphereCollider.h"
 #include "../osumaruEngine/Physics/Collider/ICollider.h"
 #include "../osumaruEngine/Physics/CharacterController.h"
 #include "../osumaruEngine/Physics/CollisionDetection.h"
 #include "../osumaruEngine/Physics/CollisionAttr.h"
 #include "../osumaruEngine/Input/Pad.h"
+#include "../osumaruEngine/Sound/SoundSource.h"
 
 
 const int playerPriority = 1;

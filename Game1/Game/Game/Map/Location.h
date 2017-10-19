@@ -19,7 +19,7 @@
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagPlayer, //タグ
 },
-//test
+//Spring
 {
 	"Spring",
 	D3DXVECTOR3(13.49f, -0.01f, -32.74f),             //平行移動
@@ -58,6 +58,13 @@
 {
 	"test",
 	D3DXVECTOR3(-3.40f, 11.70f, -59.60f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, -0.71f, 0.71f ),  //回転
+	enMapTagMapChip, //タグ
+},
+//test
+{
+	"test",
+	D3DXVECTOR3(-3.40f, -24.20f, -59.60f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, -0.71f, 0.71f ),  //回転
 	enMapTagMapChip, //タグ
 },

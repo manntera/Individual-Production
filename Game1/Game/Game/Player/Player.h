@@ -1,6 +1,7 @@
 #pragma once
 //プレイヤークラス
 #include "PlayerGraspCliff.h"
+#include "PlayerWallJump.h"
 
 enum EnAnimationSet
 {
@@ -12,6 +13,8 @@ enum EnAnimationSet
 	enAnimSetCliffRise,
 	enAnimSetNum,
 };
+class MapChip;
+
 
 class Player : public GameObject
 {
@@ -50,33 +53,6 @@ public:
 	*/
 	void SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed);
 
-	void SetActiveFlg(bool active)
-	{
-		m_isActive = active;
-	}
-
-	void PlayAnimation(EnAnimationSet animeNum)
-	{
-		m_anim.PlayAnimation(animeNum);
-		m_currentAnim = animeNum;
-	}
-
-	bool IsPlay()
-	{
-		return m_anim.IsPlay();
-	}
-
-	bool IsActive()
-	{
-		return m_isActive;
-	}
-
-	D3DXVECTOR3 GetMoveSpeed()
-	{
-		return m_characterController.GetMoveSpeed();
-	}
-	void CriffRise();
-
 	D3DXMATRIX* FindBoneWorldMatrix(char* boneName)
 	{
 		return m_skinModelData.GetFindBoneWorldMatrix(boneName);
@@ -86,6 +62,30 @@ public:
 	{
 		return m_skinModel.GetWorldMatrix();
 	}
+
+
+	D3DXVECTOR3 GetMovement()
+	{
+		return m_movement;
+	}
+	/*
+	崖を上るときにPlayerGraspCliffから呼び出す関数
+	moveDirection	壁の法線
+	*/
+	void CliffRiseStart(D3DXVECTOR3 moveDirection);
+
+	/*
+	崖を上っている時にPlayerGraspCliffから呼び出す関数
+	ret		崖を上り終わったか？trueなら上り終わった、falseならまだ上っている途中
+	*/
+	bool CriffRiseEnd();
+
+	void WallShear(D3DXVECTOR3 moveSpeed);
+
+	void WallJump(D3DXVECTOR3 jumpDirection);
+
+	void SetParent(MapChip* parent);
+
 private:
 	//移動処理をする関数
 	void Move();
@@ -100,20 +100,23 @@ private:
 	SkinModelData		m_skinModelData;		//スキンモデルデータ
 	Light				m_light;				//モデルのライト
 	D3DXQUATERNION		m_rotation;				//モデルの回転
+	D3DXQUATERNION		m_localRotation;
 	D3DXVECTOR3			m_position;				//座標
+	D3DXVECTOR3			m_localPosition;
 	D3DXVECTOR3			m_scale;				//モデルのサイズ
 	Animation			m_anim;					//アニメーション
 	CharacterController m_characterController;	//キャラクターコントローラー
 	Texture				m_modelNormalMap;		//モデルの法線マップ
 	Texture				m_modelSpecularMap;		//モデルのスペキュラマップ
 	D3DXVECTOR3			m_stageGimmickMoveSpeed;//ステージギミックによってプレイヤーを動かされる時の移動速度
+	D3DXVECTOR3			m_movement;
+	PlayerGraspCliff	m_graspCliff;
+	PlayerWallJump		m_wallJump;
 	int					m_jumpCount;
-	bool				m_isWallShear;
 	float				m_wallShearGravity;
 	float				m_defaultGravity;
-	D3DXVECTOR3			m_wallJumpDirection;
 	EnAnimationSet		m_currentAnim;
 	bool				m_isJump;
-	bool				m_isActive;
-	PlayerGraspCliff	m_graspCliff;
+	float				m_animationTime = 0.3f;
+	MapChip*			m_parent;
 };

@@ -5,7 +5,7 @@ class Texture;
 
 //スプライトクラス
 
-class Sprite
+class Sprite : Uncopyable
 {
 public:
 	//コンストラクタ

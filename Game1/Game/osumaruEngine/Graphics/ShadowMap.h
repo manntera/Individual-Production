@@ -3,7 +3,7 @@
 
 class SkinModel;
 
-class ShadowMap
+class ShadowMap : Uncopyable
 {
 public:
 	//コンストラクタ

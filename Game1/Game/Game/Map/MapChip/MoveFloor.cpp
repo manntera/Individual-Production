@@ -23,34 +23,44 @@ void MoveFloor::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelN
 	m_rigidBody.Create(rInfo);
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
+	
 	m_timer = 0.0f;
-}
-
-void MoveFloor::Update()
-{
-	MapChip::Update();
-
 	D3DXMATRIX worldMatrix = m_skinModel.GetWorldMatrix();
 	m_moveSpeed.x = worldMatrix.m[2][0];
 	m_moveSpeed.y = worldMatrix.m[2][1];
 	m_moveSpeed.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&m_moveSpeed, &m_moveSpeed);
 	m_moveSpeed *= g_moveFloorSpeed;
+	m_isChild = false;
+}
+
+void MoveFloor::Update()
+{
+	MapChip::Update();
+
 	m_position += m_moveSpeed;
 
-	if (m_rigidBody.GetBody()->getPlayerCollisionFlg())
+	if (!m_isChild && m_rigidBody.GetBody()->getPlayerCollisionFlg())
 	{
-		g_gameScene->GetPlayer()->SetStageGimmickMoveSpeed(m_moveSpeed);
+		g_gameScene->GetPlayer()->SetParent(this);
+		m_isChild = true;
 	}
+	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionFlg())
+	{
+		g_gameScene->GetPlayer()->SetParent(nullptr);
+		m_isChild = false;
+	}
+
 
 	m_timer += 1.0f / 60.0f;
 	if (2.0f < m_timer)
 	{
-		D3DXQUATERNION multi;
-		D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), cPI);
-		D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
+		m_moveSpeed *= -1.0f;
 		m_timer = 0.0f;
 	}
+	D3DXQUATERNION multi;
+	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 3.0f / 180.0f * cPI);
+	D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
 
 	m_rigidBody.GetBody()->getWorldTransform().setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
 	m_rigidBody.GetBody()->getWorldTransform().setRotation(btQuaternion(m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w));

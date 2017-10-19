@@ -17,7 +17,6 @@ void RigidBody::Create(RigidBodyInfo& rbInfo)
 	GetEngine().GetPhysicsWorld()->AddRigidBody(m_rigidBody);
 	m_rigidBody->getWorldTransform().setOrigin(btVector3(rbInfo.pos.x, rbInfo.pos.y, rbInfo.pos.z));
 	m_rigidBody->getWorldTransform().setRotation(btQuaternion(rbInfo.rot.x, rbInfo.rot.y, rbInfo.rot.z, rbInfo.rot.w));
-	m_rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 void RigidBody::Release()

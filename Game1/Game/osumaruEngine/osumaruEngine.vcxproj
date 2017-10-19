@@ -205,6 +205,10 @@
     <ClCompile Include="Physics\CollisionDetection.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Physics\RigidBody.cpp" />
+    <ClCompile Include="Sound\Sound.cpp" />
+    <ClCompile Include="Sound\SoundEngine.cpp" />
+    <ClCompile Include="Sound\SoundSource.cpp" />
+    <ClCompile Include="Sound\WaveFileOpen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -233,6 +237,11 @@
     <ClInclude Include="Physics\CollisionDetection.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\RigidBody.h" />
+    <ClInclude Include="Sound\Sound.h" />
+    <ClInclude Include="Sound\SoundEngine.h" />
+    <ClInclude Include="Sound\SoundSource.h" />
+    <ClInclude Include="Sound\WaveFileOpen.h" />
+    <ClInclude Include="Uncopyable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

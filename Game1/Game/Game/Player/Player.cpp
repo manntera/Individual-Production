@@ -4,18 +4,18 @@
 #include "../Scene/GameScene.h"
 #include  "../Scene/Fade.h"
 #include "../Map/MapChip/MoveFloor.h"
+#include "../Map/MapChip/MapChip.h"
 
 Player::Player()
 {
 	m_jumpCount = 0;
 	m_stageGimmickMoveSpeed = { 0.0f, 0.0f, 0.0f };
-	m_isWallShear = false;
 	m_isJump = false;
 	m_wallShearGravity = -60.0f;
 	m_defaultGravity = -90.0f;
-	m_wallJumpDirection = { 0.0f, 0.0f, 0.0f };
 	m_currentAnim = enAnimSetWait;
-	m_isActive = true;
+	m_movement = { 0.0f, 0.0f, 0.0f };
+	m_parent = nullptr;
 }
 
 Player::~Player()
@@ -58,8 +58,9 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_rotation = rotation;
 	m_position = position;
 	m_scale = { 1.0f, 1.0f, 1.0f };
-	m_characterController.Init(1.0f, 1.0f, m_position);
-	m_graspCliff.Init(this, 2.5f);
+	m_characterController.Init(2.0f, 1.0f, m_position);
+	m_graspCliff.Init(this, 6.0f);
+	m_wallJump.Init(this, &m_characterController);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 	m_characterController.SetGravity(-90.0f);
 	m_skinModel.SetShadowCasterFlg(true);
@@ -94,33 +95,103 @@ void Player::Update()
 		return;
 	}
 	m_graspCliff.Update();
+	m_wallJump.Update();
 	m_anim.Update(1.0f / 60.0f);
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-	if (!m_isActive)
+	if (m_graspCliff.IsActive())
 	{
 		return;
 	}
 	Move();
 	Jump();
-	if (m_characterController.IsOnGround() && (GetPad().GetLeftStickX() != 0.0f || GetPad().GetLeftStickY() != 0.0f))
+	if (m_characterController.IsOnGround())
 	{
 		Rotation();
 	}
 	if (m_position.y < -10.0f)
 	{
+		//g_gameScene->GameOver();
+	}
+	if (GetPad().IsTriggerButton(enButtonY))
+	{
+		//m_anim.PlayAnimation(enAnimSetCliffRise);
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/reload.wav");
+		//sound->Init("Assets/sound/BattleScene.wav");
+		sound->Play(false);
+	}
+	if (GetPad().IsTriggerButton(enButtonX))
+	{
 		g_gameScene->GameOver();
 	}
 }
 
-void Player::CriffRise()
+void Player::CliffRiseStart(D3DXVECTOR3 moveDirection)
 {
+	//ŠR‚ðã‚éƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
+	m_anim.PlayAnimation(enAnimSetCliffRise, m_animationTime);
+	moveDirection.y = 0.0f;
+	m_characterController.SetMoveSpeed(moveDirection);
+	Rotation();
+	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
+}
+
+bool Player::CriffRiseEnd()
+{
+	//ŠR‚ðã‚Á‚Ä‚È‚¢Žž‚©ŠR‚ðã‚Á‚Ä‚¢‚é“r’†‚Ìê‡‘ŠúƒŠƒ^[ƒ“‚·‚é
+	if (m_anim.IsPlay())
+	{
+		return false;
+	}
+	//ŠR‚ðã‚èI‚í‚Á‚ÄÀ•W‚ðXV
 	D3DXMATRIX* matrix = m_skinModelData.GetFindBoneWorldMatrix("Character1_Reference");
 	m_position.x = matrix->m[3][0];
 	m_position.y = matrix->m[3][1];
 	m_position.z = matrix->m[3][2];
 	m_characterController.SetPosition(m_position);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
+	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_anim.PlayAnimation(enAnimSetWait);
+	m_currentAnim = enAnimSetWait;
+	return true;
 }
+
+void Player::WallShear(D3DXVECTOR3 moveSpeed)
+{
+	m_characterController.SetMoveSpeed(moveSpeed);
+	m_currentAnim = enAnimSetWallShear;
+	m_anim.PlayAnimation(enAnimSetWallShear, m_animationTime);
+	Rotation();
+}
+
+void Player::WallJump(D3DXVECTOR3 jumpDirection)
+{
+	D3DXVECTOR3 jumpSpeed = jumpDirection;
+	jumpSpeed.y = 0.0f;
+	D3DXVec3Normalize(&jumpSpeed, &jumpSpeed);
+	jumpSpeed *= 25.0f;
+	jumpSpeed.y = 50.0f;
+	m_characterController.SetMoveSpeed(jumpSpeed);
+	Rotation();
+	m_jumpCount = 1;
+	m_currentAnim = enAnimSetWallJump;
+	m_anim.PlayAnimation(enAnimSetWallJump, m_animationTime);
+}
+
+void Player::SetParent(MapChip* parent)
+{
+	m_parent = parent;
+	if (parent != nullptr)
+	{
+		D3DXMATRIX matrix = m_parent->GetWorldMatrix();
+		D3DXMatrixInverse(&matrix, NULL, &matrix);
+		D3DXVec3TransformCoord(&m_localPosition, &m_position, &matrix);
+		D3DXQUATERNION multi;
+		D3DXQuaternionRotationMatrix(&multi, &matrix);
+		D3DXQuaternionMultiply(&m_localRotation, &m_rotation, &multi);
+	}
+}
+
 
 void Player::Move()
 {
@@ -147,27 +218,31 @@ void Player::Move()
 	{
 		speed *= 0.01f;
 	}
+
 	D3DXVECTOR3 moveDirectionSide = -side * GetPad().GetLeftStickX();
 	D3DXVECTOR3 moveDirectionFront = front * GetPad().GetLeftStickY();
-	moveSpeed += moveDirectionSide * speed;
-	moveSpeed += moveDirectionFront * speed;
-	if (moveSpeed.x < -speedLimit)
+	if (!m_wallJump.IsWallJump())
 	{
-		moveSpeed.x = -speedLimit;
+		moveSpeed += moveDirectionSide * speed;
+		moveSpeed += moveDirectionFront * speed;
+		if (moveSpeed.x < -speedLimit)
+		{
+			moveSpeed.x = -speedLimit;
+		}
+		else if (speedLimit < moveSpeed.x)
+		{
+			moveSpeed.x = speedLimit;
+		}
+		if (moveSpeed.z < -speedLimit)
+		{
+			moveSpeed.z = -speedLimit;
+		}
+		else if (speedLimit < moveSpeed.z)
+		{
+			moveSpeed.z = speedLimit;
+		}
 	}
-	else if (speedLimit < moveSpeed.x)
-	{
-		moveSpeed.x = speedLimit;
-	}
-	if (moveSpeed.z < -speedLimit)
-	{
-		moveSpeed.z = -speedLimit;
-	}
-	else if (speedLimit < moveSpeed.z)
-	{
-		moveSpeed.z = speedLimit;
-	}
-	if (GetPad().IsTriggerButton(padButtonA) && m_jumpCount < 2)
+	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallJump())
 	{
 		moveSpeed.y = 0.0f;
 		if (m_jumpCount != 0)
@@ -175,8 +250,6 @@ void Player::Move()
 
 			moveSpeed.x = (moveDirectionSide.x + moveDirectionFront.x) * speedLimit;
 			moveSpeed.z = (moveDirectionSide.z + moveDirectionFront.z) * speedLimit;
-			//moveSpeed.y += 15.0f * m_jumpCount;
-
 		}
 		moveSpeed.y += 50.0f;
 		m_characterController.SetMoveSpeed(moveSpeed);
@@ -188,7 +261,7 @@ void Player::Move()
 		//	m_anim.PlayAnimation(enAnimSetJump);
 		//}
 		m_currentAnim = enAnimSetJump;
-		m_anim.PlayAnimation(enAnimSetJump);
+		m_anim.PlayAnimation(enAnimSetJump, m_animationTime);
 	}
 
 	if (m_characterController.IsOnGround())
@@ -200,7 +273,7 @@ void Player::Move()
 			if (m_currentAnim != enAnimSetWait)
 			{
 				m_currentAnim = enAnimSetWait;
-				m_anim.PlayAnimation(enAnimSetWait);
+				m_anim.PlayAnimation(enAnimSetWait, m_animationTime);
 			}
 		}
 		else
@@ -208,7 +281,7 @@ void Player::Move()
 			if (m_currentAnim != enAnimSetRun)
 			{
 				m_currentAnim = enAnimSetRun;
-				m_anim.PlayAnimation(enAnimSetRun);
+				m_anim.PlayAnimation(enAnimSetRun, m_animationTime);
 			}
 		}
 	}
@@ -221,74 +294,37 @@ void Player::Move()
 	if (0.0f < m_stageGimmickMoveSpeed.y)
 	{
 		m_currentAnim = enAnimSetJump;
-		m_anim.PlayAnimation(enAnimSetJump);
+		m_anim.PlayAnimation(enAnimSetJump, m_animationTime);
 		m_jumpCount = 1;
 	}
-	if (m_characterController.IsJump() )
-	{
-
-		//if (m_characterController.GetWallCollisionObject() != nullptr)
-		//{
-		//	
-		//	//m_isWallShear = true;
-		//	D3DXVECTOR3 wallNormal = m_characterController.GetWallNormal();
-		//	wallNormal.y = 0.0f;
-		//	D3DXVec3Normalize(&wallNormal, &wallNormal);
-		//	D3DXVECTOR3 playerDirection = moveSpeed;
-		//	playerDirection.y = 0.0f;
-		//	D3DXVec3Normalize(&playerDirection, &playerDirection);
-		//	playerDirection *= -1.0f;
-
-		//	float dot = D3DXVec3Dot(&playerDirection, &wallNormal);
-		//	if (0.0f < dot)
-		//	{
-		//		playerDirection *= -1.0f;
-		//		wallNormal *= dot * 2.0f;
-		//		playerDirection += wallNormal;
-		//		m_wallJumpDirection = playerDirection;
-		//		D3DXVec3Normalize(&m_wallJumpDirection, &m_wallJumpDirection);
-		//		m_wallJumpDirection *= speedLimit;
-		//		m_wallJumpDirection.y = 50.0f;
-		//		if (m_currentAnim != enAnimSetWallShear)
-		//		{
-		//			m_currentAnim = enAnimSetWallShear;
-		//			m_anim.PlayAnimation(enAnimSetWallShear);
-		//		}
-		//		m_characterController.SetMoveSpeed(-wallNormal);
-		//		Rotation();
-		//	}
-		//}
-	}
-	else
-	{
-		m_isWallShear = false;
-	}
-	if (m_isWallShear)
+	if (m_wallJump.IsWallShear())
 	{
 		moveSpeed = { 0.0f, 0.0f, 0.0f };
 		m_characterController.SetGravity(m_wallShearGravity);
-		if (GetPad().IsTriggerButton(padButtonA))
-		{
-			moveSpeed = m_wallJumpDirection;
-			m_characterController.SetGravity(m_defaultGravity);
-			m_characterController.SetMoveSpeed(moveSpeed);
-			Rotation();
-			m_jumpCount = 1;
-			m_isWallShear = false;
-			if (m_currentAnim != enAnimSetWallJump)
-			{
-				m_currentAnim = enAnimSetWallJump;
-				m_anim.PlayAnimation(enAnimSetWallJump);
-			}
-
-		}
 	}
 	else
 	{
 		m_characterController.SetGravity(m_defaultGravity);
 	}
-	m_characterController.SetMoveSpeed(moveSpeed);
-	m_characterController.Execute();
+	if (m_parent != nullptr)
+	{
+		D3DXVECTOR3 position;
+		D3DXVec3TransformCoord(&position, &m_localPosition, &m_parent->GetWorldMatrix());
+		m_characterController.SetPosition(position);
+		m_characterController.SetMoveSpeed(moveSpeed);
+		m_characterController.Execute();
+		position = m_characterController.GetPosition();
+		D3DXMATRIX inverseMatrix;
+		D3DXMatrixInverse(&inverseMatrix, NULL, &m_parent->GetWorldMatrix());
+		D3DXVec3TransformCoord(&m_localPosition, &position, &inverseMatrix);
+	}
+	else
+	{
+		m_characterController.SetMoveSpeed(moveSpeed);
+		m_characterController.Execute();
+	}
+
+	m_movement = m_characterController.GetPosition() - m_position;
 	m_position = m_characterController.GetPosition();
 	m_stageGimmickMoveSpeed = { 0.0f, 0.0f, 0.0f };
 }
@@ -312,26 +348,60 @@ void Player::Rotation()
 	{
 		D3DXMATRIX worldMat = m_skinModel.GetWorldMatrix();
 		D3DXVECTOR3 front;
-		front.x = 0.0f;
+
+		front.x = worldMat.m[2][0];
 		front.y = 0.0f;
-		front.z = 1.0f;
+		front.z = worldMat.m[2][2];
 		D3DXVec3Normalize(&moveDir, &moveDir);
 		D3DXVec3Normalize(&front, &front);
-		float rad = acos(D3DXVec3Dot(&front, &moveDir));
+
+		float rad = D3DXVec3Dot(&front, &moveDir);
+		if (1.0f < rad)
+		{
+			rad = 1.0f;
+		}
+		if (rad < -1.0f)
+		{
+			rad = 1.0f;
+		}
+		rad = acosf(rad);
 		D3DXVECTOR3 cross;
 		D3DXVec3Cross(&cross, &front, &moveDir);
 		if (cross.y < 0.0f)
 		{
 			rad = -rad;
 		}
-		D3DXQUATERNION multi;
-		D3DXQuaternionRotationAxis(&m_rotation, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
+
+		if (m_parent != nullptr)
+		{
+			D3DXQUATERNION multi;
+			D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
+			D3DXQuaternionMultiply(&m_localRotation, &m_localRotation, &multi);
+			D3DXQuaternionRotationMatrix(&multi, &m_parent->GetWorldMatrix());
+			D3DXQuaternionMultiply(&m_rotation, &m_localRotation, &multi);
+
+		}
+		else
+		{
+			D3DXQUATERNION multi;
+			D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
+			D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
+		}
+	}
+	else
+	{
+		if (m_parent != nullptr)
+		{
+			D3DXQUATERNION multi;
+			D3DXQuaternionRotationMatrix(&multi, &m_parent->GetWorldMatrix());
+			D3DXQuaternionMultiply(&m_rotation, &m_localRotation, &multi);
+
+		}
 	}
 }
 
 
 void Player::Draw()
 {
-	m_graspCliff.Draw();
 	m_skinModel.Draw(&g_gameScene->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera().GetProjectionMatrix());
 }

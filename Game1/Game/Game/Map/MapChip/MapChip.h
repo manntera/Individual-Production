@@ -29,6 +29,11 @@ public:
 	//描画関数
 	virtual void Draw()override;
 
+	D3DXMATRIX GetWorldMatrix()
+	{
+		return m_skinModel.GetWorldMatrix();
+	}
+	
 
 protected:
 	SkinModelData	m_skinModelData;	//スキンンモデルデータ

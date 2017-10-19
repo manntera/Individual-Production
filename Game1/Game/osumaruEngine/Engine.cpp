@@ -71,9 +71,10 @@ void Engine::InitD3D(HINSTANCE& hInst)
 	m_physicsWorld->Init();
 	m_shadowMap.Create(1024, 1024);
 	m_shadowMap.SetLightCameraTarget({ 0.0f, 00.0f, 0.0f });
-	m_shadowMap.SetLightCameraPosition({ 0.0f, 30.0f, 0.0f });
+	m_shadowMap.SetLightCameraPosition({ 0.0f, 20.0f, 0.0f });
 	m_shadowMap.SetLightCameraUp({ 1.0f, 0.0f, 0.0f });
 	m_objectManager.Init();
+	m_soundEngine.Init();
 	// show the window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	UpdateWindow(hWnd);

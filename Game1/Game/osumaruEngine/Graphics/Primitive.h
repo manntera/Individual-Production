@@ -1,7 +1,7 @@
 #pragma once
 #include "Texture.h"
 
-class Primitive
+class Primitive : Uncopyable
 {
 public:
 

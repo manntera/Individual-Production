@@ -4,7 +4,7 @@ class RigidBody;
 •¨—ƒ[ƒ‹ƒh
 */
 
-class PhysicsWorld
+class PhysicsWorld : Uncopyable
 {
 	btDefaultCollisionConfiguration*		m_collisionConfig;
 	btCollisionDispatcher*					m_collisionDispatcher;		//Õ“Ë‰ğŒˆˆ—

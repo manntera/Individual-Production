@@ -18,7 +18,7 @@ struct RigidBodyInfo
 };
 
 //剛体のクラス
-class RigidBody
+class RigidBody : Uncopyable
 {
 public:
 	//コンストラクタ

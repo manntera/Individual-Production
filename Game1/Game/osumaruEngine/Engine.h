@@ -4,6 +4,7 @@
 #include "Physics\Physics.h"
 #include "Input\Pad.h"
 #include "Graphics\ShadowMap.h"
+#include "Sound\SoundEngine.h"
 
 //エンジンクラス
 
@@ -91,6 +92,11 @@ public:
 	{
 		return m_pad;
 	}
+
+	SoundEngine& GetSoundEngine()
+	{
+		return m_soundEngine;
+	}
 private:
 	LPDIRECT3D9			m_pD3D;
 	LPDIRECT3DDEVICE9	m_pD3DDevice;			//デバイス
@@ -100,6 +106,7 @@ private:
 	PhysicsWorld*		m_physicsWorld;			//物理ワールド
 	Pad					m_pad;					//パッドの入力
 	ShadowMap			m_shadowMap;			//シャドウマップ
+	SoundEngine			m_soundEngine;
 };
 //エンジンクラスのインスタンスを取得。
 static Engine& GetEngine()
@@ -125,7 +132,13 @@ static Pad& GetPad()
 	return GetEngine().GetPad();
 }
 
+//シャドウマップの取得
 static ShadowMap& GetShadowMap()
 {
 	return GetEngine().GetShadowMap();
+}
+
+static SoundEngine& GetSoundEngine()
+{
+	return GetEngine().GetSoundEngine();
 }

@@ -20,4 +20,5 @@ private:
 	D3DXVECTOR3		m_moveSpeed;
 	RigidBody		m_rigidBody;		//剛体
 	BoxCollider		m_boxCollider;		//コライダー
+	bool			m_isChild;			
 };

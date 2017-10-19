@@ -2,56 +2,92 @@
 #include "PlayerGraspCliff.h"
 #include "Player.h"
 
+PlayerGraspCliff::PlayerGraspCliff()
+{
+	m_isActive = false;
+	m_playerHeight = 0.0f;
+	m_player = nullptr;
+}
+
+PlayerGraspCliff::~PlayerGraspCliff()
+{
+
+}
+
 void PlayerGraspCliff::Init(Player* player, float height)
 {
 	m_player = player;
 	m_playerHeight = height;
+
 	D3DXVECTOR3 position  = m_player->GetPosition();
 	D3DXMATRIX matrix = m_player->GetWorldMatrix();
 	D3DXQUATERNION rotation;
 	D3DXQuaternionRotationMatrix(&rotation, &matrix);
-	m_boxColliderLow.Create({ 10.0f, 0.1f, 10.2f });
-	m_boxColliderUp.Create({ 1.0f, 0.1f, 2.2f });
 	position.y += m_playerHeight;
-	m_cliffRiseDetectionLow.Init(&m_boxColliderLow, position, rotation);
-	position.y += 0.2f;
-	m_cliffRiseDetectionUp.Init(&m_boxColliderUp, position, rotation);
+
+	m_boxCollider.Create({ 1.0f, 0.1f, 0.1f });
+
+	m_cliffRiseDetectionBack.Init(&m_boxCollider, position, rotation);
+	m_cliffRiseDetectionLow.Init(&m_boxCollider, position, rotation);
+	m_cliffRiseDetectionUp.Init(&m_boxCollider, position, rotation);
+
 	m_cliffRiseDetectionLow.SetUserIndex(enCollisionAttr_CliffDetection);
 	m_cliffRiseDetectionUp.SetUserIndex(enCollisionAttr_CliffDetection);
+	m_cliffRiseDetectionBack.SetUserIndex(enCollisionAttr_CliffDetection);
 }
 
 void PlayerGraspCliff::Update()
 {
-	D3DXVECTOR3 position = m_player->GetPosition();
-	position.y += m_playerHeight;
-	m_cliffRiseDetectionLow.SetPosition(position);
-	position.y += 1.0f;
-	m_cliffRiseDetectionUp.SetPosition(position);
+	float m_upDifference = 0.4f;
+	float m_backDifference = 1.0f;
+	float m_frontDifference = 1.7f;
 
-	D3DXMATRIX matrix = m_player->GetWorldMatrix();
+	//ワールド行列から回転行列を引っ張ってきて剛体の回転を設定
+	D3DXMATRIX worldMatrix = m_player->GetWorldMatrix();
 	D3DXQUATERNION rotation;
-	D3DXQuaternionRotationMatrix(&rotation, &matrix);
+	D3DXQuaternionRotationMatrix(&rotation, &worldMatrix);
 	m_cliffRiseDetectionLow.SetRotation(rotation);
 	m_cliffRiseDetectionUp.SetRotation(rotation);
 
+	//回転行列を使って剛体の位置を調整
+	D3DXVECTOR3 position = m_player->GetPosition();
+	D3DXVECTOR3 playerFrontNormal;
+	playerFrontNormal.x = worldMatrix.m[2][0];
+	playerFrontNormal.y = 0.0f;
+	playerFrontNormal.z = worldMatrix.m[2][2];
+	D3DXVec3Normalize(&playerFrontNormal, &playerFrontNormal);
+	position.y += m_playerHeight;
+	position += playerFrontNormal * m_backDifference;
+	m_cliffRiseDetectionBack.SetPosition(position);
+	position += playerFrontNormal * m_frontDifference;
+	m_cliffRiseDetectionLow.SetPosition(position);
+	position.y += m_upDifference;
+	m_cliffRiseDetectionUp.SetPosition(position);
+
 	m_cliffRiseDetectionLow.Execute();
 	m_cliffRiseDetectionUp.Execute();
-	if (m_cliffRiseDetectionLow.IsHit()&&/*
-		!m_cliffRiseDetectionUp.IsHit() &&*/
-		m_player->IsActive())
-	{
-		m_player->SetActiveFlg(false);
-		m_player->PlayAnimation(enAnimSetCliffRise);
-	}
-	if (!m_player->IsActive() && !m_player->IsPlay())
-	{
-		m_player->SetActiveFlg(true);
-		m_player->CriffRise();
-	}
-}
+	m_cliffRiseDetectionBack.Execute();
 
-void PlayerGraspCliff::Draw()
-{
-	m_cliffRiseDetectionLow.Draw();
-	m_cliffRiseDetectionUp.Draw();
+	//剛体が当たっていて崖を上っていない時
+	if (m_cliffRiseDetectionLow.IsHit()&&
+		!m_cliffRiseDetectionUp.IsHit() &&
+		!m_cliffRiseDetectionBack.IsHit() &&
+		!m_isActive)
+	{
+		D3DXVECTOR3 collisionNormal = m_cliffRiseDetectionLow.GetHitCOllisionNormal();
+		D3DXVec3Normalize(&collisionNormal, &collisionNormal);
+		if (D3DXVec3Dot(&playerFrontNormal, &collisionNormal) < 0.0f)
+		{
+			collisionNormal *= -1.0f;
+		}
+		m_player->CliffRiseStart(collisionNormal);
+		m_isActive = true;
+	}
+
+	//崖を上っている時
+	if (m_isActive)
+	{
+		bool isActive = m_player->CriffRiseEnd();
+		m_isActive = !isActive;
+	}
 }

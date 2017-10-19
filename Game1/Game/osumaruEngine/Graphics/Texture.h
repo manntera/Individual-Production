@@ -1,7 +1,7 @@
 #pragma once
 //テクスチャクラス
 
-class Texture
+class Texture : Uncopyable
 {
 public:
 	//コンストラクタ

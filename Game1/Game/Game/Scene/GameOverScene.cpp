@@ -33,7 +33,7 @@ void GameOverScene::Update()
 	{
 		return;
 	}
-	if (GetPad().IsPressButton(padButtonA))
+	if (GetPad().IsPressButton(enButtonA))
 	{
 
 		g_pFade->FadeOut();

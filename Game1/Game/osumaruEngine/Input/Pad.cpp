@@ -7,27 +7,27 @@ const float inputDeadZone = 0.2f;	//ì¸óÕó ÇÃåÎç∑ÇÃîÕàÕ
 
 struct CorrespondencePad
 {
-	PadButton	padButton;
+	EnPadButton	padButton;
 	DWORD		padCode;
 	DWORD		keyCode;
 };
 
-const CorrespondencePad correspondencePad[padButtonNum] = 
+const CorrespondencePad correspondencePad[enButtonNum] = 
 {
-	{ padButtonUp,			XINPUT_GAMEPAD_DPAD_UP,			'W' },
-	{ padButtonDown,		XINPUT_GAMEPAD_DPAD_DOWN,		'S' },
-	{ padButtonLeft,		XINPUT_GAMEPAD_DPAD_LEFT,		'A' },
-	{ padButtonRight,		XINPUT_GAMEPAD_DPAD_RIGHT,		'D' },
-	{ padButtonA,			XINPUT_GAMEPAD_A,				'J' },
-	{ padButtonB,			XINPUT_GAMEPAD_B,				'K' },
-	{ padButtonX,			XINPUT_GAMEPAD_X,				'I' },
-	{ padButtonY,			XINPUT_GAMEPAD_Y,				'O' },
-	{ padButtonStart,		XINPUT_GAMEPAD_START,			'B' },
-	{ padButtonSelect,		XINPUT_GAMEPAD_BACK,			'V' },
-	{ padButtonRB,			XINPUT_GAMEPAD_RIGHT_SHOULDER,	'2' },
-	{ padButtonRStickPush,	XINPUT_GAMEPAD_RIGHT_THUMB,		'4' },
-	{ padButtonLB,			XINPUT_GAMEPAD_LEFT_SHOULDER,	'7' },
-	{ padButtonLStickPush,	XINPUT_GAMEPAD_LEFT_THUMB,		'9' }
+	{ enButtonUp,			XINPUT_GAMEPAD_DPAD_UP,			'W' },
+	{ enButtonDown,			XINPUT_GAMEPAD_DPAD_DOWN,		'S' },
+	{ enButtonLeft,			XINPUT_GAMEPAD_DPAD_LEFT,		'A' },
+	{ enButtonRight,		XINPUT_GAMEPAD_DPAD_RIGHT,		'D' },
+	{ enButtonA,			XINPUT_GAMEPAD_A,				'J' },
+	{ enButtonB,			XINPUT_GAMEPAD_B,				'K' },
+	{ enButtonX,			XINPUT_GAMEPAD_X,				'I' },
+	{ enButtonY,			XINPUT_GAMEPAD_Y,				'O' },
+	{ enButtonStart,		XINPUT_GAMEPAD_START,			'B' },
+	{ enButtonSelect,		XINPUT_GAMEPAD_BACK,			'V' },
+	{ enButtonRB,			XINPUT_GAMEPAD_RIGHT_SHOULDER,	'2' },
+	{ enButtonRStickPush,	XINPUT_GAMEPAD_RIGHT_THUMB,		'4' },
+	{ enButtonLB,			XINPUT_GAMEPAD_LEFT_SHOULDER,	'7' },
+	{ enButtonLStickPush,	XINPUT_GAMEPAD_LEFT_THUMB,		'9' }
 };
 Pad::Pad()
 {

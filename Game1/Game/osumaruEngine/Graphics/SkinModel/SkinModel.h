@@ -20,7 +20,7 @@ enum EnSkinModelShaderTechnique
 	enShaderTechniqueShadow,				//影を書く時のテクニック
 	enShaderTechniqueNum,
 };
-class SkinModel
+class SkinModel : Uncopyable
 {
 public:
 	//コンストラクタ

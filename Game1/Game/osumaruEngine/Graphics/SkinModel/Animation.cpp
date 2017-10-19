@@ -35,6 +35,7 @@ void Animation::Init(ID3DXAnimationController* anim)
 	for (int i = 0; i < m_numMaxTracks; i++)
 	{
 		m_blendRateTable[i] = 1.0f;
+		m_pAnimController->SetTrackWeight(i, 0.0f);
 	}
 	//アニメーションセットを初期化。
 	for (int i = 0; i < m_numAnimSet; i++)
@@ -58,11 +59,12 @@ void Animation::PlayAnimation(int animationSetIndex)
 			for (int i = 1; i < m_numMaxTracks; i++)
 			{
 				m_pAnimController->SetTrackEnable(i, FALSE);
+				m_pAnimController->SetTrackWeight(i, 0.0f);
 			}
-			m_pAnimController->SetTrackWeight(0, 1.0f);
 			m_pAnimController->SetTrackAnimationSet(m_currentTrackNo, m_animationSets[m_currentAnimationSetNo]);
-			m_pAnimController->SetTrackEnable(0, TRUE);
-			m_pAnimController->SetTrackPosition(0, 0.0f);
+			m_pAnimController->SetTrackEnable(m_currentTrackNo, TRUE);
+			m_pAnimController->SetTrackPosition(m_currentTrackNo, 0.0f);
+			m_pAnimController->SetTrackWeight(m_currentTrackNo, 1.0f);
 			m_localAnimationTime = 0.0;
 			m_isPlay = true;
 		}
@@ -82,12 +84,13 @@ void Animation::PlayAnimation(int animationSetIndex, float interpolateTime)
 		{
 			//補間開始の印
 			m_isInterpolate = true;
+			m_isPlay = true;
 			this->m_interpolateTime = 0.0f;
 			m_interpolateEndTime = interpolateTime;
 			m_currentTrackNo = (m_currentTrackNo + 1) % m_numMaxTracks;
 			m_pAnimController->SetTrackAnimationSet(m_currentTrackNo, m_animationSets[animationSetIndex]);
 			m_pAnimController->SetTrackEnable(m_currentTrackNo, TRUE);
-			m_pAnimController->SetTrackSpeed(m_currentTrackNo, 0.0f);
+			m_pAnimController->SetTrackSpeed(m_currentTrackNo, 1.0f);
 			m_pAnimController->SetTrackPosition(m_currentTrackNo, 0.0f);
 			m_localAnimationTime = 0.0;
 			m_currentAnimationSetNo = animationSetIndex;
@@ -115,9 +118,15 @@ void Animation::Update(float deltaTime)
 				m_pAnimController->SetTrackPosition(m_currentTrackNo, m_localAnimationTime);
 				m_pAnimController->AdvanceTime(0, NULL);
 			}
+			else
+			{
+				m_isPlay = false;
+			}
 		}
 		else
 		{
+
+
 			if (m_localAnimationTime < m_animationSets[m_currentAnimationSetNo]->GetPeriod() ||
 				m_isAnimationLoop[m_currentAnimationSetNo])
 			{
@@ -132,7 +141,7 @@ void Animation::Update(float deltaTime)
 		}
 		if (m_isInterpolate)
 		{
-			ID3DXAnimationSet* animSet = m_animationSets[m_currentAnimationSetNo];
+			ID3DXAnimationSet* animSet = m_animationSets[m_currentTrackNo];
 			float period = (float)(animSet->GetPeriod());
 			//補間中
 			m_interpolateTime += deltaTime;
@@ -147,6 +156,7 @@ void Animation::Update(float deltaTime)
 					{
 						m_pAnimController->SetTrackEnable(i, FALSE);
 					}
+					m_pAnimController->SetTrackWeight(i, weight);
 				}
 			}
 			else

@@ -2,7 +2,7 @@
 class GameObject;
 
 const int priorityMax = 16;
-class GameObjectManager
+class GameObjectManager : Uncopyable
 {
 public:
 

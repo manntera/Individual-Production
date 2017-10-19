@@ -24,7 +24,7 @@ struct D3DXMESHCONTAINER_DERIVED : public D3DXMESHCONTAINER
 
 class Animation;
 
-class SkinModelData
+class SkinModelData : Uncopyable
 {
 public:
 	//コンストラクタ

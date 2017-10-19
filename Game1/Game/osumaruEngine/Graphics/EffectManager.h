@@ -2,7 +2,7 @@
 
 //エフェクトを読み込んで保持するクラス
 
-class EffectManager
+class EffectManager : Uncopyable
 {
 public:
 	//コンストラクタ

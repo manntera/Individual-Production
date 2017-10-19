@@ -45,7 +45,7 @@ void SpringObject::Update()
 		g_gameScene->GetPlayer()->SetStageGimmickMoveSpeed(springDirection);
 		m_anim.PlayAnimation(1);
 	}
-	if (GetPad().IsTriggerButton(padButtonY))
+	if (GetPad().IsTriggerButton(enButtonY))
 	{
 		m_anim.PlayAnimation(1);
 	}
