@@ -21,6 +21,7 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	GetEngine().Release();
 	delete m_effectManager;
 	delete m_physicsWorld;
 }

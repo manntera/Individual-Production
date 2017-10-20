@@ -100,23 +100,20 @@ private:
 	SkinModelData		m_skinModelData;		//スキンモデルデータ
 	Light				m_light;				//モデルのライト
 	D3DXQUATERNION		m_rotation;				//モデルの回転
-	D3DXQUATERNION		m_localRotation;
+	D3DXQUATERNION		m_localRotation;		//親がいるときの親から見たローカル座標
 	D3DXVECTOR3			m_position;				//座標
-	D3DXVECTOR3			m_localPosition;
+	D3DXVECTOR3			m_localPosition;		//親がいるときの親から見たローカルな回転
 	D3DXVECTOR3			m_scale;				//モデルのサイズ
 	Animation			m_anim;					//アニメーション
 	CharacterController m_characterController;	//キャラクターコントローラー
 	Texture				m_modelNormalMap;		//モデルの法線マップ
 	Texture				m_modelSpecularMap;		//モデルのスペキュラマップ
 	D3DXVECTOR3			m_stageGimmickMoveSpeed;//ステージギミックによってプレイヤーを動かされる時の移動速度
-	D3DXVECTOR3			m_movement;
-	PlayerGraspCliff	m_graspCliff;
-	PlayerWallJump		m_wallJump;
-	int					m_jumpCount;
-	float				m_wallShearGravity;
-	float				m_defaultGravity;
-	EnAnimationSet		m_currentAnim;
-	bool				m_isJump;
-	float				m_animationTime = 0.3f;
-	MapChip*			m_parent;
+	D3DXVECTOR3			m_movement;				//1フレームで移動した距離
+	PlayerGraspCliff	m_graspCliff;			//崖掴んでくれる奴
+	PlayerWallJump		m_wallJump;				//壁ジャンプしてくれる奴
+	int					m_jumpCount;			//ジャンプした回数
+	EnAnimationSet		m_currentAnim;			//現在再生してるアニメーション
+	bool				m_isJump;				//ジャンプしてるか？
+	MapChip*			m_parent;				//親
 };

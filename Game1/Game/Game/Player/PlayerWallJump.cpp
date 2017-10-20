@@ -9,6 +9,8 @@ PlayerWallJump::PlayerWallJump()
 	m_characterController = nullptr;
 	m_wallJumpDirection = { 0.0f, 0.0f, 0.0f };
 	m_isWallJump = false;
+
+	m_wallShearGravity = -60.0f;
 }
 
 PlayerWallJump::~PlayerWallJump()
@@ -34,6 +36,8 @@ void PlayerWallJump::Init(Player* player, CharacterController* characterControll
 	D3DXQUATERNION rotation;
 	D3DXQuaternionRotationMatrix(&rotation, &worldMatrix);
 	m_wallDetection.Init(&m_boxCollider, position, rotation);
+
+	m_defaultGravity = m_characterController->GetGravity();
 }
 
 void PlayerWallJump::Update()
@@ -44,6 +48,7 @@ void PlayerWallJump::Update()
 	{
 		D3DXVECTOR3 movement = m_player->GetMovement();
 		movement.y = 0.0f;
+		m_characterController->SetGravity(m_defaultGravity);
 
 		if (m_characterController->IsJump() && 
 			m_characterController->GetWallCollisionObject() != nullptr &&
@@ -72,6 +77,8 @@ void PlayerWallJump::Update()
 	}
 	else
 	{
+
+		m_characterController->SetGravity(m_wallShearGravity);
 		D3DXVECTOR3 position = m_player->GetPosition();
 		D3DXMATRIX worldMatrix = m_player->GetWorldMatrix();
 		D3DXVECTOR3 playerFront;
@@ -90,6 +97,7 @@ void PlayerWallJump::Update()
 
 		if (GetPad().IsTriggerButton(enButtonA))
 		{
+			m_characterController->SetGravity(m_defaultGravity);
 			m_player->WallJump(m_wallJumpDirection);
 			m_isWallShear = false;
 			m_isWallJump = true;

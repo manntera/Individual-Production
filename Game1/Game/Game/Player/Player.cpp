@@ -11,8 +11,6 @@ Player::Player()
 	m_jumpCount = 0;
 	m_stageGimmickMoveSpeed = { 0.0f, 0.0f, 0.0f };
 	m_isJump = false;
-	m_wallShearGravity = -60.0f;
-	m_defaultGravity = -90.0f;
 	m_currentAnim = enAnimSetWait;
 	m_movement = { 0.0f, 0.0f, 0.0f };
 	m_parent = nullptr;
@@ -57,12 +55,12 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 
 	m_rotation = rotation;
 	m_position = position;
+	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
+	m_characterController.SetGravity(-90.0f);
 	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(2.0f, 1.0f, m_position);
 	m_graspCliff.Init(this, 6.0f);
 	m_wallJump.Init(this, &m_characterController);
-	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
-	m_characterController.SetGravity(-90.0f);
 	m_skinModel.SetShadowCasterFlg(true);
 	m_skinModel.SetShadowReceiverFlg(true);
 
@@ -129,7 +127,7 @@ void Player::Update()
 void Player::CliffRiseStart(D3DXVECTOR3 moveDirection)
 {
 	//崖を上るアニメーションを再生
-	m_anim.PlayAnimation(enAnimSetCliffRise, m_animationTime);
+	m_anim.PlayAnimation(enAnimSetCliffRise);
 	moveDirection.y = 0.0f;
 	m_characterController.SetMoveSpeed(moveDirection);
 	Rotation();
@@ -160,7 +158,7 @@ void Player::WallShear(D3DXVECTOR3 moveSpeed)
 {
 	m_characterController.SetMoveSpeed(moveSpeed);
 	m_currentAnim = enAnimSetWallShear;
-	m_anim.PlayAnimation(enAnimSetWallShear, m_animationTime);
+	m_anim.PlayAnimation(enAnimSetWallShear);
 	Rotation();
 }
 
@@ -175,7 +173,7 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 	Rotation();
 	m_jumpCount = 1;
 	m_currentAnim = enAnimSetWallJump;
-	m_anim.PlayAnimation(enAnimSetWallJump, m_animationTime);
+	m_anim.PlayAnimation(enAnimSetWallJump);
 }
 
 void Player::SetParent(MapChip* parent)
@@ -261,7 +259,7 @@ void Player::Move()
 		//	m_anim.PlayAnimation(enAnimSetJump);
 		//}
 		m_currentAnim = enAnimSetJump;
-		m_anim.PlayAnimation(enAnimSetJump, m_animationTime);
+		m_anim.PlayAnimation(enAnimSetJump);
 	}
 
 	if (m_characterController.IsOnGround())
@@ -273,7 +271,7 @@ void Player::Move()
 			if (m_currentAnim != enAnimSetWait)
 			{
 				m_currentAnim = enAnimSetWait;
-				m_anim.PlayAnimation(enAnimSetWait, m_animationTime);
+				m_anim.PlayAnimation(enAnimSetWait);
 			}
 		}
 		else
@@ -281,7 +279,7 @@ void Player::Move()
 			if (m_currentAnim != enAnimSetRun)
 			{
 				m_currentAnim = enAnimSetRun;
-				m_anim.PlayAnimation(enAnimSetRun, m_animationTime);
+				m_anim.PlayAnimation(enAnimSetRun);
 			}
 		}
 	}
@@ -294,18 +292,14 @@ void Player::Move()
 	if (0.0f < m_stageGimmickMoveSpeed.y)
 	{
 		m_currentAnim = enAnimSetJump;
-		m_anim.PlayAnimation(enAnimSetJump, m_animationTime);
+		m_anim.PlayAnimation(enAnimSetJump);
 		m_jumpCount = 1;
 	}
 	if (m_wallJump.IsWallShear())
 	{
 		moveSpeed = { 0.0f, 0.0f, 0.0f };
-		m_characterController.SetGravity(m_wallShearGravity);
 	}
-	else
-	{
-		m_characterController.SetGravity(m_defaultGravity);
-	}
+
 	if (m_parent != nullptr)
 	{
 		D3DXVECTOR3 position;

@@ -91,6 +91,11 @@ public:
 		m_gravity = gravity;
 	}
 
+	float GetGravity()
+	{
+		return m_gravity;
+	}
+
 	//„‘Ì‚ğíœB
 	void RemovedRigidBody();
 

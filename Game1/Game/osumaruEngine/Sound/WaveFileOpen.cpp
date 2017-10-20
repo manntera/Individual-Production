@@ -24,6 +24,7 @@ WaveFileOpen::~WaveFileOpen()
 
 void WaveFileOpen::Open(char* filePath)
 {
+	//WAVEファイルを開く
 	m_hmmio = mmioOpen(filePath, NULL, MMIO_ALLOCBUF | MMIO_READ);
 
 	m_riffChunk.fccType = mmioFOURCC('W', 'A', 'V', 'E');
@@ -84,6 +85,7 @@ void WaveFileOpen::Open(char* filePath)
 void WaveFileOpen::Read()
 {
 	m_size = m_dataChunk.cksize;
+	//データ読み込み用のバッファを確保
 	m_readMemory = new char[m_size];
 
 	MMIOINFO  mmioInfo;
@@ -92,12 +94,8 @@ void WaveFileOpen::Read()
 		throw;
 	}
 	UINT cbDataIn = m_size;
-	//if (dataChunk.cksize < cbDataIn)
-	//{
-	//	cbDataIn = dataChunk.cksize;
-	//}
-	//dataChunk.cksize -= cbDataIn;
 
+	//データを読み込み
 	for (DWORD cT = 0; cT < cbDataIn; cT++)
 	{
 		if (mmioInfo.pchNext == mmioInfo.pchEndRead)
