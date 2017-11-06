@@ -6,6 +6,7 @@ class EffectManager;
 #include <d3dx9effect.h>
 #include <x3daudio.h>
 #include <XAudio2.h>
+#include <XAudio2fx.h>
 #include <mmsystem.h>
 #include <XInput.h>
 #include <cstdlib>
@@ -15,6 +16,7 @@ class EffectManager;
 #include <list>
 
 #pragma comment ( lib, "winmm.lib" )
+
 
 #include <stdio.h>
 #include <string.h>

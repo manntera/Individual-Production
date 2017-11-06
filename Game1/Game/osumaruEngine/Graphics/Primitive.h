@@ -40,6 +40,12 @@ public:
 	}
 	//リリース
 	void Release();
+
+
+	LPDIRECT3DVERTEXDECLARATION9 GetVertexDecaration()
+	{
+		return m_pVertexDecaration;
+	}
 private:
 	LPDIRECT3DVERTEXBUFFER9			m_pVertexBuffer;		//頂点バッファ
 	LPDIRECT3DINDEXBUFFER9			m_pIndexBuffer;			//インデックスバッファ

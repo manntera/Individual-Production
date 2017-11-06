@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "PlayerWallJump.h"
 #include "Player.h"
+#include "../GameCamera/GameCamera.h"
+#include "../Scene/GameScene.h"
 
 PlayerWallJump::PlayerWallJump()
 {
@@ -9,8 +11,8 @@ PlayerWallJump::PlayerWallJump()
 	m_characterController = nullptr;
 	m_wallJumpDirection = { 0.0f, 0.0f, 0.0f };
 	m_isWallJump = false;
-
-	m_wallShearGravity = -60.0f;
+	m_wallDust = nullptr;
+	m_wallShearGravity = -200.0f;
 }
 
 PlayerWallJump::~PlayerWallJump()
@@ -38,6 +40,7 @@ void PlayerWallJump::Init(Player* player, CharacterController* characterControll
 	m_wallDetection.Init(&m_boxCollider, position, rotation);
 
 	m_defaultGravity = m_characterController->GetGravity();
+	m_dustPos = m_player->FindBoneWorldMatrix("Character1_RightToeBase");
 }
 
 void PlayerWallJump::Update()
@@ -72,6 +75,22 @@ void PlayerWallJump::Update()
 				m_wallJumpDirection = playerDirection;
 				D3DXVec3Normalize(&m_wallJumpDirection, &m_wallJumpDirection);
 				m_player->WallShear(-wallNormal);
+				D3DXVECTOR3 position;
+				position.x = m_dustPos->m[3][0];
+				position.y = m_dustPos->m[3][1];
+				position.z = m_dustPos->m[3][2];
+				m_wallDust = New<ParticleEmitter>(cameraPriority);
+				m_wallDust->Init({
+					"Assets/particle/WallDust.png",		//テクスチャのファイルパス
+					2.0f,								//パーティクルの横幅
+					2.0f,								//パーティクルの縦幅
+					{ 0.0f, 0.0f, 1.0f, 1.0f },			//テクスチャのuv。xyが左上のuvでzwが右下のuv
+					0.7f,								//パーティクルの寿命
+					0.4f,								//パーティクルが出るまでのインターバル
+					0.0f,								//エミッターの寿命
+					position							//エミッターの座標
+				}
+				, &g_gameScene->GetCamera());
 			}
 		}
 	}
@@ -95,12 +114,25 @@ void PlayerWallJump::Update()
 		m_wallDetection.Execute();
 		m_isWallShear = m_wallDetection.IsHit();
 
+		position.x = m_dustPos->m[3][0];
+		position.y = m_dustPos->m[3][1];
+		position.z = m_dustPos->m[3][2];
+		m_wallDust->SetPosition(position);
 		if (GetPad().IsTriggerButton(enButtonA))
 		{
 			m_characterController->SetGravity(m_defaultGravity);
 			m_player->WallJump(m_wallJumpDirection);
 			m_isWallShear = false;
 			m_isWallJump = true;
+			Delete(m_wallDust);
+			m_wallDust = nullptr;
+		}
+
+		if (m_wallDust != nullptr && !m_isWallShear)
+		{
+			Delete(m_wallDust);
+			m_wallDust = nullptr;
+
 		}
 
 	}

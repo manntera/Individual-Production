@@ -20,5 +20,5 @@ public:
 
 private:
 	RigidBody		m_rigidBody;		//剛体
-	BoxCollider		m_boxCollider;
+	BoxCollider		m_boxCollider;		//コライダー
 };

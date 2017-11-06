@@ -15,7 +15,7 @@ int WINAPI wWinMain(
 	//Direct3D‚ğ‰Šú‰»
 	GetEngine().InitD3D(hInst);
 	g_gameScene = New<GameScene>(0);
-	g_pFade = New<Fade>(0);
+	g_pFade = New<Fade>(priorityMax - 1);
 	g_pFade->Init();
 	GetEngine().GameLoop();
 	return 0;

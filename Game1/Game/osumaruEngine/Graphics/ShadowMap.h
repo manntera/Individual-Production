@@ -79,5 +79,5 @@ private:
 	D3DXMATRIX				m_projMatrix;		//ライトのプロジェクション行列
 	int						m_width;			//ウィンドウの幅
 	int						m_height;			//ウィンドウの高さ
-	std::vector<SkinModel*> m_models;			//シャドウマップに描画するモデル
+	std::list<SkinModel*> m_models;			//シャドウマップに描画するモデル
 };

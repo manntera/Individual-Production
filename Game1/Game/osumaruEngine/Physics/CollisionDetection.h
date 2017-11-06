@@ -64,6 +64,11 @@ public:
 		return m_hitCollisionNormal;
 	}
 
+	D3DXVECTOR3 GetPosition()
+	{
+		return m_position;
+	}
+
 private:
 	RigidBody		m_rigidBody;		//剛体
 	ICollider*		m_pCollider;		//コライダー

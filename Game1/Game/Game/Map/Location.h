@@ -68,3 +68,10 @@
 	D3DXQUATERNION(0.00f, 0.00f, -0.71f, 0.71f ),  //回転
 	enMapTagMapChip, //タグ
 },
+//test
+{
+	"test",
+	D3DXVECTOR3(12.50f, 17.50f, -63.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagMapChip, //タグ
+},

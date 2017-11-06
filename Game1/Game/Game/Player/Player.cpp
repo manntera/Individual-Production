@@ -58,12 +58,9 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 	m_characterController.SetGravity(-90.0f);
 	m_scale = { 1.0f, 1.0f, 1.0f };
-	m_characterController.Init(2.0f, 1.0f, m_position);
-	m_graspCliff.Init(this, 6.0f);
-	m_wallJump.Init(this, &m_characterController);
+	m_characterController.Init(2.0f, 2.5f, m_position);
 	m_skinModel.SetShadowCasterFlg(true);
 	m_skinModel.SetShadowReceiverFlg(true);
-
 }
 
 void Player::Start()
@@ -83,6 +80,10 @@ void Player::Start()
 	m_anim.SetAnimationLoopFlg(enAnimSetJump, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetCliffRise, false);
 	m_anim.PlayAnimation(enAnimSetWait);
+	//sprite.Init("Assets/sprite/Texture.png");
+	m_graspCliff.Init(this, 6.0f);
+	m_wallJump.Init(this, &m_characterController);
+	m_isParentRotation = false;
 }
 
 
@@ -112,11 +113,22 @@ void Player::Update()
 	}
 	if (GetPad().IsTriggerButton(enButtonY))
 	{
-		//m_anim.PlayAnimation(enAnimSetCliffRise);
 		SoundSource* sound = New<SoundSource>(0);
-		sound->Init("Assets/sound/reload.wav");
-		//sound->Init("Assets/sound/BattleScene.wav");
+		sound->Init("Assets/sound/univ1197a.wav", true);
 		sound->Play(false);
+		sound->SetPosition(m_position);
+		//ParticleEmitter* emitter = New<ParticleEmitter>(0);
+		//emitter->Init({
+		//	"Assets/particle/Explosion5.png",
+		//	10.0f,
+		//	10.0f,
+		//	{ 0.5f, 0.0f, 0.666f, 0.166f },
+		//	1.0f,
+		//	0.3f,
+		//	3.0f,
+		//	m_position
+		//}
+		//, &g_gameScene->GetCamera());
 	}
 	if (GetPad().IsTriggerButton(enButtonX))
 	{
@@ -162,6 +174,7 @@ void Player::WallShear(D3DXVECTOR3 moveSpeed)
 	Rotation();
 }
 
+
 void Player::WallJump(D3DXVECTOR3 jumpDirection)
 {
 	D3DXVECTOR3 jumpSpeed = jumpDirection;
@@ -176,7 +189,7 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 	m_anim.PlayAnimation(enAnimSetWallJump);
 }
 
-void Player::SetParent(MapChip* parent)
+void Player::SetParent(MapChip* parent, bool parentRotation)
 {
 	m_parent = parent;
 	if (parent != nullptr)
@@ -184,9 +197,13 @@ void Player::SetParent(MapChip* parent)
 		D3DXMATRIX matrix = m_parent->GetWorldMatrix();
 		D3DXMatrixInverse(&matrix, NULL, &matrix);
 		D3DXVec3TransformCoord(&m_localPosition, &m_position, &matrix);
-		D3DXQUATERNION multi;
-		D3DXQuaternionRotationMatrix(&multi, &matrix);
-		D3DXQuaternionMultiply(&m_localRotation, &m_rotation, &multi);
+		m_isParentRotation = parentRotation;
+		if (m_isParentRotation)
+		{
+			D3DXQUATERNION multi;
+			D3DXQuaternionRotationMatrix(&multi, &matrix);
+			D3DXQuaternionMultiply(&m_localRotation, &m_rotation, &multi);
+		}
 	}
 }
 
@@ -366,7 +383,7 @@ void Player::Rotation()
 			rad = -rad;
 		}
 
-		if (m_parent != nullptr)
+		if (m_parent != nullptr && m_isParentRotation)
 		{
 			D3DXQUATERNION multi;
 			D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
@@ -384,7 +401,7 @@ void Player::Rotation()
 	}
 	else
 	{
-		if (m_parent != nullptr)
+		if (m_parent != nullptr && m_isParentRotation)
 		{
 			D3DXQUATERNION multi;
 			D3DXQuaternionRotationMatrix(&multi, &m_parent->GetWorldMatrix());

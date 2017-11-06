@@ -18,8 +18,8 @@ void Texture::Load(char *filePath)
 	D3DXCreateTextureFromFileEx(
 		GetEngine().GetDevice(),
 		filePath,
-		0,
-		0,
+		D3DX_DEFAULT,
+		D3DX_DEFAULT,
 		0,
 		0,
 		D3DFMT_UNKNOWN,

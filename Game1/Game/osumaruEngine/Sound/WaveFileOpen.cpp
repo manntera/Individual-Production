@@ -44,6 +44,8 @@ void WaveFileOpen::Open(char* filePath)
 	{
 		throw;
 	}
+	m_format = (WAVEFORMATEX*)new CHAR[sizeof(WAVEFORMATEX)];
+	memcpy(m_format, &pcmFormat, sizeof(pcmFormat));
 	if (pcmFormat.wf.wFormatTag == WAVE_FORMAT_PCM)
 	{
 		m_format = (WAVEFORMATEX*)new CHAR[sizeof(WAVEFORMATEX)];

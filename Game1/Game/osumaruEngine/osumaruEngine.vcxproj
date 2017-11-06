@@ -196,6 +196,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Input\Pad.cpp" />
+    <ClCompile Include="Particle\Particle.cpp" />
+    <ClCompile Include="Particle\ParticleEmitter.cpp" />
     <ClCompile Include="Physics\CharacterController.cpp" />
     <ClCompile Include="Physics\Collider\BoxCollider.cpp" />
     <ClCompile Include="Physics\Collider\CapsuleCollider.cpp" />
@@ -205,6 +207,7 @@
     <ClCompile Include="Physics\CollisionDetection.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Physics\RigidBody.cpp" />
+    <ClCompile Include="Resource\TextureResource.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundEngine.cpp" />
     <ClCompile Include="Sound\SoundSource.cpp" />
@@ -227,6 +230,8 @@
     <ClInclude Include="Graphics\VertexCommon.h" />
     <ClInclude Include="engineStdafx.h" />
     <ClInclude Include="Input\Pad.h" />
+    <ClInclude Include="Particle\Particle.h" />
+    <ClInclude Include="Particle\ParticleEmitter.h" />
     <ClInclude Include="Physics\CharacterController.h" />
     <ClInclude Include="Physics\Collider\BoxCollider.h" />
     <ClInclude Include="Physics\Collider\CapsuleCollider.h" />
@@ -237,6 +242,7 @@
     <ClInclude Include="Physics\CollisionDetection.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\RigidBody.h" />
+    <ClInclude Include="Resource\TextureResource.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundEngine.h" />
     <ClInclude Include="Sound\SoundSource.h" />

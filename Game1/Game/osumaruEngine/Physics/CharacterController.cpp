@@ -4,7 +4,7 @@
 #include "CollisionAttr.h"
 #include "../Engine.h"
 
-
+//衝突したときに呼ばれる関数オブジェクト(地面用)
 struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 {
 	bool isHit = false;								//衝突フラグ。
@@ -29,6 +29,55 @@ struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 		D3DXVECTOR3	hitNormalTmp = D3DXVECTOR3(convexResult.m_hitNormalLocal);
 		//上方向と法線のなす角度を求める。
 		D3DXVECTOR3 up = { 0.0f, 1.0f, 0.0f };
+		float angle = D3DXVec3Dot(&hitNormalTmp, &up);
+		angle = fabsf(acosf(angle));
+		if (angle < cPI * 0.3f ||		//地面の傾斜が54度より小さいので地面とみなす。角度がラジアン単位なので180度がcPI
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Ground)//もしくはコリジョン属性が地面と指定されている。
+		{
+			//衝突している。
+			isHit = true;
+			D3DXVECTOR3 hitPosTmp = D3DXVECTOR3(convexResult.m_hitPointLocal);
+			//衝突点の距離を求める。
+			D3DXVECTOR3 vDist;
+			vDist = hitPosTmp - startPos;
+			float distTmp = D3DXVec3Length(&vDist);
+			if (dist > distTmp)
+			{
+				//この衝突点の方が近いので、最近傍の衝突点を更新する。
+				hitPos = hitPosTmp;
+				hitNormal = D3DXVECTOR3(convexResult.m_hitNormalLocal);
+				dist = distTmp;
+			}
+		}
+		return 0.0f;
+	}
+};
+
+//衝突したときに呼ばれる関数オブジェクト(天井用)
+struct SweepResultCeiling : public btCollisionWorld::ConvexResultCallback
+{
+	bool isHit = false;								//衝突フラグ。
+	D3DXVECTOR3 hitPos = { 0.0f, 0.0f, 0.0f };		//衝突点。
+	D3DXVECTOR3 startPos = { 0.0f, 0.0f, 0.0f };	//レイの始点。
+	D3DXVECTOR3 hitNormal = { 0.0f, 0.0f, 0.0f };	//衝突点の法線
+	const btCollisionObject* hitObject = nullptr;
+	btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
+	float dist = FLT_MAX;							//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
+													//衝突したときに呼ばれるコールバック関数。
+	virtual btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
+	{
+		if (convexResult.m_hitCollisionObject == me ||
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character ||
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_CliffDetection)
+		{
+			//自分に衝突した。orキャラクタ属性のコリジョンと衝突した。
+			return 0.0f;
+		}
+		hitObject = convexResult.m_hitCollisionObject;
+		//衝突点の法線を引っ張ってくる
+		D3DXVECTOR3	hitNormalTmp = D3DXVECTOR3(convexResult.m_hitNormalLocal);
+		//下方向と法線のなす角度を求める。
+		D3DXVECTOR3 up = { 0.0f, -1.0f, 0.0f };
 		float angle = D3DXVec3Dot(&hitNormalTmp, &up);
 		angle = fabsf(acosf(angle));
 		if (angle < cPI * 0.3f ||		//地面の傾斜が54度より小さいので地面とみなす。角度がラジアン単位なので180度がcPI
@@ -253,10 +302,11 @@ void CharacterController::Execute()
 	//XZの移動は確定。
 	m_position.x = nextPosition.x;
 	m_position.z = nextPosition.z;
+
+	D3DXVECTOR3 addPosY;
+	addPosY = nextPosition - m_position;
 	//下方向を調べる。
 	{
-		D3DXVECTOR3 addPosY;
-		addPosY = nextPosition - m_position;
 		m_position = nextPosition;	//移動の仮確定。
 		//レイを作成する。
 		btTransform start, end;
@@ -313,6 +363,48 @@ void CharacterController::Execute()
 		if (callback.hitObject != nullptr && m_rigidBody.GetBody()->getUserIndex() == enCollisionAttr_Character)
 		{
 			const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionFlg(true);
+		}
+	}//上方向を調べる
+	{
+		m_position = nextPosition;	//移動の仮確定。
+									//レイを作成する。
+		btTransform start, end;
+		start.setIdentity();
+		end.setIdentity();
+		//始点はカプセルコライダーの中心。
+		start.setOrigin(btVector3(m_position.x, m_position.y + m_height * 0.5f + m_radius, m_position.z));
+		//終点は地面上にいない場合は1m下を見る。
+		//地面上にいなくてジャンプで上昇中の場合は上昇量の0.01倍下を見る。
+		//地面上にいなくて降下中の場合はそのまま落下先を調べる。
+		D3DXVECTOR3 endPos;
+		endPos = D3DXVECTOR3(start.getOrigin());
+		if (!m_isOnGround)
+		{
+			if (addPosY.y > 0.0f)
+			{
+				//ジャンプ中とかで上昇中。
+				//上昇中でもXZに移動した結果めり込んでいる可能性があるので下を調べる。
+				endPos.y += addPosY.y;
+			}
+			else
+			{
+				endPos.y -= addPosY.y * 0.01f;
+			}
+		}
+		end.setOrigin(btVector3(endPos.x, endPos.y, endPos.z));
+		SweepResultCeiling callback;
+		callback.me = m_rigidBody.GetBody();
+		callback.startPos = D3DXVECTOR3(start.getOrigin());
+		//衝突検出。
+		if (fabsf(addPosY.y) > FLT_EPSILON && (start.getOrigin().y() - end.getOrigin().y() != 0.0f))
+		{
+			physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+		}
+		if (callback.isHit)
+		{
+			//当たった。
+			m_moveSpeed.y = 0.0f;
+			nextPosition.y = callback.hitPos.y - (m_height + m_radius * 2.0f);
 		}
 	}
 	//移動確定。

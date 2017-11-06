@@ -81,6 +81,9 @@
     <ClCompile Include="Player\PlayerWallJump.cpp">
       <Filter>ソース ファイル\Player</Filter>
     </ClCompile>
+    <ClCompile Include="Map\MapChip\RotationObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="Player\PlayerWallJump.h">
       <Filter>ソース ファイル\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\MapChip\RotationObject.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -41,7 +41,6 @@ void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 			object->Drawer();
 		}
 	}
-
 	for (GameObjectList& objList : m_objectVector)
 	{
 		for (GameObject* object : objList)
@@ -49,6 +48,7 @@ void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 			object->AfterDrawer();
 		}
 	}
+
 	// シーンの描画終了。
 	pDevice->EndScene();
 	// バックバッファとフロントバッファを入れ替える。

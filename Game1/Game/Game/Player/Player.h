@@ -84,7 +84,7 @@ public:
 
 	void WallJump(D3DXVECTOR3 jumpDirection);
 
-	void SetParent(MapChip* parent);
+	void SetParent(MapChip* parent, bool parentRotation);
 
 private:
 	//移動処理をする関数
@@ -116,4 +116,5 @@ private:
 	EnAnimationSet		m_currentAnim;			//現在再生してるアニメーション
 	bool				m_isJump;				//ジャンプしてるか？
 	MapChip*			m_parent;				//親
+	bool				m_isParentRotation;
 };

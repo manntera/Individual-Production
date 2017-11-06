@@ -23,7 +23,10 @@
 #include "../osumaruEngine/Physics/CollisionDetection.h"
 #include "../osumaruEngine/Physics/CollisionAttr.h"
 #include "../osumaruEngine/Input/Pad.h"
+#include "../osumaruEngine/Sound/SoundEngine.h"
 #include "../osumaruEngine/Sound/SoundSource.h"
+#include "../osumaruEngine/Particle/Particle.h"
+#include "../osumaruEngine/Particle/ParticleEmitter.h"
 
 
 const int playerPriority = 1;

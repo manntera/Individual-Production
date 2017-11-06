@@ -7,6 +7,7 @@
 #include "MapChip\MoveFloor.h"
 #include "MapChip/SpringObject.h"
 #include "MapTagEnum.h"
+#include "MapChip\RotationObject.h"
 
 struct MapChipInfo
 {
@@ -56,10 +57,13 @@ void Map::Init()
 			mapChip = New<SpringObject>(stageGimmickPriority);
 			break;
 
+		//case enMapTagRotation:
+		//	mapChip = New<RotationObject>(stageGimmickPriority);
+		//	break;
+
 		default:
 			mapChip = New<StaticMapObject>(stageGimmickPriority);
 			break;
-
 		}
 
 		if (mapChip != nullptr)

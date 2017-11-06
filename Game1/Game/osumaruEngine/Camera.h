@@ -53,7 +53,7 @@ public:
 	//プロジェクション行列の設定。
 	void SetProjectionMatrix(D3DXMATRIX projection);
 
-	//プロジェクション行列の設定。
+	//プロジェクション行列の取得。
 	D3DXMATRIX GetProjectionMatrix();
 
 	//初期化

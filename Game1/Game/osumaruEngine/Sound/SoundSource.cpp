@@ -7,6 +7,9 @@ SoundSource::SoundSource()
 	m_sourceVoice = nullptr;
 	m_isLoop = false;
 	m_isPlaying = false;
+	memset(m_coefficients, 0, sizeof(m_coefficients));
+	memset(m_emitterAzimuths, 0, sizeof(m_emitterAzimuths));
+	m_position = { 0.0f, 0.0f, 0.0f };
 }
 
 SoundSource::~SoundSource()
@@ -17,12 +20,17 @@ SoundSource::~SoundSource()
 	}
 }
 
-void SoundSource::Init(char* filePath)
+void SoundSource::Init(char* filePath, bool is3DSound)
 {
 	//WAVEファイルを読み込み
 	m_waveFile.Open(filePath);
 	//ソースボイスを作成
-	m_sourceVoice = GetSoundEngine().CreateSouceVoice(m_waveFile.GetFormat());
+	m_sourceVoice = GetSoundEngine().CreateSouceVoice(m_waveFile.GetFormat(), is3DSound);
+
+	m_dspSettings.pMatrixCoefficients = m_coefficients;
+	m_dspSettings.pDelayTimes = nullptr;
+	m_dspSettings.SrcChannelCount = INPUTCHANNELS;
+	m_dspSettings.DstChannelCount = GetSoundEngine().GetChannelNum();
 }
 
 void SoundSource::Update()

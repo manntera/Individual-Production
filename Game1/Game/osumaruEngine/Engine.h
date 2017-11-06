@@ -5,7 +5,7 @@
 #include "Input\Pad.h"
 #include "Graphics\ShadowMap.h"
 #include "Sound\SoundEngine.h"
-
+#include "Resource\TextureResource.h"
 //エンジンクラス
 
 const int FRAME_BUFFER_WIDTH = 1280;
@@ -44,6 +44,11 @@ public:
 	EffectManager* GetEffectManager()
 	{
 		return m_effectManager;
+	}
+	//テクスチャリソースを取得
+	TextureResource& GetTextureResource()
+	{
+		return m_textureResource;
 	}
 	//物理ワールドを取得。
 	PhysicsWorld* GetPhysicsWorld()
@@ -107,6 +112,7 @@ private:
 	Pad					m_pad;					//パッドの入力
 	ShadowMap			m_shadowMap;			//シャドウマップ
 	SoundEngine			m_soundEngine;
+	TextureResource		m_textureResource;
 };
 //エンジンクラスのインスタンスを取得。
 static Engine& GetEngine()
@@ -141,4 +147,9 @@ static ShadowMap& GetShadowMap()
 static SoundEngine& GetSoundEngine()
 {
 	return GetEngine().GetSoundEngine();
+}
+
+static TextureResource& GetTextureResource()
+{
+	return GetEngine().GetTextureResource();
 }

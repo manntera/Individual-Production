@@ -45,4 +45,6 @@ private:
 	D3DXVECTOR3				m_wallJumpDirection;	//壁ジャンプするときの方向
 	float					m_wallShearGravity;		//壁ずりの時の重力
 	float					m_defaultGravity;		//普通の時の重力
+	ParticleEmitter*		m_wallDust;
+	D3DXMATRIX*				m_dustPos;
 };

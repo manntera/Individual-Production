@@ -1,9 +1,10 @@
 #pragma once
 #include "MapChip.h"
 
-class SpringObject : public MapChip
+class RotationObject : public MapChip
 {
 public:
+
 	/*
 	初期化する関数
 	position	座標
@@ -15,9 +16,9 @@ public:
 
 	//更新関数
 	void Update()override;
-
 private:
 	RigidBody		m_rigidBody;		//剛体
 	BoxCollider		m_boxCollider;		//コライダー
-	Animation		m_anim;				//アニメーション
+	bool			m_isChild;			//子供がいるかどうか
+	D3DXQUATERNION	m_multi;
 };

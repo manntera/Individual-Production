@@ -18,6 +18,8 @@ void GameCamera::Init()
 	camera.Init();
 	camera.SetPosition({ 0.0, 40.0f, -40.0f });
 	camera.SetTarget({0.0f, 0.0f, 0.0f});
+	camera.SetNear(0.1f);
+	camera.SetFar(1000.0f);
 	D3DXQuaternionIdentity(&rotation);
 }
 
