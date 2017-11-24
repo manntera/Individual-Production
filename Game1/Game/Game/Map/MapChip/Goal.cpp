@@ -23,6 +23,8 @@ void Goal::Update()
 	if (D3DXVec3Length(&distance) < 3.0f)
 	{
 		g_gameScene->GameClear();
+
+
 	}
 	MapChip::Update();
 }

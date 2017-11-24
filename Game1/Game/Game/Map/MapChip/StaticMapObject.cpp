@@ -4,23 +4,35 @@
 void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
+
 	//メッシュコライダーからAABBを作成
-	MeshCollider meshCollider;
-	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
-	D3DXVECTOR3 boxSize = meshCollider.GetAabbMax();
-	m_boxCollider.Create({boxSize.x, boxSize.y, boxSize.z});
+	m_meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
 
 	RigidBodyInfo rInfo;
-	rInfo.collider = &m_boxCollider;
+	rInfo.collider = &m_meshCollider;
 	rInfo.mass = 0.0f;
-	rInfo.pos = m_position;	
-	
-	//剛体を作成
+	rInfo.pos = m_position;
+	D3DXQUATERNION rot;
+	D3DXQuaternionIdentity(&rot);
 	rInfo.rot = m_rotation;
+
+	//剛体を作成
 	m_rigidBody.Create(rInfo);
+	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }
 
 void StaticMapObject::Start()
 {
+}
 
+void StaticMapObject::Update()
+{
+	MapChip::Update();
+	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+}
+
+void StaticMapObject::Draw()
+{
+	MapChip::Draw();
+	GetEngine().GetPhysicsWorld()->DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
 }

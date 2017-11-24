@@ -9,18 +9,18 @@ void RotationObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* m
 	MapChip::Init(position, rotation, modelName);
 
 	//メッシュコライダーからaabbを作成	
-	MeshCollider meshCollider;
-	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
-	D3DXVECTOR3 boxSize = meshCollider.GetAabbMax();
-	m_boxCollider.Create({ boxSize.x, boxSize.y, boxSize.z });
+	//MeshCollider meshCollider;
+	m_meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
+	//D3DXVECTOR3 boxSize = meshCollider.GetAabbMax();
+	//m_boxCollider.Create({ boxSize.x, boxSize.y, boxSize.z });
 
 	RigidBodyInfo rInfo;
-	rInfo.collider = &m_boxCollider;
+	rInfo.collider = &m_meshCollider;
 	rInfo.mass = 0.0f;
 	rInfo.pos = m_position;
+	rInfo.rot = m_rotation;
 
 	//剛体を作成
-	rInfo.rot = m_rotation;
 	m_rigidBody.Create(rInfo);
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
@@ -54,4 +54,10 @@ void RotationObject::Update()
 	m_rigidBody.GetBody()->getWorldTransform().setRotation(btQuaternion(m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w));
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+}
+
+void RotationObject::Draw()
+{
+	MapChip::Draw();
+	GetEngine().GetPhysicsWorld()->DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
 }

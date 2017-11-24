@@ -35,6 +35,8 @@ public:
 		return m_isWallJump;
 	}
 
+	void Draw();
+
 private:
 	BoxCollider				m_boxCollider;			//壁とのあたり判定を取るコライダー
 	CollisionDetection		m_wallDetection;		//壁とのあたり判定
@@ -46,5 +48,7 @@ private:
 	float					m_wallShearGravity;		//壁ずりの時の重力
 	float					m_defaultGravity;		//普通の時の重力
 	ParticleEmitter*		m_wallDust;
+	D3DXVECTOR3				m_position;
+	D3DXQUATERNION			m_rotation;
 	D3DXMATRIX*				m_dustPos;
 };

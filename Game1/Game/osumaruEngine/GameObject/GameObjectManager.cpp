@@ -9,8 +9,9 @@ void GameObjectManager::Init()
 	m_objectVector.resize(priorityMax);
 }
 
-void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
+void GameObjectManager::Execute()
 {
+	LPDIRECT3DDEVICE9 pDevice = GetEngine().GetDevice();
 	//‰Šú‰»
 	for (GameObjectList& objList : m_objectVector)
 	{
@@ -41,6 +42,7 @@ void GameObjectManager::Execute(LPDIRECT3DDEVICE9 pDevice)
 			object->Drawer();
 		}
 	}
+	GetEngine().GetPhysicsWorld()->Draw();
 	for (GameObjectList& objList : m_objectVector)
 	{
 		for (GameObject* object : objList)

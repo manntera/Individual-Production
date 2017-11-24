@@ -21,7 +21,7 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-	GetEngine().Release();
+	Release();
 	delete m_effectManager;
 	delete m_physicsWorld;
 }
@@ -70,7 +70,7 @@ void Engine::InitD3D(HINSTANCE& hInst)
 	m_effectManager = new EffectManager;
 	m_physicsWorld = new PhysicsWorld;
 	m_physicsWorld->Init();
-	m_shadowMap.Create(1024, 1024);
+	m_shadowMap.Create(2048, 2048);
 	m_shadowMap.SetLightCameraTarget({ 0.0f, 00.0f, 0.0f });
 	m_shadowMap.SetLightCameraPosition({ 0.0f, 20.0f, 0.0f });
 	m_shadowMap.SetLightCameraUp({ 1.0f, 0.0f, 0.0f });
@@ -96,7 +96,7 @@ void Engine::GameLoop()
 		}
 		else
 		{
-			m_objectManager.Execute(m_pD3DDevice);
+			m_objectManager.Execute();
 			m_physicsWorld->Update();
 			m_shadowMap.Update();
 			m_pad.Update();

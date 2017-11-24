@@ -85,10 +85,10 @@ void Particle::AfterDraw()
 	D3DXMatrixMultiply(&worldViewProjMat, &m_worldMatrix, &m_camera->GetViewMatrix());
 	D3DXMatrixMultiply(&worldViewProjMat, &worldViewProjMat, &m_camera->GetProjectionMatrix());
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
-	//DWORD srcBackup;
-	//DWORD destBackup;
-	//pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &srcBackup);
-	//pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &destBackup);
+	DWORD srcBackup;
+	DWORD destBackup;
+	pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &srcBackup);
+	pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &destBackup);
 	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -105,9 +105,9 @@ void Particle::AfterDraw()
 	m_pEffect->SetTexture("g_tex", m_texture->GetBody());
 	m_pEffect->SetMatrix("g_world", &worldViewProjMat);
 	m_pEffect->CommitChanges();
+	pD3DDevice->SetVertexDeclaration(m_primitive.GetVertexDecaration());
 	pD3DDevice->SetStreamSource(0, m_primitive.GetVertexBuffer(), 0, sizeof(VERTEX_PT));
 	pD3DDevice->SetIndices(m_primitive.GetIndexBuffer());
-	pD3DDevice->SetFVF(D3DFVF_XYZW | D3DFVF_TEX1);
 	pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
 
 	m_pEffect->EndPass();
@@ -116,6 +116,6 @@ void Particle::AfterDraw()
 	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 
-	//pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup); 
-	//pD3DDevice->SetRenderState(D3DRS_DESTBLEND, destBackup);
+	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup); 
+	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, destBackup);
 }

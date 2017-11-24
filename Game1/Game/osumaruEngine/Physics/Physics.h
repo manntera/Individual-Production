@@ -1,5 +1,7 @@
 #pragma once
 class RigidBody;
+class RigidBodyDraw;
+class Camera;
 /*
 物理ワールド
 */
@@ -11,6 +13,8 @@ class PhysicsWorld : Uncopyable
 	btBroadphaseInterface*					m_overlappingPairCache;		//ブロードフェーズ。
 	btSequentialImpulseConstraintSolver*	m_constraintSolver;			//コンストレイントソルバー。拘束条件の解決処理
 	btDiscreteDynamicsWorld*				m_dynamicWorld;				//ワールド
+	RigidBodyDraw*							m_rigidBodyDraw;
+	Camera*									m_camera;
 public:
 	//コンストラクタ
 	PhysicsWorld();
@@ -24,6 +28,8 @@ public:
 	//更新関数
 	void Update();
 
+	void Draw();
+
 	//ダイナミックワールドを取得。
 	btDiscreteDynamicsWorld* GetDynamicWorld()
 	{
@@ -34,6 +40,11 @@ public:
 
 	//剛体を物理ワールドから削除
 	void RemoveRigidBody(btRigidBody* rb);
+
+	void SetCamera(Camera* camera)
+	{
+		m_camera = camera;
+	}
 
 	void ConvexSweepTest(
 		const btConvexShape* castShape,
@@ -56,6 +67,6 @@ public:
 		btTransform& worldTrans,
 		btCollisionShape* colShape)
 	{
-		m_dynamicWorld->debugDrawObject(worldTrans, colShape, {0.0f, 0.0f, 1.0f});
+		m_dynamicWorld->debugDrawObject(worldTrans, colShape, {1.0f, 0.0f, 0.0f});
 	}
 };

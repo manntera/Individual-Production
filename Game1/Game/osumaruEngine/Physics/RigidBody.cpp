@@ -10,8 +10,8 @@
 void RigidBody::Create(RigidBodyInfo& rbInfo)
 {
 	Release();
-	m_myMotionState = new btDefaultMotionState();
 
+	m_myMotionState = new btDefaultMotionState();
 	btRigidBody::btRigidBodyConstructionInfo btRBInfo(rbInfo.mass, m_myMotionState, rbInfo.collider->GetBody(), btVector3(0, 0, 0));
 	m_rigidBody = new btRigidBody(btRBInfo);
 	GetEngine().GetPhysicsWorld()->AddRigidBody(m_rigidBody);

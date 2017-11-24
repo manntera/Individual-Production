@@ -18,7 +18,11 @@ public:
 	//初期化関数
 	void Start()override;
 
+	void Update()override;
+
+	void Draw()override;
+
 private:
 	RigidBody		m_rigidBody;		//剛体
-	BoxCollider		m_boxCollider;		//コライダー
+	MeshCollider	m_meshCollider;		//コライダー
 };

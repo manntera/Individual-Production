@@ -20,6 +20,7 @@ struct ContactSingle : public btCollisionWorld::ContactResultCallback
 		hitObjectNormal.x = rot.m[1][0];
 		hitObjectNormal.y = rot.m[1][1];
 		hitObjectNormal.z = rot.m[1][2];
+		const_cast<btCollisionObject*>(colObj1Wrap->getCollisionObject())->setPlayerCollisionFlg(true);
 		return 0.0f;
 	}
 };

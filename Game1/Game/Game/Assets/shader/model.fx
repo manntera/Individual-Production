@@ -228,18 +228,20 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	{
 		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
 		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
-		//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
-		uv += 1.0f;
-		uv *= 0.5f;
-		uv.y = 1.0f - uv.y;
-		float4 shadow = tex2D(g_shadowMapSampler, uv);
-		//ライトカメラから見た深度値を計算
-		float depth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
-		depth = min(1.0f, depth);
-		//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-		if (shadow.x < depth - 0.015f)
-		{
-			lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f) {
+			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+			uv += 1.0f;
+			uv *= 0.5f;
+			uv.y = 1.0f - uv.y;
+			float4 shadow = tex2D(g_shadowMapSampler, uv);
+			//ライトカメラから見た深度値を計算
+			float depth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+			depth = min(1.0f, depth);
+			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+			if (shadow.x < depth - 0.035f)
+			{
+				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+			}
 		}
 	}
 	color *= lig;
@@ -270,6 +272,7 @@ VS_OUTPUT ShadowMapVSMain(VS_INPUT In, uniform bool hasSkin)
 	return Out;
 }
 
+
 //シャドウマップ書き込み用のピクセルシェーダー
 float4 ShadowMapPSMain(VS_OUTPUT In) : COLOR
 {
@@ -279,6 +282,11 @@ float4 ShadowMapPSMain(VS_OUTPUT In) : COLOR
 	color.yz = 0.0f;
 	color.w = 1.0f;
 	return color;
+}
+
+float4 SilhouettePSMain(VS_OUTPUT In) : COLOR
+{
+	return float4(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 
@@ -319,5 +327,25 @@ technique NoSkinShadowMap
 	{
 		VertexShader = compile vs_3_0 ShadowMapVSMain(false);
 		PixelShader = compile ps_3_0 ShadowMapPSMain();
+	}
+}
+
+//スキンありモデル用のテクニック。
+technique SilhouetteSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(true);
+		PixelShader = compile ps_3_0 SilhouettePSMain();
+	}
+}
+
+//スキンなしモデル用テクニック。
+technique SilhouetteNoSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(false);
+		PixelShader = compile ps_3_0 SilhouettePSMain();
 	}
 }

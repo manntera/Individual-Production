@@ -28,6 +28,7 @@ void Sprite::Init(char *filePath)
 
 	//エフェクトをロード
 	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/shader/sprite.fx");
+
 	//頂点バッファを作成
 	VERTEX_PT elements[4] =
 	{
@@ -70,11 +71,11 @@ void Sprite::Draw()
 	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &scale);
 	D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &transform);
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
-	//DWORD srcBackup;
-	//DWORD destBackup;
+	DWORD srcBackup;
+	DWORD destBackup;
 	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
-	//pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &srcBackup);
-	//pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &destBackup);
+	pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &srcBackup);
+	pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &destBackup);
 
 	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
@@ -86,17 +87,17 @@ void Sprite::Draw()
 	m_pEffect->SetValue("g_world", worldMatrix, sizeof(worldMatrix));
 	m_pEffect->SetFloat("g_alpha", m_alpha);
 	m_pEffect->CommitChanges();
+	pD3DDevice->SetVertexDeclaration(m_primitive.GetVertexDecaration());
 	pD3DDevice->SetStreamSource(0, m_primitive.GetVertexBuffer(), 0, sizeof(VERTEX_PT));
 	pD3DDevice->SetIndices(m_primitive.GetIndexBuffer());
-	pD3DDevice->SetFVF(D3DFVF_XYZW | D3DFVF_TEX1);
 	pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
 
 	m_pEffect->EndPass();
 	m_pEffect->End();
 
 	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-	//pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup); 
-	//pD3DDevice->SetRenderState(D3DRS_DESTBLEND, destBackup);
+	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup); 
+	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, destBackup);
 
 }
 

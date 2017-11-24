@@ -17,9 +17,9 @@ void MoveFloor::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelN
 	rInfo.collider = &m_boxCollider;
 	rInfo.mass = 0.0f;
 	rInfo.pos = m_position;
+	rInfo.rot = m_rotation;
 
 	//„‘Ì‚ðì¬
-	rInfo.rot = m_rotation;
 	m_rigidBody.Create(rInfo);
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);

@@ -135,6 +135,9 @@
     <ClCompile Include="Resource\TextureResource.cpp">
       <Filter>ソース ファイル\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\RigidBodyDraw.cpp">
+      <Filter>ソース ファイル\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics\EffectManager.h">
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="Resource\TextureResource.h">
       <Filter>ソース ファイル\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics\RigidBodyDraw.h">
+      <Filter>ソース ファイル\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

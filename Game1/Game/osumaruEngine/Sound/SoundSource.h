@@ -59,6 +59,11 @@ public:
 	{
 		return m_position;
 	}
+
+	void SetVolume(float volume)
+	{
+		m_sourceVoice->SetVolume(volume, XAUDIO2_COMMIT_NOW);
+	}
 private:
 	D3DXVECTOR3				m_position;
 	FLOAT32					m_coefficients[INPUTCHANNELS * OUTPUTCHANNELS];

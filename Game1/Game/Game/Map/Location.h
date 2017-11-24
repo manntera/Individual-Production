@@ -52,7 +52,7 @@
 	"test",
 	D3DXVECTOR3(7.10f, 0.00f, 7.40f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
-	enMapTagMoveFloor, //タグ
+	enMapTagUntagged, //タグ
 },
 //test
 {
@@ -74,4 +74,32 @@
 	D3DXVECTOR3(12.50f, 17.50f, -63.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagMapChip, //タグ
+},
+//testBox
+{
+	"testBox",
+	D3DXVECTOR3(-25.30f, 8.60f, -98.40f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+	enMapTagMoveFloor, //タグ
+},
+//test
+{
+	"test",
+	D3DXVECTOR3(10.00f, 0.00f, -99.20f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagUntagged, //タグ
+},
+//testRectangle
+{
+	"testRectangle",
+	D3DXVECTOR3(68.20f, -35.50f, -43.80f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagRotation, //タグ
+},
+//testBox
+{
+	"testBox",
+	D3DXVECTOR3(-25.30f, 8.60f, -165.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+	enMapTagHindrance, //タグ
 },

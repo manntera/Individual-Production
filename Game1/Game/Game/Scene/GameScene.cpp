@@ -20,7 +20,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-
+	//Delete(m_bgm);
 }
 
 void GameScene::Start()
@@ -31,6 +31,10 @@ void GameScene::Start()
 	m_camera = New<GameCamera>(cameraPriority);
 	m_camera->Init();
 	g_pFade->FadeIn();
+	//m_bgm = New<SoundSource>(0);
+	//m_bgm->Init("Assets/sound/BGM.wav");
+	//m_bgm->SetVolume(0.1f);
+	//m_bgm->Play(true);
 }
 
 void GameScene::Update()
@@ -82,6 +86,9 @@ void GameScene::GameClear()
 	}
 	m_isGameClear = true;
 	g_pFade->FadeOut();
+	//SoundSource* sound = New<SoundSource>(0);
+	//sound->Init("Assets/sound/univ1018.wav");
+	//sound->Play(false);
 }
 
 void GameScene::GameOver()
@@ -91,5 +98,8 @@ void GameScene::GameOver()
 		return;
 	}
 	m_isGameOver = true;
+	//SoundSource* sound = New<SoundSource>(0);
+	//sound->Init("Assets/sound/univ0010.wav");
+	//sound->Play(false);
 	g_pFade->FadeOut();
 }

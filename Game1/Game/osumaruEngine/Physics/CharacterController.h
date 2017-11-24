@@ -119,6 +119,10 @@ public:
 		m_rigidBody.GetBody()->setUserIndex(userNum);
 	}
 
+	void StaticExecute();
+
+	void Draw();
+
 private:
 	D3DXVECTOR3		m_position;			//À•W
 	D3DXVECTOR3		m_moveSpeed;		//ˆÚ“®‘¬“x

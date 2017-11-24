@@ -56,7 +56,7 @@ void SoundEngine::Init()
 	XAUDIO2_EFFECT_CHAIN effectChain = { 1, effects };
 	if (FAILED(hr = m_xAudio->CreateSubmixVoice(&m_submixVoice, 1,
 		details.OutputFormat.Format.nSamplesPerSec, 0, 0,
-		NULL, &effectChain)))
+		NULL, NULL)))
 	{
 		throw;
 	}

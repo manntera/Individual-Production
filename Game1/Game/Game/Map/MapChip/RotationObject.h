@@ -16,9 +16,11 @@ public:
 
 	//更新関数
 	void Update()override;
+
+	void Draw();
 private:
 	RigidBody		m_rigidBody;		//剛体
-	BoxCollider		m_boxCollider;		//コライダー
+	MeshCollider	m_meshCollider;		//コライダー
 	bool			m_isChild;			//子供がいるかどうか
 	D3DXQUATERNION	m_multi;
 };

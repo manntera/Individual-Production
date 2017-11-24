@@ -87,6 +87,7 @@ void PlayerGraspCliff::Update()
 	//ŠR‚ðã‚Á‚Ä‚¢‚éŽž
 	if (m_isActive)
 	{
+		m_player->ParentChildMove();
 		bool isActive = m_player->CriffRiseEnd();
 		m_isActive = !isActive;
 	}

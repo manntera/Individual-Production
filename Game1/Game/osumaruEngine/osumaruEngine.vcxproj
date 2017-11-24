@@ -207,6 +207,7 @@
     <ClCompile Include="Physics\CollisionDetection.cpp" />
     <ClCompile Include="Physics\Physics.cpp" />
     <ClCompile Include="Physics\RigidBody.cpp" />
+    <ClCompile Include="Physics\RigidBodyDraw.cpp" />
     <ClCompile Include="Resource\TextureResource.cpp" />
     <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundEngine.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="Physics\CollisionDetection.h" />
     <ClInclude Include="Physics\Physics.h" />
     <ClInclude Include="Physics\RigidBody.h" />
+    <ClInclude Include="Physics\RigidBodyDraw.h" />
     <ClInclude Include="Resource\TextureResource.h" />
     <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundEngine.h" />

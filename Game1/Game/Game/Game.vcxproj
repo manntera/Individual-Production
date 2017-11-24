@@ -170,6 +170,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map\Map.cpp" />
     <ClCompile Include="Map\MapChip\Goal.cpp" />
+    <ClCompile Include="Map\MapChip\HindranceObject.cpp" />
     <ClCompile Include="Map\MapChip\MapChip.cpp" />
     <ClCompile Include="Map\MapChip\MoveFloor.cpp" />
     <ClCompile Include="Map\MapChip\RotationObject.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="GameCamera\GameCamera.h" />
     <ClInclude Include="Map\Map.h" />
     <ClInclude Include="Map\MapChip\Goal.h" />
+    <ClInclude Include="Map\MapChip\HindranceObject.h" />
     <ClInclude Include="Map\MapChip\MapChip.h" />
     <ClInclude Include="Map\MapChip\MoveFloor.h" />
     <ClInclude Include="Map\MapChip\RotationObject.h" />

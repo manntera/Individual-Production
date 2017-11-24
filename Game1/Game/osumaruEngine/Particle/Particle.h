@@ -3,6 +3,7 @@
 #include "../Graphics/Texture.h"
 class Camera;
 struct SParticleEmittInfo;
+
 class Particle : public GameObject
 {
 public:

@@ -265,6 +265,8 @@ void SkinModel::Init(SkinModelData* modelData)
 	m_currentShaderTechnique = enShaderTechniqueNormal;
 	m_shaderTechnique[enShaderTechniqueNormal].SkinModelTechnique = m_pEffect->GetTechniqueByName("SkinModel");
 	m_shaderTechnique[enShaderTechniqueNormal].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("NoSkinModel");
+	m_shaderTechnique[enShaderTechniqueSilhouette].SkinModelTechnique = m_pEffect->GetTechniqueByName("SilhouetteSkinModel");
+	m_shaderTechnique[enShaderTechniqueSilhouette].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("SilhouetteNoSkinModel");
 	m_shaderTechnique[enShaderTechniqueShadow].SkinModelTechnique = m_pEffect->GetTechniqueByName("SkinShadowMap");
 	m_shaderTechnique[enShaderTechniqueShadow].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("NoSkinShadowMap");
 

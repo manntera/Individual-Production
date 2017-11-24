@@ -10,7 +10,7 @@ public:
 	void Init();
 
 	//ゲームの1ループを実行する関数
-	void Execute(LPDIRECT3DDEVICE9 pDevice);
+	void Execute();
 
 	//ゲームのオブジェクトを消去する関数
 	void Delete(GameObject* deleteObject);

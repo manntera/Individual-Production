@@ -86,14 +86,14 @@ public:
 
 	void SetParent(MapChip* parent, bool parentRotation);
 
+	void ParentChildMove();
+
 private:
 	//移動処理をする関数
 	void Move();
 
-	void Jump();
-
 	//モデルを移動方向に合わせて回転させる関数
-	void Rotation();
+	void Rotation(D3DXVECTOR3 rotationDirection);
 
 private:
 	SkinModel			m_skinModel;			//スキンモデル
@@ -117,4 +117,7 @@ private:
 	bool				m_isJump;				//ジャンプしてるか？
 	MapChip*			m_parent;				//親
 	bool				m_isParentRotation;
+	float				m_moveSpeed;
+	float				m_acceleration;
+	float				m_gravity;
 };

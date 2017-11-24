@@ -19,11 +19,11 @@ public:
 	//カメラの取得
 	Camera& GetCamera()
 	{
-		return camera;
+		return m_camera;
 	}
 
 private:
-	D3DXQUATERNION	rotation;		//カメラの回転
-	Camera			camera;			//カメラ
+	D3DXQUATERNION	m_rotation;		//カメラの回転
+	Camera			m_camera;			//カメラ
 
 };

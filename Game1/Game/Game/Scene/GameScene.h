@@ -44,6 +44,7 @@ private:
 	Map*			m_map;		//マップ
 	GameCamera*		m_camera;	//カメラ
 	Sky*			m_sky;		//スカイボックス
+	SoundSource*		m_bgm;
 };
 
 extern GameScene *g_gameScene;
