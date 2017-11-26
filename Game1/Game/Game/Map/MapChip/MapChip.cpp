@@ -15,6 +15,7 @@ MapChip::~MapChip()
 
 void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
 {
+	//ライトの設定
 	float ambientLightColor = 0.4f;
 	float diffuseLightColor0 = 0.3f;
 	float diffuseLightColor1 = 0.3f;
@@ -39,16 +40,19 @@ void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelNam
 	D3DXVec3Normalize(&lightDirection, &lightDirection);
 	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
 
+	//モデルの読み込み
 	char filePath[64];
 	sprintf(filePath, "Assets/modelData/%s.X", modelName);
 	m_skinModelData.LoadModelData(filePath, anim);
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
+
 	m_position = position;
 	m_rotation = rotation;
 	m_skinModel.SetShadowCasterFlg(true);
 	m_skinModel.SetShadowReceiverFlg(true);
 	D3DXVECTOR3 scale = { 1.0f, 1.0f, 1.0f };
+	//基本的に動かさないのでワールド行列を最初の一回だけ更新しておく。
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, scale);
 }
 

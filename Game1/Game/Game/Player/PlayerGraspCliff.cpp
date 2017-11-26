@@ -25,22 +25,18 @@ void PlayerGraspCliff::Init(Player* player, float height)
 	D3DXQuaternionRotationMatrix(&rotation, &matrix);
 	position.y += m_playerHeight;
 
-	m_boxCollider.Create({ 1.0f, 0.1f, 0.1f });
+	m_boxCollider.Create({ 1.0f, 0.4f, 0.4f });
 
 	m_cliffRiseDetectionBack.Init(&m_boxCollider, position, rotation);
 	m_cliffRiseDetectionLow.Init(&m_boxCollider, position, rotation);
 	m_cliffRiseDetectionUp.Init(&m_boxCollider, position, rotation);
-
-	m_cliffRiseDetectionLow.SetUserIndex(enCollisionAttr_CliffDetection);
-	m_cliffRiseDetectionUp.SetUserIndex(enCollisionAttr_CliffDetection);
-	m_cliffRiseDetectionBack.SetUserIndex(enCollisionAttr_CliffDetection);
 }
 
 void PlayerGraspCliff::Update()
 {
-	float m_upDifference = 0.4f;
+	float m_upDifference = 1.0f;
 	float m_backDifference = 1.0f;
-	float m_frontDifference = 1.7f;
+	float m_frontDifference = 1.0f;
 
 	//ÉèÅ[ÉãÉhçsóÒÇ©ÇÁâÒì]çsóÒÇà¯Ç¡í£Ç¡ÇƒÇ´ÇƒçÑëÃÇÃâÒì]Çê›íË
 	D3DXMATRIX worldMatrix = m_player->GetWorldMatrix();
@@ -48,6 +44,7 @@ void PlayerGraspCliff::Update()
 	D3DXQuaternionRotationMatrix(&rotation, &worldMatrix);
 	m_cliffRiseDetectionLow.SetRotation(rotation);
 	m_cliffRiseDetectionUp.SetRotation(rotation);
+	m_cliffRiseDetectionBack.SetRotation(rotation);
 
 	//âÒì]çsóÒÇégÇ¡ÇƒçÑëÃÇÃà íuÇí≤êÆ
 	D3DXVECTOR3 position = m_player->GetPosition();
@@ -69,12 +66,13 @@ void PlayerGraspCliff::Update()
 	m_cliffRiseDetectionBack.Execute();
 
 	//çÑëÃÇ™ìñÇΩÇ¡ÇƒÇ¢ÇƒäRÇè„Ç¡ÇƒÇ¢Ç»Ç¢éû
-	if (m_cliffRiseDetectionLow.IsHit()&&
+	if (m_cliffRiseDetectionLow.IsHit() &&
 		!m_cliffRiseDetectionUp.IsHit() &&
 		!m_cliffRiseDetectionBack.IsHit() &&
+		m_cliffRiseDetectionLow.GetHitCollisionType() != enCollisionAttr_Rotation &&
 		!m_isActive)
 	{
-		D3DXVECTOR3 collisionNormal = m_cliffRiseDetectionLow.GetHitCOllisionNormal();
+		D3DXVECTOR3 collisionNormal = m_cliffRiseDetectionLow.GetHitCollisionNormal();
 		D3DXVec3Normalize(&collisionNormal, &collisionNormal);
 		if (D3DXVec3Dot(&playerFrontNormal, &collisionNormal) < 0.0f)
 		{
@@ -87,8 +85,29 @@ void PlayerGraspCliff::Update()
 	//äRÇè„Ç¡ÇƒÇ¢ÇÈéû
 	if (m_isActive)
 	{
-		m_player->ParentChildMove();
-		bool isActive = m_player->CriffRiseEnd();
-		m_isActive = !isActive;
+		m_isActive = !m_player->CriffRiseEnd();
+	}
+}
+
+void PlayerGraspCliff::Draw()
+{
+	//çÑëÃÇï`âÊ
+	const int detectionNum = 3;
+	CollisionDetection* detection[detectionNum] =
+	{
+		&m_cliffRiseDetectionBack,
+		&m_cliffRiseDetectionUp,
+		&m_cliffRiseDetectionLow
+	};
+	for (int i = 0; i < detectionNum; i++)
+	{
+		D3DXVECTOR3 position = detection[i]->GetPosition();
+		D3DXQUATERNION rotation = detection[i]->GetRotation();
+		btTransform trans;
+		trans.setIdentity();
+		trans.setOrigin(btVector3(position.x, position.y, position.z));
+		trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+
+		//GetPhysicsWorld().DebugDraw(trans, m_boxCollider.GetBody());
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "MapChip.h"
+//バネオブジェクト
 
 class SpringObject : public MapChip
 {

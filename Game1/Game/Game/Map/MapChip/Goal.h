@@ -13,6 +13,6 @@ public:
 
 	//XVŠÖ”
 	void Update()override;
-
 private:
+
 };

@@ -37,6 +37,7 @@ public:
 		m_size = size;
 	}
 
+	//•s“§–¾“x‚ğİ’è
 	void SetAlpha(float alpha)
 	{
 		m_alpha = alpha;

@@ -95,15 +95,11 @@ void Player::Update()
 	{
 		return;
 	}
+	Move();
 	m_graspCliff.Update();
 	m_wallJump.Update();
 	m_anim.Update(1.0f / 60.0f);
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
-	if (m_graspCliff.IsActive())
-	{
-		return;
-	}
-	Move();
 	if (m_characterController.IsOnGround())
 	{
 		Rotation(m_characterController.GetMoveSpeed());
@@ -170,12 +166,12 @@ bool Player::CriffRiseEnd()
 	return true;
 }
 
-void Player::WallShear(D3DXVECTOR3 moveSpeed)
+void Player::WallShear(D3DXVECTOR3 playerDirection)
 {
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 	m_currentAnim = enAnimSetWallShear;
 	m_anim.PlayAnimation(enAnimSetWallShear);
-	Rotation(moveSpeed);
+	Rotation(playerDirection);
 }
 
 
@@ -294,7 +290,7 @@ void Player::Move()
 		m_jumpCount = 1;
 	}
 
-	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallJump())
+	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallJump() && !m_graspCliff.IsActive())
 	{
 
 		if (m_jumpCount != 0)
@@ -321,8 +317,30 @@ void Player::Move()
 
 	moveSpeed += m_stageGimmickMoveSpeed;
 	m_characterController.SetMoveSpeed(moveSpeed);
-	ParentChildMove();
-	
+	if (m_parent != nullptr)
+	{
+		D3DXVECTOR3 position;
+		D3DXVec3TransformCoord(&position, &m_localPosition, &m_parent->GetWorldMatrix());
+		m_characterController.SetPosition(position);
+		if (!m_graspCliff.IsActive())
+		{
+			m_characterController.Execute();
+		}
+		position = m_characterController.GetPosition();
+		D3DXMATRIX inverseMatrix;
+		D3DXMatrixInverse(&inverseMatrix, NULL, &m_parent->GetWorldMatrix());
+		D3DXVec3TransformCoord(&m_localPosition, &position, &inverseMatrix);
+	}
+	else
+	{
+		if (!m_graspCliff.IsActive())
+		{
+			m_characterController.Execute();
+		}
+	}
+
+	m_movement = m_characterController.GetPosition() - m_position;
+	m_position = m_characterController.GetPosition();
 	m_stageGimmickMoveSpeed = { 0.0f, 0.0f, 0.0f };
 }
 
@@ -407,28 +425,8 @@ void Player::Draw()
 	device->SetRenderState(D3DRS_ZWRITEENABLE, zwriteEnableStateBackup);
 
 	m_skinModel.Draw(&g_gameScene->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera().GetProjectionMatrix());
-	m_characterController.Draw();
+	//m_characterController.Draw();
+	m_wallJump.Draw();
+	m_graspCliff.Draw();
 
-}
-
-void Player::ParentChildMove()
-{
-	if (m_parent != nullptr)
-	{
-		D3DXVECTOR3 position;
-		D3DXVec3TransformCoord(&position, &m_localPosition, &m_parent->GetWorldMatrix());
-		m_characterController.SetPosition(position);
-		m_characterController.Execute();
-		position = m_characterController.GetPosition();
-		D3DXMATRIX inverseMatrix;
-		D3DXMatrixInverse(&inverseMatrix, NULL, &m_parent->GetWorldMatrix());
-		D3DXVec3TransformCoord(&m_localPosition, &position, &inverseMatrix);
-	}
-	else
-	{
-		m_characterController.Execute();
-	}
-
-	m_movement = m_characterController.GetPosition() - m_position;
-	m_position = m_characterController.GetPosition();
 }

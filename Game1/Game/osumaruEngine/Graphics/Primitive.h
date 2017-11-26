@@ -41,7 +41,7 @@ public:
 	//リリース
 	void Release();
 
-
+	//頂点定義を取得
 	LPDIRECT3DVERTEXDECLARATION9 GetVertexDecaration()
 	{
 		return m_pVertexDecaration;

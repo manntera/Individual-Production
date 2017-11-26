@@ -35,5 +35,5 @@ private:
 
 private:
 	typedef std::list<GameObject*> GameObjectList;	//オブジェクトのリスト
-	std::vector<GameObjectList> m_objectVector;
+	std::vector<GameObjectList> m_objectVector;		//オブジェクト
 };

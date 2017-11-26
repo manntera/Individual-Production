@@ -39,12 +39,12 @@ public:
 
 private:
 
-	bool			m_isGameOver;
-	bool			m_isGameClear;
+	bool			m_isGameOver;	//ゲームオーバーか？
+	bool			m_isGameClear;	//ゲームクリアか？
 	Map*			m_map;		//マップ
 	GameCamera*		m_camera;	//カメラ
 	Sky*			m_sky;		//スカイボックス
-	SoundSource*		m_bgm;
+	SoundSource*		m_bgm;	//BGM
 };
 
 extern GameScene *g_gameScene;

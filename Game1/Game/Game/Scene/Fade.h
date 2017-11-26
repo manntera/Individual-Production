@@ -1,4 +1,5 @@
 #pragma once
+//フェードをするクラス
 
 enum EnFadeState
 {
@@ -9,37 +10,46 @@ enum EnFadeState
 class Fade : public GameObject
 {
 public:
+	//コンストラクタ
 	Fade();
 
+	//デストラクタ
 	~Fade();
 
+	//初期化
 	void Init();
 
+	//フェードインする時に外部から呼び出す関数
 	void FadeIn();
 
+	//フェードアウトする時に外部から呼び出す関数
 	void FadeOut();
 
+	//更新関数
 	void Update()override;
 
+	//描画関数
 	void AfterDraw()override;
 
+	//フェードの状態を取得
 	EnFadeState GetCurrentState()
 	{
 		return m_state;
 	}
 
+	//フェード中か？
 	bool IsExcute()
 	{
 		return m_isExcute;
 	}
 
 private:
-	float		m_fadeTime;
-	float		m_timer;
-	Sprite		m_sprite;
-	float		m_alpha;
-	bool		m_isExcute;
-	EnFadeState	m_state;
+	float		m_fadeTime;		//フェードする時間
+	float		m_timer;		//タイマー
+	Sprite		m_sprite;		//スプライト
+	float		m_alpha;		//不透明度
+	bool		m_isExcute;		//フェード中か？
+	EnFadeState	m_state;		//フェードの状態
 };
 
 extern Fade* g_pFade;

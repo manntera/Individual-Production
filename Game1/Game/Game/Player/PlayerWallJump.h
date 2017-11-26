@@ -29,17 +29,19 @@ public:
 		return m_isWallShear;
 	}
 
-	//
+	//壁ジャンプしたか
 	bool IsWallJump()
 	{
 		return m_isWallJump;
 	}
 
+	//描画関数
 	void Draw();
 
 private:
 	BoxCollider				m_boxCollider;			//壁とのあたり判定を取るコライダー
 	CollisionDetection		m_wallDetection;		//壁とのあたり判定
+	CollisionDetection		m_groundDetection;		//地面とのあたり判定(キャラクターコントローラーのIsOnGroundを使うとメッシュなどで剛体を作っていた場合にポリゴンの切れ目に判定が入ってしまう
 	Player*					m_player;				//プレイヤー
 	bool					m_isWallShear;			//壁ずり中か？
 	bool					m_isWallJump;			//壁ジャンプ中か？
@@ -47,8 +49,6 @@ private:
 	D3DXVECTOR3				m_wallJumpDirection;	//壁ジャンプするときの方向
 	float					m_wallShearGravity;		//壁ずりの時の重力
 	float					m_defaultGravity;		//普通の時の重力
-	ParticleEmitter*		m_wallDust;
-	D3DXVECTOR3				m_position;
-	D3DXQUATERNION			m_rotation;
-	D3DXMATRIX*				m_dustPos;
+	ParticleEmitter*		m_wallDust;				//パーティクル
+	D3DXMATRIX*				m_dustPos;				//パーティクルを出す時の位置
 };

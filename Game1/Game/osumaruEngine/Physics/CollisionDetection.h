@@ -26,7 +26,7 @@ public:
 	void SetPosition(D3DXVECTOR3 position)
 	{
 		m_position = position;
-		m_rigidBody.GetBody()->getWorldTransform().setOrigin({ position.x, position.y, position.z });
+		m_rigidBody.SetPosition(position);
 	}
 
 	/*
@@ -35,7 +35,7 @@ public:
 	void SetRotation(D3DXQUATERNION rotation)
 	{
 		m_rotation = rotation;
-		m_rigidBody.GetBody()->getWorldTransform().setRotation({ m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w });
+		m_rigidBody.SetRotation(m_rotation);
 	}
 
 	//実行
@@ -59,14 +59,27 @@ public:
 		m_rigidBody.GetBody()->setUserIndex(userIndex);
 	}
 
-	D3DXVECTOR3 GetHitCOllisionNormal()
+	D3DXVECTOR3 GetHitCollisionNormal()
 	{
 		return m_hitCollisionNormal;
 	}
 
+	//回転を取得
+	D3DXQUATERNION GetRotation()
+	{
+		return m_rotation;
+	}
+
+	//座標を取得
 	D3DXVECTOR3 GetPosition()
 	{
 		return m_position;
+	}
+
+	//ヒットしたコリジョンの属性を取得
+	int GetHitCollisionType()
+	{
+		return m_collisionType;
 	}
 
 private:
@@ -75,5 +88,6 @@ private:
 	D3DXVECTOR3		m_position;			//座標
 	D3DXQUATERNION	m_rotation;			//回転
 	bool			m_isHit;			//当たってるか？
-	D3DXVECTOR3		m_hitCollisionNormal;
+	D3DXVECTOR3		m_hitCollisionNormal;	//テスト用
+	int				m_collisionType;		//ヒットしたｺﾘｼﾞｮﾝの属性
 };

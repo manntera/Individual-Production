@@ -51,9 +51,9 @@ public:
 		return m_textureResource;
 	}
 	//物理ワールドを取得。
-	PhysicsWorld* GetPhysicsWorld()
+	PhysicsWorld& GetPhysicsWorld()
 	{
-		return m_physicsWorld;
+		return *m_physicsWorld;
 	}
 
 	//シャドウマップを取得
@@ -152,4 +152,9 @@ static SoundEngine& GetSoundEngine()
 static TextureResource& GetTextureResource()
 {
 	return GetEngine().GetTextureResource();
+}
+
+static PhysicsWorld& GetPhysicsWorld()
+{
+	return GetEngine().GetPhysicsWorld();
 }

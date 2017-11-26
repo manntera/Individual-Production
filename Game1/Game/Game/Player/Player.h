@@ -53,21 +53,28 @@ public:
 	*/
 	void SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed);
 
+	/*
+	ボーンの名前検索でボーンのワード行列を取得。
+	boneName	ボーンの名前
+	ret			ボーンのワールド行列のポインタ
+	*/
 	D3DXMATRIX* FindBoneWorldMatrix(char* boneName)
 	{
 		return m_skinModelData.GetFindBoneWorldMatrix(boneName);
 	}
 
+	//ワールド行列を取得。
 	D3DXMATRIX GetWorldMatrix()
 	{
 		return m_skinModel.GetWorldMatrix();
 	}
 
-
+	//1フレームでの移動量を取得。
 	D3DXVECTOR3 GetMovement()
 	{
 		return m_movement;
 	}
+
 	/*
 	崖を上るときにPlayerGraspCliffから呼び出す関数
 	moveDirection	壁の法線
@@ -80,13 +87,24 @@ public:
 	*/
 	bool CriffRiseEnd();
 
-	void WallShear(D3DXVECTOR3 moveSpeed);
+	/*
+	壁に張り付いた時に呼び出す関数
+	playerDirection		プレイヤーの方向
+	*/
+	void WallShear(D3DXVECTOR3 playerDirection);
 
+	/*
+	壁ジャンプする時に呼び出す関数
+	jumpDirection		プレイヤーがジャンプする方向
+	*/
 	void WallJump(D3DXVECTOR3 jumpDirection);
 
+	/*
+	親子関係をつけたり外したりする関数
+	parent　		親のポインタ。親子関係を外す場合はnullptrを渡せばいい。
+	parentRotation	回転も親子関係をつけるか否か
+	*/
 	void SetParent(MapChip* parent, bool parentRotation);
-
-	void ParentChildMove();
 
 private:
 	//移動処理をする関数
@@ -116,8 +134,7 @@ private:
 	EnAnimationSet		m_currentAnim;			//現在再生してるアニメーション
 	bool				m_isJump;				//ジャンプしてるか？
 	MapChip*			m_parent;				//親
-	bool				m_isParentRotation;
-	float				m_moveSpeed;
-	float				m_acceleration;
-	float				m_gravity;
+	bool				m_isParentRotation;		//回転の親子関係をつけているか
+	float				m_moveSpeed;			//移動速度
+	float				m_acceleration;			//加速度
 };

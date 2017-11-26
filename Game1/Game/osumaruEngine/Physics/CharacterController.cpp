@@ -19,7 +19,7 @@ struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 	{
 		if (convexResult.m_hitCollisionObject == me ||
 			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character ||
-			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_CliffDetection)
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Detection)
 		{
 			//自分に衝突した。orキャラクタ属性のコリジョンと衝突した。
 			return 0.0f;
@@ -69,7 +69,7 @@ struct SweepResultCeiling : public btCollisionWorld::ConvexResultCallback
 	{
 		if (convexResult.m_hitCollisionObject == me ||
 			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character ||
-			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_CliffDetection)
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Detection)
 		{
 			//自分に衝突した。orキャラクタ属性のコリジョンと衝突した。
 			return 0.0f;
@@ -119,7 +119,7 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 	virtual btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 	{
 		if (convexResult.m_hitCollisionObject == me ||
-			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_CliffDetection)
+			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Detection)
 		{
 			//自分に衝突した。or地面に衝突した。
 			return 0.0f;
@@ -191,9 +191,8 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 	rbInfo.collider = &m_collider;
 	rbInfo.mass = 0.0f;
 	m_rigidBody.Create(rbInfo);
-	btTransform& trans = m_rigidBody.GetBody()->getWorldTransform();
 	//剛体の位置を更新。
-	trans.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+	m_rigidBody.SetPosition(m_position);
 	//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
 	m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
@@ -201,7 +200,7 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 
 void CharacterController::Execute()
 {
-	PhysicsWorld* physicsWorld = GetEngine().GetPhysicsWorld();
+	PhysicsWorld& physicsWorld = GetPhysicsWorld();
 	//速度に重力加速度を加える。
 	m_moveSpeed.y += m_gravity * (1.0f / 60.0f);
 	//次の移動先となる座標を計算する。
@@ -248,7 +247,7 @@ void CharacterController::Execute()
 			callback.me = m_rigidBody.GetBody();
 			callback.startPos = posTmp;
 			//衝突検出。
-			physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+			physicsWorld.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 			if (callback.isHit)
 			{
 				wallCollisionObject = callback.hitObject;
@@ -352,7 +351,7 @@ void CharacterController::Execute()
 		//衝突検出。
 		if (fabsf(addPosY.y) > FLT_EPSILON && (start.getOrigin().y() - end.getOrigin().y() != 0.0f))
 		{
-			physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+			physicsWorld.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 		}
 		if (callback.isHit)
 		{
@@ -406,7 +405,7 @@ void CharacterController::Execute()
 		//衝突検出。
 		if (fabsf(addPosY.y) > FLT_EPSILON && (start.getOrigin().y() - end.getOrigin().y() != 0.0f))
 		{
-			physicsWorld->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+			physicsWorld.ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 		}
 		if (callback.isHit)
 		{
@@ -420,9 +419,8 @@ void CharacterController::Execute()
 	btRigidBody* btBody = m_rigidBody.GetBody();
 	//剛体を動かす。
 	btBody->setActivationState(DISABLE_DEACTIVATION);
-	btTransform& trans = btBody->getWorldTransform();
 	//剛体の一を更新
-	trans.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+	m_rigidBody.SetPosition(m_position);
 	//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 	StaticExecute();
 }
@@ -453,7 +451,7 @@ void CharacterController::StaticExecute()
 		callback.me = m_rigidBody.GetBody();
 		callback.startPos = startPos;
 		callback.ray = D3DXVECTOR3(end.getOrigin() - start.getOrigin());
-		GetEngine().GetPhysicsWorld()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
+		GetPhysicsWorld().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 		float radius = m_radius;
 		if (callback.isHit && callback.isRay)
 		{
@@ -504,11 +502,8 @@ void CharacterController::StaticExecute()
 		}*/
 
 	}
-	btRigidBody* btBody = m_rigidBody.GetBody();
-	//剛体を動かす。
-	btTransform& trans = btBody->getWorldTransform();
 	//剛体の一を更新
-	trans.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+	m_rigidBody.SetPosition(m_position);
 }
 
 void CharacterController::RemovedRigidBody()
@@ -521,5 +516,5 @@ void CharacterController::Draw()
 	btTransform transform = m_rigidBody.GetBody()->getWorldTransform();
 	btVector3& position = transform.getOrigin();
 	position.setY(position.y() + m_radius + m_height * 0.5f);
-	GetEngine().GetPhysicsWorld()->DebugDraw(transform, m_collider.GetBody());
+	GetPhysicsWorld().DebugDraw(transform, m_collider.GetBody());
 }

@@ -30,6 +30,7 @@ void SpringObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* mod
 void SpringObject::Update()
 {
 	MapChip::Update();
+	//プレイヤーが乗ったので移動速度を与えてプレイヤーを飛ばす
 	if (m_rigidBody.GetBody()->getPlayerCollisionFlg())
 	{
 		D3DXQUATERNION rot = m_rigidBody.GetBody()->getWorldTransform().getRotation();
@@ -43,10 +44,6 @@ void SpringObject::Update()
 		D3DXVec3Normalize(&springDirection, &springDirection);
 		springDirection *= 2.0f;
 		g_gameScene->GetPlayer()->SetStageGimmickMoveSpeed(springDirection);
-		m_anim.PlayAnimation(1);
-	}
-	if (GetPad().IsTriggerButton(enButtonY))
-	{
 		m_anim.PlayAnimation(1);
 	}
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);

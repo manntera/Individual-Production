@@ -26,8 +26,8 @@ void PlayerWallJump::Init(Player* player, CharacterController* characterControll
 	m_player = player;
 	m_characterController = characterController;
 
-	m_boxCollider.Create({ 0.1f, 0.1f, 0.1f });
-	m_position = m_player->GetPosition();
+	m_boxCollider.Create({ 0.3f, 0.3f, 0.3f });
+	D3DXVECTOR3 position = m_player->GetPosition();
 	D3DXMATRIX worldMatrix = m_player->GetWorldMatrix();
 	D3DXVECTOR3 playerFront;
 	playerFront.x = worldMatrix.m[2][0];
@@ -35,10 +35,12 @@ void PlayerWallJump::Init(Player* player, CharacterController* characterControll
 	playerFront.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&playerFront, &playerFront);
 	playerFront *= 1.3f;
-	m_position += playerFront;
-	D3DXQuaternionRotationMatrix(&m_rotation, &worldMatrix);
-	m_wallDetection.Init(&m_boxCollider, m_position, m_rotation);
-
+	position += playerFront;
+	D3DXQUATERNION rotation;
+	D3DXQuaternionRotationMatrix(&rotation, &worldMatrix);
+	m_wallDetection.Init(&m_boxCollider, position, rotation);
+	position = m_player->GetPosition();
+	m_groundDetection.Init(&m_boxCollider, position, rotation);
 	m_defaultGravity = m_characterController->GetGravity();
 	m_dustPos = m_player->FindBoneWorldMatrix("Character1_RightToeBase");
 }
@@ -46,29 +48,35 @@ void PlayerWallJump::Init(Player* player, CharacterController* characterControll
 void PlayerWallJump::Update()
 {
 	m_isWallJump = false;
-	m_wallDetection.Execute();
-	m_position = m_player->GetPosition();
+	D3DXVECTOR3 position = m_player->GetPosition();
 	D3DXMATRIX worldMatrix = m_player->GetWorldMatrix();
 	D3DXVECTOR3 playerFront;
 	playerFront.x = worldMatrix.m[2][0];
 	playerFront.y = worldMatrix.m[2][1];
 	playerFront.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&playerFront, &playerFront);
-	playerFront *= 2.9f;
-	m_position += playerFront;
-	D3DXQuaternionRotationMatrix(&m_rotation, &worldMatrix);
-	m_wallDetection.SetPosition(m_position);
-	m_wallDetection.SetRotation(m_rotation);
+	playerFront *= 2.7f;
+	position += playerFront;
+	D3DXQUATERNION rotation;
+	D3DXQuaternionRotationMatrix(&rotation, &worldMatrix);
+	m_wallDetection.SetPosition(position);
+	m_wallDetection.SetRotation(rotation);
+	position = m_player->GetPosition();
+	position.y -= 0.2f;
+	m_groundDetection.SetPosition(position);
+	m_groundDetection.SetRotation(rotation);
+	//壁に張り付いてない時
 	if (!m_isWallShear)
 	{
 		D3DXVECTOR3 movement = m_player->GetMovement();
 		movement.y = 0.0f;
-		m_characterController->SetGravity(m_defaultGravity);
 
+		//ジャンプ中で壁に当たって移動速度がある程度あるとき
 		if (m_characterController->IsJump() && 
 			m_characterController->GetWallCollisionObject() != nullptr &&
 			0.12f < D3DXVec3Length(&movement))
 		{
+			//壁の法線とプレイヤーの向きで内積を計算
 			D3DXVECTOR3 wallNormal = m_characterController->GetWallNormal();
 			wallNormal.y = 0.0f;
 			D3DXVec3Normalize(&wallNormal, &wallNormal);
@@ -78,16 +86,17 @@ void PlayerWallJump::Update()
 			playerDirection *= -1.0f;
 			float dot = D3DXVec3Dot(&playerDirection, &wallNormal);
 			float rad = 30.0f / 180.0f * cPI;
+			//壁に対して入射角がある程度あった場合壁に張り付く
 			if (sin(rad) < dot)
 			{
 				m_isWallShear = true;
+				m_characterController->SetGravity(m_wallShearGravity);
 				playerDirection *= -1.0f;
 				wallNormal *= dot * 2.0f;
 				playerDirection += wallNormal;
 				m_wallJumpDirection = playerDirection;
 				D3DXVec3Normalize(&m_wallJumpDirection, &m_wallJumpDirection);
 				m_player->WallShear(-wallNormal);
-				D3DXVECTOR3 position;
 				position.x = m_dustPos->m[3][0];
 				position.y = m_dustPos->m[3][1];
 				position.z = m_dustPos->m[3][2];
@@ -106,38 +115,35 @@ void PlayerWallJump::Update()
 			}
 		}
 	}
-	else
+	else//壁に張り付いてる時
 	{
 
-		m_characterController->SetGravity(m_wallShearGravity);
-		m_wallDetection.Execute();
-		m_isWallShear = m_wallDetection.IsHit();
-		D3DXVECTOR3 position;
 		position.x = m_dustPos->m[3][0];
 		position.y = m_dustPos->m[3][1];
 		position.z = m_dustPos->m[3][2];
 		m_wallDust->SetPosition(position);
+		m_wallDetection.Execute();
+		m_groundDetection.Execute();
+		m_isWallShear = m_wallDetection.IsHit();
+
 		if (GetPad().IsTriggerButton(enButtonA))
 		{
-			m_characterController->SetGravity(m_defaultGravity);
 			m_player->WallJump(m_wallJumpDirection);
 			m_isWallShear = false;
 			m_isWallJump = true;
-			Delete(m_wallDust);
-			m_wallDust = nullptr;
+		}
+		if (m_wallDust != nullptr && m_isWallShear &&
+			m_groundDetection.IsHit() &&
+			m_groundDetection.GetHitCollisionType() != enCollisionAttr_Character)
+		{
+			m_isWallShear = false;
 		}
 
 		if (m_wallDust != nullptr && !m_isWallShear)
 		{
 			Delete(m_wallDust);
 			m_wallDust = nullptr;
-		}
-
-		if (m_wallDust != nullptr && !m_isWallShear && m_characterController->IsOnGround())
-		{
-			Delete(m_wallDust);
-			m_wallDust = nullptr;
-			m_isWallShear = false;
+			m_characterController->SetGravity(m_defaultGravity);
 		}
 
 	}
@@ -146,10 +152,13 @@ void PlayerWallJump::Update()
 
 void PlayerWallJump::Draw()
 {
-	//btTransform trans;
-	//trans.setIdentity();
-	//trans.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
-	//trans.setRotation(btQuaternion(m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w));
+	//剛体を描画
+	D3DXVECTOR3 position = m_wallDetection.GetPosition();
+	D3DXQUATERNION rotation = m_wallDetection.GetRotation();
+	btTransform trans;
+	trans.setIdentity();
+	trans.setOrigin(btVector3(position.x, position.y, position.z));
+	trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 
-	//GetEngine().GetPhysicsWorld()->DebugDraw(trans, m_boxCollider.GetBody());
+	GetPhysicsWorld().DebugDraw(trans, m_boxCollider.GetBody());
 }

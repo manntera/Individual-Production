@@ -52,6 +52,16 @@ public:
 		return m_rigidBody;
 	}
 
+	void SetPosition(D3DXVECTOR3 position)
+	{
+		m_rigidBody->getWorldTransform().setOrigin(btVector3(position.x, position.y, position.z));
+	}
+
+	void SetRotation(D3DXQUATERNION rotation)
+	{
+		m_rigidBody->getWorldTransform().setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+	}
+
 private:
 	btDefaultMotionState*	m_myMotionState;		//モーションステイト
 	btRigidBody*			m_rigidBody;			//剛体

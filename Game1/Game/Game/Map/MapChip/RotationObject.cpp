@@ -22,7 +22,7 @@ void RotationObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* m
 
 	//剛体を作成
 	m_rigidBody.Create(rInfo);
-	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
+	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Rotation);
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
 
 	D3DXVECTOR3 axis;
@@ -39,11 +39,13 @@ void RotationObject::Update()
 {
 	MapChip::Update();
 	
+	//プレイヤーが上に乗ったので親子関係をつける
 	if (!m_isChild && m_rigidBody.GetBody()->getPlayerCollisionFlg())
 	{
 		g_gameScene->GetPlayer()->SetParent(this, false);
 		m_isChild = true;
 	}
+	//プレイヤーが離れたので親子関係を外す
 	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionFlg())
 	{
 		g_gameScene->GetPlayer()->SetParent(nullptr, false);
@@ -51,7 +53,7 @@ void RotationObject::Update()
 	}
 	D3DXQuaternionMultiply(&m_rotation, &m_rotation, &m_multi);
 
-	m_rigidBody.GetBody()->getWorldTransform().setRotation(btQuaternion(m_rotation.x, m_rotation.y, m_rotation.z, m_rotation.w));
+	m_rigidBody.SetRotation(m_rotation);
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }
@@ -59,5 +61,5 @@ void RotationObject::Update()
 void RotationObject::Draw()
 {
 	MapChip::Draw();
-	GetEngine().GetPhysicsWorld()->DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
 }

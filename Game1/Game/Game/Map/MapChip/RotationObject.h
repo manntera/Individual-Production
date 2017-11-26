@@ -1,5 +1,6 @@
 #pragma once
 #include "MapChip.h"
+//回転オブジェクト
 
 class RotationObject : public MapChip
 {
@@ -17,10 +18,11 @@ public:
 	//更新関数
 	void Update()override;
 
+	//描画関数
 	void Draw();
 private:
 	RigidBody		m_rigidBody;		//剛体
 	MeshCollider	m_meshCollider;		//コライダー
 	bool			m_isChild;			//子供がいるかどうか
-	D3DXQUATERNION	m_multi;
+	D3DXQUATERNION	m_multi;			//回転量
 };

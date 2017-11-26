@@ -28,6 +28,9 @@ public:
 		return m_isActive;
 	}
 
+	//•`‰æŠÖ”
+	void Draw();
+
 private:	
 	CollisionDetection	m_cliffRiseDetectionLow;	//ŠR‚ğ‚Â‚©‚ñ‚¾‚©‚Ì‚ ‚½‚è”»’è
 	CollisionDetection	m_cliffRiseDetectionUp;		//ŠR‚ğ‚Â‚©‚ñ‚¾‚©‚Ì‚ ‚½‚è”»’è

@@ -7,7 +7,8 @@ void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* 
 
 	//メッシュコライダーからAABBを作成
 	m_meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
-
+	D3DXVECTOR3 meshAabbMax = m_meshCollider.GetAabbMax();
+	m_boxCollider.Create(btVector3(meshAabbMax.x, meshAabbMax.y, meshAabbMax.z));
 	RigidBodyInfo rInfo;
 	rInfo.collider = &m_meshCollider;
 	rInfo.mass = 0.0f;
@@ -34,5 +35,5 @@ void StaticMapObject::Update()
 void StaticMapObject::Draw()
 {
 	MapChip::Draw();
-	GetEngine().GetPhysicsWorld()->DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
 }

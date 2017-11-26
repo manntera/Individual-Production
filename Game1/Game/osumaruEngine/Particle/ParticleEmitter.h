@@ -15,25 +15,35 @@ struct SParticleEmittInfo
 	D3DXVECTOR3 emitterPosition;//エミッターの座標
 };
 
+//パーティクルエミッター
 class ParticleEmitter : public GameObject
 {
 public:
+	//コンストラクタ
 	ParticleEmitter();
 
+	//デストラクタ
 	~ParticleEmitter();
 
+	/*
+	エミッターの初期化
+	info　パーティクルとエミッターの初期化情報
+	camera	ビルボード処理に使うカメラ
+	*/
 	void Init(SParticleEmittInfo info, Camera* camera);
 
+	//更新関数
 	void Update()override;
 
+	//座標を設定。
 	void SetPosition(D3DXVECTOR3 position)
 	{
 		m_info.emitterPosition = position;
 	}
 
 private:
-	Camera*					m_camera;
-	SParticleEmittInfo		m_info;
-	float					m_lifeTimer;
-	float					m_intervalTime;
+	Camera*					m_camera;		//カメラ
+	SParticleEmittInfo		m_info;			//パーティクルとエミッターの初期化情報
+	float					m_lifeTimer;	//寿命
+	float					m_intervalTime;	//パーティクルを出すインターバルタイム
 };

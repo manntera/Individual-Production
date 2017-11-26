@@ -42,7 +42,7 @@ void GameObjectManager::Execute()
 			object->Drawer();
 		}
 	}
-	GetEngine().GetPhysicsWorld()->Draw();
+	GetPhysicsWorld().Draw();
 	for (GameObjectList& objList : m_objectVector)
 	{
 		for (GameObject* object : objList)
