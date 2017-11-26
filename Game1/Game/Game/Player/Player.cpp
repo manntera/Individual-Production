@@ -16,6 +16,9 @@ Player::Player()
 	m_parent = nullptr;
 	m_moveSpeed = 0.0f;
 	m_acceleration = 0.0f;
+	m_rotationCount = 0;
+	m_rotationFrameNum = 3;
+	m_frameAngle = 0.0f;
 }
 
 Player::~Player()
@@ -25,12 +28,6 @@ Player::~Player()
 
 void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 {
-	//float ambient = 0.6f;
-	//float diffuseColor = 0.3f;
-	//m_light.SetAmbiemtLight({ ambient, ambient, ambient, 1.0f });
-	//m_light.SetDiffuseLightColor(0, { diffuseColor, diffuseColor, diffuseColor, 1.0f });
-	//m_light.SetDiffuseLightDirection(0, { 0.707f, 0.0f, 0.707f, 1.0f });
-
 	float ambientLightColor = 0.6f;
 	float diffuseLightColor0 = 0.3f;
 	float diffuseLightColor1 = 0.3f;
@@ -82,7 +79,6 @@ void Player::Start()
 	m_anim.SetAnimationLoopFlg(enAnimSetJump, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetCliffRise, false);
 	m_anim.PlayAnimation(enAnimSetWait);
-	//sprite.Init("Assets/sprite/Texture.png");
 	m_graspCliff.Init(this, 6.0f);
 	m_wallJump.Init(this, &m_characterController);
 	m_isParentRotation = false;
@@ -102,7 +98,7 @@ void Player::Update()
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 	if (m_characterController.IsOnGround())
 	{
-		Rotation(m_characterController.GetMoveSpeed());
+		DelayRotation(m_characterController.GetMoveSpeed());
 	}
 	if (m_position.y < -20.0f)
 	{
@@ -142,6 +138,9 @@ void Player::CliffRiseStart(D3DXVECTOR3 moveDirection)
 	//ŠR‚ðã‚éƒAƒjƒ[ƒVƒ‡ƒ“‚ðÄ¶
 	m_anim.PlayAnimation(enAnimSetCliffRise);
 	moveDirection.y = 0.0f;
+	/*for (int i = 0; i < m_rotationFrameNum; i++)
+	{
+	}*/
 	Rotation(moveDirection);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 }
@@ -349,7 +348,7 @@ void Player::SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed)
 	m_stageGimmickMoveSpeed += moveSpeed * 60.0f;
 }
 
-void Player::Rotation(D3DXVECTOR3 rotationDirection)
+void Player::DelayRotation(D3DXVECTOR3 rotationDirection)
 {
 	D3DXVECTOR3 moveDir = rotationDirection;
 	moveDir.y = 0.0f;
@@ -359,6 +358,7 @@ void Player::Rotation(D3DXVECTOR3 rotationDirection)
 	//ƒ‚ƒfƒ‹‚ð‰ñ“]
 	if (0.0f < D3DXVec3Length(&moveDir))
 	{
+		m_rotationCount = 0;
 		D3DXMATRIX worldMat = m_skinModel.GetWorldMatrix();
 		D3DXVECTOR3 front;
 
@@ -384,9 +384,64 @@ void Player::Rotation(D3DXVECTOR3 rotationDirection)
 		{
 			rad = -rad;
 		}
-
-		D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
+		m_frameAngle = rad / m_rotationFrameNum;
 	}
+	if (m_rotationCount < m_rotationFrameNum)
+	{
+		D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), m_frameAngle);
+		m_rotationCount++;
+	}
+
+	if (m_parent != nullptr && m_isParentRotation)
+	{
+		D3DXQuaternionMultiply(&m_localRotation, &m_localRotation, &multi);
+		D3DXQuaternionRotationMatrix(&multi, &m_parent->GetWorldMatrix());
+		D3DXQuaternionMultiply(&m_rotation, &m_localRotation, &multi);
+	}
+	else
+	{
+		D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
+	}
+}
+
+void Player::Rotation(D3DXVECTOR3 rotationDirection)
+{
+	D3DXVECTOR3 moveDir = rotationDirection;
+	moveDir.y = 0.0f;
+	if (D3DXVec3Length(&moveDir) < 0.001f)
+	{
+		return;
+	}
+	D3DXQUATERNION multi;
+	D3DXQuaternionIdentity(&multi);
+	//ƒ‚ƒfƒ‹‚ð‰ñ“]
+	D3DXMATRIX worldMat = m_skinModel.GetWorldMatrix();
+	D3DXVECTOR3 front;
+
+	front.x = worldMat.m[2][0];
+	front.y = 0.0f;
+	front.z = worldMat.m[2][2];
+	D3DXVec3Normalize(&moveDir, &moveDir);
+	D3DXVec3Normalize(&front, &front);
+
+	float rad = D3DXVec3Dot(&front, &moveDir);
+	if (1.0f < rad)
+	{
+		rad = 1.0f;
+	}
+	if (rad < -1.0f)
+	{
+		rad = 1.0f;
+	}
+	rad = acosf(rad);
+	D3DXVECTOR3 cross;
+	D3DXVec3Cross(&cross, &front, &moveDir);
+	if (cross.y < 0.0f)
+	{
+		rad = -rad;
+	}
+
+	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
 	if (m_parent != nullptr && m_isParentRotation)
 	{
 		D3DXQuaternionMultiply(&m_localRotation, &m_localRotation, &multi);

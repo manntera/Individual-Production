@@ -18,9 +18,9 @@ struct ContactSingle : public btCollisionWorld::ContactResultCallback
 		quaternion = D3DXQUATERNION(colObj1Wrap->getCollisionObject()->getWorldTransform().getRotation());
 		D3DXMATRIX rot;
 		D3DXMatrixRotationQuaternion(&rot, &quaternion);
-		hitObjectNormal.x = rot.m[1][0];
-		hitObjectNormal.y = rot.m[1][1];
-		hitObjectNormal.z = rot.m[1][2];
+		hitObjectNormal.x = cp.m_normalWorldOnB.x();
+		hitObjectNormal.y = cp.m_normalWorldOnB.y();
+		hitObjectNormal.z = cp.m_normalWorldOnB.z();
 		const_cast<btCollisionObject*>(colObj1Wrap->getCollisionObject())->setPlayerCollisionFlg(true);
 		collisionType = colObj1Wrap->getCollisionObject()->getUserIndex();
 		return 0.0f;

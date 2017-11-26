@@ -47,7 +47,7 @@ void GameCamera::Update()
 	D3DXMATRIX rotMatrix;
 	D3DXMatrixRotationQuaternion(&rotMatrix, &m_rotation);
 	D3DXVECTOR3 position = {0.0f, 0.0f, 0.0f};
-	position.z -= 50.0f;
+	position.z -= 25.0f;
 	D3DXVec3TransformCoord(&position, &position, &rotMatrix);
 	Player*	player = g_gameScene->GetPlayer();
 	D3DXMATRIX* playerWorldMat = player->FindBoneWorldMatrix("center");

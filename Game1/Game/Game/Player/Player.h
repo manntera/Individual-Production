@@ -106,9 +106,17 @@ public:
 	*/
 	void SetParent(MapChip* parent, bool parentRotation);
 
+	int GetRotationFrameNum()
+	{
+		return m_rotationFrameNum;
+	}
+
 private:
 	//移動処理をする関数
 	void Move();
+
+	//モデルを移動方向に合わせてディレイをかけながら回転させる関数
+	void DelayRotation(D3DXVECTOR3 rotationDirection);
 
 	//モデルを移動方向に合わせて回転させる関数
 	void Rotation(D3DXVECTOR3 rotationDirection);
@@ -137,4 +145,7 @@ private:
 	bool				m_isParentRotation;		//回転の親子関係をつけているか
 	float				m_moveSpeed;			//移動速度
 	float				m_acceleration;			//加速度
+	int					m_rotationFrameNum;		//
+	float				m_frameAngle;
+	int					m_rotationCount;
 };
