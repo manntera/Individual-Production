@@ -55,16 +55,19 @@ void PlayerWallJump::Update()
 	playerFront.y = worldMatrix.m[2][1];
 	playerFront.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&playerFront, &playerFront);
-	playerFront *= 2.7f;
+	playerFront *= 2.00f;
 	position += playerFront;
 	D3DXQUATERNION rotation;
 	D3DXQuaternionRotationMatrix(&rotation, &worldMatrix);
+	position.y += 3.0f;
 	m_wallDetection.SetPosition(position);
 	m_wallDetection.SetRotation(rotation);
 	position = m_player->GetPosition();
 	position.y -= 0.2f;
 	m_groundDetection.SetPosition(position);
 	m_groundDetection.SetRotation(rotation);
+
+	m_wallDetection.Execute();
 	//壁に張り付いてない時
 	if (!m_isWallShear)
 	{
@@ -73,8 +76,8 @@ void PlayerWallJump::Update()
 
 		//ジャンプ中で壁に当たって移動速度がある程度あるとき
 		if (m_characterController->IsJump() && 
-			m_characterController->GetWallCollisionObject() != nullptr &&
-			0.12f < D3DXVec3Length(&movement))
+			m_characterController->GetWallCollisionObject() != nullptr/* &&
+			0.12f < D3DXVec3Length(&movement)*/)
 		{
 			//壁の法線とプレイヤーの向きで内積を計算
 			D3DXVECTOR3 wallNormal = m_characterController->GetWallNormal();
@@ -152,13 +155,23 @@ void PlayerWallJump::Update()
 
 void PlayerWallJump::Draw()
 {
-	//剛体を描画
-	D3DXVECTOR3 position = m_wallDetection.GetPosition();
-	D3DXQUATERNION rotation = m_wallDetection.GetRotation();
-	btTransform trans;
-	trans.setIdentity();
-	trans.setOrigin(btVector3(position.x, position.y, position.z));
-	trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
+	const int detectionNum = 2;
+	CollisionDetection* detection[detectionNum] =
+	{
+		&m_groundDetection,
+		&m_wallDetection,
+		//&m_wallDetection2,
+	};
+	for (int i = 0; i < detectionNum; i++)
+	{
+		//剛体を描画
+		D3DXVECTOR3 position = detection[i]->GetPosition();
+		D3DXQUATERNION rotation = detection[i]->GetRotation();
+		btTransform trans;
+		trans.setIdentity();
+		trans.setOrigin(btVector3(position.x, position.y, position.z));
+		trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 
-	GetPhysicsWorld().DebugDraw(trans, m_boxCollider.GetBody());
+		GetPhysicsWorld().DebugDraw(trans, m_boxCollider.GetBody());
+	}
 }

@@ -92,7 +92,7 @@ void Player::Update()
 		return;
 	}
 	Move();
-	m_graspCliff.Update();
+	//m_graspCliff.Update();
 	m_wallJump.Update();
 	m_anim.Update(1.0f / 60.0f);
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
@@ -480,7 +480,7 @@ void Player::Draw()
 	device->SetRenderState(D3DRS_ZWRITEENABLE, zwriteEnableStateBackup);
 
 	m_skinModel.Draw(&g_gameScene->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera().GetProjectionMatrix());
-	//m_characterController.Draw();
+	m_characterController.Draw();
 	m_wallJump.Draw();
 	m_graspCliff.Draw();
 
