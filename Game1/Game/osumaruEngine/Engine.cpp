@@ -17,13 +17,13 @@ Engine::Engine()
 {
 	m_pD3D = NULL;
 	m_pD3DDevice = NULL;
+	m_effectManager = nullptr;
+	m_physicsWorld = nullptr;
 }
 
 Engine::~Engine()
 {
 	Release();
-	delete m_effectManager;
-	delete m_physicsWorld;
 }
 
 
@@ -76,6 +76,8 @@ void Engine::InitD3D(HINSTANCE& hInst)
 	m_shadowMap.SetLightCameraUp({ 1.0f, 0.0f, 0.0f });
 	m_objectManager.Init();
 	m_soundEngine.Init();
+	m_renderTarget.Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, D3DFMT_A8R8G8B8, D3DFMT_D16);
+	m_postEffect.Init();
 	// show the window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 	UpdateWindow(hWnd);
@@ -96,7 +98,9 @@ void Engine::GameLoop()
 		}
 		else
 		{
-			m_objectManager.Execute();
+
+			m_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+			m_objectManager.Execute(m_postEffect);
 			m_physicsWorld->Update();
 			m_shadowMap.Update();
 			m_pad.Update();

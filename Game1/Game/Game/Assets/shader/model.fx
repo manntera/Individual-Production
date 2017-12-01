@@ -14,11 +14,10 @@ float4x4	g_viewMatrixRotInv;		//カメラの回転行列
 float3		g_cameraPos;			//スペキュラ用のカメラ視点
 float4x4	g_invWorldMatrix;
 float4x4	g_lightViewProjMatrix;
-bool	g_flg;
+float3		g_lightCameraDir;
 
 bool	g_isShadowMapCaster;
 bool	g_isShadowMapReceiver;
-
 bool	g_isHasNormalMap;			//法線マップ保持している？
 bool	g_isHasSpecularMap;			//法線マップ保持している？
 texture g_diffuseTexture;			//ディフューズテクスチャ
@@ -229,18 +228,22 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
 		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
 		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f) {
-			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
-			uv += 1.0f;
-			uv *= 0.5f;
-			uv.y = 1.0f - uv.y;
-			float4 shadow = tex2D(g_shadowMapSampler, uv);
-			//ライトカメラから見た深度値を計算
-			float depth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
-			depth = min(1.0f, depth);
-			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-			if (shadow.x < depth - 0.035f)
+			//float dotValue = dot(normal, g_lightCameraDir);
+			//if (dotValue < 0.0f)
 			{
-				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+				uv += 1.0f;
+				uv *= 0.5f;
+				uv.y = 1.0f - uv.y;
+				float4 shadow = tex2D(g_shadowMapSampler, uv);
+				//ライトカメラから見た深度値を計算
+				float depth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+				depth = min(1.0f, depth);
+				//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+				if (shadow.x < depth - 0.035f)
+				{
+					lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				}
 			}
 		}
 	}

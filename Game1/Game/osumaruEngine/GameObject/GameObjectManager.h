@@ -1,5 +1,6 @@
 #pragma once
 class GameObject;
+#include "../Graphics/PostEffect/PostEffect.h"
 
 const int priorityMax = 16;
 class GameObjectManager : Uncopyable
@@ -10,7 +11,7 @@ public:
 	void Init();
 
 	//ゲームの1ループを実行する関数
-	void Execute();
+	void Execute(PostEffect& postEffect);
 
 	//ゲームのオブジェクトを消去する関数
 	void Delete(GameObject* deleteObject);

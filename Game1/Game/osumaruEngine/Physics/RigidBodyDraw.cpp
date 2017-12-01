@@ -23,8 +23,8 @@ void RigidBodyDraw::Init()
 	WORD indexBuffer[vertexNum];
 	memset(vertexBuffer, 0, sizeof(vertexBuffer)); 
 	memset(indexBuffer, 0, sizeof(indexBuffer));
-	m_primitive.Create(vertex_PC, vertexBuffer, vertexNum, sizeof(VERTEX_PC), indexBuffer, vertexNum);
-	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/shader/rigidBodyDraw.fx");
+	m_primitive.Create(vertex_PC, vertexBuffer, vertexNum, sizeof(VERTEX_PC), indexBuffer, vertexNum, Primitive::enIndex16, Primitive::enTypeLineList);
+	m_pEffect = GetEffectManager().LoadEffect("Assets/shader/rigidBodyDraw.fx");
 }
 
 void RigidBodyDraw::drawLine(const btVector3 &from, const btVector3 &to, const btVector3& color)
@@ -86,7 +86,7 @@ void RigidBodyDraw::Draw(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 	pD3DDevice->SetVertexDeclaration(m_primitive.GetVertexDecaration());
 	pD3DDevice->SetStreamSource(0, m_primitive.GetVertexBuffer(), 0, sizeof(VERTEX_PC));
 	pD3DDevice->SetIndices(m_primitive.GetIndexBuffer());
-	pD3DDevice->DrawIndexedPrimitive(D3DPT_LINELIST, 0, 0, vertexNum, 0, m_count);
+	pD3DDevice->DrawIndexedPrimitive(m_primitive.GetPrimitiveType(), 0, 0, vertexNum, 0, m_count);
 	m_pEffect->EndPass();
 	m_pEffect->End();
 

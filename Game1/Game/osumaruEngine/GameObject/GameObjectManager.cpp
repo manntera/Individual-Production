@@ -9,7 +9,7 @@ void GameObjectManager::Init()
 	m_objectVector.resize(priorityMax);
 }
 
-void GameObjectManager::Execute()
+void GameObjectManager::Execute(PostEffect& postEffect)
 {
 	LPDIRECT3DDEVICE9 pDevice = GetEngine().GetDevice();
 	//初期化
@@ -32,8 +32,14 @@ void GameObjectManager::Execute()
 	GetShadowMap().Draw();
 	//描画
 	// 画面をクリア。
+	LPDIRECT3DSURFACE9 renderTargetBackup;
+	LPDIRECT3DSURFACE9 depthStencilBackup;
+	pDevice->GetRenderTarget(0, &renderTargetBackup);
+	pDevice->GetDepthStencilSurface(&depthStencilBackup);
+	pDevice->SetRenderTarget(0, GetMainRenderTarget().GetRenderTarget());
+	pDevice->SetDepthStencilSurface(GetMainRenderTarget().GetDepthStencilBuffer());
 	pDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
-	//シーンの描画開始。
+	////シーンの描画開始。
 	pDevice->BeginScene();
 	for (GameObjectList& objList : m_objectVector)
 	{
@@ -42,7 +48,15 @@ void GameObjectManager::Execute()
 			object->Drawer();
 		}
 	}
-	GetPhysicsWorld().Draw();
+	pDevice->EndScene();
+	pDevice->SetRenderTarget(0, renderTargetBackup);
+	pDevice->SetDepthStencilSurface(depthStencilBackup);
+	renderTargetBackup->Release();
+	depthStencilBackup->Release();
+	pDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+	pDevice->BeginScene();
+	postEffect.Draw();
+	//GetPhysicsWorld().Draw();
 	for (GameObjectList& objList : m_objectVector)
 	{
 		for (GameObject* object : objList)
@@ -50,7 +64,6 @@ void GameObjectManager::Execute()
 			object->AfterDrawer();
 		}
 	}
-
 	// シーンの描画終了。
 	pDevice->EndScene();
 	// バックバッファとフロントバッファを入れ替える。

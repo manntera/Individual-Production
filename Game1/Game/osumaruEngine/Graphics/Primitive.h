@@ -1,9 +1,22 @@
 #pragma once
 #include "Texture.h"
 
+
 class Primitive : Uncopyable
 {
 public:
+	enum EnFormatIndex
+	{
+		enIndex16,
+		enIndex32,
+	};
+
+	enum EnPrimitiveType
+	{
+		enTypeLineList,
+		enTypeTriangleStrip,
+		enTypeTriangleList,
+	};
 
 	//コンストラクタ
 	Primitive();
@@ -19,8 +32,10 @@ public:
 	vertexStride		頂点データのサイズ
 	indexBuffer			インデックスバッファ
 	indexNum			インデックス数
+	indexFormat			インデックスバッファのフォーマット
+	primitiveType		プリミティブの種類
 	*/
-	void Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum,  int vertexStride, WORD *indexBuffer, int indexNum);
+	void Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum,  int vertexStride, void *indexBuffer, int indexNum, EnFormatIndex indexFormat, EnPrimitiveType primitivetype );
 
 	//頂点バッファを取得。
 	LPDIRECT3DVERTEXBUFFER9 GetVertexBuffer()
@@ -46,9 +61,28 @@ public:
 	{
 		return m_pVertexDecaration;
 	}
+
+	int GetPolygonNum()
+	{
+		return m_polygonNum;
+	}
+
+	int GetVertexStride()
+	{
+		return m_vertexStride;
+	}
+
+	D3DPRIMITIVETYPE GetPrimitiveType()
+	{
+		return m_primitiveType;
+	}
+
 private:
 	LPDIRECT3DVERTEXBUFFER9			m_pVertexBuffer;		//頂点バッファ
 	LPDIRECT3DINDEXBUFFER9			m_pIndexBuffer;			//インデックスバッファ
 	LPDIRECT3DVERTEXDECLARATION9	m_pVertexDecaration;	//頂点定義
 	int								m_vertexNum;			//頂点数
+	D3DPRIMITIVETYPE				m_primitiveType;
+	int								m_polygonNum;
+	int								m_vertexStride;
 };		

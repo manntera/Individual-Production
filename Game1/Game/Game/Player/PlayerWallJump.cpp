@@ -76,8 +76,8 @@ void PlayerWallJump::Update()
 
 		//ジャンプ中で壁に当たって移動速度がある程度あるとき
 		if (m_characterController->IsJump() && 
-			m_characterController->GetWallCollisionObject() != nullptr/* &&
-			0.12f < D3DXVec3Length(&movement)*/)
+			m_characterController->GetWallCollisionObject() != nullptr &&
+			0.12f < D3DXVec3Length(&movement))
 		{
 			//壁の法線とプレイヤーの向きで内積を計算
 			D3DXVECTOR3 wallNormal = m_characterController->GetWallNormal();
@@ -160,7 +160,6 @@ void PlayerWallJump::Draw()
 	{
 		&m_groundDetection,
 		&m_wallDetection,
-		//&m_wallDetection2,
 	};
 	for (int i = 0; i < detectionNum; i++)
 	{

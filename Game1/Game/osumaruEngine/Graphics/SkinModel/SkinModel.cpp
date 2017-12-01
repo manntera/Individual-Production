@@ -71,7 +71,14 @@ void DrawMeshContainer(
 		D3DXMatrixMultiply(&viewProjMatrix, &GetShadowMap().GetViewMatrix(), &GetShadowMap().GetProjectionMatrix());
 		pEffect->SetMatrix("g_lightViewProjMatrix", &viewProjMatrix);
 		pEffect->SetBool("g_isShadowMapReceiver", isShadowReceiver);
-
+		D3DXMATRIX cameraViewMatrix = GetShadowMap().GetViewMatrix();
+		D3DXMatrixInverse(&cameraViewMatrix, NULL, &cameraViewMatrix);
+		D3DXVECTOR3 cameraDir;
+		cameraDir.x = cameraViewMatrix.m[2][0];
+		cameraDir.y = cameraViewMatrix.m[2][1];
+		cameraDir.z = cameraViewMatrix.m[2][2];
+		D3DXVec3Normalize(&cameraDir, &cameraDir);
+		pEffect->SetValue("g_lightCameraDir", &cameraDir, sizeof(D3DXVECTOR3));
 		pEffect->SetBool("g_isHasNormalMap", isHasNormal);
 		pEffect->SetBool("g_isHasSpecularMap", isHasSpecular);
 	}
@@ -260,7 +267,7 @@ SkinModel::~SkinModel()
 
 void SkinModel::Init(SkinModelData* modelData)
 {
-	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/Shader/Model.fx");
+	m_pEffect = GetEffectManager().LoadEffect("Assets/Shader/Model.fx");
 	m_skinModelData = modelData;
 	m_currentShaderTechnique = enShaderTechniqueNormal;
 	m_shaderTechnique[enShaderTechniqueNormal].SkinModelTechnique = m_pEffect->GetTechniqueByName("SkinModel");

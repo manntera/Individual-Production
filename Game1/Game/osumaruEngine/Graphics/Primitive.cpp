@@ -18,7 +18,7 @@ Primitive::~Primitive()
 	Release();
 }
 
-void Primitive::Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum, int vertexStride, WORD *indexBuffer, int indexNum)
+void Primitive::Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum, int vertexStride, void *indexBuffer, int indexNum, EnFormatIndex indexFormat, EnPrimitiveType primitiveType)
 {
 	Release();
 	m_vertexNum = vertexNum;
@@ -40,11 +40,25 @@ void Primitive::Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int 
 	m_pVertexBuffer->Lock(0, 0, &pVertex, 0);
 	memcpy(pVertex, vertexBuffer, m_vertexNum * vertexStride);
 	m_pVertexBuffer->Unlock();
+	D3DFORMAT format;
+	int size;
+	switch (indexFormat)
+	{
+	case enIndex16:
+		format = D3DFMT_INDEX16;
+		size = sizeof(WORD);
+		break;
+
+	case enIndex32:
+		format = D3DFMT_INDEX32;
+		size = sizeof(DWORD);
+		break;
+	}
 	//インデックスバッファを作成
 	pD3DDevice->CreateIndexBuffer(
-		sizeof(WORD) * indexNum,
+		size * indexNum,
 		0,
-		D3DFMT_INDEX16,
+		format,
 		D3DPOOL_DEFAULT,
 		&m_pIndexBuffer,
 		NULL
@@ -52,8 +66,25 @@ void Primitive::Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int 
 	//作ったインデックスバッファに書き込み。
 	void* pIndex;
 	m_pIndexBuffer->Lock(0, 0, &pIndex, 0);
-	memcpy(pIndex, indexBuffer, sizeof(WORD) * indexNum);
+	memcpy(pIndex, indexBuffer, size * indexNum);
 	m_pIndexBuffer->Unlock();
+
+	switch (primitiveType)
+	{
+	case enTypeLineList:
+		m_polygonNum = indexNum / 2;
+		m_primitiveType = D3DPT_LINELIST;
+		break;
+	case enTypeTriangleList:
+		m_polygonNum = indexNum / 3;
+		m_primitiveType = D3DPT_TRIANGLELIST;
+		break;
+	case enTypeTriangleStrip:
+		m_polygonNum = indexNum - 2;
+		m_primitiveType = D3DPT_TRIANGLESTRIP;
+		break;
+	}
+	m_vertexStride = vertexStride;
 }
 
 void Primitive::Release()

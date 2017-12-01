@@ -40,6 +40,9 @@
     <Filter Include="ソース ファイル\Resource">
       <UniqueIdentifier>{1fbd5d4a-fff3-471a-959e-c58bfc754a2f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Graphics\PostEffect">
+      <UniqueIdentifier>{dbd85307-11cc-4b2d-a9f5-6a29df8983ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graphics\EffectManager.cpp">
@@ -137,6 +140,15 @@
     </ClCompile>
     <ClCompile Include="Physics\RigidBodyDraw.cpp">
       <Filter>ソース ファイル\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\PostEffect\PostEffect.cpp">
+      <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\PostEffect\MonochromeFilter.cpp">
+      <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RenderTarget.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +256,15 @@
     </ClInclude>
     <ClInclude Include="Physics\RigidBodyDraw.h">
       <Filter>ソース ファイル\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\PostEffect\PostEffect.h">
+      <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\PostEffect\MonochromeFilter.h">
+      <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderTarget.h">
+      <Filter>ソース ファイル\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

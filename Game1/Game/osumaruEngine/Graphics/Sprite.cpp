@@ -27,7 +27,7 @@ void Sprite::Init(char *filePath)
 	SetPosition({ 0.0f, 0.0f});
 
 	//エフェクトをロード
-	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/shader/sprite.fx");
+	m_pEffect = GetEffectManager().LoadEffect("Assets/shader/sprite.fx");
 
 	//頂点バッファを作成
 	VERTEX_PT elements[4] =
@@ -40,8 +40,7 @@ void Sprite::Init(char *filePath)
 	//インデックスバッファーを作成
 	WORD indexElements[6] = { 0, 2, 3, 0, 1, 2 };
 	//プリミティブを作成
-	m_primitive.Create(vertex_PT, elements, 4, sizeof(VERTEX_PT), indexElements, 6);
-
+	m_primitive.Create(vertex_PT, elements, 4, sizeof(VERTEX_PT), indexElements, 6, Primitive::enIndex16, Primitive::enTypeTriangleList);
 	m_size.x = m_texture.GetWidth();
 	m_size.y = m_texture.GetHeight();
 }
@@ -88,9 +87,9 @@ void Sprite::Draw()
 	m_pEffect->SetFloat("g_alpha", m_alpha);
 	m_pEffect->CommitChanges();
 	pD3DDevice->SetVertexDeclaration(m_primitive.GetVertexDecaration());
-	pD3DDevice->SetStreamSource(0, m_primitive.GetVertexBuffer(), 0, sizeof(VERTEX_PT));
+	pD3DDevice->SetStreamSource(0, m_primitive.GetVertexBuffer(), 0, m_primitive.GetVertexStride());
 	pD3DDevice->SetIndices(m_primitive.GetIndexBuffer());
-	pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+	pD3DDevice->DrawIndexedPrimitive(m_primitive.GetPrimitiveType(), 0, 0, m_primitive.GetVertexNum(), 0, m_primitive.GetPolygonNum());
 
 	m_pEffect->EndPass();
 	m_pEffect->End();

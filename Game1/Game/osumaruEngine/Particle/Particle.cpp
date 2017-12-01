@@ -36,9 +36,9 @@ void Particle::Init(SParticleEmittInfo& info, Camera* camera)
 	//インデックスバッファーを作成
 	WORD indexElements[6] = { 0, 2, 3, 0, 1, 2 };
 	//プリミティブを作成
-	m_primitive.Create(vertex_PT, elements, 4, sizeof(VERTEX_PT), indexElements, 6);
+	m_primitive.Create(vertex_PT, elements, 4, sizeof(VERTEX_PT), indexElements, 6, Primitive::enIndex16, Primitive::enTypeTriangleList);
 	D3DXMatrixIdentity(&m_worldMatrix);
-	m_pEffect = GetEngine().GetEffectManager()->LoadEffect("Assets/shader/particle.fx");
+	m_pEffect = GetEffectManager().LoadEffect("Assets/shader/particle.fx");
 	D3DXQuaternionIdentity(&m_rotation);
 
 	m_size.x = info.width;
@@ -108,7 +108,7 @@ void Particle::AfterDraw()
 	pD3DDevice->SetVertexDeclaration(m_primitive.GetVertexDecaration());
 	pD3DDevice->SetStreamSource(0, m_primitive.GetVertexBuffer(), 0, sizeof(VERTEX_PT));
 	pD3DDevice->SetIndices(m_primitive.GetIndexBuffer());
-	pD3DDevice->DrawIndexedPrimitive(D3DPT_TRIANGLELIST, 0, 0, 4, 0, 2);
+	pD3DDevice->DrawIndexedPrimitive(m_primitive.GetPrimitiveType(), 0, 0, m_primitive.GetVertexNum(), 0, m_primitive.GetPolygonNum());
 
 	m_pEffect->EndPass();
 	m_pEffect->End();

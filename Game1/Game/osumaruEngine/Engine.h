@@ -6,6 +6,7 @@
 #include "Graphics\ShadowMap.h"
 #include "Sound\SoundEngine.h"
 #include "Resource\TextureResource.h"
+#include "Graphics\PostEffect\PostEffect.h"
 //エンジンクラス
 
 const int FRAME_BUFFER_WIDTH = 1280;
@@ -41,9 +42,9 @@ public:
 		return m_pD3DDevice;
 	}
 	//エフェクトマネージャーを取得
-	EffectManager* GetEffectManager()
+	EffectManager& GetEffectManager()
 	{
-		return m_effectManager;
+		return *m_effectManager;
 	}
 	//テクスチャリソースを取得
 	TextureResource& GetTextureResource()
@@ -61,6 +62,14 @@ public:
 	{
 		return m_shadowMap;
 	}
+
+	//メインのレンダリングターゲットを取得
+	RenderTarget& GetMainRendertarget()
+	{
+		return m_renderTarget;
+	}
+
+
 	//自分のインスタンスを取得
 	static Engine& GetEngine()
 	{
@@ -78,6 +87,17 @@ public:
 		{
 			m_pD3D->Release();
 		}
+		if (m_effectManager != nullptr)
+		{
+			delete m_effectManager;
+			m_effectManager = nullptr;
+		}
+		if (m_physicsWorld != nullptr)
+		{
+			delete m_physicsWorld;
+			m_physicsWorld = nullptr;
+		}
+		delete m_physicsWorld;
 		PostQuitMessage(0);
 	}
 	//インスタンスの生成
@@ -91,6 +111,8 @@ public:
 	{
 		m_objectManager.Delete(deleteObject);
 	}
+
+	
 
 	//パッドの取得
 	Pad& GetPad()
@@ -113,6 +135,8 @@ private:
 	ShadowMap			m_shadowMap;			//シャドウマップ
 	SoundEngine			m_soundEngine;
 	TextureResource		m_textureResource;
+	RenderTarget		m_renderTarget;			//メインのレンダリングターゲット
+	PostEffect			m_postEffect;
 };
 //エンジンクラスのインスタンスを取得。
 static Engine& GetEngine()
@@ -157,4 +181,14 @@ static TextureResource& GetTextureResource()
 static PhysicsWorld& GetPhysicsWorld()
 {
 	return GetEngine().GetPhysicsWorld();
+}
+
+static EffectManager& GetEffectManager()
+{
+	return GetEngine().GetEffectManager();
+}
+
+static RenderTarget& GetMainRenderTarget()
+{
+	return GetEngine().GetMainRendertarget();
 }
