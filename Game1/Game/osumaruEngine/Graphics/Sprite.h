@@ -1,6 +1,4 @@
 #pragma once
-#include "Primitive.h"
-#include "Texture.h"
 
 //スプライトクラス
 

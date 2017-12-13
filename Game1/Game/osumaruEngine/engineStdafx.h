@@ -1,6 +1,5 @@
 #pragma once
 class EffectManager;
-//int MakeHash(const char* string);
 
 #include <d3d9.h>
 #include <d3dx9effect.h>
@@ -18,11 +17,13 @@ class EffectManager;
 
 #pragma comment ( lib, "winmm.lib" )
 
-
 #include <stdio.h>
 #include <string.h>
 
 #include "Uncopyable.h"
+#include "Graphics/Texture.h"
+#include "Graphics/Primitive.h"
+#include "Graphics/RenderTarget.h"
 #include "GameObject/GameObject.h"
 #include "GameObject/GameObjectManager.h"
 #include "btBulletDynamicsCommon.h"

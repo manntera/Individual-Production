@@ -168,6 +168,9 @@
     <ClCompile Include="Graphics\RenderTarget.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\PostEffect\DepthOfField.cpp">
+      <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics\EffectManager.h">
@@ -294,6 +297,9 @@
       <Filter>ソース ファイル\Font</Filter>
     </ClInclude>
     <ClInclude Include="Graphics\PostEffect\Bloom.h">
+      <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\PostEffect\DepthOfField.h">
       <Filter>ソース ファイル\Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>

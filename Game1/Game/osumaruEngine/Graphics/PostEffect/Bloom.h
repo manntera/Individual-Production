@@ -1,5 +1,6 @@
 #pragma once
 
+
 const int g_downSamplingNum = 5;
 
 class Bloom : Uncopyable

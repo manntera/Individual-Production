@@ -34,8 +34,6 @@ void MonochromeFilter::Init(bool isActive)
 	m_primitive.Create(vertex_PT, vertexBuffer, vertexNum, sizeof(VERTEX_PT), indexBuffer, indexNum, Primitive::enIndex16, Primitive::enTypeTriangleList);
 	m_pEffect = GetEffectManager().LoadEffect("Assets/shader/MonochromeFilter.fx");
 	LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
-	device->GetRenderTarget(0, &m_backBuffer);
-	device->GetDepthStencilSurface(&m_depthBuffer);
 }
 
 void MonochromeFilter::Draw()
@@ -44,7 +42,7 @@ void MonochromeFilter::Draw()
 	{
 		return;
 	}
-	for (int i = 0; i < 50; i++)
+	//for (int i = 0; i < 50; i++)
 	{
 		LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
 		LPDIRECT3DTEXTURE9 texture = GetMainRenderTarget().GetTexture();

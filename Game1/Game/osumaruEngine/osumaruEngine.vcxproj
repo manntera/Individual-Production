@@ -185,6 +185,7 @@
     <ClCompile Include="graphics\EffectManager.cpp" />
     <ClCompile Include="Graphics\Light.cpp" />
     <ClCompile Include="Graphics\PostEffect\Bloom.cpp" />
+    <ClCompile Include="Graphics\PostEffect\DepthOfField.cpp" />
     <ClCompile Include="Graphics\PostEffect\MonochromeFilter.cpp" />
     <ClCompile Include="Graphics\PostEffect\PostEffect.cpp" />
     <ClCompile Include="Graphics\Primitive.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="graphics\EffectManager.h" />
     <ClInclude Include="Graphics\Light.h" />
     <ClInclude Include="Graphics\PostEffect\Bloom.h" />
+    <ClInclude Include="Graphics\PostEffect\DepthOfField.h" />
     <ClInclude Include="Graphics\PostEffect\MonochromeFilter.h" />
     <ClInclude Include="Graphics\PostEffect\PostEffect.h" />
     <ClInclude Include="Graphics\Primitive.h" />
