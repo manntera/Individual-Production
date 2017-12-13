@@ -9,12 +9,14 @@ public:
 
 	~MonochromeFilter();
 
-	void Init();
+	void Init(bool isActive);
 
 	void Draw();
 
 private:
 	Primitive		m_primitive;
-	//RenderTarget	m_renderTarget;
 	LPD3DXEFFECT	m_pEffect;
+	LPDIRECT3DSURFACE9	m_backBuffer;
+	LPDIRECT3DSURFACE9	m_depthBuffer;
+	bool				m_isActive;
 };

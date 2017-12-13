@@ -16,12 +16,15 @@ public:
 
 	//更新関数
 	void Update()override;
+
+	void Draw()override;
 private:
 	float			m_timer;			//一定時間たつと移動速度を反転させるためのタイマー
 	D3DXVECTOR3		m_moveSpeed;		//移動速度
 	D3DXVECTOR3		m_acceleration;		//加速度
 	RigidBody		m_rigidBody;		//剛体
 	BoxCollider		m_boxCollider;		//コライダー
+	MeshCollider	m_meshCollider;
 	bool			m_isChild;			//子供がいるかどうか
 	float			m_timerLimit;		//タイマーの限界
 };

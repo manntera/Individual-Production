@@ -55,7 +55,7 @@ void PlayerWallJump::Update()
 	playerFront.y = worldMatrix.m[2][1];
 	playerFront.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&playerFront, &playerFront);
-	playerFront *= 2.00f;
+	playerFront *= 1.80f;
 	position += playerFront;
 	D3DXQUATERNION rotation;
 	D3DXQuaternionRotationMatrix(&rotation, &worldMatrix);
@@ -76,8 +76,8 @@ void PlayerWallJump::Update()
 
 		//ジャンプ中で壁に当たって移動速度がある程度あるとき
 		if (m_characterController->IsJump() && 
-			m_characterController->GetWallCollisionObject() != nullptr &&
-			0.12f < D3DXVec3Length(&movement))
+			m_characterController->GetWallCollisionObject() != nullptr/* &&
+			0.12f < D3DXVec3Length(&movement)*/)
 		{
 			//壁の法線とプレイヤーの向きで内積を計算
 			D3DXVECTOR3 wallNormal = m_characterController->GetWallNormal();

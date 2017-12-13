@@ -26,7 +26,7 @@ public:
 	void Update()override;
 
 	//•`‰æˆ—
-	void AfterDraw()override;
+	void Draw()override;
 
 private:
 	D3DXVECTOR2		m_size;			//ƒTƒCƒY

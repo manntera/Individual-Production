@@ -20,10 +20,10 @@ void RigidBodyDraw::Init()
 	//頂点数1万で空ノバッファを作成
 	const int vertexNum = 10000;
 	VERTEX_PC  vertexBuffer[vertexNum];
-	WORD indexBuffer[vertexNum];
+	DWORD indexBuffer[vertexNum];
 	memset(vertexBuffer, 0, sizeof(vertexBuffer)); 
 	memset(indexBuffer, 0, sizeof(indexBuffer));
-	m_primitive.Create(vertex_PC, vertexBuffer, vertexNum, sizeof(VERTEX_PC), indexBuffer, vertexNum, Primitive::enIndex16, Primitive::enTypeLineList);
+	m_primitive.Create(vertex_PC, vertexBuffer, vertexNum, sizeof(VERTEX_PC), indexBuffer, vertexNum, Primitive::enIndex32, Primitive::enTypeLineList);
 	m_pEffect = GetEffectManager().LoadEffect("Assets/shader/rigidBodyDraw.fx");
 }
 
@@ -65,7 +65,7 @@ void RigidBodyDraw::Draw(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 	count = 0;
 	for (auto& list : m_indexBuffer)
 	{
-		*((WORD*)pIndex + count) = list;
+		*((DWORD*)pIndex + count) = list;
 		count++;
 	}
 	pIndexBuffer->Unlock();

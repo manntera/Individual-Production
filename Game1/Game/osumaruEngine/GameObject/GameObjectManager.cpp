@@ -11,7 +11,7 @@ void GameObjectManager::Init()
 
 void GameObjectManager::Execute(PostEffect& postEffect)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetEngine().GetDevice();
+	LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
 	//初期化
 	for (GameObjectList& objList : m_objectVector)
 	{
@@ -32,15 +32,11 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 	GetShadowMap().Draw();
 	//描画
 	// 画面をクリア。
-	LPDIRECT3DSURFACE9 renderTargetBackup;
-	LPDIRECT3DSURFACE9 depthStencilBackup;
-	pDevice->GetRenderTarget(0, &renderTargetBackup);
-	pDevice->GetDepthStencilSurface(&depthStencilBackup);
-	pDevice->SetRenderTarget(0, GetMainRenderTarget().GetRenderTarget());
-	pDevice->SetDepthStencilSurface(GetMainRenderTarget().GetDepthStencilBuffer());
-	pDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+	device->SetRenderTarget(0, GetMainRenderTarget().GetRenderTarget());
+	device->SetDepthStencilSurface(GetMainRenderTarget().GetDepthStencilBuffer());
+	device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 	////シーンの描画開始。
-	pDevice->BeginScene();
+	device->BeginScene();
 	for (GameObjectList& objList : m_objectVector)
 	{
 		for (GameObject* object : objList)
@@ -48,15 +44,10 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 			object->Drawer();
 		}
 	}
-	pDevice->EndScene();
-	pDevice->SetRenderTarget(0, renderTargetBackup);
-	pDevice->SetDepthStencilSurface(depthStencilBackup);
-	renderTargetBackup->Release();
-	depthStencilBackup->Release();
-	pDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
-	pDevice->BeginScene();
+	device->EndScene();
+	device->BeginScene();
 	postEffect.Draw();
-	//GetPhysicsWorld().Draw();
+	GetPhysicsWorld().Draw();
 	for (GameObjectList& objList : m_objectVector)
 	{
 		for (GameObject* object : objList)
@@ -65,9 +56,9 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 		}
 	}
 	// シーンの描画終了。
-	pDevice->EndScene();
+	device->EndScene();
 	// バックバッファとフロントバッファを入れ替える。
-	pDevice->Present(NULL, NULL, NULL, NULL);
+	device->Present(NULL, NULL, NULL, NULL);
 
 	//最後にオブジェクトを消去
 	DeleteExecute();

@@ -10,7 +10,7 @@ void MoveFloor::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelN
 	//メッシュコライダーからaabbを作成	
 	MeshCollider meshCollider;
 	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
-	D3DXVECTOR3 boxSize = meshCollider.GetAabbMax();
+	D3DXVECTOR3 boxSize = (meshCollider.GetAabbMax() - meshCollider.GetAabbMin()) / 2.0f;
 	m_boxCollider.Create({ boxSize.x, boxSize.y, boxSize.z });
 
 	RigidBodyInfo rInfo;
@@ -67,3 +67,8 @@ void MoveFloor::Update()
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }
 
+void MoveFloor::Draw()
+{
+	MapChip::Draw();
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_boxCollider.GetBody());
+}

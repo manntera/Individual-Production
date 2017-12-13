@@ -17,10 +17,12 @@ RenderTarget::~RenderTarget()
 
 void RenderTarget::Create(int width, int height, D3DFORMAT format, D3DFORMAT depthFormat)
 {
+	m_width = width;
+	m_height = height;
 	//シャドウマップを作成
 	GetEngine().GetDevice()->CreateTexture(
-		width,
-		height,
+		m_width,
+		m_height,
 		1,
 		D3DUSAGE_RENDERTARGET,
 		format,
@@ -30,8 +32,8 @@ void RenderTarget::Create(int width, int height, D3DFORMAT format, D3DFORMAT dep
 	);
 	//深度ステンシルバッファを作成
 	GetEngine().GetDevice()->CreateDepthStencilSurface(
-		width,
-		height,
+		m_width,
+		m_height,
 		depthFormat,
 		D3DMULTISAMPLE_NONE,
 		0,

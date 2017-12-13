@@ -100,9 +100,9 @@ void Player::Update()
 	{
 		DelayRotation(m_characterController.GetMoveSpeed());
 	}
-	if (m_position.y < -20.0f)
+	if (m_position.y < -70.0f)
 	{
-		//g_gameScene->GameOver();
+		g_gameScene->GameOver();
 	}
 	if (GetPad().IsTriggerButton(enButtonY))
 	{
@@ -138,9 +138,6 @@ void Player::CliffRiseStart(D3DXVECTOR3 moveDirection)
 	//崖を上るアニメーションを再生
 	m_anim.PlayAnimation(enAnimSetCliffRise);
 	moveDirection.y = 0.0f;
-	/*for (int i = 0; i < m_rotationFrameNum; i++)
-	{
-	}*/
 	Rotation(moveDirection);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 }
@@ -255,30 +252,40 @@ void Player::Move()
 		{
 			speed = speedLimit;
 		}
-		if (m_characterController.IsOnGround())
+		if (!m_wallJump.IsWallShear() && !m_graspCliff.IsActive())
 		{
-			if (m_currentAnim != enAnimSetRun)
+
+			if (m_characterController.IsOnGround())
 			{
-				m_currentAnim = enAnimSetRun;
-				m_anim.PlayAnimation(enAnimSetRun);
+				if (m_currentAnim != enAnimSetRun)
+				{
+					m_currentAnim = enAnimSetRun;
+					m_anim.PlayAnimation(enAnimSetRun);
+				}
+				moveSpeed += stickDir;
+				moveSpeed *= speed;
 			}
-			moveSpeed += stickDir;
-			moveSpeed *= speed;
+			else
+			{
+
+				D3DXVECTOR3 jumpSpeed = stickDir;
+				speed *= 0.02f;
+				jumpSpeed *= speed;
+				moveSpeed += jumpSpeed;
+				D3DXVECTOR3 moveDirection = moveSpeed;
+				moveDirection.y = 0.0f;
+				if (speedLimit < D3DXVec3Length(&moveDirection))
+				{
+					D3DXVec3Normalize(&moveDirection, &moveDirection);
+					moveSpeed.x = moveDirection.x * speedLimit;
+					moveSpeed.z = moveDirection.z * speedLimit;
+				}
+			}
 		}
 		else
 		{
-			D3DXVECTOR3 jumpSpeed = stickDir;
-			speed *= 0.02f;
-			jumpSpeed *= speed;
-			moveSpeed += jumpSpeed;
-			D3DXVECTOR3 moveDirection = moveSpeed;
-			moveDirection.y = 0.0f;
-			if (speedLimit < D3DXVec3Length(&moveDirection))
-			{
-				D3DXVec3Normalize(&moveDirection, &moveDirection);
-				moveSpeed.x = moveDirection.x * speedLimit;
-				moveSpeed.z = moveDirection.z * speedLimit;
-			}
+			m_acceleration = 0.0f;
+			m_moveSpeed = 0.0f;
 		}
 	}
 	
@@ -288,8 +295,7 @@ void Player::Move()
 		m_isJump = true;
 		m_jumpCount = 1;
 	}
-
-	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallJump() && !m_graspCliff.IsActive())
+	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallShear() && !m_graspCliff.IsActive())
 	{
 
 		if (m_jumpCount != 0)
@@ -309,6 +315,7 @@ void Player::Move()
 		m_jumpCount++;
 
 	}
+
 	if (m_wallJump.IsWallShear())
 	{
 		moveSpeed = { 0.0f, 0.0f, 0.0f };

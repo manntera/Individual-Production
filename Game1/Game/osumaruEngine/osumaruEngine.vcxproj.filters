@@ -43,6 +43,12 @@
     <Filter Include="ソース ファイル\Graphics\PostEffect">
       <UniqueIdentifier>{dbd85307-11cc-4b2d-a9f5-6a29df8983ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Timer">
+      <UniqueIdentifier>{f77de4a2-f308-416e-8356-b962d991aa47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Font">
+      <UniqueIdentifier>{2f4dc14c-9ac0-42ba-9e2c-43b3ef8c5027}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graphics\EffectManager.cpp">
@@ -147,8 +153,20 @@
     <ClCompile Include="Graphics\PostEffect\MonochromeFilter.cpp">
       <Filter>ソース ファイル\Graphics\PostEffect</Filter>
     </ClCompile>
+    <ClCompile Include="Timer\StopWatch.cpp">
+      <Filter>ソース ファイル\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer\GameTime.cpp">
+      <Filter>ソース ファイル\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="Font\Font.cpp">
+      <Filter>ソース ファイル\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\PostEffect\Bloom.cpp">
+      <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClCompile>
     <ClCompile Include="Graphics\RenderTarget.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +283,18 @@
     </ClInclude>
     <ClInclude Include="Graphics\RenderTarget.h">
       <Filter>ソース ファイル\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer\StopWatch.h">
+      <Filter>ソース ファイル\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer\GameTime.h">
+      <Filter>ソース ファイル\Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Font\Font.h">
+      <Filter>ソース ファイル\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\PostEffect\Bloom.h">
+      <Filter>ソース ファイル\Graphics\PostEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

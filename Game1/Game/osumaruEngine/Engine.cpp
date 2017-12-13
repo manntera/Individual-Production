@@ -1,6 +1,8 @@
 #include "engineStdafx.h"
 #include "Engine.h"
 #include "graphics/EffectManager.h"
+#include "Timer\GameTime.h"
+#include "Timer\StopWatch.h"
 
 LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -19,6 +21,7 @@ Engine::Engine()
 	m_pD3DDevice = NULL;
 	m_effectManager = nullptr;
 	m_physicsWorld = nullptr;
+	m_currentRenderTargetNum = 0;
 }
 
 Engine::~Engine()
@@ -76,7 +79,8 @@ void Engine::InitD3D(HINSTANCE& hInst)
 	m_shadowMap.SetLightCameraUp({ 1.0f, 0.0f, 0.0f });
 	m_objectManager.Init();
 	m_soundEngine.Init();
-	m_renderTarget.Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, D3DFMT_A8R8G8B8, D3DFMT_D16);
+	m_renderTarget[0].Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, D3DFMT_A16B16G16R16F, D3DFMT_D16); 
+	m_renderTarget[1].Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, D3DFMT_A16B16G16R16F, D3DFMT_D16);
 	m_postEffect.Init();
 	// show the window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
@@ -98,12 +102,14 @@ void Engine::GameLoop()
 		}
 		else
 		{
-
-			m_pD3DDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+			StopWatch sw;
+			sw.Start();
 			m_objectManager.Execute(m_postEffect);
 			m_physicsWorld->Update();
 			m_shadowMap.Update();
 			m_pad.Update();
+			sw.Stop();
+			GetGameTime().SetFrameDeltaTime((float)sw.GetElapsedTime());
 
 		}
 	}

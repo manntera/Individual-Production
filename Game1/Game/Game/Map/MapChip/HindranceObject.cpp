@@ -8,12 +8,11 @@ void HindranceObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *
 	MapChip::Init(position, rotation, modelName);
 
 	//メッシュコライダーからaabbを作成	
-	MeshCollider meshCollider;
-	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
-	D3DXVECTOR3 boxSize = meshCollider.GetAabbMax();
+	m_meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
+	D3DXVECTOR3 boxSize = m_meshCollider.GetAabbMax();
 	m_boxCollider.Create({ boxSize.x, boxSize.y, boxSize.z });
 	RigidBodyInfo rInfo;
-	rInfo.collider = &m_boxCollider;
+	rInfo.collider = &m_meshCollider;
 	rInfo.mass = 0.0f;
 	rInfo.pos = m_position;
 	rInfo.rot = m_rotation;
@@ -62,4 +61,10 @@ void HindranceObject::Update()
 	m_rigidBody.SetPosition(m_position);
 	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+}
+
+void HindranceObject::Draw()
+{
+	MapChip::Draw();
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
 }

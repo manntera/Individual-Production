@@ -4,6 +4,7 @@ class EffectManager;
 
 #include <d3d9.h>
 #include <d3dx9effect.h>
+#include <windows.h>
 #include <x3daudio.h>
 #include <XAudio2.h>
 #include <XAudio2fx.h>

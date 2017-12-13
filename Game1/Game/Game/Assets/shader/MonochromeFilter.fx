@@ -16,6 +16,12 @@ sampler TextureSampler =
 sampler_state
 {
 	Texture = <g_tex>;
+	MipFilter = LINEAR;
+	MinFilter = LINEAR;
+	MagFilter = LINEAR;
+	AddressU = CLAMP;
+	AddressV = CLAMP;
+
 };
 
 VS_OUTPUT VSMain(VS_INPUT In)
@@ -29,7 +35,6 @@ VS_OUTPUT VSMain(VS_INPUT In)
 float4 PSMain(VS_OUTPUT In) : COLOR0
 {
 	float4 color = tex2D(TextureSampler, In.uv);
-	//return color;
 	return length(color.xyz) * 0.5f;
 }
 

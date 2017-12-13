@@ -1,0 +1,8 @@
+テクスチャのアドレッシングモード
+WRAP
+CLAMP
+ミラー(綴り不詳使えるかもみ確認)
+テクスチャのフィルタリング
+POINT
+LINEAR
+ANISOTROPIC

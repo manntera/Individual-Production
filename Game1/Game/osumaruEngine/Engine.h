@@ -64,11 +64,16 @@ public:
 	}
 
 	//メインのレンダリングターゲットを取得
-	RenderTarget& GetMainRendertarget()
+	RenderTarget& GetMainRenderTarget()
 	{
-		return m_renderTarget;
+		return m_renderTarget[m_currentRenderTargetNum];
 	}
 
+	//メインレンダリングターゲットを切り替え
+	void SwitchingRenderTarget()
+	{
+		m_currentRenderTargetNum ^= 1;
+	}
 
 	//自分のインスタンスを取得
 	static Engine& GetEngine()
@@ -135,7 +140,8 @@ private:
 	ShadowMap			m_shadowMap;			//シャドウマップ
 	SoundEngine			m_soundEngine;
 	TextureResource		m_textureResource;
-	RenderTarget		m_renderTarget;			//メインのレンダリングターゲット
+	RenderTarget		m_renderTarget[2];			//メインのレンダリングターゲット
+	int					m_currentRenderTargetNum;
 	PostEffect			m_postEffect;
 };
 //エンジンクラスのインスタンスを取得。
@@ -190,5 +196,5 @@ static EffectManager& GetEffectManager()
 
 static RenderTarget& GetMainRenderTarget()
 {
-	return GetEngine().GetMainRendertarget();
+	return GetEngine().GetMainRenderTarget();
 }

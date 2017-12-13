@@ -16,6 +16,8 @@ public:
 
 	//更新関数
 	void Update()override;
+
+	void Draw()override;
 private:
 	float			m_timer;			//一定時間たつと移動速度を反転させるためのタイマー
 	D3DXVECTOR3		m_moveSpeed;		//移動速度

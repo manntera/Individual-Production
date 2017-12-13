@@ -1,6 +1,5 @@
 #pragma once
 
-#include <windows.h>
 #include "../osumaruEngine/engineStdafx.h"
 #include "../osumaruEngine/GameObject/GameObject.h"
 #include "../osumaruEngine/GameObject/GameObjectManager.h"
@@ -27,7 +26,7 @@
 #include "../osumaruEngine/Sound/SoundSource.h"
 #include "../osumaruEngine/Particle/Particle.h"
 #include "../osumaruEngine/Particle/ParticleEmitter.h"
-
+#include "../osumaruEngine/Font/Font.h"
 
 const int playerPriority = 1;
 const int stageGimmickPriority = 0;

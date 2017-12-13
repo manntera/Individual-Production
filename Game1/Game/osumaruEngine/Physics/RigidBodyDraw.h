@@ -49,7 +49,7 @@ public:
 	}
 
 private:
-	std::list<WORD> m_indexBuffer;			//インデックスバッファ
+	std::list<DWORD> m_indexBuffer;			//インデックスバッファ
 	std::list<VERTEX_PC> m_vertexBuffer;	//頂点バッファ
 	Primitive		m_primitive;			//プリミティブ
 	int				m_count;				//プリミティブの数

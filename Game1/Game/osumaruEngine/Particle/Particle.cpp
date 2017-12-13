@@ -79,7 +79,7 @@ void Particle::Update()
 	D3DXMatrixMultiply(&m_worldMatrix, &m_worldMatrix, &transMat);
 }
 
-void Particle::AfterDraw()
+void Particle::Draw()
 {
 	D3DXMATRIX worldViewProjMat;
 	D3DXMatrixMultiply(&worldViewProjMat, &m_worldMatrix, &m_camera->GetViewMatrix());
