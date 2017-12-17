@@ -89,9 +89,6 @@ void RigidBodyDraw::Draw(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 	pD3DDevice->DrawIndexedPrimitive(m_primitive.GetPrimitiveType(), 0, 0, vertexNum, 0, m_count);
 	m_pEffect->EndPass();
 	m_pEffect->End();
-
-	//毎フレームインデックスバッファと頂点バッファをリセット
-	m_count = 0;
-	m_vertexBuffer.clear();
-	m_indexBuffer.clear();
+	
+	Reset();
 }

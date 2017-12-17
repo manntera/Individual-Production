@@ -72,10 +72,12 @@ void Sprite::Draw()
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
 	DWORD srcBackup;
 	DWORD destBackup;
-	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+	DWORD alphaBlendBackup;
+	pD3DDevice->GetRenderState(D3DRS_ALPHABLENDENABLE, &alphaBlendBackup);
 	pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &srcBackup);
 	pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &destBackup);
 
+	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 	//•`‰æ
@@ -94,7 +96,7 @@ void Sprite::Draw()
 	m_pEffect->EndPass();
 	m_pEffect->End();
 
-	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
+	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, alphaBlendBackup);
 	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup); 
 	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, destBackup);
 

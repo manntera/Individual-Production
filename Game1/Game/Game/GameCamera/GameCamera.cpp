@@ -18,8 +18,8 @@ void GameCamera::Init()
 	m_camera.Init();
 	m_camera.SetPosition({ 0.0, 40.0f, -40.0f });
 	m_camera.SetTarget({0.0f, 0.0f, 0.0f});
-	m_camera.SetNear(0.1f);
-	m_camera.SetFar(1000.0f);
+	m_camera.SetNear(3.0f);
+	m_camera.SetFar(700.0f);
 	D3DXQuaternionIdentity(&m_rotation);
 	GetPhysicsWorld().SetCamera(&m_camera);
 }
@@ -30,8 +30,8 @@ void GameCamera::Update()
 	{
 		return;
 	}
-	float angleY = GetPad().GetRightStickX() * 2 / 180.0f * cPI;
-	float angleX = GetPad().GetRightStickY() * 2 / 180.0f * cPI;
+	float angleY = GetPad().GetRightStickX() * 2.0f / 180.0f * cPI;
+	float angleX = GetPad().GetRightStickY() * 2.0f / 180.0f * cPI;
 	D3DXQUATERNION multi;
 	D3DXVECTOR3 axisX = m_camera.GetTarget() - m_camera.GetPosition();
 	//前方向と上方向のベクトルの外積を取り横方向のベクトルを求める

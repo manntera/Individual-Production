@@ -7,6 +7,7 @@ RenderTarget::RenderTarget()
 {
 	m_pTexture = nullptr;
 	m_pDepthBuffer = nullptr;
+	m_pDepthBuffer = nullptr;
 	m_pRenderTarget = nullptr;
 }
 
@@ -42,6 +43,7 @@ void RenderTarget::Create(int width, int height, D3DFORMAT format, D3DFORMAT dep
 		NULL
 	);
 	m_pTexture->GetSurfaceLevel(0, &m_pRenderTarget);
+	
 }
 
 void RenderTarget::Release()
@@ -50,10 +52,13 @@ void RenderTarget::Release()
 	{
 		m_pTexture->Release();
 		m_pTexture = nullptr;
+		m_pRenderTarget = nullptr;
 	}
 	if (m_pDepthBuffer != nullptr)
 	{
 		m_pDepthBuffer->Release();
 		m_pDepthBuffer = nullptr;
+		m_pDepthBuffer = nullptr;
 	}
+
 }

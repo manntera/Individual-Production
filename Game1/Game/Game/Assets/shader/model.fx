@@ -64,11 +64,11 @@ sampler g_shadowMapSampler =
 sampler_state
 {
 	Texture = <g_shadowMapTexture>;
-	//MipFilter = NONE;
-	//MinFilter = NONE;
-	//MagFilter = NONE;
-	//AddressU = Wrap;
-	//AddressV = Wrap;
+	MipFilter = NONE;
+	MinFilter = NONE;
+	MagFilter = NONE;
+	AddressU = Wrap;
+	AddressV = Wrap;
 };
 
 //入力頂点
@@ -92,8 +92,14 @@ struct VS_OUTPUT
 	float4 LightDir				: TEXCOORD2;
 	float3 WorldPos				: TEXCOORD3; 
 	float4 ShadowSpacePos		: TEXCOORD4;
+	float4 ScreenSpacePos		: TEXCOORD5;
 };
 
+struct PS_OUTPUT
+{
+	float4 color : COLOR0;
+	float4 depth : COLOR1;
+};
 /*
 ワールド座標とワールド法線をスキン行列から計算する。
 In		入力頂点
@@ -181,12 +187,13 @@ VS_OUTPUT VSMain(VS_INPUT In, uniform bool hasSkin)
 	Out.LightDir.xyz = normalize(Out.LightDir.xyz);
 	Out.Tex0 = In.Tex0;
 	Out.WorldPos = Pos.xyz;
+	Out.ScreenSpacePos = Out.Pos;
 	Out.ShadowSpacePos = mul(float4(Pos.xyz, 1.0f), g_lightViewProjMatrix);
 	return Out;
 }
 
 //ピクセルシェーダー
-float4 PSMain(VS_OUTPUT In) : COLOR
+PS_OUTPUT PSMain(VS_OUTPUT In)
 {
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
@@ -237,10 +244,10 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 				uv.y = 1.0f - uv.y;
 				float4 shadow = tex2D(g_shadowMapSampler, uv);
 				//ライトカメラから見た深度値を計算
-				float depth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
-				depth = min(1.0f, depth);
+				float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+				shadowDepth = min(1.0f, shadowDepth);
 				//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-				if (shadow.x < depth - 0.035f)
+				if (shadow.x < shadowDepth - 0.035f)
 				{
 					lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
 				}
@@ -248,7 +255,11 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 		}
 	}
 	color *= lig;
-	return color;
+	PS_OUTPUT Out;
+	Out.color = color;
+	float depth = In.ScreenSpacePos.z / In.ScreenSpacePos.w;
+	Out.depth = float4(depth, 0.0f, 0.0f, 1.0f);
+	return Out;
 }
 
 /*
@@ -277,7 +288,7 @@ VS_OUTPUT ShadowMapVSMain(VS_INPUT In, uniform bool hasSkin)
 
 
 //シャドウマップ書き込み用のピクセルシェーダー
-float4 ShadowMapPSMain(VS_OUTPUT In) : COLOR
+float4 ShadowMapPSMain(VS_OUTPUT In) : COLOR0
 {
 	float4 color;
 	//深度値を書き込み
@@ -287,7 +298,7 @@ float4 ShadowMapPSMain(VS_OUTPUT In) : COLOR
 	return color;
 }
 
-float4 SilhouettePSMain(VS_OUTPUT In) : COLOR
+float4 SilhouettePSMain(VS_OUTPUT In) : COLOR0
 {
 	return float4(0.0f, 0.0f, 0.0f, 1.0f);
 }

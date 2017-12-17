@@ -30,6 +30,7 @@ void PostEffect::Init()
 	m_bloom.Init(false);
 	m_bloom.SetWeight(30.0f);
 	m_monochrome.Init(false);
+	m_dof.Init(false);
 	const int vertexNum = 4;
 	VERTEX_PT vertexBuffer[vertexNum] =
 	{
@@ -52,6 +53,7 @@ void PostEffect::Draw()
 {
 	m_bloom.Draw();
 	m_monochrome.Draw();
+	m_dof.Draw();
 	LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
 	device->SetRenderTarget(0, m_frameBuffer);
 	device->SetDepthStencilSurface(m_depthBuffer);

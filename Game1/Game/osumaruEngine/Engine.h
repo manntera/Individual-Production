@@ -63,6 +63,11 @@ public:
 		return m_shadowMap;
 	}
 
+	PostEffect& GetPostEffect()
+	{
+		return m_postEffect;
+	}
+
 	//メインのレンダリングターゲットを取得
 	RenderTarget& GetMainRenderTarget()
 	{
@@ -197,4 +202,9 @@ static EffectManager& GetEffectManager()
 static RenderTarget& GetMainRenderTarget()
 {
 	return GetEngine().GetMainRenderTarget();
+}
+
+static DepthOfField& GetDepthOfField()
+{
+	return GetEngine().GetPostEffect().GetDepthOfField();
 }

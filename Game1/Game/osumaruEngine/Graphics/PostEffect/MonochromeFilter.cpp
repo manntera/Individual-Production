@@ -33,7 +33,6 @@ void MonochromeFilter::Init(bool isActive)
 	WORD indexBuffer[indexNum] = { 0, 1, 2, 0, 2, 3};
 	m_primitive.Create(vertex_PT, vertexBuffer, vertexNum, sizeof(VERTEX_PT), indexBuffer, indexNum, Primitive::enIndex16, Primitive::enTypeTriangleList);
 	m_pEffect = GetEffectManager().LoadEffect("Assets/shader/MonochromeFilter.fx");
-	LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
 }
 
 void MonochromeFilter::Draw()
@@ -50,6 +49,10 @@ void MonochromeFilter::Draw()
 		device->SetRenderTarget(0, GetMainRenderTarget().GetRenderTarget());
 		device->SetDepthStencilSurface(GetMainRenderTarget().GetDepthStencilBuffer());
 		device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
+		DWORD zenableBackUp;
+		DWORD alphaBlendBackUp;
+		device->GetRenderState(D3DRS_ZENABLE, &zenableBackUp);
+		device->GetRenderState(D3DRS_ALPHABLENDENABLE, &alphaBlendBackUp);
 		device->SetRenderState(D3DRS_ZENABLE, FALSE);
 		device->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
 		m_pEffect->SetTechnique("Monochrome");
@@ -63,7 +66,7 @@ void MonochromeFilter::Draw()
 		device->DrawIndexedPrimitive(m_primitive.GetPrimitiveType(), 0, 0, m_primitive.GetVertexNum(), 0, m_primitive.GetPolygonNum());
 		m_pEffect->EndPass();
 		m_pEffect->End();
-		device->SetRenderState(D3DRS_ZENABLE, TRUE);
-		device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+		device->SetRenderState(D3DRS_ZENABLE, zenableBackUp);
+		device->SetRenderState(D3DRS_ALPHABLENDENABLE, alphaBlendBackUp);
 	}
 }

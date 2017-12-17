@@ -66,6 +66,8 @@ void Bloom::Draw()
 		return;
 	}
 	LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
+	DWORD zenableBackup;
+	device->GetRenderState(D3DRS_ZENABLE, &zenableBackup);
 	device->SetRenderState(D3DRS_ZENABLE, FALSE);
 	//‹P“x’Šo
 	{
@@ -203,6 +205,6 @@ void Bloom::Draw()
 		device->SetRenderState(D3DRS_SRCBLEND, srcBlendBackup);
 		device->SetRenderState(D3DRS_DESTBLEND, destBlendBackup);
 	}
-	device->SetRenderState(D3DRS_ZENABLE, TRUE);
+	device->SetRenderState(D3DRS_ZENABLE, zenableBackup);
 
 }

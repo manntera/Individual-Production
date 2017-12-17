@@ -42,6 +42,14 @@ public:
 	//よくわかってない
 	void setDebugMode(int debugMode) {}
 
+	void Reset()
+	{
+		//毎フレームインデックスバッファと頂点バッファをリセット
+		m_count = 0;
+		m_vertexBuffer.clear();
+		m_indexBuffer.clear();
+	}
+
 	//よくわかってない
 	int getDebugMode() const
 	{

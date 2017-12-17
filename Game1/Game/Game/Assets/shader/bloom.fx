@@ -168,7 +168,7 @@ BLUR_OUTPUT YBlurVS(VS_INPUT In)
 	return Out;
 }
 
-float4 BlurPS(BLUR_OUTPUT In) : COLOR
+float4 BlurPS(BLUR_OUTPUT In) : COLOR0
 {
 	float4 color;
 	color = g_weight[0] * (tex2D(g_sceneSampler, In.uv0) + tex2D(g_sceneSampler, In.uv7 + g_offset));

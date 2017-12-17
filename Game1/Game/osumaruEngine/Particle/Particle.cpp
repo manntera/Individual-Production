@@ -85,14 +85,17 @@ void Particle::Draw()
 	D3DXMatrixMultiply(&worldViewProjMat, &m_worldMatrix, &m_camera->GetViewMatrix());
 	D3DXMatrixMultiply(&worldViewProjMat, &worldViewProjMat, &m_camera->GetProjectionMatrix());
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
-	DWORD srcBackup;
-	DWORD destBackup;
+	DWORD srcBackup, destBackup, alphaBlendBackup, alphaTestBackup, alphaRefBackup, alphaFuncBackup;;
+	pD3DDevice->GetRenderState(D3DRS_ALPHABLENDENABLE, &alphaBlendBackup);
 	pD3DDevice->GetRenderState(D3DRS_SRCBLEND, &srcBackup);
 	pD3DDevice->GetRenderState(D3DRS_DESTBLEND, &destBackup);
+	pD3DDevice->GetRenderState(D3DRS_ALPHATESTENABLE, &alphaTestBackup);
+	pD3DDevice->GetRenderState(D3DRS_ALPHAREF, &alphaRefBackup);
+	pD3DDevice->GetRenderState(D3DRS_ALPHAFUNC, &alphaTestBackup);
+	
 	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
-
 	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
 	pD3DDevice->SetRenderState(D3DRS_ALPHAREF, 1);
 	pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATEREQUAL);
@@ -113,9 +116,10 @@ void Particle::Draw()
 	m_pEffect->EndPass();
 	m_pEffect->End();
 
-	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
-
-	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup); 
+	pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, alphaBlendBackup);
+	pD3DDevice->SetRenderState(D3DRS_SRCBLEND, srcBackup);
 	pD3DDevice->SetRenderState(D3DRS_DESTBLEND, destBackup);
+	pD3DDevice->SetRenderState(D3DRS_ALPHATESTENABLE, alphaTestBackup);
+	pD3DDevice->SetRenderState(D3DRS_ALPHAREF, alphaRefBackup);
+	pD3DDevice->SetRenderState(D3DRS_ALPHAFUNC,alphaTestBackup);
 }
