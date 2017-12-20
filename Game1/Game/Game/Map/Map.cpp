@@ -9,15 +9,16 @@
 #include "MapTagEnum.h"
 #include "MapChip\RotationObject.h"
 #include "MapChip\HindranceObject.h"
+#include "MapChip/FallObject.h"
 
 struct MapChipInfo
 {
 	char*			m_modelName;
 	D3DXVECTOR3		m_position;
 	D3DXQUATERNION	m_rotation;
-
 	EnMapChipTag	m_tag;
 };
+
 MapChipInfo mapChipInfo[] = 
 {
 #include "Location.h"
@@ -50,22 +51,25 @@ void Map::Init()
 			mapChip = New<Goal>(stageGimmickPriority);
 			break;
 
-		case enMapTagMoveFloor:
-			mapChip = New<MoveFloor>(stageGimmickPriority);
-			break;
+		//case enMapTagMoveFloor:
+		//	mapChip = New<MoveFloor>(stageGimmickPriority);
+		//	break;
 
-		case enMapTagSpring:
-			mapChip = New<SpringObject>(stageGimmickPriority);
-			break;
+		//case enMapTagSpring:
+		//	mapChip = New<SpringObject>(stageGimmickPriority);
+		//	break;
 
-		case enMapTagRotation:
-			mapChip = New<RotationObject>(stageGimmickPriority);
-			break;
+		//case enMapTagRotation:
+		//	mapChip = New<RotationObject>(stageGimmickPriority);
+		//	break;
 
-		case enMapTagHindrance:
-			mapChip = New<HindranceObject>(stageGimmickPriority);
-			break;
+		//case enMapTagHindrance:
+		//	mapChip = New<HindranceObject>(stageGimmickPriority);
+		//	break;
 
+		case enMapTagFall:
+			mapChip = New<FallObject>(stageGimmickPriority);
+			break;
 		default:
 			mapChip = New<StaticMapObject>(stageGimmickPriority);
 			break;

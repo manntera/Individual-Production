@@ -23,7 +23,7 @@ void SpringObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* mod
 
 	m_rigidBody.Create(rInfo);
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Spring);
-	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
+	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 	m_anim.SetAnimationLoopFlg(1, false);
 }
 
@@ -31,7 +31,7 @@ void SpringObject::Update()
 {
 	MapChip::Update();
 	//プレイヤーが乗ったので移動速度を与えてプレイヤーを飛ばす
-	if (m_rigidBody.GetBody()->getPlayerCollisionFlg())
+	if (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
 		D3DXQUATERNION rot = m_rigidBody.GetBody()->getWorldTransform().getRotation();
 		D3DXMATRIX rotationMat;
@@ -46,7 +46,7 @@ void SpringObject::Update()
 		g_gameScene->GetPlayer()->SetStageGimmickMoveSpeed(springDirection);
 		m_anim.PlayAnimation(1);
 	}
-	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
-	m_anim.Update(1.0f / 60.0f);
+	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
+	m_anim.Update(GetGameTime().GetDeltaFrameTime());
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }

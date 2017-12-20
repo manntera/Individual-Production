@@ -30,6 +30,9 @@ void PlayerGraspCliff::Init(Player* player, float height)
 	m_cliffRiseDetectionBack.Init(&m_boxCollider, position, rotation);
 	m_cliffRiseDetectionLow.Init(&m_boxCollider, position, rotation);
 	m_cliffRiseDetectionUp.Init(&m_boxCollider, position, rotation);
+	m_cliffRiseDetectionBack.SetJudgmentType(enJudgment_Wall);
+	m_cliffRiseDetectionLow.SetJudgmentType(enJudgment_Wall);
+	m_cliffRiseDetectionUp.SetJudgmentType(enJudgment_Wall);
 }
 
 void PlayerGraspCliff::Update()

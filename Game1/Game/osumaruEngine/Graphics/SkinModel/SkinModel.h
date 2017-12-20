@@ -136,5 +136,5 @@ private:
 	Animation					m_animation;								//アニメーション
 	Light*						m_light;									//ライト
 	Camera*						m_pCamera;									//スペキュラで使うカメラ
-
+	bool						m_isShadowCompesation;						//
 };

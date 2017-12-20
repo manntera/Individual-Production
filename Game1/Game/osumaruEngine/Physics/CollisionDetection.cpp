@@ -9,6 +9,7 @@ struct ContactSingle : public btCollisionWorld::ContactResultCallback
 	D3DXVECTOR3 hitObjectNormal;
 	btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
 	int collisionType = enCollisionAttr_Unknown;
+	int judgmentType = enJudgment_Wall;
 
 	btScalar addSingleResult(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0Wrap, int partId0, int index0, const btCollisionObjectWrapper* colObj1Wrap, int partId1, int index1)override
 	{
@@ -21,8 +22,21 @@ struct ContactSingle : public btCollisionWorld::ContactResultCallback
 		hitObjectNormal.x = cp.m_normalWorldOnB.x();
 		hitObjectNormal.y = cp.m_normalWorldOnB.y();
 		hitObjectNormal.z = cp.m_normalWorldOnB.z();
-		const_cast<btCollisionObject*>(colObj1Wrap->getCollisionObject())->setPlayerCollisionFlg(true);
 		collisionType = colObj1Wrap->getCollisionObject()->getUserIndex();
+		if (collisionType != enCollisionAttr_Character)
+		{
+			switch (judgmentType)
+			{
+			case enJudgment_Ground:
+				const_cast<btCollisionObject*>(colObj1Wrap->getCollisionObject())->setPlayerCollisionGroundFlg(true);
+				break;
+			case enJudgment_Wall:
+				const_cast<btCollisionObject*>(colObj1Wrap->getCollisionObject())->setPlayerCollisionWallFlg(true);
+				break;
+			default:
+				break;
+			}
+		}
 		return 0.0f;
 	}
 };
@@ -61,6 +75,7 @@ void CollisionDetection::Execute()
 	//collisionWorldと剛体の個別の衝突テスト
 	ContactSingle callBack;
 	callBack.me = m_rigidBody.GetBody();
+	callBack.judgmentType = m_judgmentType;
 	GetPhysicsWorld().ContactTest(m_rigidBody.GetBody(), callBack);
 	m_isHit = callBack.isHit;
 	m_collisionType = callBack.collisionType;

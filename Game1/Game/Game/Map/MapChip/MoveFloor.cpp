@@ -22,7 +22,7 @@ void MoveFloor::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelN
 	//剛体を作成
 	m_rigidBody.Create(rInfo);
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
-	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
+	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 	
 	m_timer = 0.0f;
 	D3DXMATRIX worldMatrix = m_skinModel.GetWorldMatrix();
@@ -41,13 +41,13 @@ void MoveFloor::Update()
 	m_position += m_moveSpeed;
 
 	//プレイヤーが上に乗ったら親子関係をつける
-	if (!m_isChild && m_rigidBody.GetBody()->getPlayerCollisionFlg())
+	if (!m_isChild && m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
 		g_gameScene->GetPlayer()->SetParent(this, true);
 		m_isChild = true;
 	}
 	//プレイヤーが離れたので親子関係を外す
-	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionFlg())
+	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
 		g_gameScene->GetPlayer()->SetParent(nullptr, true);
 		m_isChild = false;
@@ -62,7 +62,7 @@ void MoveFloor::Update()
 	//剛体のワールド行列を更新
 	m_rigidBody.SetPosition(m_position);
 	m_rigidBody.SetRotation(m_rotation);
-	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
+	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }

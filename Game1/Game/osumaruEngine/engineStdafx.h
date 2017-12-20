@@ -20,6 +20,7 @@ class EffectManager;
 #include <stdio.h>
 #include <string.h>
 
+#include "Timer\GameTime.h"
 #include "Uncopyable.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Primitive.h"

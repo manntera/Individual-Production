@@ -20,7 +20,7 @@ void HindranceObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *
 	//„‘Ì‚ðì¬
 	m_rigidBody.Create(rInfo);
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
-	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
+	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 
 	m_timerLimit = 3.0f;
 	m_timer = m_timerLimit * 0.5f;
@@ -41,12 +41,12 @@ void HindranceObject::Update()
 	m_moveSpeed += m_acceleration;
 	m_position += m_moveSpeed;
 
-	if (!m_isChild && m_rigidBody.GetBody()->getPlayerCollisionFlg())
+	if (!m_isChild && m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
 		g_gameScene->GetPlayer()->SetParent(this, true);
 		m_isChild = true;
 	}
-	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionFlg())
+	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
 		g_gameScene->GetPlayer()->SetParent(nullptr, true);
 		m_isChild = false;
@@ -59,7 +59,7 @@ void HindranceObject::Update()
 	}
 
 	m_rigidBody.SetPosition(m_position);
-	m_rigidBody.GetBody()->setPlayerCollisionFlg(false);
+	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }
 

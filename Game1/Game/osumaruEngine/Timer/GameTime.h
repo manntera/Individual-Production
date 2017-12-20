@@ -11,9 +11,7 @@ class GameTime
 	{
 
 	}
-
 public:
-
 	static GameTime& GetInstance()
 	{
 		static GameTime gametime;
@@ -23,7 +21,7 @@ public:
 	//1フレームの経過時間を設定
 	void SetFrameDeltaTime(float frameDeltaTime)
 	{
-		m_frameDeltaTime = frameDeltaTime;
+		m_frameDeltaTime = min(1.0f / 10.0f, frameDeltaTime);
 	}
 
 	//1フレームの経過時間を取得

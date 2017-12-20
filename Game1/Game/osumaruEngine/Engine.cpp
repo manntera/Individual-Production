@@ -109,7 +109,16 @@ void Engine::GameLoop()
 			m_shadowMap.Update();
 			m_pad.Update();
 			sw.Stop();
-			GetGameTime().SetFrameDeltaTime((float)sw.GetElapsedTime());
+			if (sw.GetElapsedTime() < 1.0f / 30.0f)
+			{
+				DWORD sleepTime = max(0.0, (1.0 - 30.0) * 1000.0 - (DWORD)sw.GetElapsedTimeMill());
+				Sleep(sleepTime);
+				GetGameTime().SetFrameDeltaTime(1.0f / 30.0f);
+			}
+			else
+			{
+				GetGameTime().SetFrameDeltaTime((float)sw.GetElapsedTime());
+			}
 
 		}
 	}

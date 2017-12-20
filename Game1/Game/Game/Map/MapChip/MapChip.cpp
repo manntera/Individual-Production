@@ -68,5 +68,17 @@ void MapChip::Update()
 void MapChip::Draw()
 {
 	Camera& camera = g_gameScene->GetCamera();
+	if (m_skinModel.GetCurrentShaderTechnique() == enShaderTechniqueShadow)
+	{
+
+		D3DXVECTOR3 scale = { 0.8f, 0.8f, 0.8f };
+		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, scale);
+	}
+	else
+	{
+
+		D3DXVECTOR3 scale = { 1.0f, 1.0f, 1.0f};
+		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, scale);
+	}
 	m_skinModel.Draw(&camera.GetViewMatrix(), &camera.GetProjectionMatrix());
 }

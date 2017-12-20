@@ -25,7 +25,7 @@ void ParticleEmitter::Init(SParticleEmittInfo info, Camera* camera)
 
 void ParticleEmitter::Update()
 {
-	m_intervalTime += 1.0f / 60.0f;
+	m_intervalTime += GetGameTime().GetDeltaFrameTime();
 	if (m_info.emittIntervalTime <= m_intervalTime)
 	{
 		m_intervalTime = 0.0f;
@@ -34,7 +34,7 @@ void ParticleEmitter::Update()
 	}
 	if (0.0f < m_lifeTimer)
 	{
-		m_lifeTimer -= 1.0f / 60.0f;
+		m_lifeTimer -= GetGameTime().GetDeltaFrameTime();
 		if (m_lifeTimer < 0.0f)
 		{
 			Delete(this);

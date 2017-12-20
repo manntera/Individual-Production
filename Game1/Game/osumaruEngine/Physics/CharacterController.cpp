@@ -202,12 +202,12 @@ void CharacterController::Execute()
 {
 	PhysicsWorld& physicsWorld = GetPhysicsWorld();
 	//速度に重力加速度を加える。
-	m_moveSpeed.y += m_gravity * (1.0f / 60.0f);
+	m_moveSpeed.y += m_gravity * GetGameTime().GetDeltaFrameTime();
 	//次の移動先となる座標を計算する。
 	D3DXVECTOR3 nextPosition = m_position;
 	//速度からこのフレームでの移動量を求める。オイラー積分。
 	D3DXVECTOR3 addPos = m_moveSpeed;
-	addPos *= 1.0f / 60.0f;
+	addPos *=  GetGameTime().GetDeltaFrameTime();
 	nextPosition += addPos;
 	D3DXVECTOR3 originalXZDir = addPos;
 	originalXZDir.y = 0.0f;
@@ -300,7 +300,7 @@ void CharacterController::Execute()
 			}
 			if (callback.hitObject != nullptr && m_rigidBody.GetBody()->getUserIndex() == enCollisionAttr_Character)
 			{
-				//const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionFlg(true);
+				//const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionWallFlg(true);
 			}
 		}
 		m_wallNormal = hitNormal;
@@ -366,11 +366,12 @@ void CharacterController::Execute()
 			//地面上にいない
 			m_isOnGround = false;
 		}
-		m_groundHitObject = callback.hitObject;
 		if (callback.hitObject != nullptr && m_rigidBody.GetBody()->getUserIndex() == enCollisionAttr_Character)
 		{
-			const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionFlg(true);
+			//const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionGroundFlg(true);
 		}
+		m_groundHitObject = callback.hitObject;
+
 	}//上方向を調べる
 	{
 		m_position = nextPosition;	//移動の仮確定。

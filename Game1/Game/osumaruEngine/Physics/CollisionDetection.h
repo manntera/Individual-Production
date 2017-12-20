@@ -81,13 +81,18 @@ public:
 	{
 		return m_collisionType;
 	}
-
+	//このコリジョンの属性を設定
+	void SetJudgmentType(int judgmentType)
+	{
+		m_judgmentType = judgmentType;
+	}
 private:
-	RigidBody		m_rigidBody;		//剛体
-	ICollider*		m_pCollider;		//コライダー
-	D3DXVECTOR3		m_position;			//座標
-	D3DXQUATERNION	m_rotation;			//回転
-	bool			m_isHit;			//当たってるか？
+	RigidBody		m_rigidBody;			//剛体
+	ICollider*		m_pCollider;			//コライダー
+	D3DXVECTOR3		m_position;				//座標
+	D3DXQUATERNION	m_rotation;				//回転
+	bool			m_isHit;				//当たってるか？
 	D3DXVECTOR3		m_hitCollisionNormal;	//テスト用
 	int				m_collisionType;		//ヒットしたｺﾘｼﾞｮﾝの属性
+	int				m_judgmentType;			//このコリジョンの属性
 };

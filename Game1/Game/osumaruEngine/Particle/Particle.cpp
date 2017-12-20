@@ -47,7 +47,7 @@ void Particle::Init(SParticleEmittInfo& info, Camera* camera)
 
 void Particle::Update()
 {
-	m_lifeTimer -= 1.0f / 60.0f;
+	m_lifeTimer -= GetGameTime().GetDeltaFrameTime();
 	if (m_lifeTimer < 0.0f)
 	{
 		Delete(this);

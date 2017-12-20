@@ -39,7 +39,7 @@ void Fade::Update()
 {
 	if (m_timer < m_fadeTime)
 	{
-		m_timer += 1.0f / 60.0f;
+		m_timer += GetGameTime().GetDeltaFrameTime();
 	}
 	else
 	{

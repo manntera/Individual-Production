@@ -258,7 +258,7 @@ SkinModel::SkinModel()
 	m_pCamera = nullptr;
 	m_isShadowMapCaster = false;
 	m_isShadowMapReceiver = false;
-
+	m_isShadowCompesation = false;
 }
 
 SkinModel::~SkinModel()

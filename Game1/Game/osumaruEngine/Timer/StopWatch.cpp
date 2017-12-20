@@ -5,6 +5,7 @@
 StopWatch::StopWatch()
 {
 	m_time = 0.0;
+	m_millTime = 0.0f;
 	m_start = 0;
 	m_end = 0;
 	m_frequency = 1;
@@ -22,9 +23,10 @@ void StopWatch::Start()
 
 void StopWatch::Stop()
 {
-	QueryPerformanceCounter((LARGE_INTEGER*)&m_end);
 	QueryPerformanceFrequency((LARGE_INTEGER*)&m_frequency);
+	QueryPerformanceCounter((LARGE_INTEGER*)&m_end);
 	m_time = (double)(m_end - m_start) / m_frequency;
+	m_millTime = m_time * 1000.0;
 }
 
 

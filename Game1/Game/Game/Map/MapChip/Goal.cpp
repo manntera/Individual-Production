@@ -20,7 +20,7 @@ void Goal::Update()
 	}
 	Player* player = g_gameScene->GetPlayer();
 	D3DXVECTOR3 distance = player->GetPosition() - m_position;
-	if (D3DXVec3Length(&distance) < 3.0f)
+	if (D3DXVec3Length(&distance) < 6.0f)
 	{
 		g_gameScene->GameClear();
 	}

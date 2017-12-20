@@ -55,7 +55,7 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_rotation = rotation;
 	m_position = position;
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
-	m_characterController.SetGravity(-90.0f);
+	m_characterController.SetGravity(-40.0f);
 	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(2.0f, 2.5f, m_position);
 	m_skinModel.SetShadowCasterFlg(true);
@@ -94,7 +94,7 @@ void Player::Update()
 	Move();
 	//m_graspCliff.Update();
 	m_wallJump.Update();
-	m_anim.Update(1.0f / 60.0f);
+	m_anim.Update(GetGameTime().GetDeltaFrameTime());
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 	if (m_characterController.IsOnGround())
 	{
@@ -104,6 +104,7 @@ void Player::Update()
 	{
 		g_gameScene->GameOver();
 	}
+
 	if (GetPad().IsTriggerButton(enButtonY))
 	{
 		//SoundSource* sound = New<SoundSource>(0);
@@ -177,7 +178,7 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 	jumpSpeed.y = 0.0f;
 	D3DXVec3Normalize(&jumpSpeed, &jumpSpeed);
 	jumpSpeed *= 25.0f;
-	jumpSpeed.y = 50.0f;
+	jumpSpeed.y = 30.0f;
 	m_characterController.SetMoveSpeed(jumpSpeed);
 	Rotation(jumpSpeed);
 	m_jumpCount = 1;
@@ -231,7 +232,7 @@ void Player::Move()
 	stickDir += front * GetPad().GetLeftStickY();
 
 	const float acceleration = 0.1f;
-	const float speedLimit = 30.0f;
+	const float speedLimit = 20.0f;
 	if (stickDir.x == 0.0f && stickDir.z == 0.0f)
 	{
 		if (m_characterController.IsOnGround() && m_currentAnim != enAnimSetWait)
@@ -269,7 +270,7 @@ void Player::Move()
 			{
 
 				D3DXVECTOR3 jumpSpeed = stickDir;
-				speed *= 0.02f;
+				speed *= 0.05f;
 				jumpSpeed *= speed;
 				moveSpeed += jumpSpeed;
 				D3DXVECTOR3 moveDirection = moveSpeed;
@@ -305,7 +306,7 @@ void Player::Move()
 			jumpDir *= D3DXVec3Length(&moveSpeed);
 			moveSpeed = jumpDir;
 		}
-		moveSpeed.y = 50.0f;
+		moveSpeed.y = 30.0f;
 		m_currentAnim = enAnimSetJump;
 		m_anim.PlayAnimation(enAnimSetJump);
 		Rotation(moveSpeed);
@@ -319,6 +320,8 @@ void Player::Move()
 	if (m_wallJump.IsWallShear())
 	{
 		moveSpeed = { 0.0f, 0.0f, 0.0f };
+		m_position.y -= 0.2f;
+		m_characterController.SetPosition(m_position);
 	}
 
 	moveSpeed += m_stageGimmickMoveSpeed;
@@ -328,7 +331,7 @@ void Player::Move()
 		D3DXVECTOR3 position;
 		D3DXVec3TransformCoord(&position, &m_localPosition, &m_parent->GetWorldMatrix());
 		m_characterController.SetPosition(position);
-		if (!m_graspCliff.IsActive())
+		if (!m_graspCliff.IsActive() && !m_wallJump.IsWallShear())
 		{
 			m_characterController.Execute();
 		}
@@ -339,7 +342,7 @@ void Player::Move()
 	}
 	else
 	{
-		if (!m_graspCliff.IsActive())
+		if (!m_graspCliff.IsActive() && !m_wallJump.IsWallShear())
 		{
 			m_characterController.Execute();
 		}
@@ -352,7 +355,7 @@ void Player::Move()
 
 void Player::SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed)
 {
-	m_stageGimmickMoveSpeed += moveSpeed * 60.0f;
+	m_stageGimmickMoveSpeed += moveSpeed / GetGameTime().GetDeltaFrameTime();
 }
 
 void Player::DelayRotation(D3DXVECTOR3 rotationDirection)

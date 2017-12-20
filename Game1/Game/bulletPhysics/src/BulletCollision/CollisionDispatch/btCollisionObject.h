@@ -51,7 +51,8 @@ ATTRIBUTE_ALIGNED16(class)	btCollisionObject
 
 protected:
 
-	bool		m_playerCollisionFlg = false;
+	bool		m_playerCollisionGroundFlg = false;
+	bool		m_playerCollisionWallFlg = false;
 
 	btTransform	m_worldTransform;
 
@@ -397,14 +398,24 @@ public:
 		return m_interpolationAngularVelocity;
 	}
 
-	void setPlayerCollisionFlg(bool flg)
+	void setPlayerCollisionGroundFlg(bool flg)
 	{
-		m_playerCollisionFlg = flg;
+		m_playerCollisionGroundFlg = flg;
 	}
 
-	bool getPlayerCollisionFlg()
+	bool getPlayerCollisionGroundFlg()
 	{
-		return m_playerCollisionFlg;
+		return m_playerCollisionGroundFlg;
+	}
+
+	void setPlayerCollisionWallFlg(bool flg)
+	{
+		m_playerCollisionWallFlg = flg;
+	}
+
+	bool getPlayerCollisionWallFlg()
+	{
+		return m_playerCollisionWallFlg;
 	}
 
 	SIMD_FORCE_INLINE int getIslandTag() const

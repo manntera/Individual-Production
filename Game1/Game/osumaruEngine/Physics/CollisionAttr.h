@@ -12,3 +12,9 @@ enum EnCollisionAttr {
 	enCollisionAttr_MapChip,
 	enCollisionAttr_User,		//以下にユーザー定義のコリジョン属性を設定する。
 };
+
+enum EnJudgmentColl
+{
+	enJudgment_Wall,
+	enJudgment_Ground,
+};

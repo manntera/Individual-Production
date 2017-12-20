@@ -39,8 +39,10 @@ void PlayerWallJump::Init(Player* player, CharacterController* characterControll
 	D3DXQUATERNION rotation;
 	D3DXQuaternionRotationMatrix(&rotation, &worldMatrix);
 	m_wallDetection.Init(&m_boxCollider, position, rotation);
+	m_wallDetection.SetJudgmentType(enJudgment_Wall);
 	position = m_player->GetPosition();
 	m_groundDetection.Init(&m_boxCollider, position, rotation);
+	m_groundDetection.SetJudgmentType(enJudgment_Ground);
 	m_defaultGravity = m_characterController->GetGravity();
 	m_dustPos = m_player->FindBoneWorldMatrix("Character1_RightToeBase");
 }
@@ -68,6 +70,7 @@ void PlayerWallJump::Update()
 	m_groundDetection.SetRotation(rotation);
 
 	m_wallDetection.Execute();
+	m_groundDetection.Execute();
 	//•Ç‚É’£‚è•t‚¢‚Ä‚È‚¢Žž
 	if (!m_isWallShear)
 	{
@@ -125,8 +128,6 @@ void PlayerWallJump::Update()
 		position.y = m_dustPos->m[3][1];
 		position.z = m_dustPos->m[3][2];
 		m_wallDust->SetPosition(position);
-		m_wallDetection.Execute();
-		m_groundDetection.Execute();
 		m_isWallShear = m_wallDetection.IsHit();
 
 		if (GetPad().IsTriggerButton(enButtonA))
@@ -148,7 +149,6 @@ void PlayerWallJump::Update()
 			m_wallDust = nullptr;
 			m_characterController->SetGravity(m_defaultGravity);
 		}
-
 	}
 }
 
