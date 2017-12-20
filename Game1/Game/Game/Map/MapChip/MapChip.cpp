@@ -53,7 +53,8 @@ void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelNam
 	m_skinModel.SetShadowReceiverFlg(true);
 	D3DXVECTOR3 scale = { 1.0f, 1.0f, 1.0f };
 	//基本的に動かさないのでワールド行列を最初の一回だけ更新しておく。
-	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, scale);
+	m_skinModel.Update(m_position, m_rotation, scale);
+	m_skinModel.SetShadowCompesationFlg(true);
 }
 
 void MapChip::Start()
@@ -68,17 +69,5 @@ void MapChip::Update()
 void MapChip::Draw()
 {
 	Camera& camera = g_gameScene->GetCamera();
-	if (m_skinModel.GetCurrentShaderTechnique() == enShaderTechniqueShadow)
-	{
-
-		D3DXVECTOR3 scale = { 0.8f, 0.8f, 0.8f };
-		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, scale);
-	}
-	else
-	{
-
-		D3DXVECTOR3 scale = { 1.0f, 1.0f, 1.0f};
-		m_skinModel.UpdateWorldMatrix(m_position, m_rotation, scale);
-	}
 	m_skinModel.Draw(&camera.GetViewMatrix(), &camera.GetProjectionMatrix());
 }

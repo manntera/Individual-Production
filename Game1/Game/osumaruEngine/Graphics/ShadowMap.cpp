@@ -28,9 +28,19 @@ void ShadowMap::Create(int width, int height)
 
 void ShadowMap::Update()
 {
+	D3DXVECTOR3 direction = m_target - m_position;
+	D3DXVec3Normalize(&direction, &direction);
+	if (0.999f < fabs(D3DXVec3Dot(&direction, &D3DXVECTOR3(0.0f, 1.0f, 0.0f))) )
+	{
+		m_up = { 1.0f, 0.0f, 0.0f };
+	}
+	else
+	{
+		m_up = { 0.0f, 1.0f, 0.0f };
+	}
 	D3DXMatrixLookAtLH(&m_viewMatrix, &m_position, &m_target, &m_up);
 	//D3DXMatrixPerspectiveFovLH(&m_projMatrix, D3DXToRadian(60.0f), 1.0f, 1.0f, 100.0f);
-	D3DXMatrixOrthoLH(&m_projMatrix, 50.0f, 50.0f, 1.0f, 100.0f);
+	D3DXMatrixOrthoLH(&m_projMatrix, 100.0f, 100.0f, 3.0f, 300.0f);
 }
 
 void ShadowMap::Entry(SkinModel* model)
@@ -53,9 +63,24 @@ void ShadowMap::Draw()
 	for (SkinModel* model : m_models)
 	{
 		EnSkinModelShaderTechnique shaderTechniqueBackup = model->GetCurrentShaderTechnique();
+		D3DXVECTOR3 trans;
+		D3DXQUATERNION rot;
+		D3DXVECTOR3 scale;
+		if (model->IsShadowCompesation())
+		{
+			trans = model->GetPosition();
+			rot = model->GetRotation();
+			scale = model->GetScale();
+			model->UpdateWorldMatrix(trans, rot, scale * 0.99f);
+		}
 		model->SetShaderTechnique(enShaderTechniqueShadow);
 		model->Draw(&m_viewMatrix, &m_projMatrix);
 		model->SetShaderTechnique(shaderTechniqueBackup);
+		if (model->IsShadowCompesation())
+		{
+			model->UpdateWorldMatrix(trans, rot, scale);
+		}
+		model->SetIsShadowEntry(false);
 	}
 	GetEngine().GetDevice()->EndScene();
 	GetEngine().GetDevice()->SetRenderTarget(0, renderTargetBackup);

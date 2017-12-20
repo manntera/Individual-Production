@@ -234,23 +234,20 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 	{
 		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
 		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
-		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f) {
-			//float dotValue = dot(normal, g_lightCameraDir);
-			//if (dotValue < 0.0f)
+		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f) 
+		{
+			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+			uv += 1.0f;
+			uv *= 0.5f;
+			uv.y = 1.0f - uv.y;
+			float4 shadow = tex2D(g_shadowMapSampler, uv);
+			//ライトカメラから見た深度値を計算
+			float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+			shadowDepth = min(1.0f, shadowDepth);
+			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+			if (shadow.x < shadowDepth - 0.005f)
 			{
-				//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
-				uv += 1.0f;
-				uv *= 0.5f;
-				uv.y = 1.0f - uv.y;
-				float4 shadow = tex2D(g_shadowMapSampler, uv);
-				//ライトカメラから見た深度値を計算
-				float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
-				shadowDepth = min(1.0f, shadowDepth);
-				//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-				if (shadow.x < shadowDepth - 0.035f)
-				{
-					lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
-				}
+				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
 			}
 		}
 	}

@@ -259,6 +259,7 @@ SkinModel::SkinModel()
 	m_isShadowMapCaster = false;
 	m_isShadowMapReceiver = false;
 	m_isShadowCompesation = false;
+	m_isShadowEntry = false;
 }
 
 SkinModel::~SkinModel()
@@ -281,25 +282,34 @@ void SkinModel::Init(SkinModelData* modelData)
 
 void SkinModel::ShadowMapEntry()
 {
-	if (m_isShadowMapCaster)
+	if (m_isShadowMapCaster && !m_isShadowEntry)
 	{
 		GetShadowMap().Entry(this);
+		m_isShadowEntry = true;
 	}
 }
 
 void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
 {
-	ShadowMapEntry();
-	D3DXMATRIX mTrans, mScale;
-	D3DXMatrixScaling(&mScale, scale.x, scale.y, scale.z);
-	D3DXMatrixTranslation(&mTrans, trans.x, trans.y, trans.z);
-	D3DXMatrixRotationQuaternion(&m_rotationMatrix, &rot);
-	m_worldMatrix = mScale * m_rotationMatrix * mTrans;
+	m_scale = scale;
+	m_position = trans;
+	m_rotation = rot;
 
+	D3DXMATRIX mTrans, mScale;
+	D3DXMatrixScaling(&mScale, m_scale.x, m_scale.y, m_scale.z);
+	D3DXMatrixTranslation(&mTrans, m_position.x, m_position.y, m_position.z);
+	D3DXMatrixRotationQuaternion(&m_rotationMatrix, &m_rotation);
+	m_worldMatrix = mScale * m_rotationMatrix * mTrans;
 	if (m_skinModelData)
 	{
 		m_skinModelData->UpdateBoneMatrix(m_worldMatrix);		//ボーン行列を更新
 	}
+}
+
+void SkinModel::Update(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
+{
+	ShadowMapEntry();
+	UpdateWorldMatrix(trans, rot, scale);
 }
 
 void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)

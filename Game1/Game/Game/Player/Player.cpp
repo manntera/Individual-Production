@@ -95,7 +95,7 @@ void Player::Update()
 	//m_graspCliff.Update();
 	m_wallJump.Update();
 	m_anim.Update(GetGameTime().GetDeltaFrameTime());
-	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 	if (m_characterController.IsOnGround())
 	{
 		DelayRotation(m_characterController.GetMoveSpeed());
@@ -130,7 +130,7 @@ void Player::Update()
 	}
 	GetShadowMap().SetLightCameraTarget(m_characterController.GetPosition());
 	D3DXVECTOR3 lightCameraPos = m_characterController.GetPosition();
-	lightCameraPos += {0.0f, 10.0f, 0.0f};
+	lightCameraPos += {0.0f, 40.0f, 0.0f};
 	GetShadowMap().SetLightCameraPosition(lightCameraPos);
 }
 
@@ -184,9 +184,14 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 	m_jumpCount = 1;
 	m_currentAnim = enAnimSetWallJump;
 	m_anim.PlayAnimation(enAnimSetWallJump);
-	//SoundSource* sound = New<SoundSource>(0);
-	//sound->Init("Assets/sound/univ0001.wav");
-	//sound->Play(false);
+	SoundSource* sound = New<SoundSource>(0);
+	sound->Init("Assets/sound/univ0001.wav");
+	sound->Play(false);
+	sound->SetVolume(0.8f);
+	sound = New<SoundSource>(0);
+	sound->Init("Assets/sound/Jump.wav");
+	sound->Play(false);
+	sound->SetVolume(0.3f);
 }
 
 void Player::SetParent(MapChip* parent, bool parentRotation)
@@ -306,13 +311,23 @@ void Player::Move()
 			jumpDir *= D3DXVec3Length(&moveSpeed);
 			moveSpeed = jumpDir;
 		}
+		else
+		{
+			SoundSource* jumpSound;
+			jumpSound = New<SoundSource>(0);
+			jumpSound->Init("Assets/sound/Jump.wav");
+			jumpSound->Play(false);
+			jumpSound->SetVolume(0.3f);
+
+		}
 		moveSpeed.y = 30.0f;
 		m_currentAnim = enAnimSetJump;
 		m_anim.PlayAnimation(enAnimSetJump);
 		Rotation(moveSpeed);
-		//SoundSource* sound = New<SoundSource>(0);
-		//sound->Init("Assets/sound/univ0002.wav");
-		//sound->Play(false);
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/univ0002.wav");
+		sound->Play(false);
+		sound->SetVolume(0.8f);
 		m_jumpCount++;
 
 	}

@@ -108,7 +108,7 @@ VS_OUTPUT VSMain(VS_INPUT In)
 	return Out;
 }
 
-float4 PSMain(VS_OUTPUT In) : COLOR
+float4 PSMain(VS_OUTPUT In) : COLOR0
 {
 	float4 color = tex2D(g_sceneSampler, In.uv);
 	float t = dot(color.xyz, float3(0.2125f, 0.7154f, 0.0721f));
@@ -118,7 +118,7 @@ float4 PSMain(VS_OUTPUT In) : COLOR
 	return color;
 }
 
-float4 CombinePS(VS_OUTPUT In) : COLOR
+float4 CombinePS(VS_OUTPUT In) : COLOR0
 {
 	float4 color;
 	color = tex2D(g_downSampler0, In.uv);
@@ -130,7 +130,7 @@ float4 CombinePS(VS_OUTPUT In) : COLOR
 	return color;
 }
 
-float4 FinalPS(VS_OUTPUT In) : COLOR
+float4 FinalPS(VS_OUTPUT In) : COLOR0
 {
 	float4 color = tex2D(g_sceneSampler, In.uv);
 	return clamp(color.x, color.y, color.z);

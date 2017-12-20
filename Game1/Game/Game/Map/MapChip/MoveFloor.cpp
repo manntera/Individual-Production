@@ -64,7 +64,7 @@ void MoveFloor::Update()
 	m_rigidBody.SetRotation(m_rotation);
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 
-	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }
 
 void MoveFloor::Draw()

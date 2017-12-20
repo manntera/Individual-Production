@@ -32,7 +32,7 @@ void FallObject::Update()
 		m_position.y -= 0.4f;
 	}
 	m_rigidBody.SetPosition(m_position);
-	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 }
 

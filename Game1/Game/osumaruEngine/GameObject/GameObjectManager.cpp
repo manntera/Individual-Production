@@ -36,7 +36,7 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 
 	device->SetRenderTarget(0, GetMainRenderTarget().GetRenderTarget());
 	device->SetDepthStencilSurface(GetMainRenderTarget().GetDepthStencilBuffer());
-	device->SetRenderTarget(1, GetDepthOfField().GetDepthRendertarget().GetRenderTarget());
+	//device->SetRenderTarget(1, GetDepthOfField().GetDepthRendertarget().GetRenderTarget());
 	device->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, D3DCOLOR_XRGB(0, 0, 255), 1.0f, 0);
 	////シーンの描画開始。
 	device->BeginScene();
@@ -49,7 +49,7 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 	}
 	device->EndScene();
 
-	device->SetRenderTarget(1, NULL);
+	//device->SetRenderTarget(1, NULL);
 	device->BeginScene();
 	postEffect.Draw();
 	GetPhysicsWorld().Draw();

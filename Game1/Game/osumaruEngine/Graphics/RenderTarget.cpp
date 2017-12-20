@@ -43,7 +43,6 @@ void RenderTarget::Create(int width, int height, D3DFORMAT format, D3DFORMAT dep
 		NULL
 	);
 	m_pTexture->GetSurfaceLevel(0, &m_pRenderTarget);
-	
 }
 
 void RenderTarget::Release()

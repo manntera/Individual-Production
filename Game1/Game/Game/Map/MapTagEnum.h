@@ -4,5 +4,6 @@
 	enMapTagPlayer,
 	enMapTagFall,
 	enMapTagGoal,
+	enMapTagMapChip,
 	enMapTagNum,
 };

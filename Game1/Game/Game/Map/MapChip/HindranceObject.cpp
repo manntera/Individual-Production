@@ -60,7 +60,7 @@ void HindranceObject::Update()
 
 	m_rigidBody.SetPosition(m_position);
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
-	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }
 
 void HindranceObject::Draw()

@@ -66,9 +66,11 @@ void Map::Init()
 		//case enMapTagHindrance:
 		//	mapChip = New<HindranceObject>(stageGimmickPriority);
 		//	break;
-
-		case enMapTagFall:
-			mapChip = New<FallObject>(stageGimmickPriority);
+		//case enMapTagFall:
+		//	mapChip = New<FallObject>(stageGimmickPriority);
+		//	break;
+		case enMapTagMapChip:
+			mapChip = New<MapChip>(stageGimmickPriority);
 			break;
 		default:
 			mapChip = New<StaticMapObject>(stageGimmickPriority);

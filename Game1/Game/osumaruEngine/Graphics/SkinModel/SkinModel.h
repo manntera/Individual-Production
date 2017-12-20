@@ -51,6 +51,14 @@ public:
 	*/
 	void UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale);
 
+	/*
+	更新。
+	trans	平行移動
+	rot		回転
+	scale	拡大
+	*/
+	void Update(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale);
+
 	//シャドウマップに登録
 	void ShadowMapEntry();
 
@@ -120,6 +128,41 @@ public:
 	{
 		return m_currentShaderTechnique;
 	}
+
+	//地面に垂直な部分があるモデルかのフラグを設定
+	void SetShadowCompesationFlg(bool isShadowCompesation)
+	{
+		m_isShadowCompesation = isShadowCompesation;
+	}
+
+	//地面に垂直な部分があるモデルか？
+	bool IsShadowCompesation()
+	{
+		return m_isShadowCompesation;
+	}
+
+
+	//座標の取得。
+	D3DXVECTOR3 GetPosition()
+	{
+		return m_position;
+	}
+
+	//スケールの取得。
+	D3DXVECTOR3 GetScale()
+	{
+		return m_scale;
+	}
+
+	//回転を取得。
+	D3DXQUATERNION GetRotation()
+	{
+		return m_rotation;
+	}
+	void SetIsShadowEntry(bool isShadowEntry)
+	{
+		m_isShadowEntry = isShadowEntry;
+	}
 private:
 	bool						m_isShadowMapCaster;						//影を落とすか？
 	bool						m_isShadowMapReceiver;						//影を落とされるか？
@@ -136,5 +179,9 @@ private:
 	Animation					m_animation;								//アニメーション
 	Light*						m_light;									//ライト
 	Camera*						m_pCamera;									//スペキュラで使うカメラ
-	bool						m_isShadowCompesation;						//
+	bool						m_isShadowCompesation;						//地面に垂直な部分に落ちる影の補正するか？
+	D3DXVECTOR3					m_position;									//モデルの座標
+	D3DXVECTOR3					m_scale;									//モデルのスケール
+	D3DXQUATERNION				m_rotation;									//モデルの回転
+	bool						m_isShadowEntry;
 };

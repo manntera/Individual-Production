@@ -27,7 +27,7 @@ void Sky::Update()
 	D3DXQuaternionIdentity(&rotation);
 	D3DXVECTOR3 position = { 0.0f, 0.0f, 0.0f };
 	D3DXVECTOR3 scale = { 2.0f, 2.0f, 2.0f };
-	m_skinModel.UpdateWorldMatrix(position, rotation, scale);
+	m_skinModel.Update(position, rotation, scale);
 }
 
 void Sky::Draw()
