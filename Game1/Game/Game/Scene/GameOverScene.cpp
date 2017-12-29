@@ -14,7 +14,8 @@ GameOverScene::~GameOverScene()
 
 void GameOverScene::Start()
 {
-	m_sprite.Init("Assets/sprite/GameOver.png");
+	Texture* texture = GetTextureResource().LoadTexture("Assets / sprite / GameOver.png");
+	m_sprite.Init(texture);
 	m_sprite.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
 	g_pFade->FadeIn();
 }

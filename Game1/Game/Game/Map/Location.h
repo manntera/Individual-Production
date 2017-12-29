@@ -1,301 +1,105 @@
-﻿//GroundBrock
+﻿//testGround
 {
-	"GroundBrock",
-	D3DXVECTOR3(0.00f, -10.20f, 0.00f),             //平行移動
+	"testGround",
+	D3DXVECTOR3(-0.31f, -42.30f, 1.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagUntagged, //タグ
+},
+//test
+{
+	"test",
+	D3DXVECTOR3(12.50f, 0.00f, -63.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagUntagged, //タグ
 },
 //Unitychan
 {
 	"Unitychan",
-	D3DXVECTOR3(0.00f, 8.95f, 0.00f),             //平行移動
+	D3DXVECTOR3(16.80f, 0.86f, -62.60f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagPlayer, //タグ
 },
-//GroundBrock
+//Spring
 {
-	"GroundBrock",
-	D3DXVECTOR3(0.00f, -8.90f, 37.30f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.70f, 0.00f, 0.71f ),  //回転
-	enMapTagUntagged, //タグ
+	"Spring",
+	D3DXVECTOR3(-56.70f, 4.70f, -24.70f),             //平行移動
+	D3DXQUATERNION(0.13f, 0.18f, -0.02f, 0.97f ),  //回転
+	enMapTagSpring, //タグ
 },
-//GroundBrock
+//test
 {
-	"GroundBrock",
-	D3DXVECTOR3(-5.80f, 61.10f, 100.20f),             //平行移動
+	"test",
+	D3DXVECTOR3(45.40f, 0.00f, -58.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
+	enMapTagMoveFloor, //タグ
+},
+//test
+{
+	"test",
+	D3DXVECTOR3(41.44f, 0.00f, 35.80f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagUntagged, //タグ
 },
-//GroundBrock
+//testGoal
 {
-	"GroundBrock",
-	D3DXVECTOR3(56.20f, 6.70f, 73.20f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.25f, 0.00f, 0.97f ),  //回転
-	enMapTagUntagged, //タグ
-},
-//GroundBrock
-{
-	"GroundBrock",
-	D3DXVECTOR3(54.40f, 25.30f, 138.90f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.39f, 0.00f, 0.92f ),  //回転
-	enMapTagUntagged, //タグ
-},
-//GroundBrock
-{
-	"GroundBrock",
-	D3DXVECTOR3(11.00f, 39.70f, 161.50f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.63f, 0.00f, 0.77f ),  //回転
-	enMapTagUntagged, //タグ
-},
-//GroundBrock
-{
-	"GroundBrock",
-	D3DXVECTOR3(-43.50f, 47.60f, 152.10f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.91f, 0.00f, 0.42f ),  //回転
-	enMapTagFall, //タグ
-},
-//GroundBrock
-{
-	"GroundBrock",
-	D3DXVECTOR3(-59.10f, 57.40f, 99.90f),             //平行移動
-	D3DXQUATERNION(0.00f, -1.00f, 0.00f, 0.00f ),  //回転
-	enMapTagFall, //タグ
-},
-//star
-{
-	"star",
-	D3DXVECTOR3(-5.80f, 85.50f, 99.90f),             //平行移動
+	"testGoal",
+	D3DXVECTOR3(42.70f, 0.80f, 36.50f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagGoal, //タグ
 },
-//GroundBrock
+//test
 {
-	"GroundBrock",
-	D3DXVECTOR3(31.40f, -0.70f, 48.10f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.47f, 0.00f, 0.88f ),  //回転
+	"test",
+	D3DXVECTOR3(7.10f, 0.00f, 7.40f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 	enMapTagUntagged, //タグ
 },
-//GroundBrock
+//test
 {
-	"GroundBrock",
-	D3DXVECTOR3(64.60f, 15.20f, 103.30f),             //平行移動
+	"test",
+	D3DXVECTOR3(-3.40f, 11.70f, -59.60f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, -0.71f, 0.71f ),  //回転
+	enMapTagUntagged, //タグ
+},
+//test
+{
+	"test",
+	D3DXVECTOR3(-3.40f, -24.20f, -59.60f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, -0.71f, 0.71f ),  //回転
+	enMapTagUntagged, //タグ
+},
+//testBox
+{
+	"testBox",
+	D3DXVECTOR3(-25.30f, 8.60f, -98.40f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+	enMapTagMoveFloor, //タグ
+},
+//test
+{
+	"test",
+	D3DXVECTOR3(10.00f, 0.00f, -99.20f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagUntagged, //タグ
 },
-//GroundIsland
+//testRectangle
 {
-	"GroundIsland",
-	D3DXVECTOR3(101.50f, -46.20f, -7.60f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.20f, 0.00f, 0.98f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(120.71f, -45.50f, 52.82f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//Wave
-{
-	"Wave",
-	D3DXVECTOR3(0.00f, -42.70f, 0.00f),             //平行移動
+	"testRectangle",
+	D3DXVECTOR3(68.20f, -35.50f, -43.80f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
+	enMapTagRotation, //タグ
 },
-//GroundIsland
+//testBox
 {
-	"GroundIsland",
-	D3DXVECTOR3(103.80f, -45.50f, 127.22f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.20f, 0.00f, 0.98f ),  //回転
-	enMapTagMapChip, //タグ
+	"testBox",
+	D3DXVECTOR3(-25.30f, 8.60f, -165.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+	enMapTagHindrance, //タグ
 },
-//GroundIsland
+//GroundBrock
 {
-	"GroundIsland",
-	D3DXVECTOR3(-54.60f, -45.50f, 101.40f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.71f, 0.00f, 0.71f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-140.56f, -45.50f, 9.90f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.55f, 0.00f, 0.84f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-103.97f, -45.50f, -54.50f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.09f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-40.55f, -45.50f, -104.65f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.90f, 0.00f, 0.44f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(70.63f, -45.50f, -72.76f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.07f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-233.00f, -45.50f, 163.00f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.11f, 0.00f, 0.99f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-128.70f, -45.50f, 193.10f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.01f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(22.00f, -45.50f, 325.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-56.90f, -45.50f, 315.07f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.27f, 0.00f, 0.96f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(155.00f, -45.50f, 281.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-61.00f, -45.50f, 233.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-179.00f, -45.50f, 326.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.13f, 0.00f, 0.99f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-198.00f, -45.50f, 82.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-225.00f, -45.50f, -42.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(12.00f, -45.50f, -165.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(210.75f, -45.50f, 156.24f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.03f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(211.00f, -45.50f, 156.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(166.37f, -45.50f, -54.32f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.78f, 0.00f, 0.63f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(229.00f, -45.50f, 66.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-258.00f, -45.50f, 68.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-157.00f, -45.50f, -119.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-124.00f, -45.50f, 100.00f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.20f, 0.00f, 0.98f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-247.00f, -45.50f, 271.00f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.20f, 0.00f, 0.98f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(42.00f, -45.50f, 159.00f),             //平行移動
-	D3DXQUATERNION(0.00f, -0.20f, 0.00f, 0.98f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(64.00f, -45.50f, 251.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(135.00f, -45.50f, -145.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
-},
-//GroundIsland
-{
-	"GroundIsland",
-	D3DXVECTOR3(-240.00f, -45.50f, -131.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.04f, 0.00f, 1.00f ),  //回転
-	enMapTagMapChip, //タグ
+	"GroundBrock",
+	D3DXVECTOR3(18.10f, 23.00f, -31.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagFall, //タグ
 },

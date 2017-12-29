@@ -7,6 +7,7 @@
 #include "Sound\SoundEngine.h"
 #include "Resource\TextureResource.h"
 #include "Graphics\PostEffect\PostEffect.h"
+#include "Resource\SkinModelDataResource.h"
 //エンジンクラス
 
 const int FRAME_BUFFER_WIDTH = 1280;
@@ -63,10 +64,18 @@ public:
 		return m_shadowMap;
 	}
 
+	//ポストエフェクトを取得
 	PostEffect& GetPostEffect()
 	{
 		return m_postEffect;
 	}
+
+	//スキンモデルデータリソースを取得
+	SkinModelDataResource& GetModelDataResource()
+	{
+		return m_skinModelDataResource;
+	}
+	
 
 	//メインのレンダリングターゲットを取得
 	RenderTarget& GetMainRenderTarget()
@@ -135,19 +144,20 @@ public:
 		return m_soundEngine;
 	}
 private:
-	LPDIRECT3D9			m_pD3D;
-	LPDIRECT3DDEVICE9	m_pD3DDevice;			//デバイス
-	EffectManager*		m_effectManager;		//エフェクトマネージャー
-	WNDCLASSEX			m_wc;
-	GameObjectManager	m_objectManager;		//オブジェクトマネージャー
-	PhysicsWorld*		m_physicsWorld;			//物理ワールド
-	Pad					m_pad;					//パッドの入力
-	ShadowMap			m_shadowMap;			//シャドウマップ
-	SoundEngine			m_soundEngine;
-	TextureResource		m_textureResource;
-	RenderTarget		m_renderTarget[2];			//メインのレンダリングターゲット
-	int					m_currentRenderTargetNum;
-	PostEffect			m_postEffect;
+	LPDIRECT3D9				m_pD3D;
+	LPDIRECT3DDEVICE9		m_pD3DDevice;			//デバイス
+	EffectManager*			m_effectManager;		//エフェクトマネージャー
+	WNDCLASSEX				m_wc;
+	GameObjectManager		m_objectManager;		//オブジェクトマネージャー
+	PhysicsWorld*			m_physicsWorld;			//物理ワールド
+	Pad						m_pad;					//パッドの入力
+	ShadowMap				m_shadowMap;			//シャドウマップ
+	SoundEngine				m_soundEngine;
+	TextureResource			m_textureResource;
+	SkinModelDataResource	m_skinModelDataResource;
+	RenderTarget			m_renderTarget[2];			//メインのレンダリングターゲット
+	int						m_currentRenderTargetNum;
+	PostEffect				m_postEffect;
 };
 //エンジンクラスのインスタンスを取得。
 static Engine& GetEngine()
@@ -207,4 +217,9 @@ static RenderTarget& GetMainRenderTarget()
 static DepthOfField& GetDepthOfField()
 {
 	return GetEngine().GetPostEffect().GetDepthOfField();
+}
+
+static SkinModelDataResource& GetModelDataResource()
+{
+	return GetEngine().GetModelDataResource();
 }

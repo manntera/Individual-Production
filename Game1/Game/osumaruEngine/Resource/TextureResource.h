@@ -13,8 +13,6 @@ public:
 
 	//テクスチャを取得
 	Texture* LoadTexture(char* filePath);
-
-
 private:
-	std::map<char*, Texture*> m_textures;	//テクスチャ
+	std::map<int, Texture*> m_textures;	//テクスチャ
 };

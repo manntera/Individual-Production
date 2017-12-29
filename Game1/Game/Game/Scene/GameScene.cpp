@@ -8,33 +8,39 @@
 #include "GameClearScene.h"
 #include "GameOverScene.h"
 #include "Fade.h"
+#include "../HUD/TimeSprite.h"
 
 GameScene *g_gameScene;
+int GameScene::m_stageNum = 0;
 
 
 GameScene::GameScene()
 {
 	m_isGameClear = false;
 	m_isGameOver = false;
+	m_pTimeSprite = nullptr;
+	
 }
 
 GameScene::~GameScene()
 {
 	Delete(m_bgm);
+	Delete(m_pTimeSprite);
 }
 
 void GameScene::Start()
 {
 	m_sky = New<Sky>(0);
-	m_map = New<Map>(0);
-	m_map->Init();
 	m_camera = New<GameCamera>(cameraPriority);
 	m_camera->Init();
+	m_map = New<Map>(0);
+	m_map->Init(m_stageNum);
 	g_pFade->FadeIn();
 	m_bgm = New<SoundSource>(0);
 	m_bgm->Init("Assets/sound/BGM.wav");
 	m_bgm->SetVolume(0.1f);
 	m_bgm->Play(true);
+	m_pTimeSprite = New<TimeSprite>(lastPriority);
 }
 
 void GameScene::Update()
@@ -46,6 +52,7 @@ void GameScene::Update()
 			if (m_isGameClear)
 			{
 				New<GameClearScene>(0);
+				m_stageNum++;
 			}
 			else if (m_isGameOver)
 			{

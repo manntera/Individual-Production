@@ -19,9 +19,6 @@ public:
 	*/
 	LPD3DXEFFECT LoadEffect(char* filePath);
 
-	//ハッシュ値を文字列からintの値で作る関数
-	int MakeHash(char* string);
-
 	//リリース
 	void Release();
 private:

@@ -64,7 +64,7 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 
 void Player::Start()
 {
-	m_skinModelData.LoadModelData("Assets/modelData/Unitychan.X", &m_anim);
+	GetModelDataResource().Load(&m_skinModelData, &m_anim, "Assets/modelData/Unitychan.X");
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
 	m_modelNormalMap.Load("Assets/modelData/utc_normal.tga");

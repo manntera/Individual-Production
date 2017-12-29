@@ -4,6 +4,7 @@ class GameCamera;
 class Test;
 class Sky;
 class Player;
+class TimeSprite;
 
 //ゲームシーンクラス
 
@@ -45,6 +46,8 @@ private:
 	GameCamera*		m_camera;	//カメラ
 	Sky*			m_sky;		//スカイボックス
 	SoundSource*		m_bgm;	//BGM
+	static int		m_stageNum;
+	TimeSprite*		m_pTimeSprite;
 };
 
 extern GameScene *g_gameScene;

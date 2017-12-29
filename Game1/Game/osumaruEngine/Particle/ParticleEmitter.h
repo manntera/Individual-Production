@@ -9,10 +9,13 @@ struct SParticleEmittInfo
 	float width;				//パーティクルの横幅
 	float height;				//パーティクルの縦幅
 	D3DXVECTOR4 uv;				//テクスチャのuv座標。左上のuv、右下のuv
+	D3DXVECTOR3 randomPosition;		//パーティクル座標のランダム幅
+	D3DXVECTOR3 gravity;		//パーティクルの重力
 	float	lifeTime;			//パーティクルの寿命
 	float	emittIntervalTime;	//パーティクルが出るインターバルの時間
 	float	emitterLifeTime;	//エミッターの寿命
 	D3DXVECTOR3 emitterPosition;//エミッターの座標
+	int particleNum;			//同時に出るパーティクルの数
 };
 
 //パーティクルエミッター
@@ -46,4 +49,5 @@ private:
 	SParticleEmittInfo		m_info;			//パーティクルとエミッターの初期化情報
 	float					m_lifeTimer;	//寿命
 	float					m_intervalTime;	//パーティクルを出すインターバルタイム
+	int						m_particleNum;	//1フレームに出るパーティクルの数
 };

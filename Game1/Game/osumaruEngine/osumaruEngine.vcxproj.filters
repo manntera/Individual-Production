@@ -49,6 +49,9 @@
     <Filter Include="ソース ファイル\Font">
       <UniqueIdentifier>{2f4dc14c-9ac0-42ba-9e2c-43b3ef8c5027}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Random">
+      <UniqueIdentifier>{db3d6a04-8a16-4136-b32d-cac5e67b4a8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graphics\EffectManager.cpp">
@@ -170,6 +173,12 @@
     </ClCompile>
     <ClCompile Include="Graphics\PostEffect\DepthOfField.cpp">
       <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource\SkinModelDataResource.cpp">
+      <Filter>ソース ファイル\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Random\Random.cpp">
+      <Filter>ソース ファイル\Random</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,6 +310,12 @@
     </ClInclude>
     <ClInclude Include="Graphics\PostEffect\DepthOfField.h">
       <Filter>ソース ファイル\Graphics\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource\SkinModelDataResource.h">
+      <Filter>ソース ファイル\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Random\Random.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -20,6 +20,7 @@ void GameCamera::Init()
 	m_camera.SetTarget({0.0f, 0.0f, 0.0f});
 	m_camera.SetNear(3.0f);
 	m_camera.SetFar(1000.0f);
+	m_camera.Update();
 	D3DXQuaternionIdentity(&m_rotation);
 	GetPhysicsWorld().SetCamera(&m_camera);
 }

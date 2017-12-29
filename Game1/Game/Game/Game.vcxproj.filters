@@ -28,6 +28,9 @@
     <Filter Include="ソース ファイル\Map\MapChip">
       <UniqueIdentifier>{1a7e3104-4569-477b-8260-746b580b958a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\HUD">
+      <UniqueIdentifier>{1c2ffda4-790f-4406-8449-21d5f8e72f21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -90,6 +93,9 @@
     <ClCompile Include="Map\MapChip\FallObject.cpp">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClCompile>
+    <ClCompile Include="HUD\TimeSprite.cpp">
+      <Filter>ソース ファイル\HUD</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -148,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Map\MapChip\FallObject.h">
       <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD\TimeSprite.h">
+      <Filter>ソース ファイル\HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

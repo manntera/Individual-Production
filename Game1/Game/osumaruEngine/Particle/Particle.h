@@ -39,4 +39,6 @@ private:
 	Camera*			m_camera;		//ƒJƒƒ‰
 	float			m_lifeTimer;	//õ–½
 	float			m_angle;		//‰ñ“]—Ê
+	D3DXVECTOR3		m_gravity;		//d—Í
+	D3DXVECTOR3		m_speed;		//‘¬“x
 };

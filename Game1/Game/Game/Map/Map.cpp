@@ -19,10 +19,17 @@ struct MapChipInfo
 	EnMapChipTag	m_tag;
 };
 
-MapChipInfo mapChipInfo[] = 
+std::vector<std::vector<MapChipInfo>> mapChipInfo = 
 {
+	{
 #include "Location.h"
+	},
+	{
+#include "Location2.h"
+	}
 };
+
+
 
 
 Map::Map()
@@ -34,9 +41,9 @@ Map::~Map()
 {
 }
 
-void Map::Init()
+void Map::Init(int stageNum)
 {
-	for (MapChipInfo& mInfo : mapChipInfo)
+	for (MapChipInfo& mInfo : mapChipInfo[stageNum])
 	{
 		MapChip* mapChip = nullptr;
 
@@ -50,25 +57,24 @@ void Map::Init()
 		case enMapTagGoal:
 			mapChip = New<Goal>(stageGimmickPriority);
 			break;
+		case enMapTagMoveFloor:
+			mapChip = New<MoveFloor>(stageGimmickPriority);
+			break;
 
-		//case enMapTagMoveFloor:
-		//	mapChip = New<MoveFloor>(stageGimmickPriority);
-		//	break;
+		case enMapTagSpring:
+			mapChip = New<SpringObject>(stageGimmickPriority);
+			break;
 
-		//case enMapTagSpring:
-		//	mapChip = New<SpringObject>(stageGimmickPriority);
-		//	break;
+		case enMapTagRotation:
+			mapChip = New<RotationObject>(stageGimmickPriority);
+			break;
 
-		//case enMapTagRotation:
-		//	mapChip = New<RotationObject>(stageGimmickPriority);
-		//	break;
-
-		//case enMapTagHindrance:
-		//	mapChip = New<HindranceObject>(stageGimmickPriority);
-		//	break;
-		//case enMapTagFall:
-		//	mapChip = New<FallObject>(stageGimmickPriority);
-		//	break;
+		case enMapTagHindrance:
+			mapChip = New<HindranceObject>(stageGimmickPriority);
+			break;
+		case enMapTagFall:
+			mapChip = New<FallObject>(stageGimmickPriority);
+			break;
 		case enMapTagMapChip:
 			mapChip = New<MapChip>(stageGimmickPriority);
 			break;
@@ -103,4 +109,15 @@ void Map::BeforeDead()
 		Delete(mapchip);
 	}
 	m_mapChip.clear();
+}
+
+int Map::IntMakeHash(char* string)
+{
+	int hash = 0;
+	int len = (int)strlen(string);
+	for (int i = 0; i < len; i++)
+	{
+		hash = hash * 37 + string[i];
+	}
+	return hash;
 }

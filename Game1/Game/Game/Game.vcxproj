@@ -167,6 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameCamera\GameCamera.cpp" />
+    <ClCompile Include="HUD\TimeSprite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map\Map.cpp" />
     <ClCompile Include="Map\MapChip\FallObject.cpp" />
@@ -194,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameCamera\GameCamera.h" />
+    <ClInclude Include="HUD\TimeSprite.h" />
     <ClInclude Include="Map\Map.h" />
     <ClInclude Include="Map\MapChip\FallObject.h" />
     <ClInclude Include="Map\MapChip\Goal.h" />

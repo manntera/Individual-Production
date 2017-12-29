@@ -12,6 +12,8 @@ Particle::Particle()
 	m_pEffect = nullptr;
 	m_lifeTimer = 0.0f;
 	m_size = { 1.0f, 1.0f};
+	m_speed = { 0.0f, 0.0f, 0.0f };
+	m_camera = nullptr;
 }
 
 Particle::~Particle()
@@ -21,8 +23,14 @@ Particle::~Particle()
 
 void Particle::Init(SParticleEmittInfo& info, Camera* camera)
 {
+	m_gravity = info.gravity;
 	m_camera = camera;
 	m_position = info.emitterPosition;
+	D3DXVECTOR3 addPos = info.randomPosition;
+	addPos.x *= (float)GetRandom().GetRandDouble() * 2.0f - 1.0f;
+	addPos.y *= (float)GetRandom().GetRandDouble() * 2.0f - 1.0f;
+	addPos.z *= (float)GetRandom().GetRandDouble() * 2.0f - 1.0f;
+	m_position += addPos;
 	m_lifeTimer = info.lifeTime;
 	m_texture = GetTextureResource().LoadTexture(info.filePath);
 	//頂点バッファを作成
@@ -47,6 +55,8 @@ void Particle::Init(SParticleEmittInfo& info, Camera* camera)
 
 void Particle::Update()
 {
+	m_speed += m_gravity * GetGameTime().GetDeltaFrameTime();
+	m_position += m_speed;
 	m_lifeTimer -= GetGameTime().GetDeltaFrameTime();
 	if (m_lifeTimer < 0.0f)
 	{
@@ -55,7 +65,6 @@ void Particle::Update()
 	D3DXQUATERNION multi;
 	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), m_angle);
 	D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
-
 	D3DXMATRIX cameraRotMat;
 	cameraRotMat = m_camera->GetViewMatrix();
 	D3DXMatrixInverse(&cameraRotMat, NULL, &cameraRotMat);

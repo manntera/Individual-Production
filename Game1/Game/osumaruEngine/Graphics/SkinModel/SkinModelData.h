@@ -43,7 +43,6 @@ public:
 	//リリース関数
 	void Release();
 
-
 	//フレームルートを取得
 	LPD3DXFRAME GetFrameRoot()
 	{
@@ -62,12 +61,22 @@ public:
 		return &frameDer->CombinedTransformationMatrix;
 	}
 	D3DXMATRIX* GetFindBoneWorldMatrix(char *boneName);
+
+	void CloneModelData(SkinModelData& modelData, Animation* anim);
 private:
+	void CloneSkelton(LPD3DXFRAME& destFrame, LPD3DXFRAME srcFrame);
+
 	//一番最初に見つかったオリジナルメッシュを取得。
 	LPD3DXMESH GetOrgMesh(LPD3DXFRAME frame);
 
 	D3DXMATRIX* FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName);
+
+	void SetOutputAnimationRegist(LPD3DXFRAME frame, LPD3DXANIMATIONCONTROLLER animCtr);
+
+	void DeleteCloneSkelton(LPD3DXFRAME frame);
+
 private:
 	LPD3DXFRAME					m_frameRoot;			//フレームルート。
 	ID3DXAnimationController*	m_pAnimController;	//アニメーションコントローラ。
+	bool						m_isClone;
 };

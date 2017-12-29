@@ -15,6 +15,17 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
+int MakeHash(char* string)
+{
+	int hash = 0;
+	int len = (int)strlen(string);
+	for (int i = 0; i < len; i++)
+	{
+		hash = hash * 37 + string[i];
+	}
+	return hash;
+}
+
 Engine::Engine()
 {
 	m_pD3D = NULL;

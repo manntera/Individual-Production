@@ -16,7 +16,8 @@ GameClearScene::~GameClearScene()
 
 void GameClearScene::Start()
 {
-	m_sprite.Init("Assets/sprite/CLEAR.png");
+	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/CLEAR.png");
+	m_sprite.Init(texture);
 	m_sprite.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
 	g_pFade->FadeIn();
 }

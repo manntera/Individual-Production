@@ -15,7 +15,7 @@ Sky::~Sky()
 
 void Sky::Start()
 {
-	m_skinModelData.LoadModelData("Assets/modelData/SkyBox.X", NULL);
+	GetModelDataResource().Load(&m_skinModelData, nullptr, "Assets/modelData/SkyBox.X");
 	m_skinModel.Init(&m_skinModelData);
 	m_light.SetAmbiemtLight({ 1.0f, 1.0f, 1.0f, 1.0f });
 	m_skinModel.SetLight(&m_light);

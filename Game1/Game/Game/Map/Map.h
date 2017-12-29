@@ -14,7 +14,7 @@ public:
 	~Map();
 
 	//初期化
-	void Init();
+	void Init(int stageNum);
 
 	//初期化関数
 	void Start()override;
@@ -30,6 +30,8 @@ public:
 	{
 		return m_player;
 	}
+
+	int IntMakeHash(char* string);
 
 private:
 	std::vector<MapChip*> m_mapChip;	//マップチップ

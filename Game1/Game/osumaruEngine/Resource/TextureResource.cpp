@@ -17,12 +17,13 @@ TextureResource::~TextureResource()
 
 Texture* TextureResource::LoadTexture(char* filePath)
 {
-	auto& map = m_textures.find(filePath);
+	int hash = MakeHash(filePath);
+	auto& map = m_textures.find(hash);
 	if (map == m_textures.end())
 	{
 		Texture* texture = new Texture;
 		texture->Load(filePath);
-		m_textures.insert({ filePath, texture });
+		m_textures.insert({ hash, texture });
 		return texture;
 	}
 	else

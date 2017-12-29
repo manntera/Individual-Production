@@ -1,7 +1,17 @@
 #include "stdafx.h"
 #include "FallObject.h"
+#include "../../Scene/GameScene.h"
 
 
+FallObject::FallObject()
+{
+	m_particle = nullptr;
+}
+
+FallObject::~FallObject()
+{
+	ParticleDelete();
+}
 
 void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
 {
@@ -18,6 +28,27 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 	m_rigidBody.Create(rbInfo);
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 	m_isActive = false;
+	m_particle = New<ParticleEmitter>(cameraPriority);
+	m_particle->Init({
+		"Assets/particle/WallDust.png",		//テクスチャのファイルパス
+		0.2f,								//パーティクルの横幅
+		0.2f,								//パーティクルの縦幅
+		{ 0.0f, 0.0f, 1.0f, 1.0f },			//テクスチャのuv。xyが左上のuvでzwが右下のuv
+		{ aabb.x, aabb.y, aabb.z },			//パーティクルの座標のランダム幅
+		{ 0.0f, -1.0f, 0.0f },				//パーティクルの重力
+		6.0f,								//パーティクルの寿命
+		2.0f,								//パーティクルが出るまでのインターバル
+		0.0f,								//エミッターの寿命
+		m_position,							//エミッターの座標
+		13									//1フレームで出るパーティクルの数
+	}
+	, &g_gameScene->GetCamera());
+}
+
+void FallObject::Start()
+{
+	MapChip::Start();
+
 }
 
 void FallObject::Update()
@@ -26,6 +57,7 @@ void FallObject::Update()
 	if (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
 		m_isActive = true;
+		ParticleDelete();
 	}
 	if (m_isActive)
 	{
@@ -35,6 +67,16 @@ void FallObject::Update()
 	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 }
+
+void FallObject::ParticleDelete()
+{
+	if (m_particle != nullptr)
+	{
+		Delete(m_particle);
+		m_particle = nullptr;
+	}
+}
+
 
 void FallObject::Draw()
 {

@@ -43,7 +43,7 @@ void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelNam
 	//ÉÇÉfÉãÇÃì«Ç›çûÇ›
 	char filePath[64];
 	sprintf(filePath, "Assets/modelData/%s.X", modelName);
-	m_skinModelData.LoadModelData(filePath, anim);
+	GetModelDataResource().Load(&m_skinModelData, anim, filePath);
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
 

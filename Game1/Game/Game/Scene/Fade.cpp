@@ -18,7 +18,8 @@ Fade::~Fade()
 
 void Fade::Init()
 {
-	m_sprite.Init("Assets/sprite/Fade.png");
+	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/Fade.png");
+	m_sprite.Init(texture);
 	m_sprite.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
 }
 

@@ -610,6 +610,7 @@ SkinModelData::SkinModelData()
 {
 	m_frameRoot = nullptr;
 	m_pAnimController = nullptr;
+	m_isClone = false;
 }
 
 SkinModelData::~SkinModelData()
@@ -624,9 +625,37 @@ void SkinModelData::Release()
 		m_pAnimController->Release();
 		m_pAnimController = nullptr;
 	}
-	ReleaseFrame(m_frameRoot);
+	if (m_isClone)
+	{
+		DeleteCloneSkelton(m_frameRoot);
+	}
+	else
+	{
+		ReleaseFrame(m_frameRoot);
+	}
 	m_frameRoot = nullptr;
 }
+
+void SkinModelData::DeleteCloneSkelton(LPD3DXFRAME frame)
+{
+	if (frame->pFrameSibling != nullptr)
+	{
+		DeleteCloneSkelton(frame->pFrameSibling);
+	}
+	if (frame->pFrameFirstChild != nullptr)
+	{
+		DeleteCloneSkelton(frame->pFrameFirstChild);
+	}
+	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)frame->pMeshContainer;
+	if (pMeshContainer)
+	{
+		SAFE_DELETE_ARRAY(pMeshContainer->ppBoneMatrixPtrs);
+		SAFE_DELETE(pMeshContainer);
+	}
+	SAFE_DELETE_ARRAY(frame->Name);
+	SAFE_DELETE(frame);
+}
+
 
 void SkinModelData::LoadModelData(const char* filePath, Animation* anim)
 {
@@ -645,6 +674,77 @@ void SkinModelData::LoadModelData(const char* filePath, Animation* anim)
 	if (anim && m_pAnimController)
 	{
 		anim->Init(m_pAnimController);
+	}
+}
+
+void SkinModelData::CloneModelData(SkinModelData& modelData, Animation* anim)
+{
+	m_isClone = true;
+	m_frameRoot = new D3DXFRAME_DERIVED;
+	m_frameRoot->pFrameFirstChild = nullptr;
+	m_frameRoot->pFrameSibling = nullptr;
+	m_frameRoot->pMeshContainer = nullptr;
+	CloneSkelton(m_frameRoot, modelData.m_frameRoot);
+
+	if (modelData.m_pAnimController)
+	{
+		modelData.m_pAnimController->CloneAnimationController(
+			modelData.m_pAnimController->GetMaxNumAnimationOutputs(),
+			modelData.m_pAnimController->GetMaxNumAnimationSets(),
+			modelData.m_pAnimController->GetMaxNumTracks(),
+			modelData.m_pAnimController->GetMaxNumEvents(),
+			&m_pAnimController);
+		SetOutputAnimationRegist(m_frameRoot, m_pAnimController);
+		if (anim && m_pAnimController)
+		{
+			anim->Init(m_pAnimController);
+		}
+	}
+	SetupBoneMatrixPointers(m_frameRoot, m_frameRoot);
+}
+
+void SkinModelData::SetOutputAnimationRegist(LPD3DXFRAME frame, LPD3DXANIMATIONCONTROLLER animCtr)
+{
+	animCtr->RegisterAnimationOutput(frame->Name, &frame->TransformationMatrix, nullptr, nullptr, nullptr);
+	if (frame->pFrameSibling != nullptr)
+	{
+		SetOutputAnimationRegist(frame->pFrameSibling, animCtr);
+	}
+	if (frame->pFrameFirstChild != nullptr)
+	{
+		SetOutputAnimationRegist(frame->pFrameFirstChild, animCtr);
+	}
+
+}
+
+void SkinModelData::CloneSkelton(LPD3DXFRAME& destFrame, LPD3DXFRAME srcFrame)
+{
+	destFrame->TransformationMatrix = srcFrame->TransformationMatrix;
+	AllocateName(srcFrame->Name, &destFrame->Name);
+	if (srcFrame->pMeshContainer)
+	{
+		destFrame->pMeshContainer = new D3DXMESHCONTAINER_DERIVED;
+		memcpy(destFrame->pMeshContainer, srcFrame->pMeshContainer, sizeof(D3DXMESHCONTAINER_DERIVED));
+	}
+	else
+	{
+		destFrame->pMeshContainer = NULL;
+	}
+	if (srcFrame->pFrameSibling)
+	{
+		destFrame->pFrameSibling = new D3DXFRAME_DERIVED;
+		destFrame->pFrameSibling->pFrameSibling = nullptr;
+		destFrame->pFrameSibling->pFrameFirstChild = nullptr;
+		destFrame->pFrameSibling->pMeshContainer = nullptr;
+		CloneSkelton(destFrame->pFrameSibling, srcFrame->pFrameSibling);
+	}
+	if (srcFrame->pFrameFirstChild)
+	{
+		destFrame->pFrameFirstChild = new D3DXFRAME_DERIVED;
+		destFrame->pFrameFirstChild->pFrameSibling = nullptr;
+		destFrame->pFrameFirstChild->pFrameFirstChild = nullptr;
+		destFrame->pFrameFirstChild->pMeshContainer = nullptr;
+		CloneSkelton(destFrame->pFrameFirstChild, srcFrame->pFrameFirstChild);
 	}
 }
 

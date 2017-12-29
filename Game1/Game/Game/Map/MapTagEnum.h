@@ -5,5 +5,9 @@
 	enMapTagFall,
 	enMapTagGoal,
 	enMapTagMapChip,
+	enMapTagMoveFloor,
+	enMapTagSpring,
+	enMapTagRotation,
+	enMapTagHindrance,
 	enMapTagNum,
 };

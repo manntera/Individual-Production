@@ -31,3 +31,4 @@
 const int playerPriority = 1;
 const int stageGimmickPriority = 0;
 const int cameraPriority = 2;
+const int lastPriority = 3;

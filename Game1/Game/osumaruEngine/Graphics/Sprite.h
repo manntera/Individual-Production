@@ -12,7 +12,7 @@ public:
 	~Sprite();
 
 	//初期化
-	void Init(char *filePath);
+	void Init(Texture* texture);
 
 	//描画
 	void Draw();
@@ -50,9 +50,14 @@ public:
 	//メモリを解放
 	void Release();
 
+	void SetTexture(Texture* pTexture)
+	{
+		m_pTexture = pTexture;
+	}
+
 private:
 	float			m_alpha;
-	Texture			m_texture;			//テクスチャ
+	Texture*		m_pTexture;			//テクスチャ
 	D3DXVECTOR2		m_position;			//スプライトのウィンドウ上での座標
 	D3DXVECTOR2		m_centerPosition;	//スプライトの基点を表す座標
 	D3DXVECTOR2		m_size;				//スプライトのサイズ

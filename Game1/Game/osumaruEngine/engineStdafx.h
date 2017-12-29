@@ -1,5 +1,6 @@
 #pragma once
 class EffectManager;
+int MakeHash(char* string);
 
 #include <d3d9.h>
 #include <d3dx9effect.h>
@@ -21,6 +22,7 @@ class EffectManager;
 #include <string.h>
 
 #include "Timer\GameTime.h"
+#include "Random\Random.h"
 #include "Uncopyable.h"
 #include "Graphics/Texture.h"
 #include "Graphics/Primitive.h"
