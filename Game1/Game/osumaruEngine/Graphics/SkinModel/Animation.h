@@ -1,7 +1,7 @@
 #pragma once
 //アニメーションを管理するクラス
 
-class Animation
+class Animation : Uncopyable
 {
 public:
 	//コンストラクタ
@@ -76,6 +76,13 @@ public:
 		return m_isAnimationLoop[animationNum];
 	}
 
+	//現在再生中のアニメーションの番号を取得
+	int GetCurrentAnimationNum()
+	{
+		return m_currentAnimationSetNo;
+	}
+
+	//再生中か？
 	bool IsPlay()
 	{
 		return m_isPlay;

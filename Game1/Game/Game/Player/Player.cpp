@@ -5,6 +5,8 @@
 #include  "../Scene/Fade.h"
 #include "../Map/MapChip/MoveFloor.h"
 #include "../Map/MapChip/MapChip.h"
+#include "../GhostPlayer/GhostPlayer.h"
+#include "../GhostPlayer/GhostDataList.h"
 
 Player::Player()
 {
@@ -19,11 +21,13 @@ Player::Player()
 	m_rotationCount = 0;
 	m_rotationFrameNum = 3;
 	m_frameAngle = 0.0f;
+	m_ghost = nullptr;
 }
 
 Player::~Player()
 {
-
+	g_ghostDataList->Finish();
+	Delete(m_ghost);
 }
 
 void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
@@ -60,6 +64,7 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_characterController.Init(2.0f, 2.5f, m_position);
 	m_skinModel.SetShadowCasterFlg(true);
 	//m_skinModel.SetShadowReceiverFlg(true);
+	g_ghostDataList->Start(&m_position, &m_rotation, &m_anim);
 }
 
 void Player::Start()
@@ -82,6 +87,8 @@ void Player::Start()
 	m_graspCliff.Init(this, 6.0f);
 	m_wallJump.Init(this, &m_characterController);
 	m_isParentRotation = false;
+	m_ghost = New<GhostPlayer>(playerPriority);
+	m_ghost->Init(m_skinModelData, &m_light);
 }
 
 

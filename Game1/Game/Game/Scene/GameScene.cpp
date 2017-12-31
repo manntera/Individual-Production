@@ -3,7 +3,6 @@
 #include "../GameCamera/GameCamera.h"
 #include "../Player/Player.h"
 #include "../Map/Sky.h"
-#include "../GameCamera/GameCamera.h"
 #include "../Map/Map.h"
 #include "GameClearScene.h"
 #include "GameOverScene.h"
@@ -51,7 +50,8 @@ void GameScene::Update()
 		{
 			if (m_isGameClear)
 			{
-				New<GameClearScene>(0);
+				GameClearScene* gameClearScene = New<GameClearScene>(0);
+				gameClearScene->Init(m_pTimeSprite->GetTime());
 				m_stageNum++;
 			}
 			else if (m_isGameOver)

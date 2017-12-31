@@ -2,6 +2,7 @@
 //プレイヤークラス
 #include "PlayerGraspCliff.h"
 #include "PlayerWallJump.h"
+class GhostPlayer;
 
 enum EnAnimationSet
 {
@@ -145,7 +146,8 @@ private:
 	bool				m_isParentRotation;		//回転の親子関係をつけているか
 	float				m_moveSpeed;			//移動速度
 	float				m_acceleration;			//加速度
-	int					m_rotationFrameNum;		//
+	int					m_rotationFrameNum;		
 	float				m_frameAngle;
 	int					m_rotationCount;
+	GhostPlayer*		m_ghost;
 };

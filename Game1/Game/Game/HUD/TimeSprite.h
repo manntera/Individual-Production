@@ -16,6 +16,11 @@ public:
 
 	void Draw()override;
 
+	float GetTime()
+	{
+		return m_time;
+	}
+
 private:
 	static const int	NUM_MAX = 10;
 	static const int	DIGIT_MAX = 2;

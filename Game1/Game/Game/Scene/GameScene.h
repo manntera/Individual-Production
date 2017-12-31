@@ -38,6 +38,12 @@ public:
 	//ゲームオーバーの時に外部から呼び出す関数
 	void GameOver();
 
+	//今のステージの番号を取得
+	int GetStageNum()
+	{
+		return m_stageNum;
+	}
+
 private:
 
 	bool			m_isGameOver;	//ゲームオーバーか？
@@ -49,5 +55,5 @@ private:
 	static int		m_stageNum;
 	TimeSprite*		m_pTimeSprite;
 };
-
+const int STAGE_NUM = 2;
 extern GameScene *g_gameScene;

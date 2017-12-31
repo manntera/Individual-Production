@@ -31,6 +31,9 @@
     <Filter Include="ソース ファイル\HUD">
       <UniqueIdentifier>{1c2ffda4-790f-4406-8449-21d5f8e72f21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GhostPlayer">
+      <UniqueIdentifier>{b33f7d61-6c1b-4443-a321-536df14fba5b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -96,6 +99,15 @@
     <ClCompile Include="HUD\TimeSprite.cpp">
       <Filter>ソース ファイル\HUD</Filter>
     </ClCompile>
+    <ClCompile Include="GhostPlayer\GhostCommon.cpp">
+      <Filter>ソース ファイル\GhostPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostPlayer\GhostDataList.cpp">
+      <Filter>ソース ファイル\GhostPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostPlayer\GhostPlayer.cpp">
+      <Filter>ソース ファイル\GhostPlayer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -157,6 +169,15 @@
     </ClInclude>
     <ClInclude Include="HUD\TimeSprite.h">
       <Filter>ソース ファイル\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostPlayer\GhostCommon.h">
+      <Filter>ソース ファイル\GhostPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostPlayer\GhostDataList.h">
+      <Filter>ソース ファイル\GhostPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostPlayer\GhostPlayer.h">
+      <Filter>ソース ファイル\GhostPlayer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -32,8 +32,6 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 	GetShadowMap().Draw();
 	//•`‰æ
 	// ‰æ–Ê‚ðƒNƒŠƒAB
-
-
 	device->SetRenderTarget(0, GetMainRenderTarget().GetRenderTarget());
 	device->SetDepthStencilSurface(GetMainRenderTarget().GetDepthStencilBuffer());
 	//device->SetRenderTarget(1, GetDepthOfField().GetDepthRendertarget().GetRenderTarget());
