@@ -13,7 +13,7 @@ public:
 	void Init(float time);
 
 	//èâä˙âªä÷êî
-	void Start()override;
+	bool Start()override;
 
 	//çXêVä÷êî
 	void Update()override;
@@ -26,8 +26,8 @@ private:
 	static const int	NUM_MAX = 10;
 	static const int	DIGIT_MAX = 2;
 	static const int	TIME_MAX = 3;
-	Sprite				m_timeSprite;
-	Sprite				m_colonSprite[TIME_MAX];
-	Sprite				m_numSprite[TIME_MAX][DIGIT_MAX];
-	Texture*			m_numTexture[NUM_MAX];
+	//Sprite				m_timeSprite;
+	//Sprite				m_colonSprite[TIME_MAX];
+	//Sprite				m_numSprite[TIME_MAX][DIGIT_MAX];
+	//Texture*			m_numTexture[NUM_MAX];
 };

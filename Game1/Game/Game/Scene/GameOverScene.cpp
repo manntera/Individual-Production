@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include"GameOverScene.h"
 #include "GameScene.h"
+#include "TitleScene.h"
 #include "Fade.h"
+
 
 GameOverScene::GameOverScene()
 {
@@ -12,12 +14,17 @@ GameOverScene::~GameOverScene()
 {
 }
 
-void GameOverScene::Start()
+bool GameOverScene::Start()
 {
-	Texture* texture = GetTextureResource().LoadTexture("Assets / sprite / GameOver.png");
+	if (g_pFade->IsExcute())
+	{
+		return false;
+	}
+	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/GAMEOVER.png");
 	m_sprite.Init(texture);
 	m_sprite.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
 	g_pFade->FadeIn();
+	return true;
 }
 
 void GameOverScene::Update()
@@ -26,7 +33,7 @@ void GameOverScene::Update()
 	{
 		if (g_pFade->GetCurrentState() == enFadeOut)
 		{
-			g_gameScene = New<GameScene>(0);
+			New<TitleScene>(0);
 			Delete(this);
 		}
 	}

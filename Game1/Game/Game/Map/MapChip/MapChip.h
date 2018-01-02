@@ -21,7 +21,7 @@ public:
 	virtual void Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim = nullptr);
 
 	//‰Šú‰»ŠÖ”
-	virtual void Start()override;
+	virtual bool Start()override;
 
 	//XVŠÖ”
 	virtual void Update()override;

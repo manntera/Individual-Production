@@ -45,11 +45,7 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 	, &g_gameScene->GetCamera());
 }
 
-void FallObject::Start()
-{
-	MapChip::Start();
 
-}
 
 void FallObject::Update()
 {

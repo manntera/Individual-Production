@@ -22,9 +22,6 @@ void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* 
 	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
 }
 
-void StaticMapObject::Start()
-{
-}
 
 void StaticMapObject::Update()
 {

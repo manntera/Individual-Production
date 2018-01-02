@@ -11,7 +11,7 @@ TimeSprite::~TimeSprite()
 
 }
 
-void TimeSprite::Start()
+bool TimeSprite::Start()
 {
 	for (int i = 0; i < NUM_MAX; i++)
 	{
@@ -41,6 +41,7 @@ void TimeSprite::Start()
 			spritePos.x += 57.0f;
 		}
 	}
+	return true;
 }
 
 void TimeSprite::Update()

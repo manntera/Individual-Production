@@ -5,6 +5,7 @@ class Test;
 class Sky;
 class Player;
 class TimeSprite;
+class GhostPlayer;
 
 //ゲームシーンクラス
 
@@ -17,8 +18,10 @@ public:
 	//デストラクタ
 	~GameScene();
 
+	void Init(int stageNum, bool isTimeAttack);
+
 	//初期化関数
-	void Start()override;
+	bool Start()override;
 
 	//更新関数
 	void Update()override;
@@ -39,7 +42,7 @@ public:
 	void GameOver();
 
 	//今のステージの番号を取得
-	int GetStageNum()
+	static int GetStageNum()
 	{
 		return m_stageNum;
 	}
@@ -51,9 +54,12 @@ private:
 	Map*			m_map;		//マップ
 	GameCamera*		m_camera;	//カメラ
 	Sky*			m_sky;		//スカイボックス
-	SoundSource*		m_bgm;	//BGM
+	SoundSource*	m_bgm;	//BGM
 	static int		m_stageNum;
 	TimeSprite*		m_pTimeSprite;
+	bool			m_isInit;
+	bool			m_isTimeAttack;
+	GhostPlayer*	m_pGhost;
 };
 const int STAGE_NUM = 2;
 extern GameScene *g_gameScene;

@@ -16,27 +16,31 @@ GhostPlayer::~GhostPlayer()
 
 void GhostPlayer::Init(SkinModelData& modelData, Light* light)
 {
+
+	m_pPlayerModelData = &modelData;
+	m_pLight = light;
+}
+
+bool GhostPlayer::Start()
+{
 	if (g_ghostDataList->GetGhostData().empty())
 	{
-		return;
+		return true;
 	}
 	m_isActive = true;
-	m_modelData.CloneModelData(modelData, &m_animation);
+	m_modelData.CloneModelData(*m_pPlayerModelData, &m_animation);
 	m_model.Init(&m_modelData);
-	m_model.SetLight(light);
+	m_model.SetLight(m_pLight);
 	m_ghostData = g_ghostDataList->GetGhostData().begin();
 	m_animation.PlayAnimation(m_ghostData->currentAnimationNum);
 	m_currentAnimationNum = m_ghostData->currentAnimationNum;
+	return true;
 }
 
-void GhostPlayer::Start()
-{
-
-}
 
 void GhostPlayer::Update()
 {
-	if (!m_isActive)
+	if (!m_isActive || g_gameScene == nullptr)
 	{
 		return;
 	}
@@ -52,7 +56,7 @@ void GhostPlayer::Update()
 
 void GhostPlayer::Draw()
 {
-	if (!m_isActive)
+	if (!m_isActive || g_gameScene == nullptr)
 	{
 		return;
 	}

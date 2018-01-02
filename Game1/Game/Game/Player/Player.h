@@ -34,7 +34,7 @@ public:
 	void Init(D3DXVECTOR3 position, D3DXQUATERNION rotation);
 	
 	//‰Šú‰»ŠÖ”
-	void Start() override;
+	bool Start() override;
 
 	//XVŠÖ”
 	void Update() override;
@@ -112,6 +112,15 @@ public:
 		return m_rotationFrameNum;
 	}
 
+	SkinModelData& GetSkinModelData()
+	{
+		return m_skinModelData;
+	}
+
+	Light& GetLight()
+	{
+		return m_light;
+	}
 private:
 	//ˆÚ“®ˆ—‚ğ‚·‚éŠÖ”
 	void Move();
@@ -149,5 +158,4 @@ private:
 	int					m_rotationFrameNum;		
 	float				m_frameAngle;
 	int					m_rotationCount;
-	GhostPlayer*		m_ghost;
 };

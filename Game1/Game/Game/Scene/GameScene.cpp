@@ -8,7 +8,7 @@
 #include "GameOverScene.h"
 #include "Fade.h"
 #include "../HUD/TimeSprite.h"
-
+#include "../GhostPlayer/GhostPlayer.h"
 GameScene *g_gameScene;
 int GameScene::m_stageNum = 0;
 
@@ -18,16 +18,39 @@ GameScene::GameScene()
 	m_isGameClear = false;
 	m_isGameOver = false;
 	m_pTimeSprite = nullptr;
-	
+	m_pGhost = nullptr;
+	m_isInit = false;
+	m_isTimeAttack = false;
 }
 
 GameScene::~GameScene()
 {
 	Delete(m_bgm);
-	Delete(m_pTimeSprite);
+	if (m_pTimeSprite != nullptr)
+	{
+		Delete(m_pTimeSprite);
+	}
+	if (m_pGhost != nullptr)
+	{
+		Delete(m_pTimeSprite);
+	}
 }
 
-void GameScene::Start()
+void GameScene::Init(int stageNum, bool isTimeAttack)
+{
+	if (!m_isInit)
+	{
+		m_stageNum = stageNum;
+		if (STAGE_NUM <= m_stageNum)
+		{
+			m_stageNum = 0;
+		}
+		m_isInit = true;
+	}
+	m_isTimeAttack = isTimeAttack;
+}
+
+bool GameScene::Start()
 {
 	m_sky = New<Sky>(0);
 	m_camera = New<GameCamera>(cameraPriority);
@@ -39,7 +62,15 @@ void GameScene::Start()
 	m_bgm->Init("Assets/sound/BGM.wav");
 	m_bgm->SetVolume(0.1f);
 	m_bgm->Play(true);
-	m_pTimeSprite = New<TimeSprite>(lastPriority);
+	if (m_isTimeAttack)
+	{
+		m_pGhost = New<GhostPlayer>(playerPriority);
+		Player* player = m_map->GetPlayer();
+		m_pGhost->Init(player->GetSkinModelData(), &player->GetLight());
+		m_pTimeSprite = New<TimeSprite>(lastPriority);
+	}
+
+	return true;
 }
 
 void GameScene::Update()
@@ -50,9 +81,15 @@ void GameScene::Update()
 		{
 			if (m_isGameClear)
 			{
-				GameClearScene* gameClearScene = New<GameClearScene>(0);
-				gameClearScene->Init(m_pTimeSprite->GetTime());
-				m_stageNum++;
+				if (!m_isTimeAttack)
+				{
+					GameClearScene* gameClearScene = New<GameClearScene>(0);
+					m_stageNum++;
+				}
+				else
+				{
+
+				}
 			}
 			else if (m_isGameOver)
 			{
@@ -105,8 +142,8 @@ void GameScene::GameOver()
 		return;
 	}
 	m_isGameOver = true;
+	g_pFade->FadeOut();
 	SoundSource* sound = New<SoundSource>(0);
 	sound->Init("Assets/sound/univ0010.wav");
 	sound->Play(false);
-	g_pFade->FadeOut();
 }

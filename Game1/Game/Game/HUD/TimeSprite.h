@@ -10,7 +10,7 @@ public:
 	//デストラクタ
 	~TimeSprite()override;
 
-	void Start()override;
+	bool Start()override;
 
 	void Update()override;
 

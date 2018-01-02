@@ -91,10 +91,7 @@ void Map::Init(int stageNum)
 	}
 }
 
-void Map::Start()
-{
 
-}
 
 void Map::Update()
 {

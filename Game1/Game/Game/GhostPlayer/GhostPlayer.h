@@ -10,13 +10,15 @@ public:
 
 	void Init(SkinModelData& modelData, Light* light);
 
-	void Start()override;
+	bool Start()override;
 
 	void Update()override;
 
 	void Draw()override;
 
 private:
+	SkinModelData*	m_pPlayerModelData;
+	Light*			m_pLight;
 	SkinModelData m_modelData;
 	SkinModel m_model;
 	Animation m_animation;

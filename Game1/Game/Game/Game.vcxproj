@@ -189,6 +189,9 @@
     <ClCompile Include="Scene\GameClearScene.cpp" />
     <ClCompile Include="Scene\GameOverScene.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
+    <ClCompile Include="Scene\StageSelect.cpp" />
+    <ClCompile Include="Scene\TimeAttackResult.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -219,6 +222,9 @@
     <ClInclude Include="Scene\GameClearScene.h" />
     <ClInclude Include="Scene\GameOverScene.h" />
     <ClInclude Include="Scene\GameScene.h" />
+    <ClInclude Include="Scene\StageSelect.h" />
+    <ClInclude Include="Scene\TimeAttackResult.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -16,8 +16,6 @@ public:
 	//‰Šú‰»
 	void Init(int stageNum);
 
-	//‰Šú‰»ŠÖ”
-	void Start()override;
 
 	//XVŠÖ”
 	void Update()override;

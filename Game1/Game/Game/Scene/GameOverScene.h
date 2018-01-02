@@ -11,7 +11,7 @@ public:
 	~GameOverScene();
 
 	//‰Šú‰»ŠÖ”
-	void Start()override;
+	bool Start()override;
 
 	//XVŠÖ”
 	void Update()override;

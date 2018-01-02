@@ -10,7 +10,7 @@ public:
 	virtual ~GameObject();
 
 	//初期化関数
-	virtual void Start() {};
+	virtual bool Start() { return true; }
 
 	//更新関数
 	virtual void Update() = 0;
@@ -29,12 +29,6 @@ public:
 	{
 		return m_isDelete;
 	}
-
-	//初期化が終わった時に呼ぶ関数
-	void FinishStart()
-	{
-		m_isStart = true;
-	}
 	//初期化済みか？
 	bool IsStart()
 	{
@@ -51,8 +45,7 @@ public:
 	{
 		if (!m_isStart && !m_isDelete)
 		{
-			Start();
-			m_isStart = true;
+			m_isStart = Start();
 		}
 	}
 

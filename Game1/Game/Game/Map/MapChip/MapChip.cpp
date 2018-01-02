@@ -57,8 +57,9 @@ void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelNam
 	m_skinModel.SetShadowCompesationFlg(true);
 }
 
-void MapChip::Start()
+bool MapChip::Start()
 {
+	return true;
 }
 
 void MapChip::Update()

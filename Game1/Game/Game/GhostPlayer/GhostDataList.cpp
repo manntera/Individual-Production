@@ -20,14 +20,14 @@ GhostDataList::~GhostDataList()
 
 void GhostDataList::Start(D3DXVECTOR3* position, D3DXQUATERNION* rotation, Animation* animation)
 {
-	if (!m_ghostData.empty())
+	m_stageNum = g_gameScene->GetStageNum();
+	if (!m_ghostData[m_stageNum].empty())
 	{
 		return;
 	}
 	m_pPosition = position;
 	m_pRotation = rotation;
 	m_pAnimation = animation;
-	m_stageNum = g_gameScene->GetStageNum();
 }
 
 void GhostDataList::Finish()
