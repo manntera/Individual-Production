@@ -54,11 +54,13 @@ public:
 
 	void SetPosition(D3DXVECTOR3 position)
 	{
+		m_rigidBody->getOneBeforeWorldTransform().setOrigin(m_rigidBody->getWorldTransform().getOrigin());
 		m_rigidBody->getWorldTransform().setOrigin(btVector3(position.x, position.y, position.z));
 	}
 
 	void SetRotation(D3DXQUATERNION rotation)
 	{
+		m_rigidBody->getOneBeforeWorldTransform().setRotation(m_rigidBody->getWorldTransform().getRotation());
 		m_rigidBody->getWorldTransform().setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 	}
 

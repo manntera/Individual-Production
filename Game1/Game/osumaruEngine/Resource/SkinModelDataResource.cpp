@@ -10,6 +10,7 @@ SkinModelDataResource::SkinModelDataResource()
 
 SkinModelDataResource::~SkinModelDataResource()
 {
+
 }
 
 void SkinModelDataResource::Load(SkinModelData* modelData, Animation* anim, char* fileName)

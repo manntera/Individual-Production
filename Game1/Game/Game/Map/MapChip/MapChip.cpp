@@ -2,10 +2,11 @@
 #include "MapChip.h"
 #include "../../GameCamera/GameCamera.h"
 #include "../../Scene/GameScene.h"
+#include "../Map.h"
 
 MapChip::MapChip()
 {
-
+	//m_iterator = nullptr;
 }
 
 MapChip::~MapChip()
@@ -49,12 +50,24 @@ void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelNam
 
 	m_position = position;
 	m_rotation = rotation;
+	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_skinModel.SetShadowCasterFlg(true);
 	m_skinModel.SetShadowReceiverFlg(true);
-	D3DXVECTOR3 scale = { 1.0f, 1.0f, 1.0f };
 	//基本的に動かさないのでワールド行列を最初の一回だけ更新しておく。
-	m_skinModel.Update(m_position, m_rotation, scale);
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 	m_skinModel.SetShadowCompesationFlg(true);
+}
+
+
+void MapChip::SetIterator(Map* map, std::list<MapChip*>::iterator iterator)
+{
+	m_pMap = map;
+	m_iterator = iterator;
+}
+
+void MapChip::MapChipDelete()
+{
+	m_pMap->MapChipErase(m_iterator);
 }
 
 bool MapChip::Start()

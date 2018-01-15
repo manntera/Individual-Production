@@ -19,6 +19,7 @@ enum EnSkinModelShaderTechnique
 	enShaderTechniqueNormal,				//普通に描画するときのテクニック
 	enShaderTechniqueShadow,				//影を書く時のテクニック
 	enShaderTechniqueSilhouette,
+	enShaderTechniqueDithering,
 	enShaderTechniqueNum,
 };
 class SkinModel : Uncopyable
@@ -184,4 +185,5 @@ private:
 	D3DXVECTOR3					m_scale;									//モデルのスケール
 	D3DXQUATERNION				m_rotation;									//モデルの回転
 	bool						m_isShadowEntry;
+	float						m_ditheringRate;
 };

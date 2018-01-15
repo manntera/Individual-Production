@@ -41,16 +41,15 @@ void MoveFloor::Update()
 	m_position += m_moveSpeed;
 
 	//プレイヤーが上に乗ったら親子関係をつける
-	if (!m_isChild && m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
+	if (!m_isChild && (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg() || m_rigidBody.GetBody()->getPlayerCollisionWallFlg()))
 	{
-		g_gameScene->GetPlayer()->SetParent(this, true);
-		m_isChild = true;
+		m_isChild = g_gameScene->GetPlayer()->SetParent(this, true);
 	}
 	//プレイヤーが離れたので親子関係を外す
-	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
+	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionGroundFlg() && !m_rigidBody.GetBody()->getPlayerCollisionWallFlg())
 	{
-		g_gameScene->GetPlayer()->SetParent(nullptr, true);
-		m_isChild = false;
+		
+		m_isChild = g_gameScene->GetPlayer()->SetParent(nullptr, true);
 	}
 	m_timer += 1.0f / 60.0f;
 	if (5.0f < m_timer)
@@ -63,8 +62,9 @@ void MoveFloor::Update()
 	m_rigidBody.SetPosition(m_position);
 	m_rigidBody.SetRotation(m_rotation);
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
+	m_rigidBody.GetBody()->setPlayerCollisionWallFlg(false);
 
-	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
 
 void MoveFloor::Draw()

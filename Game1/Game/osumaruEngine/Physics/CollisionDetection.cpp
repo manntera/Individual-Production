@@ -55,6 +55,7 @@ CollisionDetection::~CollisionDetection()
 
 void CollisionDetection::Init(ICollider* collider, D3DXVECTOR3 position, D3DXQUATERNION rotation)
 {
+	
 	//„‘Ì‚ð‰Šú‰»
 	RigidBodyInfo rbInfo;
 	m_pCollider = collider;
@@ -68,7 +69,6 @@ void CollisionDetection::Init(ICollider* collider, D3DXVECTOR3 position, D3DXQUA
 	m_rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Detection);
 }
-
 
 void CollisionDetection::Execute()
 {

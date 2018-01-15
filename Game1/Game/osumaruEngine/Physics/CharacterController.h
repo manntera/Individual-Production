@@ -121,6 +121,8 @@ public:
 
 	void StaticExecute();
 
+	void DynamicExecute();
+
 	void Draw();
 
 private:

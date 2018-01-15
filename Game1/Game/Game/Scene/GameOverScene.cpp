@@ -7,7 +7,8 @@
 
 GameOverScene::GameOverScene()
 {
-
+	m_choiceNum = 0;
+	m_isTimeAttack = false;
 }
 
 GameOverScene::~GameOverScene()
@@ -23,7 +24,17 @@ bool GameOverScene::Start()
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/GAMEOVER.png");
 	m_sprite.Init(texture);
 	m_sprite.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
+	texture = GetTextureResource().LoadTexture("Assets/sprite/retry.png");
+	m_retry.Init(texture);
+	m_retry.SetPosition({ 350.0f, -100.0f });
+	texture = GetTextureResource().LoadTexture("Assets/sprite/Finish.png");
+	m_finish.Init(texture);
+	m_finish.SetPosition({350.0f, -200.0f});
+	texture = GetTextureResource().LoadTexture("Assets/sprite/arrow.png");
+	m_arrow.Init(texture);
+	m_arrow.SetPosition({ 50.0f, -100.0f });
 	g_pFade->FadeIn();
+
 	return true;
 }
 
@@ -33,7 +44,15 @@ void GameOverScene::Update()
 	{
 		if (g_pFade->GetCurrentState() == enFadeOut)
 		{
-			New<TitleScene>(0);
+			if (m_choiceNum == 0)
+			{
+				g_gameScene = New<GameScene>(0);
+				g_gameScene->Init(g_gameScene->GetStageNum(), m_isTimeAttack);
+			}
+			else
+			{
+				New<TitleScene>(0);
+			}
 			Delete(this);
 		}
 	}
@@ -41,9 +60,22 @@ void GameOverScene::Update()
 	{
 		return;
 	}
+	if (GetPad().IsTriggerButton(enButtonUp))
+	{
+		m_choiceNum--;
+		if (m_choiceNum < 0)
+		{
+			m_choiceNum = 1;
+		}
+	}
+	if (GetPad().IsTriggerButton(enButtonDown))
+	{
+		m_choiceNum++;
+	}
+	m_choiceNum %= 2;
+	m_arrow.SetPosition({ 50.0f, -100.0f + -100.0f * m_choiceNum });
 	if (GetPad().IsPressButton(enButtonA))
 	{
-
 		g_pFade->FadeOut();
 	}
 }
@@ -51,4 +83,7 @@ void GameOverScene::Update()
 void GameOverScene::Draw()
 {
 	m_sprite.Draw();
+	m_finish.Draw();
+	m_retry.Draw();
+	m_arrow.Draw();
 }

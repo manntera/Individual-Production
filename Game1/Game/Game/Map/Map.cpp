@@ -6,10 +6,10 @@
 #include "MapChip\Goal.h"
 #include "MapChip\MoveFloor.h"
 #include "MapChip/SpringObject.h"
-#include "MapTagEnum.h"
 #include "MapChip\RotationObject.h"
 #include "MapChip\HindranceObject.h"
 #include "MapChip/FallObject.h"
+#include "MapChip\ScoreUpItem.h"
 
 struct MapChipInfo
 {
@@ -22,10 +22,13 @@ struct MapChipInfo
 std::vector<std::vector<MapChipInfo>> mapChipInfo = 
 {
 	{
-#include "Location.h"
+#include "Location4.h"
 	},
 	{
 #include "Location2.h"
+	},
+	{
+#include "Location1.h"
 	}
 };
 
@@ -78,6 +81,9 @@ void Map::Init(int stageNum)
 		case enMapTagMapChip:
 			mapChip = New<MapChip>(stageGimmickPriority);
 			break;
+		case enMapTagScoreUp:
+			mapChip = New<ScoreUpItem>(stageGimmickPriority);
+			break;
 		default:
 			mapChip = New<StaticMapObject>(stageGimmickPriority);
 			break;
@@ -87,6 +93,9 @@ void Map::Init(int stageNum)
 		{
 			mapChip->Init(mInfo.m_position, mInfo.m_rotation, mInfo.m_modelName);
 			m_mapChip.push_back(mapChip);
+			std::list<MapChip*>::iterator iterator = m_mapChip.end();
+			iterator--;
+			mapChip->SetIterator(this, iterator);
 		}
 	}
 }
@@ -98,6 +107,12 @@ void Map::Update()
 
 }
 
+void Map::MapChipErase(std::list<MapChip*>::iterator iterator)
+{
+	Delete(*iterator);
+	iterator = m_mapChip.erase(iterator);
+}
+
 void Map::BeforeDead()
 {
 	Delete(m_player);
@@ -106,15 +121,5 @@ void Map::BeforeDead()
 		Delete(mapchip);
 	}
 	m_mapChip.clear();
-}
 
-int Map::IntMakeHash(char* string)
-{
-	int hash = 0;
-	int len = (int)strlen(string);
-	for (int i = 0; i < len; i++)
-	{
-		hash = hash * 37 + string[i];
-	}
-	return hash;
 }

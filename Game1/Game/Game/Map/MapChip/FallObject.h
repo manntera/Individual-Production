@@ -1,13 +1,16 @@
 #pragma once
 #include "MapChip.h"
+//落ちるオブジェクト
 
 class FallObject : public MapChip
 {
 public:
-
+	//コンストラクタ
 	FallObject();
 
+	//デストラクタ
 	~FallObject();
+
 	/*
 	初期化する関数
 	position	座標
@@ -31,4 +34,5 @@ private:
 	RigidBody			m_rigidBody;		//剛体
 	BoxCollider			m_boxCollider;		//コライダー
 	ParticleEmitter*	m_particle;			//パーティクル
+	float				m_timer;			//消えるまでの時間
 };

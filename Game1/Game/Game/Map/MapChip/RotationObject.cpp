@@ -55,7 +55,7 @@ void RotationObject::Update()
 
 	m_rigidBody.SetRotation(m_rotation);
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
-	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
 
 void RotationObject::Draw()

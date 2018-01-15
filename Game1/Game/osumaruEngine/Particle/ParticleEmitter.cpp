@@ -31,18 +31,21 @@ void ParticleEmitter::Init(SParticleEmittInfo info, Camera* camera)
 void ParticleEmitter::Update()
 {
 	m_intervalTime += GetGameTime().GetDeltaFrameTime();
+	//一定時間たつとパーティクルを生成
 	if (m_info.emittIntervalTime <= m_intervalTime)
 	{
 		m_intervalTime = 0.0f;
 		for (int i = 0; i < m_particleNum; i++)
 		{
-			Particle* particle = New<Particle>(0);
+			Particle* particle = New<Particle>(2);
 			particle->Init(m_info, m_camera);
 		}
 	}
+	//寿命が設定されている場合
 	if (0.0f < m_lifeTimer)
 	{
 		m_lifeTimer -= GetGameTime().GetDeltaFrameTime();
+		//寿命がなくなるとエミッターが死ぬ
 		if (m_lifeTimer < 0.0f)
 		{
 			Delete(this);

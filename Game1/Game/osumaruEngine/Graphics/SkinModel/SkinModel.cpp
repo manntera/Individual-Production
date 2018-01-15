@@ -27,7 +27,8 @@ void DrawMeshContainer(
 	bool isShadowReceiver,
 	bool isShadowCaster,
 	ShaderTechnique* shaderTechnique,
-	EnSkinModelShaderTechnique shaderTechniqueNum)
+	EnSkinModelShaderTechnique shaderTechniqueNum,
+	float ditheringRate)
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)pMeshContainerBase;
 	D3DXFRAME_DERIVED* pFrame = (D3DXFRAME_DERIVED*)pFrameBase;
@@ -81,6 +82,9 @@ void DrawMeshContainer(
 		pEffect->SetValue("g_lightCameraDir", &cameraDir, sizeof(D3DXVECTOR3));
 		pEffect->SetBool("g_isHasNormalMap", isHasNormal);
 		pEffect->SetBool("g_isHasSpecularMap", isHasSpecular);
+		pEffect->SetInt("g_screenWidth", FRAME_BUFFER_WIDTH);
+		pEffect->SetInt("g_screenHeight", FRAME_BUFFER_HEIGHT);
+		pEffect->SetFloat("g_ditheringRate", ditheringRate);
 	}
 	if (pMeshContainer->pSkinInfo != NULL)
 	{
@@ -172,7 +176,8 @@ void DrawFrame(
 	bool isShadowReceiver,
 	bool isShadowCaster,
 	ShaderTechnique* shaderTechnique,
-	EnSkinModelShaderTechnique shaderTechniqueNum)
+	EnSkinModelShaderTechnique shaderTechniqueNum,
+	float ditheringRate)
 {
 	LPD3DXMESHCONTAINER pMeshContainer;
 	pMeshContainer = pFrame->pMeshContainer;
@@ -196,7 +201,8 @@ void DrawFrame(
 			isShadowReceiver,
 			isShadowCaster,
 			shaderTechnique,
-			shaderTechniqueNum);
+			shaderTechniqueNum,
+			ditheringRate);
 
 		pMeshContainer = pMeshContainer->pNextMeshContainer;
 	}
@@ -220,7 +226,8 @@ void DrawFrame(
 			isShadowReceiver,
 			isShadowCaster,
 			shaderTechnique,
-			shaderTechniqueNum
+			shaderTechniqueNum,
+			ditheringRate
 			);
 	}
 	if (pFrame->pFrameFirstChild != NULL)
@@ -242,7 +249,8 @@ void DrawFrame(
 			isShadowReceiver,
 			isShadowCaster,
 			shaderTechnique,
-			shaderTechniqueNum);
+			shaderTechniqueNum,
+			ditheringRate);
 	}
 }
 
@@ -260,6 +268,7 @@ SkinModel::SkinModel()
 	m_isShadowMapReceiver = false;
 	m_isShadowCompesation = false;
 	m_isShadowEntry = false;
+	m_ditheringRate = 0.0f;
 }
 
 SkinModel::~SkinModel()
@@ -277,6 +286,8 @@ void SkinModel::Init(SkinModelData* modelData)
 	m_shaderTechnique[enShaderTechniqueSilhouette].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("SilhouetteNoSkinModel");
 	m_shaderTechnique[enShaderTechniqueShadow].SkinModelTechnique = m_pEffect->GetTechniqueByName("SkinShadowMap");
 	m_shaderTechnique[enShaderTechniqueShadow].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("NoSkinShadowMap");
+	m_shaderTechnique[enShaderTechniqueDithering].SkinModelTechnique = m_pEffect->GetTechniqueByName("DitheringSkinModel");
+	m_shaderTechnique[enShaderTechniqueDithering].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("DitheringNoSkinModel");
 
 }
 
@@ -294,7 +305,6 @@ void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVEC
 	m_scale = scale;
 	m_position = trans;
 	m_rotation = rot;
-
 	D3DXMATRIX mTrans, mScale;
 	D3DXMatrixScaling(&mScale, m_scale.x, m_scale.y, m_scale.z);
 	D3DXMatrixTranslation(&mTrans, m_position.x, m_position.y, m_position.z);
@@ -304,6 +314,7 @@ void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVEC
 	{
 		m_skinModelData->UpdateBoneMatrix(m_worldMatrix);		//ボーン行列を更新
 	}
+	
 }
 
 void SkinModel::Update(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
@@ -314,6 +325,15 @@ void SkinModel::Update(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
 
 void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 {
+	D3DXVECTOR4 position = {m_position.x, m_position.y, m_position.z, 1.0f};
+	D3DXMATRIX viewProjMat;
+	D3DXMATRIX projectionMatrix;
+
+	D3DXMatrixPerspectiveFovLH(&projectionMatrix, D3DX_PI / 4, (float)FRAME_BUFFER_WIDTH / (float)FRAME_BUFFER_HEIGHT, 10.0f, 30.0f);
+	D3DXMatrixMultiply(&viewProjMat, viewMatrix, &projectionMatrix);
+	D3DXVec4Transform(&position, &position, &viewProjMat);
+
+	m_ditheringRate = position.z / position.w;
 	D3DXVECTOR3* cameraPos = nullptr;
 	if (m_pCamera != nullptr)
 	{
@@ -338,7 +358,8 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			m_isShadowMapReceiver,
 			m_isShadowMapCaster,
 			m_shaderTechnique,
-			m_currentShaderTechnique);
+			m_currentShaderTechnique,
+			m_ditheringRate);
 	}
 }
 

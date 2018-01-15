@@ -1,4 +1,5 @@
 #pragma once
+//タイム表示のＨＵＤ
 
 class TimeSprite : public GameObject
 {
@@ -10,12 +11,16 @@ public:
 	//デストラクタ
 	~TimeSprite()override;
 
+	//初期化関数
 	bool Start()override;
 
+	//更新関数
 	void Update()override;
 
+	//描画関数
 	void Draw()override;
 
+	//タイム取得
 	float GetTime()
 	{
 		return m_time;

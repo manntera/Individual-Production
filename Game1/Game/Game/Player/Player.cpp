@@ -5,7 +5,7 @@
 #include  "../Scene/Fade.h"
 #include "../Map/MapChip/MoveFloor.h"
 #include "../Map/MapChip/MapChip.h"
-#include "../GhostPlayer/GhostDataList.h"
+#include "../GhostPlayer/GhostDataListManager.h"
 
 Player::Player()
 {
@@ -24,8 +24,18 @@ Player::Player()
 
 Player::~Player()
 {
-	g_ghostDataList->Finish();
 }
+
+void Player::GhostDataFinish(float time, bool isClear)
+{
+	g_ghostDataList->Finish(time, isClear);
+}
+
+void Player::GhostDataStart()
+{
+	g_ghostDataList->Start(&m_position, &m_rotation, &m_anim);
+}
+
 
 void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 {
@@ -61,7 +71,6 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_characterController.Init(2.0f, 2.5f, m_position);
 	m_skinModel.SetShadowCasterFlg(true);
 	//m_skinModel.SetShadowReceiverFlg(true);
-	g_ghostDataList->Start(&m_position, &m_rotation, &m_anim);
 }
 
 bool Player::Start()
@@ -84,6 +93,7 @@ bool Player::Start()
 	m_graspCliff.Init(this, 6.0f);
 	m_wallJump.Init(this, &m_characterController);
 	m_isParentRotation = false;
+	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 	return true;
 }
 
@@ -197,10 +207,18 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 	sound->SetVolume(0.3f);
 }
 
-void Player::SetParent(MapChip* parent, bool parentRotation)
+bool Player::SetParent(MapChip* parent, bool parentRotation)
 {
+	if (m_parent != nullptr && parent != nullptr)
+	{
+		return false;
+	}
 	m_parent = parent;
-	if (parent != nullptr)
+	if (m_parent == nullptr)
+	{
+		return false;
+	}
+	else
 	{
 		D3DXMATRIX matrix = m_parent->GetWorldMatrix();
 		D3DXMatrixInverse(&matrix, NULL, &matrix);
@@ -213,6 +231,7 @@ void Player::SetParent(MapChip* parent, bool parentRotation)
 			D3DXQuaternionMultiply(&m_localRotation, &m_rotation, &multi);
 		}
 	}
+	return true;
 }
 
 
@@ -239,7 +258,7 @@ void Player::Move()
 	D3DXVECTOR3 stickDir = -side * GetPad().GetLeftStickX();
 	stickDir += front * GetPad().GetLeftStickY();
 
-	const float acceleration = 0.1f;
+	const float acceleration = 0.3f;
 	const float speedLimit = 20.0f;
 	if (stickDir.x == 0.0f && stickDir.z == 0.0f)
 	{
@@ -309,10 +328,14 @@ void Player::Move()
 
 		if (m_jumpCount != 0)
 		{
-			D3DXVECTOR3 jumpDir = stickDir;
-			D3DXVec3Normalize(&jumpDir, &jumpDir);
-			jumpDir *= D3DXVec3Length(&moveSpeed);
-			moveSpeed = jumpDir;
+			if (stickDir.x != 0.0f || stickDir.z != 0.0f)
+			{
+				D3DXVECTOR3 jumpDir = stickDir;
+				D3DXVec3Normalize(&jumpDir, &jumpDir);
+				jumpDir *= D3DXVec3Length(&moveSpeed);
+				moveSpeed = jumpDir;
+
+			}
 		}
 		else
 		{
@@ -338,8 +361,6 @@ void Player::Move()
 	if (m_wallJump.IsWallShear())
 	{
 		moveSpeed = { 0.0f, 0.0f, 0.0f };
-		m_position.y -= 0.2f;
-		m_characterController.SetPosition(m_position);
 	}
 
 	moveSpeed += m_stageGimmickMoveSpeed;
@@ -349,9 +370,16 @@ void Player::Move()
 		D3DXVECTOR3 position;
 		D3DXVec3TransformCoord(&position, &m_localPosition, &m_parent->GetWorldMatrix());
 		m_characterController.SetPosition(position);
-		if (!m_graspCliff.IsActive() && !m_wallJump.IsWallShear())
+		if (!m_graspCliff.IsActive())
 		{
-			m_characterController.Execute();
+			if (m_wallJump.IsWallShear())
+			{
+				m_characterController.DynamicExecute();
+			}
+			else
+			{
+				m_characterController.Execute();
+			}
 		}
 		position = m_characterController.GetPosition();
 		D3DXMATRIX inverseMatrix;
@@ -360,7 +388,7 @@ void Player::Move()
 	}
 	else
 	{
-		if (!m_graspCliff.IsActive() && !m_wallJump.IsWallShear())
+		if (!m_graspCliff.IsActive())
 		{
 			m_characterController.Execute();
 		}

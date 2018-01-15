@@ -24,6 +24,6 @@ public:
 
 private:
 	D3DXQUATERNION	m_rotation;		//カメラの回転
-	Camera			m_camera;			//カメラ
-
+	Camera			m_camera;		//カメラ
+	float			m_angleX;		//カメラがX方向を軸に回転している角度	
 };

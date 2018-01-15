@@ -102,9 +102,6 @@
     <ClCompile Include="GhostPlayer\GhostCommon.cpp">
       <Filter>ソース ファイル\GhostPlayer</Filter>
     </ClCompile>
-    <ClCompile Include="GhostPlayer\GhostDataList.cpp">
-      <Filter>ソース ファイル\GhostPlayer</Filter>
-    </ClCompile>
     <ClCompile Include="GhostPlayer\GhostPlayer.cpp">
       <Filter>ソース ファイル\GhostPlayer</Filter>
     </ClCompile>
@@ -116,6 +113,12 @@
     </ClCompile>
     <ClCompile Include="Scene\StageSelect.cpp">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostPlayer\GhostDataListManager.cpp">
+      <Filter>ソース ファイル\GhostPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="Map\MapChip\ScoreUpItem.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +185,6 @@
     <ClInclude Include="GhostPlayer\GhostCommon.h">
       <Filter>ソース ファイル\GhostPlayer</Filter>
     </ClInclude>
-    <ClInclude Include="GhostPlayer\GhostDataList.h">
-      <Filter>ソース ファイル\GhostPlayer</Filter>
-    </ClInclude>
     <ClInclude Include="GhostPlayer\GhostPlayer.h">
       <Filter>ソース ファイル\GhostPlayer</Filter>
     </ClInclude>
@@ -196,6 +196,12 @@
     </ClInclude>
     <ClInclude Include="Scene\StageSelect.h">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostPlayer\GhostDataListManager.h">
+      <Filter>ソース ファイル\GhostPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\MapChip\ScoreUpItem.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

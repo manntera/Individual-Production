@@ -49,8 +49,8 @@ void Sprite::Draw()
 {
 	//座標のスケールを変換
 	D3DXVECTOR3 position;
-	position.x = m_position.x / FRAME_BUFFER_WIDTH;
-	position.y = m_position.y / FRAME_BUFFER_HEIGHT;
+	position.x = m_position.x / (FRAME_BUFFER_WIDTH / 2.0f);
+	position.y = m_position.y / (FRAME_BUFFER_HEIGHT / 2.0f);
 	position.z = 0.0f;
 	//拡大のスケールを変換
 	D3DXVECTOR3 size;

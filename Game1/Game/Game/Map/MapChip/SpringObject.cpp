@@ -48,5 +48,5 @@ void SpringObject::Update()
 	}
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 	m_anim.Update(GetGameTime().GetDeltaFrameTime());
-	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 }

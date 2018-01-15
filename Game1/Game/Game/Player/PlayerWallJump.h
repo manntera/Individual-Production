@@ -32,14 +32,16 @@ public:
 	//壁ジャンプしたか
 	bool IsWallJump()
 	{
-		return m_isWallJump;
+		return m_isWallJump && m_wallJumpCount ==0;
 	}
 
 	//描画関数
 	void Draw();
 
 private:
-	BoxCollider				m_boxCollider;			//壁とのあたり判定を取るコライダー
+
+	BoxCollider				m_groundCollider;		//地面とのあたり判定を取るコライダー
+	BoxCollider				m_wallCollider;			//壁とのあたり判定を取るコライダー
 	CollisionDetection		m_wallDetection;		//壁とのあたり判定
 	CollisionDetection		m_groundDetection;		//地面とのあたり判定(キャラクターコントローラーのIsOnGroundを使うとメッシュなどで剛体を作っていた場合にポリゴンの切れ目に判定が入ってしまう
 	Player*					m_player;				//プレイヤー
@@ -51,4 +53,5 @@ private:
 	float					m_defaultGravity;		//普通の時の重力
 	ParticleEmitter*		m_wallDust;				//パーティクル
 	D3DXMATRIX*				m_dustPos;				//パーティクルを出す時の位置
+	int						m_wallJumpCount;		//壁ジャンプしてからのカウンター
 };

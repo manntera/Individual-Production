@@ -6,7 +6,7 @@
 
 Bloom::Bloom()
 {
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < BLUR_RANGE; i++)
 	{
 		m_weight[i] = 1.0f;
 	}
@@ -42,7 +42,7 @@ void Bloom::Init(bool isActive)
 	}
 	m_luminanceTarget.Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, D3DFMT_A16B16G16R16F, D3DFMT_D16);
 	m_combineTarget.Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, D3DFMT_A16B16G16R16F, D3DFMT_D16);
-	for (int i = 0; i < g_downSamplingNum; i++)
+	for (int i = 0; i < DOWN_SAMPLING_NUM; i++)
 	{
 		m_downSamplingTarget[i][0].Create(FRAME_BUFFER_WIDTH >> i + 1, FRAME_BUFFER_HEIGHT >> i, D3DFMT_A16B16G16R16F, D3DFMT_D16);
 		m_downSamplingTarget[i][1].Create(FRAME_BUFFER_WIDTH >> i + 1, FRAME_BUFFER_HEIGHT >> i + 1, D3DFMT_A16B16G16R16F, D3DFMT_D16);
@@ -88,7 +88,7 @@ void Bloom::Draw()
 		m_pEffect->End();
 		device->EndScene();
 	}
-	for (int i = 0; i < g_downSamplingNum; i++)
+	for (int i = 0; i < DOWN_SAMPLING_NUM; i++)
 	{
 		//X•ûŒü‚Ö‚Ìƒuƒ‰[
 		{

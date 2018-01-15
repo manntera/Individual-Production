@@ -19,14 +19,14 @@ void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* 
 
 	//çÑëÃÇçÏê¨
 	m_rigidBody.Create(rInfo);
-	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
 
 
 void StaticMapObject::Update()
 {
 	MapChip::Update();
-	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
 
 void StaticMapObject::Draw()

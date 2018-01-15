@@ -75,7 +75,7 @@ void PlayerGraspCliff::Update()
 		m_cliffRiseDetectionLow.GetHitCollisionType() != enCollisionAttr_Rotation &&
 		!m_isActive)
 	{
-		D3DXVECTOR3 collisionNormal = m_cliffRiseDetectionLow.GetHitCollisionNormal();
+		D3DXVECTOR3 collisionNormal = m_cliffRiseDetectionLow.GetCollisionNormal();
 		D3DXVec3Normalize(&collisionNormal, &collisionNormal);
 		if (D3DXVec3Dot(&playerFrontNormal, &collisionNormal) < 0.0f)
 		{

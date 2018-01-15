@@ -15,11 +15,15 @@ float3		g_cameraPos;			//スペキュラ用のカメラ視点
 float4x4	g_invWorldMatrix;
 float4x4	g_lightViewProjMatrix;
 float3		g_lightCameraDir;
+int			g_screenWidth;
+int			g_screenHeight;
+float		g_ditheringRate;
 
 bool	g_isShadowMapCaster;
 bool	g_isShadowMapReceiver;
 bool	g_isHasNormalMap;			//法線マップ保持している？
 bool	g_isHasSpecularMap;			//法線マップ保持している？
+
 texture g_diffuseTexture;			//ディフューズテクスチャ
 sampler g_diffuseTextureSampler =
 sampler_state
@@ -300,6 +304,96 @@ float4 SilhouettePSMain(VS_OUTPUT In) : COLOR0
 	return float4(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
+PS_OUTPUT DitheringPSMain(VS_OUTPUT In)
+{
+	float ditheringMat[4][4] =
+	{
+		{ 1.0f / 17.0,		9.0f / 17.0f,	3.0f / 17.0f,	11.0f / 17.0f },
+		{ 13.0f / 17.0f,	5.0f / 17.0f,	15.0f / 17.0f,	7.0f / 17.0f },
+		{ 4.0f / 17.0f,		12.0f / 17.0f,	2.0f / 17.0f,	10.0f / 17.0f },
+		{ 16.0f / 17.0f,	8.0f / 17.0f,	14.0f / 17.0f,	6.0f / 17.0f },
+	};
+	int accuracy = 4000;
+	int2 screenPos;
+	screenPos.x = (int)((In.ScreenSpacePos.x / In.ScreenSpacePos.w) * accuracy);
+	screenPos.y = (int)((In.ScreenSpacePos.y / In.ScreenSpacePos.w) * accuracy);
+	//screenPos.x = min(screenPos.x, -screenPos.x);
+	//screenPos.y = min(screenPos.y, -screenPos.y);
+	screenPos.x = screenPos.x * g_screenWidth / accuracy;
+	screenPos.y = screenPos.y * g_screenHeight / accuracy;
+	screenPos.x = min(screenPos.x, -screenPos.x);
+	screenPos.y = min(screenPos.y, -screenPos.y);
+	screenPos.x = (screenPos.x + g_screenWidth) / 2;
+	screenPos.y = (screenPos.y + g_screenHeight) / 2;
+	//screenPos.x = max(screenPos.x, -screenPos.x);
+	//screenPos.y = max(screenPos.y, -screenPos.y);
+	screenPos.x %= 4;
+	screenPos.y %= 4;
+	clip(g_ditheringRate - ditheringMat[screenPos.y][screenPos.x]);
+	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
+	float3 normal = In.Normal;
+	float4 lig = DiffuseLight(normal);
+	if (g_isHasNormalMap)
+	{
+		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
+
+		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
+		float3 normalVector = normalColor * 2.0f - 1.0f;
+		normalVector = normalize(normalVector);
+
+		//法線マップからとってきたベクトルとライトの方向の内積を取る
+		float3 light = max(0, dot(In.LightDir.xyz, normalVector)) * g_light.diffuseLightColor[0].xyz;
+		lig.xyz *= light;
+		lig += g_light.ambient;
+		lig.w = 1.0f;
+	}
+	if (g_isHasSpecularMap)
+
+	{
+		//反射ベクトルを求める
+		float3 textureNormal = In.Normal;
+		textureNormal = normalize(textureNormal);
+		float3 gaze = In.WorldPos - g_cameraPos;
+		textureNormal *= dot(textureNormal, -gaze);
+		gaze += textureNormal * 2.0f;
+		gaze = normalize(gaze);
+		float3 lightDir = -g_light.diffuseLightDir[0].xyz;
+		lightDir = normalize(lightDir);
+		float3 specColor = tex2D(g_specularMapSampler, In.Tex0).xyz;
+		//スペキュラマップを張って絞り(pow)計算をする。
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[0].xyz * length(specColor) * 3.0f;
+		lig.w = 1.0f;
+	}
+
+	if (g_isShadowMapReceiver)
+	{
+		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
+		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
+		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
+		{
+			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+			uv += 1.0f;
+			uv *= 0.5f;
+			uv.y = 1.0f - uv.y;
+			float4 shadow = tex2D(g_shadowMapSampler, uv);
+			//ライトカメラから見た深度値を計算
+			float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+			shadowDepth = min(1.0f, shadowDepth);
+			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+			if (shadow.x < shadowDepth - 0.005f)
+			{
+				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+			}
+		}
+	}
+	color *= lig;
+	PS_OUTPUT Out;
+	Out.color = color;
+	float depth = In.ScreenSpacePos.z / In.ScreenSpacePos.w;
+	Out.depth = float4(depth, 0.0f, 0.0f, 1.0f);
+	return Out;
+}
+
 
 //スキンありモデル用のテクニック。
 technique SkinModel
@@ -358,5 +452,25 @@ technique SilhouetteNoSkinModel
 	{
 		VertexShader = compile vs_3_0 VSMain(false);
 		PixelShader = compile ps_3_0 SilhouettePSMain();
+	}
+}
+
+//スキンありモデル用のディザリングテクニック
+technique DitheringSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(true);
+		PixelShader = compile ps_3_0 DitheringPSMain();
+	}
+}
+
+//スキンなしモデル用のディザリングテクニック
+technique DitheringNoSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(false);
+		PixelShader = compile ps_3_0 DitheringPSMain();
 	}
 }

@@ -2,7 +2,7 @@
 #include "GameCamera\GameCamera.h"
 #include "Scene/GameScene.h"
 #include "Scene\Fade.h"
-#include "../Game/GhostPlayer/GhostDataList.h"
+#include "../Game/GhostPlayer/GhostDataListManager.h"
 #include "Scene\TitleScene.h"
 
 
@@ -18,7 +18,7 @@ int WINAPI wWinMain(
 	New<TitleScene>(0);
 	g_pFade = New<Fade>(priorityMax - 1);
 	g_pFade->Init();
-	g_ghostDataList = New<GhostDataList>(lastPriority);
+	g_ghostDataList = New<GhostDataListManager>(lastPriority);
 	GetEngine().GameLoop();
 	return 0;
 }

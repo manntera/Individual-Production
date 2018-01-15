@@ -59,7 +59,7 @@ public:
 		m_rigidBody.GetBody()->setUserIndex(userIndex);
 	}
 
-	D3DXVECTOR3 GetHitCollisionNormal()
+	D3DXVECTOR3 GetCollisionNormal()
 	{
 		return m_hitCollisionNormal;
 	}

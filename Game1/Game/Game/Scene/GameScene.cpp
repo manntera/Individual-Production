@@ -9,8 +9,10 @@
 #include "Fade.h"
 #include "../HUD/TimeSprite.h"
 #include "../GhostPlayer/GhostPlayer.h"
+#include "TimeAttackResult.h"
 GameScene *g_gameScene;
 int GameScene::m_stageNum = 0;
+int GameScene::m_stageMaxNum = 0;
 
 
 GameScene::GameScene()
@@ -32,7 +34,7 @@ GameScene::~GameScene()
 	}
 	if (m_pGhost != nullptr)
 	{
-		Delete(m_pTimeSprite);
+		Delete(m_pGhost);
 	}
 }
 
@@ -66,8 +68,8 @@ bool GameScene::Start()
 	{
 		m_pGhost = New<GhostPlayer>(playerPriority);
 		Player* player = m_map->GetPlayer();
-		m_pGhost->Init(player->GetSkinModelData(), &player->GetLight());
 		m_pTimeSprite = New<TimeSprite>(lastPriority);
+		player->GhostDataStart();
 	}
 
 	return true;
@@ -85,15 +87,20 @@ void GameScene::Update()
 				{
 					GameClearScene* gameClearScene = New<GameClearScene>(0);
 					m_stageNum++;
+					m_stageMaxNum++;
 				}
 				else
 				{
-
+					TimeAttackResult* result = New<TimeAttackResult>(0);
+					result->Init(m_pTimeSprite->GetTime());
+					m_map->GetPlayer()->GhostDataFinish(m_pTimeSprite->GetTime(), true);
 				}
 			}
 			else if (m_isGameOver)
 			{
-				New<GameOverScene>(0);
+				GameOverScene* gameOver = New<GameOverScene>(0);
+				gameOver->Init(m_isTimeAttack);
+				
 			}
 			Delete(this);
 			g_gameScene = nullptr;
@@ -122,6 +129,15 @@ void GameScene::BeforeDead()
 	Delete(m_camera);
 }
 
+void GameScene::GhostDataFinish()
+{
+	if (m_pGhost != nullptr)
+	{
+		Delete(m_pGhost);
+		m_pGhost = nullptr;
+	}
+}
+
 void GameScene::GameClear()
 {
 	if (m_isGameClear)
@@ -146,4 +162,8 @@ void GameScene::GameOver()
 	SoundSource* sound = New<SoundSource>(0);
 	sound->Init("Assets/sound/univ0010.wav");
 	sound->Play(false);
+	if (m_isTimeAttack)
+	{
+		m_map->GetPlayer()->GhostDataFinish(m_pTimeSprite->GetTime(), false);
+	}
 }

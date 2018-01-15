@@ -28,6 +28,7 @@
 #include "../osumaruEngine/Particle/ParticleEmitter.h"
 #include "../osumaruEngine/Font/Font.h"
 
+
 const int playerPriority = 1;
 const int stageGimmickPriority = 0;
 const int cameraPriority = 2;

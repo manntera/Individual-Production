@@ -1,26 +1,34 @@
 #pragma once
-
-
-const int g_downSamplingNum = 5;
+//ブルームクラス
 
 class Bloom : Uncopyable
 {
 public:
+	//コンストラクタ
 	Bloom();
 
+	//デストラクタ
 	~Bloom();
 
+	/*
+	初期化関数
+	isActive	アクティブか？
+	*/
 	void Init(bool isActive);
 
+	//描画関数
 	void Draw();
 
+	//ガウスブラーのウェイトを設定
 	void SetWeight(float rate);
 private:
-	RenderTarget m_downSamplingTarget[g_downSamplingNum][2];
-	RenderTarget m_luminanceTarget;
-	RenderTarget m_combineTarget;
-	LPD3DXEFFECT m_pEffect;
-	float		 m_weight[8];
-	Primitive	 m_primitive;
-	bool		 m_isActive;
+	const static int BLUR_RANGE = 8;							//ブラーをかけるピクセルの範囲
+	const static int DOWN_SAMPLING_NUM = 5;						//ダウンサンプリング
+	RenderTarget m_downSamplingTarget[DOWN_SAMPLING_NUM][2];	//ダウンサンプリング用のレンダリングターゲット
+	RenderTarget m_luminanceTarget;								//輝度抽出用のレンダリングターゲット
+	RenderTarget m_combineTarget;								//最終的に合成するようのレンダリングターゲット
+	LPD3DXEFFECT m_pEffect;										//エフェクト
+	float		 m_weight[BLUR_RANGE];							//ガウスブラーのウェイト
+	Primitive	 m_primitive;									//プリミティブ
+	bool		 m_isActive;									//アクティブか？
 };

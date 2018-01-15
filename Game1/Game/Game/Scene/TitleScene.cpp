@@ -24,19 +24,19 @@ bool TitleScene::Start()
 	m_titleBack.SetSize({(float)FRAME_BUFFER_WIDTH, (float)FRAME_BUFFER_HEIGHT});
 	texture = GetTextureResource().LoadTexture("Assets/sprite/Title.png");
 	m_title.Init(texture);
-	m_title.SetPosition({ 00.0f, 400.0f });
+	m_title.SetPosition({ 00.0f, 200.0f });
 	texture = GetTextureResource().LoadTexture("Assets/sprite/start.png");
 	m_start.Init(texture);
 	m_start.SetPosition({ 0.0f, -100.0f });
 	texture = GetTextureResource().LoadTexture("Assets/sprite/continue.png");
 	m_continue.Init(texture);
-	m_continue.SetPosition({0.0f, -300.0f});
+	m_continue.SetPosition({0.0f, -200.0f});
 	texture = GetTextureResource().LoadTexture("Assets/sprite/TimeAttack.png");
 	m_timeAttack.Init(texture);
-	m_timeAttack.SetPosition({ 200.0f, -500.0f });
+	m_timeAttack.SetPosition({ 100.0f, -300.0f });
 	texture = GetTextureResource().LoadTexture("Assets/sprite/arrow.png");
 	m_arrow.Init(texture);
-	m_arrow.SetPosition({ -550.0f, -100.0f });
+	m_arrow.SetPosition({ -275.0f, -100.0f });
 	m_arrow.SetSize({ 100.0f, 100.0f });
 	g_pFade->FadeIn();
 	m_choiceNum = 0;
@@ -97,7 +97,7 @@ void TitleScene::Update()
 	//{
 	//	m_choiceNum %= 1;
 	//}
-	m_arrow.SetPosition({ -550.0f, -100.f + -200.0f * m_choiceNum });
+	m_arrow.SetPosition({ -275.0f, -100.f + -100.0f * m_choiceNum });
 }
 
 void TitleScene::AfterDraw()

@@ -111,6 +111,7 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 	D3DXVECTOR3 startPos = { 0.0f, 0.0f, 0.0f };	//レイの始点。
 	D3DXVECTOR3 ray = { 0.0f, 0.0f, 0.0f };
 	bool		isRay = false;
+	float		distance = 0.0f;
 	float dist = FLT_MAX;							//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
 	D3DXVECTOR3	hitNormal = { 0.0f, 0.0f, 0.0f };	//衝突点の法線
 	btCollisionObject* me = NULL;					//自分自身。自分自身との衝突を除外するためのメンバ。
@@ -136,9 +137,16 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 			convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character)//もしくはコリジョン属性がキャラクタなので壁とみなす。
 		{
 			D3DXVec3Normalize(&ray, &ray);
-			if (D3DXVec3Dot(&ray, &hitNormalTmp) < 0.0f)
+			btVector3 btMoveSpeed = hitObject->getWorldTransform().getOrigin() - hitObject->getOneBeforeWorldTransform().getOrigin();
+			D3DXVECTOR3 moveSpeed = { btMoveSpeed.x(), btMoveSpeed.y(), btMoveSpeed.z() };
+			distance = D3DXVec3Length(&moveSpeed);
+			if (0.1 <= distance)
 			{
-				isRay = true;
+				D3DXVec3Normalize(&moveSpeed, &moveSpeed);
+				if (D3DXVec3Dot(&ray, &moveSpeed) < 0.0f)
+				{
+					isRay = true;
+				}
 			}
 			isHit = true;
 			D3DXVECTOR3 hitPosTmp;
@@ -200,6 +208,13 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 
 void CharacterController::Execute()
 {
+	StaticExecute();
+	DynamicExecute();
+	//StaticExecute();
+}
+
+void CharacterController::DynamicExecute()
+{
 	PhysicsWorld& physicsWorld = GetPhysicsWorld();
 	//速度に重力加速度を加える。
 	m_moveSpeed.y += m_gravity * GetGameTime().GetDeltaFrameTime();
@@ -207,7 +222,7 @@ void CharacterController::Execute()
 	D3DXVECTOR3 nextPosition = m_position;
 	//速度からこのフレームでの移動量を求める。オイラー積分。
 	D3DXVECTOR3 addPos = m_moveSpeed;
-	addPos *=  GetGameTime().GetDeltaFrameTime();
+	addPos *= GetGameTime().GetDeltaFrameTime();
 	nextPosition += addPos;
 	D3DXVECTOR3 originalXZDir = addPos;
 	originalXZDir.y = 0.0f;
@@ -251,7 +266,6 @@ void CharacterController::Execute()
 			if (callback.isHit)
 			{
 				wallCollisionObject = callback.hitObject;
-				hitNormal = callback.hitNormal;
 				//当たった。
 				//壁。
 				D3DXVECTOR3 vT0, vT1;
@@ -261,11 +275,12 @@ void CharacterController::Execute()
 				//めり込みが発生している移動ベクトルを求める。
 				D3DXVECTOR3 vMerikomi;
 				vMerikomi = vT1 - vT0;
-				
+
 				//XZ平面での衝突した壁の法線を求める。
 				D3DXVECTOR3 hitNormalXZ = callback.hitNormal;
 				hitNormalXZ.y = 0.0f;
 				D3DXVec3Normalize(&hitNormalXZ, &hitNormalXZ);
+				hitNormal = hitNormalXZ;
 				//めり込みベクトルを壁の法線に射影する。
 				float fT0 = D3DXVec3Dot(&hitNormalXZ, &vMerikomi);
 				//押し戻し返すベクトルを求める。
@@ -300,7 +315,7 @@ void CharacterController::Execute()
 			}
 			if (callback.hitObject != nullptr && m_rigidBody.GetBody()->getUserIndex() == enCollisionAttr_Character)
 			{
-				//const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionWallFlg(true);
+				const_cast<btCollisionObject*>(callback.hitObject)->setPlayerCollisionWallFlg(true);
 			}
 		}
 		m_wallNormal = hitNormal;
@@ -315,7 +330,7 @@ void CharacterController::Execute()
 	//下方向を調べる。
 	{
 		m_position = nextPosition;	//移動の仮確定。
-		//レイを作成する。
+									//レイを作成する。
 		btTransform start, end;
 		start.setIdentity();
 		end.setIdentity();
@@ -423,13 +438,12 @@ void CharacterController::Execute()
 	//剛体の一を更新
 	m_rigidBody.SetPosition(m_position);
 	//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
-	StaticExecute();
 }
 
 void CharacterController::StaticExecute()
 {
 	const int rayNum = 4;
-	const float rayLength = 0.3f;
+	const float rayLength = 10.0f;
 	D3DXVECTOR3 ray[rayNum] =
 	{
 		{ rayLength,	0.0f, 0.0f},
@@ -453,55 +467,19 @@ void CharacterController::StaticExecute()
 		callback.startPos = startPos;
 		callback.ray = D3DXVECTOR3(end.getOrigin() - start.getOrigin());
 		GetPhysicsWorld().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
-		float radius = m_radius;
-		if (callback.isHit && callback.isRay)
+		if(callback.isHit && callback.isRay && rayLength - callback.dist < m_radius - 0.001f)
 		{
 			D3DXVECTOR3 hitNormal = callback.hitNormal;
 			hitNormal.y = 0.0f;
 			D3DXVec3Normalize(&hitNormal, &hitNormal);
+			m_wallNormal = hitNormal;
 			D3DXVECTOR3 sinking;
 			sinking = callback.hitPos - D3DXVECTOR3(end.getOrigin());
 			sinking.y = 0.0f;
 			float projection = D3DXVec3Dot(&hitNormal, &sinking);
-			hitNormal *= (projection + radius);
-
-			D3DXVECTOR3 nextPosition = D3DXVECTOR3(end.getOrigin()) + hitNormal;
-			nextPosition.y = m_position.y;
-			m_position = nextPosition;
+			hitNormal *= (projection + m_radius);
+			m_position += hitNormal;
 		}
-		/*btTransform start, end;
-		start.setIdentity();
-		end.setIdentity();
-		D3DXVECTOR3 startPos = m_position;
-		start.setOrigin(btVector3(startPos.x, startPos.y + m_height * 0.5f + m_radius, startPos.z));
-		D3DXVECTOR3 endPos = m_position;
-		endPos += ray[i];
-		end.setOrigin(btVector3(endPos.x, start.getOrigin().y(), endPos.z));
-		SweepResultWall callback;
-		callback.me = m_rigidBody.GetBody();
-		callback.startPos = startPos;
-		callback.ray = D3DXVECTOR3(end.getOrigin() - start.getOrigin());
-		GetEngine().GetPhysicsWorld()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
-		float radius = m_radius;
-		if (callback.isHit)
-		{
-			D3DXVECTOR3 hitNormal = callback.hitNormal;
-			hitNormal.y = 0.0f;
-			D3DXVec3Normalize(&hitNormal, &hitNormal);
-			D3DXVECTOR3 sinking;
-			sinking = callback.hitPos - D3DXVECTOR3(end.getOrigin());
-			sinking.y = 0.0f;
-			D3DXVECTOR3 sinkingNormalize = sinking;
-			D3DXVec3Normalize(&sinkingNormalize, &sinkingNormalize);
-			sinkingNormalize *= radius;
-			sinking += sinkingNormalize;
-			float projection = D3DXVec3Dot(&hitNormal, &sinking);
-			hitNormal *= (projection + radius);
-			D3DXVECTOR3 nextPosition = D3DXVECTOR3(end.getOrigin()) + hitNormal;
-			nextPosition.y = m_position.y;
-			m_position = nextPosition;
-		}*/
-
 	}
 	//剛体の一を更新
 	m_rigidBody.SetPosition(m_position);
@@ -515,6 +493,7 @@ void CharacterController::RemovedRigidBody()
 void CharacterController::Draw()
 {
 	btTransform transform = m_rigidBody.GetBody()->getWorldTransform();
+
 	btVector3& position = transform.getOrigin();
 	//position.setY(position.y() + m_radius + m_height * 0.5f);
 	GetPhysicsWorld().DebugDraw(transform, m_collider.GetBody());

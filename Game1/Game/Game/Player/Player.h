@@ -32,7 +32,7 @@ public:
 	rotation	プレイヤーの回転
 	*/
 	void Init(D3DXVECTOR3 position, D3DXQUATERNION rotation);
-	
+
 	//初期化関数
 	bool Start() override;
 
@@ -105,18 +105,25 @@ public:
 	parent　		親のポインタ。親子関係を外す場合はnullptrを渡せばいい。
 	parentRotation	回転も親子関係をつけるか否か
 	*/
-	void SetParent(MapChip* parent, bool parentRotation);
+	bool SetParent(MapChip* parent, bool parentRotation);
 
-	int GetRotationFrameNum()
-	{
-		return m_rotationFrameNum;
-	}
-
+	//モデルデータを取得
 	SkinModelData& GetSkinModelData()
 	{
 		return m_skinModelData;
 	}
 
+	/*
+	ゴーストデータの計測開始
+	time	ステージのクリアタイム
+	isClear	ステージをクリアしたか？
+	*/
+	void GhostDataFinish(float time, bool isClear);
+
+	//ゴーストデータの計測開始
+	void GhostDataStart();
+
+	//ライトを取得
 	Light& GetLight()
 	{
 		return m_light;
@@ -155,7 +162,7 @@ private:
 	bool				m_isParentRotation;		//回転の親子関係をつけているか
 	float				m_moveSpeed;			//移動速度
 	float				m_acceleration;			//加速度
-	int					m_rotationFrameNum;		
-	float				m_frameAngle;
-	int					m_rotationCount;
+	int					m_rotationFrameNum;		//回転を線形補間する時に使うフレーム数
+	float				m_frameAngle;			//1フレームで回転する回転量
+	int					m_rotationCount;		//回転を線形補間するためのカウンター
 };

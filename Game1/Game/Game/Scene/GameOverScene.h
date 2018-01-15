@@ -10,6 +10,11 @@ public:
 	//デストラクタ
 	~GameOverScene();
 
+	void Init(bool isTimeAttack)
+	{
+		m_isTimeAttack = isTimeAttack;
+	}
+
 	//初期化関数
 	bool Start()override;
 
@@ -19,6 +24,10 @@ public:
 	//描画関数
 	void Draw()override;
 private:
-
 	Sprite m_sprite;		//ゲームオーバーのスプライト
+	int	   m_choiceNum;
+	Sprite m_arrow;
+	Sprite m_retry;
+	Sprite m_finish;
+	bool	m_isTimeAttack;
 };

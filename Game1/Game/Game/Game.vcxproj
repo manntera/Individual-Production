@@ -169,7 +169,7 @@
     <ClCompile Include="GameCamera\GameCamera.cpp" />
     <ClCompile Include="GhostPlayer\GhostCommon.cpp" />
     <ClCompile Include="GhostPlayer\GhostPlayer.cpp" />
-    <ClCompile Include="GhostPlayer\GhostDataList.cpp" />
+    <ClCompile Include="GhostPlayer\GhostDataListManager.cpp" />
     <ClCompile Include="HUD\TimeSprite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map\Map.cpp" />
@@ -179,6 +179,7 @@
     <ClCompile Include="Map\MapChip\MapChip.cpp" />
     <ClCompile Include="Map\MapChip\MoveFloor.cpp" />
     <ClCompile Include="Map\MapChip\RotationObject.cpp" />
+    <ClCompile Include="Map\MapChip\ScoreUpItem.cpp" />
     <ClCompile Include="Map\MapChip\SpringObject.cpp" />
     <ClCompile Include="Map\MapChip\StaticMapObject.cpp" />
     <ClCompile Include="Map\Sky.cpp" />
@@ -202,7 +203,7 @@
   <ItemGroup>
     <ClInclude Include="GameCamera\GameCamera.h" />
     <ClInclude Include="GhostPlayer\GhostPlayer.h" />
-    <ClInclude Include="GhostPlayer\GhostDataList.h" />
+    <ClInclude Include="GhostPlayer\GhostDataListManager.h" />
     <ClInclude Include="GhostPlayer\GhostCommon.h" />
     <ClInclude Include="HUD\TimeSprite.h" />
     <ClInclude Include="Map\Map.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Map\MapChip\MapChip.h" />
     <ClInclude Include="Map\MapChip\MoveFloor.h" />
     <ClInclude Include="Map\MapChip\RotationObject.h" />
+    <ClInclude Include="Map\MapChip\ScoreUpItem.h" />
     <ClInclude Include="Map\MapChip\SpringObject.h" />
     <ClInclude Include="Map\MapChip\StaticMapObject.h" />
     <ClInclude Include="Map\Sky.h" />

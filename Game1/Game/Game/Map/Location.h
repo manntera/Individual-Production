@@ -31,7 +31,7 @@
 	"test",
 	D3DXVECTOR3(45.40f, 0.00f, -58.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 1.00f, 0.00f, 0.00f ),  //回転
-	enMapTagMoveFloor, //タグ
+	enMapTagUntagged, //タグ
 },
 //test
 {
@@ -71,6 +71,13 @@
 //testBox
 {
 	"testBox",
+	D3DXVECTOR3(-25.30f, 8.60f, -165.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
+	enMapTagHindrance, //タグ
+},
+//testBox
+{
+	"testBox",
 	D3DXVECTOR3(-25.30f, 8.60f, -98.40f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
 	enMapTagMoveFloor, //タグ
@@ -89,17 +96,17 @@
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagRotation, //タグ
 },
-//testBox
-{
-	"testBox",
-	D3DXVECTOR3(-25.30f, 8.60f, -165.00f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.71f, 0.00f, 0.71f ),  //回転
-	enMapTagHindrance, //タグ
-},
 //GroundBrock
 {
 	"GroundBrock",
 	D3DXVECTOR3(18.10f, 23.00f, -31.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagFall, //タグ
+},
+//coin
+{
+	"coin",
+	D3DXVECTOR3(42.96f, 4.50f, -60.59f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagScoreUp, //タグ
 },

@@ -1,6 +1,20 @@
 #pragma once
 class MapChip;
 class Player;
+enum EnMapChipTag
+{
+	enMapTagUntagged,
+	enMapTagPlayer,
+	enMapTagFall,
+	enMapTagGoal,
+	enMapTagMapChip,
+	enMapTagMoveFloor,
+	enMapTagSpring,
+	enMapTagRotation,
+	enMapTagHindrance,
+	enMapTagScoreUp,
+	enMapTagNum,
+};
 
 //マップのオブジェクトを配置するクラス
 
@@ -28,11 +42,15 @@ public:
 	{
 		return m_player;
 	}
-
-	int IntMakeHash(char* string);
+	
+	/*
+	マップチップをデリート
+	iterator	デリートするマップチップのイテレーター
+	*/
+	void MapChipErase(std::list<MapChip*>::iterator iterator);
 
 private:
-	std::vector<MapChip*> m_mapChip;	//マップチップ
+	std::list<MapChip*> m_mapChip;		//マップチップ
 	Player*	m_player;					//プレイヤー
 	
 };

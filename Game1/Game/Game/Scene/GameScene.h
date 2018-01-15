@@ -41,25 +41,33 @@ public:
 	//ゲームオーバーの時に外部から呼び出す関数
 	void GameOver();
 
+	void GhostDataFinish();
+
 	//今のステージの番号を取得
 	static int GetStageNum()
 	{
 		return m_stageNum;
 	}
 
+	static int GetStageMaxNum()
+	{
+		return m_stageMaxNum;
+	}
+
 private:
 
 	bool			m_isGameOver;	//ゲームオーバーか？
 	bool			m_isGameClear;	//ゲームクリアか？
-	Map*			m_map;		//マップ
-	GameCamera*		m_camera;	//カメラ
-	Sky*			m_sky;		//スカイボックス
-	SoundSource*	m_bgm;	//BGM
-	static int		m_stageNum;
-	TimeSprite*		m_pTimeSprite;
-	bool			m_isInit;
-	bool			m_isTimeAttack;
-	GhostPlayer*	m_pGhost;
+	Map*			m_map;			//マップ
+	GameCamera*		m_camera;		//カメラ
+	Sky*			m_sky;			//スカイボックス
+	SoundSource*	m_bgm;			//BGM
+	static int		m_stageNum;		//現在のステージの番号
+	static int		m_stageMaxNum;	//一番進んでいるステージの番号
+	TimeSprite*		m_pTimeSprite;	//タイム表示のスプライト
+	bool			m_isInit;		//初期化したか？
+	bool			m_isTimeAttack;	//タイムアタックか？
+	GhostPlayer*	m_pGhost;		//ゴーストプレイヤー
 };
-const int STAGE_NUM = 2;
+const int STAGE_NUM = 3;
 extern GameScene *g_gameScene;

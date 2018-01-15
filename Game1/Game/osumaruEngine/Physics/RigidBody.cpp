@@ -17,6 +17,8 @@ void RigidBody::Create(RigidBodyInfo& rbInfo)
 	GetPhysicsWorld().AddRigidBody(m_rigidBody);
 	SetPosition(rbInfo.pos);
 	SetRotation(rbInfo.rot);
+	m_rigidBody->getOneBeforeWorldTransform().setOrigin({ rbInfo.pos.x, rbInfo.pos.y, rbInfo.pos.z });
+	m_rigidBody->getOneBeforeWorldTransform().setRotation({ rbInfo.rot.x, rbInfo.rot.y, rbInfo.rot.z, rbInfo.rot.w });
 	m_rigidBody->setUserIndex(enCollisionAttr_MapChip);
 }
 

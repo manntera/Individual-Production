@@ -17,4 +17,5 @@ enum EnJudgmentColl
 {
 	enJudgment_Wall,
 	enJudgment_Ground,
+	enJudgment_Inactive,
 };

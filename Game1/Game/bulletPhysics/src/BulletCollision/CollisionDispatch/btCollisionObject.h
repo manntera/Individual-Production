@@ -54,7 +54,10 @@ protected:
 	bool		m_playerCollisionGroundFlg = false;
 	bool		m_playerCollisionWallFlg = false;
 
+
+
 	btTransform	m_worldTransform;
+	btTransform m_oneBeforeWorldTransform;
 
 	///m_interpolationWorldTransform is used for CCD and interpolation
 	///it can be either previous or future (predicted) transform
@@ -209,7 +212,7 @@ public:
 	virtual ~btCollisionObject();
 
 	virtual void	setCollisionShape(btCollisionShape* collisionShape)
-	{
+	{ 
 		m_updateRevision++;
 		m_collisionShape = collisionShape;
 		m_rootCollisionShape = collisionShape;
@@ -337,10 +340,26 @@ public:
 		return m_worldTransform;
 	}
 
+
+	btTransform&	getOneBeforeWorldTransform()
+	{
+		return m_oneBeforeWorldTransform;
+	}
+
+	const btTransform&	getOneBeforeWorldTransform() const
+	{
+		return m_oneBeforeWorldTransform;
+	}
+
 	void	setWorldTransform(const btTransform& worldTrans)
 	{
 		m_updateRevision++;
 		m_worldTransform = worldTrans;
+	}
+
+	void	setOneBeforeWorldTransform(const btTransform& worldTrans)
+	{
+		m_oneBeforeWorldTransform = worldTrans;
 	}
 
 

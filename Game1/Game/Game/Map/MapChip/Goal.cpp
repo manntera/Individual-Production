@@ -32,5 +32,5 @@ void Goal::Update()
 	{
 		g_gameScene->GameClear();
 	}
-	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 }

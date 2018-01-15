@@ -71,7 +71,7 @@ void ShadowMap::Draw()
 			trans = model->GetPosition();
 			rot = model->GetRotation();
 			scale = model->GetScale();
-			model->UpdateWorldMatrix(trans, rot, scale * 0.99f);
+			model->UpdateWorldMatrix(trans, rot, scale * 0.95f);
 		}
 		model->SetShaderTechnique(enShaderTechniqueShadow);
 		model->Draw(&m_viewMatrix, &m_projMatrix);

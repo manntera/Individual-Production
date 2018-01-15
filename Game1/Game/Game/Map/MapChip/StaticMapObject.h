@@ -15,9 +15,10 @@ public:
 	*/
 	void Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim = nullptr)override;
 
-
+	//XVŠÖ”
 	void Update()override;
 
+	//•`‰æŠÖ”
 	void Draw()override;
 
 private:

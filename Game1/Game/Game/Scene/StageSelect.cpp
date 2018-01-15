@@ -22,7 +22,7 @@ bool StageSelect::Start()
 		return false;
 	}
 	Texture* texture;
-	D3DXVECTOR2 position = { 0.0f, 500.0f };
+	D3DXVECTOR2 position = { 0.0f, 250.0f };
 	for (int i = 0;i < 5;i++)
 	{
 		char filePath[64];
@@ -30,11 +30,11 @@ bool StageSelect::Start()
 		texture = GetTextureResource().LoadTexture(filePath);
 		m_stageNum[i].Init(texture);
 		m_stageNum[i].SetPosition(position);
-		position.y -= 200.0f;
+		position.y -= 100.0f;
 	}
 	texture = GetTextureResource().LoadTexture("Assets/sprite/arrow.png");
 	m_arrow.Init(texture);
-	m_arrow.SetPosition({ -600.0f, 500.0f });
+	m_arrow.SetPosition({ -300.0f, 250.0f });
 	texture = GetTextureResource().LoadTexture("Assets/sprite/TitleBack.png");
 	m_back.Init(texture);
 	m_back.SetSize({ (float)FRAME_BUFFER_WIDTH, (float)FRAME_BUFFER_HEIGHT });
@@ -80,7 +80,7 @@ void StageSelect::Update()
 		m_choiceNum--;
 		if (m_choiceNum < 0)
 		{
-			m_choiceNum = GameScene::GetStageNum();
+			m_choiceNum = GameScene::GetStageMaxNum();
 		}
 	}
 	if (GetPad().IsTriggerButton(enButtonDown))
@@ -88,21 +88,21 @@ void StageSelect::Update()
 		m_choiceNum++;
 	}
 
-	if (GameScene::GetStageNum() != 0)
+	if (GameScene::GetStageMaxNum() != 0)
 	{
-		m_choiceNum %= GameScene::GetStageNum();
+		m_choiceNum %= GameScene::GetStageMaxNum();
 	}
 	else
 	{
 		m_choiceNum %= 1;
 	}
-	m_arrow.SetPosition({ -600.0f, 500.f + -200.0f * m_choiceNum });
+	m_arrow.SetPosition({ -300.0f, 250.f + -100.0f * m_choiceNum });
 }
 
 void StageSelect::Draw()
 {
 	m_back.Draw();
-	for (int i = 0;i < GameScene::GetStageNum();i++)
+	for (int i = 0;i < GameScene::GetStageMaxNum();i++)
 	{
 		m_stageNum[i].Draw();
 	}

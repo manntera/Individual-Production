@@ -1,5 +1,7 @@
 #pragma once
 //マップで配置するオブジェクトの基底クラス
+class Map;
+
 
 class MapChip : public GameObject
 {
@@ -34,11 +36,25 @@ public:
 		return m_skinModel.GetWorldMatrix();
 	}
 	
+	/*
+	イテレーターをセット
+	map			自身をデリートするためのインスタンス
+	iterator	自身のイテレーター
+	*/
+	void SetIterator(Map* map, std::list<MapChip*>::iterator iterator);
 
 protected:
-	SkinModelData	m_skinModelData;	//スキンンモデルデータ
-	SkinModel		m_skinModel;		//スキンモデル
-	Light			m_light;			//モデルのライト
-	D3DXVECTOR3		m_position;			//座標
-	D3DXQUATERNION	m_rotation;			//回転
+	//デリートする関数
+	void MapChipDelete();
+
+protected:
+
+	SkinModelData	m_skinModelData;			//スキンンモデルデータ
+	SkinModel		m_skinModel;				//スキンモデル
+	Light			m_light;					//モデルのライト
+	D3DXVECTOR3		m_position;					//座標
+	D3DXQUATERNION	m_rotation;					//回転
+	D3DXVECTOR3		m_scale;					//拡大
+	Map*			m_pMap;						//デリートする時のためのポインタ
+	std::list<MapChip*>::iterator m_iterator;	//自身のイテレーター
 };
