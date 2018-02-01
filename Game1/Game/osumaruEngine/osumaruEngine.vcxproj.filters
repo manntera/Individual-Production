@@ -315,7 +315,7 @@
       <Filter>ソース ファイル\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Random\Random.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソース ファイル\Random</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

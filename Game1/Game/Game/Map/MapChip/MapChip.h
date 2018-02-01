@@ -43,6 +43,11 @@ public:
 	*/
 	void SetIterator(Map* map, std::list<MapChip*>::iterator iterator);
 
+	void SetIsActive(bool isActive)
+	{
+		m_isActive = isActive;
+	}
+
 protected:
 	//デリートする関数
 	void MapChipDelete();
@@ -57,4 +62,5 @@ protected:
 	D3DXVECTOR3		m_scale;					//拡大
 	Map*			m_pMap;						//デリートする時のためのポインタ
 	std::list<MapChip*>::iterator m_iterator;	//自身のイテレーター
+	bool			m_isActive;					//アクティブか？
 };

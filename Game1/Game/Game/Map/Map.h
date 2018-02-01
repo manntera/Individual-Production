@@ -13,6 +13,7 @@ enum EnMapChipTag
 	enMapTagRotation,
 	enMapTagHindrance,
 	enMapTagScoreUp,
+	enMapTagStopTime,
 	enMapTagNum,
 };
 
@@ -49,8 +50,10 @@ public:
 	*/
 	void MapChipErase(std::list<MapChip*>::iterator iterator);
 
+	void StopTime();
+
 private:
 	std::list<MapChip*> m_mapChip;		//マップチップ
 	Player*	m_player;					//プレイヤー
-	
+	float	m_stopTime;
 };

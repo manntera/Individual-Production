@@ -81,8 +81,8 @@ void Engine::InitD3D(HINSTANCE& hInst)
 	{
 		std::abort();
 	}
-	m_effectManager = new EffectManager;
-	m_physicsWorld = new PhysicsWorld;
+	m_effectManager = std::make_unique<EffectManager>();
+	m_physicsWorld = std::make_unique<PhysicsWorld>();
 	m_physicsWorld->Init();
 	m_shadowMap.Create(2048, 2048);
 	m_shadowMap.SetLightCameraTarget({ 0.0f, 00.0f, 0.0f });

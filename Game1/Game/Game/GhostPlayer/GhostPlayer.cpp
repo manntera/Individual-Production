@@ -17,7 +17,7 @@ GhostPlayer::~GhostPlayer()
 bool GhostPlayer::Start()
 {
 	//ゴーストデータが空の場合デリート
-	if (g_ghostDataList->GetGhostData().empty())
+	if (GetGhostDataListManager().GetGhostData().empty())
 	{
 		g_gameScene->GhostDataFinish();
 		return true;
@@ -26,7 +26,7 @@ bool GhostPlayer::Start()
 	m_modelData.CloneModelData(player->GetSkinModelData(), &m_animation);
 	m_model.Init(&m_modelData);
 	m_model.SetLight(&player->GetLight());
-	m_ghostData = g_ghostDataList->GetGhostData().begin();
+	m_ghostData = GetGhostDataListManager().GetGhostData().begin();
 	m_animation.PlayAnimation(m_ghostData->currentAnimationNum);
 	m_currentAnimationNum = m_ghostData->currentAnimationNum;
 	return true;

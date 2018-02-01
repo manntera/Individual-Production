@@ -29,7 +29,7 @@
 #include "../osumaruEngine/Font/Font.h"
 
 
-const int playerPriority = 1;
-const int stageGimmickPriority = 0;
-const int cameraPriority = 2;
-const int lastPriority = 3;
+const int PLAYER_PRIORITY = 1;
+const int STAGE_GIMMICK_PRIORITY = 0;
+const int CAMERA_PRIORITY = 2;
+const int LAST_PRIORITY = 3;

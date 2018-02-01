@@ -5,7 +5,6 @@
 
 GameCamera::GameCamera()
 {
-
 }
 
 GameCamera::~GameCamera()
@@ -17,13 +16,19 @@ void GameCamera::Init()
 {
 	m_camera.Init();
 	m_camera.SetPosition({ 0.0, 40.0f, -40.0f });
-	m_camera.SetTarget({0.0f, 0.0f, 0.0f});
+	m_camera.SetTarget({ 0.0f, 0.0f, 0.0f });
 	m_camera.SetNear(3.0f);
 	m_camera.SetFar(1000.0f);
 	m_camera.Update();
 	D3DXQuaternionIdentity(&m_rotation);
 	GetPhysicsWorld().SetCamera(&m_camera);
 	m_angleX = 0.0f;
+	Player*	player = g_gameScene->GetPlayer();
+	D3DXMATRIX mat = player->GetWorldMatrix();
+	m_target.x = -mat.m[2][0];
+	m_target.y = -mat.m[2][1];
+	m_target.z = -mat.m[2][2];
+	D3DXVec3Normalize(&m_target, &m_target);
 }
 
 void GameCamera::Update()
@@ -41,7 +46,7 @@ void GameCamera::Update()
 		angleX = stickY * GetGameTime().GetDeltaFrameTime() * 30.0f / 180.0f * cPI * 3.0f;
 		m_angleX += angleX;
 	}
-	
+
 	D3DXQUATERNION multi;
 	D3DXVECTOR3 axisX = m_camera.GetTarget() - m_camera.GetPosition();
 	//前方向と上方向のベクトルの外積を取り横方向のベクトルを求める
@@ -56,8 +61,8 @@ void GameCamera::Update()
 	//クォータニオンから回転行列を作りカメラの位置をプレイヤーを中心として回す
 	D3DXMATRIX rotMatrix;
 	D3DXMatrixRotationQuaternion(&rotMatrix, &m_rotation);
-	D3DXVECTOR3 position = {0.0f, 0.0f, 0.0f};
-	position.z -= 50.0f;
+	D3DXVECTOR3 position = { 0.0f, 0.0f, 0.0f };
+	position = m_target * 50.0f;
 	D3DXVec3TransformCoord(&position, &position, &rotMatrix);
 	Player*	player = g_gameScene->GetPlayer();
 	D3DXMATRIX* playerWorldMat = player->FindBoneWorldMatrix("center");

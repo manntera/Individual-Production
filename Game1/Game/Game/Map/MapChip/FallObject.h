@@ -30,7 +30,7 @@ public:
 	void ParticleDelete();
 
 private:
-	bool				m_isActive;			//アクティブかどうか
+	bool				m_isFall;			//落ち始めたか
 	RigidBody			m_rigidBody;		//剛体
 	BoxCollider			m_boxCollider;		//コライダー
 	ParticleEmitter*	m_particle;			//パーティクル

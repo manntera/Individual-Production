@@ -6,7 +6,7 @@
 
 MapChip::MapChip()
 {
-	//m_iterator = nullptr;
+	m_isActive = true;
 }
 
 MapChip::~MapChip()

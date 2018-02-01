@@ -9,6 +9,7 @@ Fade::Fade()
 	m_fadeTime = 0.5f;
 	m_timer = m_fadeTime;
 	m_state = enFadeOut;
+	Add(this, PRIORITY_MAX - 1);
 }
 
 Fade::~Fade()

@@ -10,6 +10,7 @@
 #include "MapChip\HindranceObject.h"
 #include "MapChip/FallObject.h"
 #include "MapChip\ScoreUpItem.h"
+#include "MapChip\StopTimeItem.h"
 
 struct MapChipInfo
 {
@@ -22,13 +23,13 @@ struct MapChipInfo
 std::vector<std::vector<MapChipInfo>> mapChipInfo = 
 {
 	{
+#include "Location1.h"
+	},
+	{
 #include "Location4.h"
 	},
 	{
-#include "Location2.h"
-	},
-	{
-#include "Location1.h"
+#include "Location5.h"
 	}
 };
 
@@ -37,7 +38,7 @@ std::vector<std::vector<MapChipInfo>> mapChipInfo =
 
 Map::Map()
 {
-
+	m_stopTime = -1.0f;
 }
 
 Map::~Map()
@@ -53,39 +54,38 @@ void Map::Init(int stageNum)
 		switch (mInfo.m_tag)
 		{
 		case enMapTagPlayer:
-			m_player = New<Player>(playerPriority);
+			m_player = New<Player>(PLAYER_PRIORITY);
 			m_player->Init(mInfo.m_position, mInfo.m_rotation);
 			break;
-
 		case enMapTagGoal:
-			mapChip = New<Goal>(stageGimmickPriority);
+			mapChip = New<Goal>(STAGE_GIMMICK_PRIORITY);
 			break;
 		case enMapTagMoveFloor:
-			mapChip = New<MoveFloor>(stageGimmickPriority);
+			mapChip = New<MoveFloor>(STAGE_GIMMICK_PRIORITY);
 			break;
-
 		case enMapTagSpring:
-			mapChip = New<SpringObject>(stageGimmickPriority);
+			mapChip = New<SpringObject>(STAGE_GIMMICK_PRIORITY);
 			break;
-
 		case enMapTagRotation:
-			mapChip = New<RotationObject>(stageGimmickPriority);
+			mapChip = New<RotationObject>(STAGE_GIMMICK_PRIORITY);
 			break;
-
 		case enMapTagHindrance:
-			mapChip = New<HindranceObject>(stageGimmickPriority);
+			mapChip = New<HindranceObject>(STAGE_GIMMICK_PRIORITY);
 			break;
 		case enMapTagFall:
-			mapChip = New<FallObject>(stageGimmickPriority);
+			mapChip = New<FallObject>(STAGE_GIMMICK_PRIORITY);
 			break;
 		case enMapTagMapChip:
-			mapChip = New<MapChip>(stageGimmickPriority);
+			mapChip = New<MapChip>(STAGE_GIMMICK_PRIORITY);
 			break;
 		case enMapTagScoreUp:
-			mapChip = New<ScoreUpItem>(stageGimmickPriority);
+			mapChip = New<ScoreUpItem>(STAGE_GIMMICK_PRIORITY);
+			break;
+		case enMapTagStopTime:
+			mapChip = New<StopTimeItem>(STAGE_GIMMICK_PRIORITY);
 			break;
 		default:
-			mapChip = New<StaticMapObject>(stageGimmickPriority);
+			mapChip = New<StaticMapObject>(STAGE_GIMMICK_PRIORITY);
 			break;
 		}
 
@@ -101,10 +101,28 @@ void Map::Init(int stageNum)
 }
 
 
-
 void Map::Update()
 {
+	if (0.0f < m_stopTime)
+	{
+		m_stopTime -= GetGameTime().GetDeltaFrameTime();
+		if (m_stopTime < 0.0f)
+		{
+			for (MapChip* mapChip : m_mapChip)
+			{
+				mapChip->SetIsActive(true);
+			}
+		}
+	}
+}
 
+void Map::StopTime()
+{
+	m_stopTime = 10.0f;
+	for (MapChip* mapChip : m_mapChip)
+	{
+		mapChip->SetIsActive(false);
+	}
 }
 
 void Map::MapChipErase(std::list<MapChip*>::iterator iterator)

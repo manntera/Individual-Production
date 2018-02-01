@@ -17,7 +17,7 @@ GameOverScene::~GameOverScene()
 
 bool GameOverScene::Start()
 {
-	if (g_pFade->IsExcute())
+	if (GetFade().IsExcute())
 	{
 		return false;
 	}
@@ -26,23 +26,23 @@ bool GameOverScene::Start()
 	m_sprite.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
 	texture = GetTextureResource().LoadTexture("Assets/sprite/retry.png");
 	m_retry.Init(texture);
-	m_retry.SetPosition({ 350.0f, -100.0f });
+	m_retry.SetPosition({ 0.0f, -100.0f });
 	texture = GetTextureResource().LoadTexture("Assets/sprite/Finish.png");
 	m_finish.Init(texture);
-	m_finish.SetPosition({350.0f, -200.0f});
+	m_finish.SetPosition({200.0f, -200.0f});
 	texture = GetTextureResource().LoadTexture("Assets/sprite/arrow.png");
 	m_arrow.Init(texture);
-	m_arrow.SetPosition({ 50.0f, -100.0f });
-	g_pFade->FadeIn();
+	m_arrow.SetPosition({ -250.0f, -100.0f });
+	GetFade().FadeIn();
 
 	return true;
 }
 
 void GameOverScene::Update()
 {
-	if (!g_pFade->IsExcute())
+	if (!GetFade().IsExcute())
 	{
-		if (g_pFade->GetCurrentState() == enFadeOut)
+		if (GetFade().GetCurrentState() == enFadeOut)
 		{
 			if (m_choiceNum == 0)
 			{
@@ -67,16 +67,25 @@ void GameOverScene::Update()
 		{
 			m_choiceNum = 1;
 		}
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/select.wav");
+		sound->Play(false);
 	}
 	if (GetPad().IsTriggerButton(enButtonDown))
 	{
 		m_choiceNum++;
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/select.wav");
+		sound->Play(false);
 	}
 	m_choiceNum %= 2;
-	m_arrow.SetPosition({ 50.0f, -100.0f + -100.0f * m_choiceNum });
+	m_arrow.SetPosition({ -250.0f, -100.0f + -100.0f * m_choiceNum });
 	if (GetPad().IsPressButton(enButtonA))
 	{
-		g_pFade->FadeOut();
+		GetFade().FadeOut();
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/enter2.wav");
+		sound->Play(false);
 	}
 }
 

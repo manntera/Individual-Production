@@ -3,7 +3,7 @@
 
 TimeSprite::TimeSprite()
 {
-	m_time = 350.0f;
+	m_time = 0.0f;
 }
 
 TimeSprite::~TimeSprite()

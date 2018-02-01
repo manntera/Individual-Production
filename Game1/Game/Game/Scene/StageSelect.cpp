@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "StageSelect.h"
 #include "Fade.h"
-#include "GameScene.h"
 #include "TitleScene.h"
 
 StageSelect::StageSelect()
@@ -17,13 +16,13 @@ StageSelect::~StageSelect()
 
 bool StageSelect::Start()
 {
-	if (g_pFade->IsExcute())
+	if (GetFade().IsExcute())
 	{
 		return false;
 	}
 	Texture* texture;
 	D3DXVECTOR2 position = { 0.0f, 250.0f };
-	for (int i = 0;i < 5;i++)
+	for (int i = 0;i < STAGE_NUM;i++)
 	{
 		char filePath[64];
 		sprintf(filePath, "Assets/sprite/stage%d.png", i + 1);
@@ -38,15 +37,15 @@ bool StageSelect::Start()
 	texture = GetTextureResource().LoadTexture("Assets/sprite/TitleBack.png");
 	m_back.Init(texture);
 	m_back.SetSize({ (float)FRAME_BUFFER_WIDTH, (float)FRAME_BUFFER_HEIGHT });
-	g_pFade->FadeIn();
+	GetFade().FadeIn();
 	return true;
 }
 
 void StageSelect::Update()
 {
-	if (!g_pFade->IsExcute())
+	if (!GetFade().IsExcute())
 	{
-		if (g_pFade->GetCurrentState() == enFadeOut)
+		if (GetFade().GetCurrentState() == enFadeOut)
 		{
 			if (m_isBackScene)
 			{
@@ -67,12 +66,18 @@ void StageSelect::Update()
 
 	if (GetPad().IsPressButton(enButtonA))
 	{
-		g_pFade->FadeOut();
+		GetFade().FadeOut();
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/enter2.wav");
+		sound->Play(false);
 	}
 	else if (GetPad().IsTriggerButton(enButtonB))
 	{
-		g_pFade->FadeOut();
-		m_isBackScene = true;
+		GetFade().FadeOut();
+		m_isBackScene = true;		
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/cancel.wav");
+		sound->Play(false);
 	}
 
 	if (GetPad().IsTriggerButton(enButtonUp))
@@ -80,12 +85,18 @@ void StageSelect::Update()
 		m_choiceNum--;
 		if (m_choiceNum < 0)
 		{
-			m_choiceNum = GameScene::GetStageMaxNum();
+			m_choiceNum = GameScene::GetStageMaxNum() - 1;
 		}
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/select.wav");
+		sound->Play(false);
 	}
 	if (GetPad().IsTriggerButton(enButtonDown))
 	{
 		m_choiceNum++;
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/select.wav");
+		sound->Play(false);
 	}
 
 	if (GameScene::GetStageMaxNum() != 0)

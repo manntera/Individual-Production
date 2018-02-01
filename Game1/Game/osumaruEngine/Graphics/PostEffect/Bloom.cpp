@@ -152,7 +152,6 @@ void Bloom::Draw()
 			device->EndScene();
 		}
 	}
-
 	//‚Ú‚©‚µ‡¬
 	{
 		
@@ -182,7 +181,8 @@ void Bloom::Draw()
 		device->SetRenderTarget(0, GetMainRenderTarget().GetRenderTarget());
 		device->SetDepthStencilSurface(GetMainRenderTarget().GetDepthStencilBuffer());
 		DWORD alphaEnableBackup, srcBlendBackup, destBlendBackup;
-		device->GetRenderState(D3DRS_ALPHABLENDENABLE, &alphaEnableBackup);
+		device->GetRenderState(D3DRS_ALPHABLENDENABLE, 
+			&alphaEnableBackup);
 		device->GetRenderState(D3DRS_SRCBLEND, &srcBlendBackup);
 		device->GetRenderState(D3DRS_DESTBLEND, &destBlendBackup);
 		device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);

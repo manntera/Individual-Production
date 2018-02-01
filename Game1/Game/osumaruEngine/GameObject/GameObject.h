@@ -73,7 +73,6 @@ public:
 		}
 	}
 private:
-	
-	bool m_isDelete;	//インスタンスを消す時に建てるフラグ
-	bool m_isStart;		//初期化してるかのフラグ
+	bool m_isDelete;			//インスタンスを消す時に建てるフラグ
+	bool m_isStart;				//初期化してるかのフラグ
 };

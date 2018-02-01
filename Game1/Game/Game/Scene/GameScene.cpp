@@ -12,7 +12,7 @@
 #include "TimeAttackResult.h"
 GameScene *g_gameScene;
 int GameScene::m_stageNum = 0;
-int GameScene::m_stageMaxNum = 0;
+int GameScene::m_stageMaxNum = 3;
 
 
 GameScene::GameScene()
@@ -55,20 +55,20 @@ void GameScene::Init(int stageNum, bool isTimeAttack)
 bool GameScene::Start()
 {
 	m_sky = New<Sky>(0);
-	m_camera = New<GameCamera>(cameraPriority);
-	m_camera->Init();
 	m_map = New<Map>(0);
+	m_camera = New<GameCamera>(CAMERA_PRIORITY);
 	m_map->Init(m_stageNum);
-	g_pFade->FadeIn();
+	m_camera->Init();
+	GetFade().FadeIn();
 	m_bgm = New<SoundSource>(0);
-	m_bgm->Init("Assets/sound/BGM.wav");
+	m_bgm->Init("Assets/sound/GameBgm.wav");
 	m_bgm->SetVolume(0.1f);
 	m_bgm->Play(true);
 	if (m_isTimeAttack)
 	{
-		m_pGhost = New<GhostPlayer>(playerPriority);
+		m_pGhost = New<GhostPlayer>(PLAYER_PRIORITY);
 		Player* player = m_map->GetPlayer();
-		m_pTimeSprite = New<TimeSprite>(lastPriority);
+		m_pTimeSprite = New<TimeSprite>(LAST_PRIORITY);
 		player->GhostDataStart();
 	}
 
@@ -77,9 +77,9 @@ bool GameScene::Start()
 
 void GameScene::Update()
 {
-	if (!g_pFade->IsExcute())
+	if (!GetFade().IsExcute())
 	{
-		if (g_pFade->GetCurrentState() == enFadeOut)
+		if (GetFade().GetCurrentState() == enFadeOut)
 		{
 			if (m_isGameClear)
 			{
@@ -101,6 +101,11 @@ void GameScene::Update()
 				GameOverScene* gameOver = New<GameOverScene>(0);
 				gameOver->Init(m_isTimeAttack);
 				
+			}
+			if (m_pGhost != nullptr)
+			{
+				Delete(m_pGhost);
+				m_pGhost = nullptr;
 			}
 			Delete(this);
 			g_gameScene = nullptr;
@@ -145,7 +150,7 @@ void GameScene::GameClear()
 		return;
 	}
 	m_isGameClear = true;
-	g_pFade->FadeOut();
+	GetFade().FadeOut();
 	SoundSource* sound = New<SoundSource>(0);
 	sound->Init("Assets/sound/univ1018.wav");
 	sound->Play(false);
@@ -158,7 +163,7 @@ void GameScene::GameOver()
 		return;
 	}
 	m_isGameOver = true;
-	g_pFade->FadeOut();
+	GetFade().FadeOut();
 	SoundSource* sound = New<SoundSource>(0);
 	sound->Init("Assets/sound/univ0010.wav");
 	sound->Play(false);

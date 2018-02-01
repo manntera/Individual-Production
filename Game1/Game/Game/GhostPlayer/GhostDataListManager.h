@@ -4,13 +4,13 @@
 
 class GhostDataListManager : public GameObject
 {
-public:
+private:
 	//コンストラクタ
 	GhostDataListManager();
 
 	//デストラクタ
 	~GhostDataListManager();
-
+public:
 	/*
 	計測開始する関数
 	position	プレイヤーの座標のアドレス
@@ -34,6 +34,12 @@ public:
 	{
 		return m_ghostData[m_stageNum].ghostData;
 	}
+
+	static GhostDataListManager& GetInstance() 
+	{
+		static GhostDataListManager ghostDataListManager;
+		return ghostDataListManager;
+	}
 private:
 	D3DXVECTOR3*				m_pPosition;		//プレイヤーの座標
 	D3DXQUATERNION*				m_pRotation;		//プレイヤーの回転
@@ -44,4 +50,8 @@ private:
 	bool						m_isActive;			//アクティブか？
 };
 
-extern GhostDataListManager* g_ghostDataList;
+
+static GhostDataListManager& GetGhostDataListManager()
+{
+	return GhostDataListManager::GetInstance();
+}

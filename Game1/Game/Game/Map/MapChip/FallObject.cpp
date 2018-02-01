@@ -6,6 +6,7 @@ FallObject::FallObject()
 {
 	m_particle = nullptr;
 	m_timer = 0.0f;
+	m_isFall = false;
 }
 
 FallObject::~FallObject()
@@ -27,22 +28,21 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 	rbInfo.collider = &m_boxCollider;
 	m_rigidBody.Create(rbInfo);
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
-	m_isActive = false;
-	//m_particle = New<ParticleEmitter>(cameraPriority);
-	//m_particle->Init({
-	//	"Assets/particle/WallDust.png",		//テクスチャのファイルパス
-	//	0.2f,								//パーティクルの横幅
-	//	0.2f,								//パーティクルの縦幅
-	//	{ 0.0f, 0.0f, 1.0f, 1.0f },			//テクスチャのuv。xyが左上のuvでzwが右下のuv
-	//	{ aabb.x, aabb.y, aabb.z },			//パーティクルの座標のランダム幅
-	//	{ 0.0f, -1.0f, 0.0f },				//パーティクルの重力
-	//	6.0f,								//パーティクルの寿命
-	//	2.0f,								//パーティクルが出るまでのインターバル
-	//	0.0f,								//エミッターの寿命
-	//	m_position,							//エミッターの座標
-	//	13									//1フレームで出るパーティクルの数
-	//}
-	//, &g_gameScene->GetCamera());
+	m_particle = New<ParticleEmitter>(CAMERA_PRIORITY);
+	m_particle->Init({
+		"Assets/particle/WallDust.png",						//テクスチャのファイルパス
+		0.4f,												//パーティクルの横幅
+		0.4f,												//パーティクルの縦幅
+		{ 0.0f, 0.0f, 1.0f, 1.0f },							//テクスチャのuv。xyが左上のuvでzwが右下のuv
+		{ aabb.x, 3.0f, aabb.z },					//パーティクルの座標のランダム幅
+		{ 0.0f, -0.5f, 0.0f },								//パーティクルの重力
+		1.3f,												//パーティクルの寿命
+		1.0f,												//パーティクルが出るまでのインターバル
+		0.0f,												//エミッターの寿命
+		{ m_position.x, m_position.y - 11.0f, m_position.z },//エミッターの座標
+		2													//1フレームで出るパーティクルの数
+	}
+	, &g_gameScene->GetCamera());
 	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 }
 
@@ -51,13 +51,17 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 void FallObject::Update()
 {
 	MapChip::Update();
+	if (!m_isActive)
+	{
+		return;
+	}
 	//プレイヤーが上に乗ったら落ち始める
 	if (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
-		m_isActive = true;
+		m_isFall = true;
 		ParticleDelete();
 	}
-	if (m_isActive)
+	if (m_isFall)
 	{
 		m_position.y -= 0.4f;
 		m_timer += GetGameTime().GetDeltaFrameTime();

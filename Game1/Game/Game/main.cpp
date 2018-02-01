@@ -4,7 +4,9 @@
 #include "Scene\Fade.h"
 #include "../Game/GhostPlayer/GhostDataListManager.h"
 #include "Scene\TitleScene.h"
-
+#include "Scene/GameClearScene.h"
+#include "Scene\GameOverScene.h"
+#include "Scene/TimeAttackResult.h"
 
 int WINAPI wWinMain(
 	HINSTANCE hInst,
@@ -16,9 +18,7 @@ int WINAPI wWinMain(
 	//Direct3DÇèâä˙âª
 	GetEngine().InitD3D(hInst);
 	New<TitleScene>(0);
-	g_pFade = New<Fade>(priorityMax - 1);
-	g_pFade->Init();
-	g_ghostDataList = New<GhostDataListManager>(lastPriority);
+	GetFade().Init();
 	GetEngine().GameLoop();
 	return 0;
 }

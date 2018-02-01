@@ -9,13 +9,20 @@ enum EnFadeState
 
 class Fade : public GameObject
 {
-public:
+private:
 	//コンストラクタ
 	Fade();
 
 	//デストラクタ
 	~Fade();
 
+public:
+
+	static Fade& GetInstance()
+	{
+		static Fade fade;
+		return fade;
+	}
 	//初期化
 	void Init();
 
@@ -52,4 +59,7 @@ private:
 	EnFadeState	m_state;		//フェードの状態
 };
 
-extern Fade* g_pFade;
+static Fade& GetFade()
+{
+	return Fade::GetInstance();
+}

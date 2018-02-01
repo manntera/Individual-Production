@@ -27,7 +27,7 @@ PostEffect::~PostEffect()
 
 void PostEffect::Init()
 {
-	m_bloom.Init(true);
+	m_bloom.Init(false);
 	m_bloom.SetWeight(30.0f);
 	m_monochrome.Init(false);
 	m_dof.Init(false);

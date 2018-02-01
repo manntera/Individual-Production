@@ -6,7 +6,7 @@
 
 void GameObjectManager::Init()
 {
-	m_objectVector.resize(priorityMax);
+	m_objectVector.resize(PRIORITY_MAX);
 }
 
 void GameObjectManager::Execute(PostEffect& postEffect)
@@ -15,17 +15,17 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 	//初期化
 	for (GameObjectList& objList : m_objectVector)
 	{
-		for (GameObject* object : objList)
+		for (GameObjectData& object : objList)
 		{
-			object->Starter();
+			object.gameObject->Starter();
 		}
 	}
 	//更新
 	for (GameObjectList& objList : m_objectVector)
 	{
-		for (GameObject* object : objList)
+		for (GameObjectData& object : objList)
 		{
-			object->Updater();
+			object.gameObject->Updater();
 		}
 	}
 
@@ -40,9 +40,9 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 	device->BeginScene();
 	for (GameObjectList& objList : m_objectVector)
 	{
-		for (GameObject* object : objList)
+		for (GameObjectData& object : objList)
 		{
-			object->Drawer();
+			object.gameObject->Drawer();
 		}
 	}
 	device->EndScene();
@@ -53,9 +53,9 @@ void GameObjectManager::Execute(PostEffect& postEffect)
 	GetPhysicsWorld().Draw();
 	for (GameObjectList& objList : m_objectVector)
 	{
-		for (GameObject* object : objList)
+		for (GameObjectData& object : objList)
 		{
-			object->AfterDrawer();
+			object.gameObject->AfterDrawer();
 		}
 	}
 	// シーンの描画終了。
@@ -77,14 +77,17 @@ void GameObjectManager::DeleteExecute()
 {
 	for (GameObjectList& objList : m_objectVector)
 	{
-		std::list<GameObject*>::iterator it = objList.begin();
+		std::list<GameObjectData>::iterator it = objList.begin();
 		while (it != objList.end())
 		{
-			if ((*it)->IsDelete())
+			if ((*it).gameObject->IsDelete())
 			{
-				GameObject *deleteObject = *it;
+				if ((*it).isNew)
+				{
+					GameObject *deleteObject = (*it).gameObject;
+					delete deleteObject;
+				}
 				it = objList.erase(it);
-				delete deleteObject;
 			}
 			else
 			{

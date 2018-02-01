@@ -323,8 +323,8 @@ PS_OUTPUT DitheringPSMain(VS_OUTPUT In)
 	screenPos.y = screenPos.y * g_screenHeight / accuracy;
 	screenPos.x = min(screenPos.x, -screenPos.x);
 	screenPos.y = min(screenPos.y, -screenPos.y);
-	screenPos.x = (screenPos.x + g_screenWidth) / 2;
-	screenPos.y = (screenPos.y + g_screenHeight) / 2;
+	screenPos.x = (screenPos.x + g_screenWidth) / 2 / 2;
+	screenPos.y = (screenPos.y + g_screenHeight) / 2 / 2;
 	//screenPos.x = max(screenPos.x, -screenPos.x);
 	//screenPos.y = max(screenPos.y, -screenPos.y);
 	screenPos.x %= 4;

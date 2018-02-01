@@ -37,7 +37,10 @@ void MoveFloor::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelN
 void MoveFloor::Update()
 {
 	MapChip::Update();
-
+	if (!m_isActive)
+	{
+		true;
+	}
 	m_position += m_moveSpeed;
 
 	//プレイヤーが上に乗ったら親子関係をつける

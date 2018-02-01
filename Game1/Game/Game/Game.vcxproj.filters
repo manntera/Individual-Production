@@ -120,6 +120,9 @@
     <ClCompile Include="Map\MapChip\ScoreUpItem.cpp">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClCompile>
+    <ClCompile Include="Map\MapChip\StopTimeItem.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -201,6 +204,9 @@
       <Filter>ソース ファイル\GhostPlayer</Filter>
     </ClInclude>
     <ClInclude Include="Map\MapChip\ScoreUpItem.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\MapChip\StopTimeItem.h">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClInclude>
   </ItemGroup>

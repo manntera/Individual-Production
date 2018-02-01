@@ -1,4 +1,5 @@
 #pragma once
+#include "GameScene.h"
 
 class StageSelect : public GameObject
 {
@@ -13,7 +14,7 @@ public:
 
 	void Draw()override;
 private:
-	Sprite	m_stageNum[5];
+	Sprite	m_stageNum[STAGE_NUM];
 	Sprite	m_arrow;
 	Sprite	m_back;
 	int		m_choiceNum;

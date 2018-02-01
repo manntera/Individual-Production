@@ -11,7 +11,7 @@ TextureResource::~TextureResource()
 {
 	for (auto& map : m_textures)
 	{
-		delete map.second;
+		map.second->Release();
 	}
 }
 

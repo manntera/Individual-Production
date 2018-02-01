@@ -23,7 +23,7 @@ void HindranceObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *
 	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
 	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 
-	m_timerLimit = 200;
+	m_timerLimit = 60;
 	m_timer = GetRandom().GetRandInt() % m_timerLimit;
 
 
@@ -32,7 +32,7 @@ void HindranceObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *
 	m_acceleration.y = worldMatrix.m[2][1];
 	m_acceleration.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&m_acceleration, &m_acceleration);
-	m_acceleration *= 0.025f;
+	m_acceleration *= 0.15f;
 	m_moveSpeed = { 0.0f, 0.0f, 0.0f };
 	m_moveSpeed += m_acceleration * (m_timer - m_timerLimit / 2);
 	m_isChild = false;
@@ -41,6 +41,10 @@ void HindranceObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *
 void HindranceObject::Update()
 {
 	MapChip::Update();
+	if (!m_isActive)
+	{
+		return;
+	}
 	if (m_timerLimit <= m_timer)
 	{
 		m_acceleration *= -1.0f;

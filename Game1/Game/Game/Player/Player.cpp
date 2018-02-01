@@ -28,12 +28,12 @@ Player::~Player()
 
 void Player::GhostDataFinish(float time, bool isClear)
 {
-	g_ghostDataList->Finish(time, isClear);
+	GetGhostDataListManager().Finish(time, isClear);
 }
 
 void Player::GhostDataStart()
 {
-	g_ghostDataList->Start(&m_position, &m_rotation, &m_anim);
+	GetGhostDataListManager().Start(&m_position, &m_rotation, &m_anim);
 }
 
 
@@ -70,6 +70,7 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(2.0f, 2.5f, m_position);
 	m_skinModel.SetShadowCasterFlg(true);
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 	//m_skinModel.SetShadowReceiverFlg(true);
 }
 
@@ -89,7 +90,7 @@ bool Player::Start()
 	m_anim.SetAnimationEndTime(enAnimSetJump, 0.7f);
 	m_anim.SetAnimationLoopFlg(enAnimSetJump, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetCliffRise, false);
-	m_anim.PlayAnimation(enAnimSetWait);
+	m_anim.SetAnimationLoopFlg(enAnimSetVerticalJump, false);
 	m_graspCliff.Init(this, 6.0f);
 	m_wallJump.Init(this, &m_characterController);
 	m_isParentRotation = false;
@@ -325,7 +326,7 @@ void Player::Move()
 	}
 	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallShear() && !m_graspCliff.IsActive())
 	{
-
+		m_currentAnim = enAnimSetJump;
 		if (m_jumpCount != 0)
 		{
 			if (stickDir.x != 0.0f || stickDir.z != 0.0f)
@@ -344,11 +345,13 @@ void Player::Move()
 			jumpSound->Init("Assets/sound/Jump.wav");
 			jumpSound->Play(false);
 			jumpSound->SetVolume(0.3f);
-
+			if (stickDir.x == 0.0f && stickDir.z == 0.0f)
+			{
+				m_currentAnim = enAnimSetVerticalJump;
+			}
 		}
 		moveSpeed.y = 30.0f;
-		m_currentAnim = enAnimSetJump;
-		m_anim.PlayAnimation(enAnimSetJump);
+		m_anim.PlayAnimation(m_currentAnim);
 		Rotation(moveSpeed);
 		SoundSource* sound = New<SoundSource>(0);
 		sound->Init("Assets/sound/univ0002.wav");

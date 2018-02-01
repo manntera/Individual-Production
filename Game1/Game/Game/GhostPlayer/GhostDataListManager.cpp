@@ -2,8 +2,6 @@
 #include "GhostDataListManager.h"
 #include "../Scene/GameScene.h"
 
-GhostDataListManager* g_ghostDataList = nullptr;
-
 GhostDataListManager::GhostDataListManager()
 {
 	m_pPosition = nullptr;

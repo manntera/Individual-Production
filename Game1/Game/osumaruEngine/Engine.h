@@ -106,17 +106,6 @@ public:
 		{
 			m_pD3D->Release();
 		}
-		if (m_effectManager != nullptr)
-		{
-			delete m_effectManager;
-			m_effectManager = nullptr;
-		}
-		if (m_physicsWorld != nullptr)
-		{
-			delete m_physicsWorld;
-			m_physicsWorld = nullptr;
-		}
-		delete m_physicsWorld;
 		PostQuitMessage(0);
 	}
 	//インスタンスの生成
@@ -129,6 +118,12 @@ public:
 	void Delete(GameObject* deleteObject)
 	{
 		m_objectManager.Delete(deleteObject);
+	}
+
+	//インスタンスをオブジェクトマネージャーに登録
+	void Add(GameObject* object, int priority)
+	{
+		m_objectManager.Add(object, priority);
 	}
 
 	
@@ -146,10 +141,10 @@ public:
 private:
 	LPDIRECT3D9				m_pD3D;
 	LPDIRECT3DDEVICE9		m_pD3DDevice;			//デバイス
-	EffectManager*			m_effectManager;		//エフェクトマネージャー
+	std::unique_ptr<EffectManager>			m_effectManager;		//エフェクトマネージャー
 	WNDCLASSEX				m_wc;
 	GameObjectManager		m_objectManager;		//オブジェクトマネージャー
-	PhysicsWorld*			m_physicsWorld;			//物理ワールド
+	std::unique_ptr<PhysicsWorld>			m_physicsWorld;			//物理ワールド
 	Pad						m_pad;					//パッドの入力
 	ShadowMap				m_shadowMap;			//シャドウマップ
 	SoundEngine				m_soundEngine;
@@ -175,6 +170,11 @@ static T* New(int priority)
 static void Delete(GameObject* deleteObject)
 {
 	GetEngine().Delete(deleteObject);
+}
+
+static void Add(GameObject* object, int priority)
+{
+	GetEngine().Add(object, priority);
 }
 
 //パッドの取得

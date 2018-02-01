@@ -12,10 +12,10 @@ enum EnAnimationSet
 	enAnimSetWallJump,
 	enAnimSetJump,
 	enAnimSetCliffRise,
+	enAnimSetVerticalJump,
 	enAnimSetNum,
 };
 class MapChip;
-
 
 class Player : public GameObject
 {
@@ -43,7 +43,7 @@ public:
 	void Draw() override;
 
 	//座標を取得
-	D3DXVECTOR3 GetPosition()
+	D3DXVECTOR3 GetPosition() 
 	{
 		return m_position;
 	}
@@ -65,7 +65,7 @@ public:
 	}
 
 	//ワールド行列を取得。
-	D3DXMATRIX GetWorldMatrix()
+	D3DXMATRIX GetWorldMatrix() 
 	{
 		return m_skinModel.GetWorldMatrix();
 	}

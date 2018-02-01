@@ -121,7 +121,7 @@ void PlayerWallJump::Update()
 				position.x = m_dustPos->m[3][0];
 				position.y = m_dustPos->m[3][1];
 				position.z = m_dustPos->m[3][2];
-				m_wallDust = New<ParticleEmitter>(cameraPriority);
+				m_wallDust = New<ParticleEmitter>(CAMERA_PRIORITY);
 				m_wallDust->Init({
 					"Assets/particle/WallDust.png",		//テクスチャのファイルパス
 					2.0f,								//パーティクルの横幅

@@ -38,7 +38,10 @@ void RotationObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* m
 void RotationObject::Update()
 {
 	MapChip::Update();
-	
+	if (m_isActive)
+	{
+
+	}
 	//プレイヤーが上に乗ったので親子関係をつける
 	if (!m_isChild && m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
