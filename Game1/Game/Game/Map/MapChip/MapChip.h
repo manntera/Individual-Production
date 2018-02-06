@@ -1,7 +1,7 @@
 #pragma once
 //マップで配置するオブジェクトの基底クラス
 class Map;
-
+class Player;
 
 class MapChip : public GameObject
 {
@@ -31,7 +31,7 @@ public:
 	//描画関数
 	virtual void Draw()override;
 
-	D3DXMATRIX GetWorldMatrix()
+	const D3DXMATRIX GetWorldMatrix() const
 	{
 		return m_skinModel.GetWorldMatrix();
 	}
@@ -46,6 +46,11 @@ public:
 	void SetIsActive(bool isActive)
 	{
 		m_isActive = isActive;
+	}
+
+	void SetPlayer(Player* player)
+	{
+		m_pPlayer = player;
 	}
 
 protected:
@@ -63,4 +68,5 @@ protected:
 	Map*			m_pMap;						//デリートする時のためのポインタ
 	std::list<MapChip*>::iterator m_iterator;	//自身のイテレーター
 	bool			m_isActive;					//アクティブか？
+	Player*			m_pPlayer;					//プレイヤーのインスタンス(親子関係をつけたりするときに使う)
 };

@@ -4,67 +4,62 @@
 #include "RigidBodyDraw.h"
 #include "../Camera.h"
 
-PhysicsWorld::PhysicsWorld()
+PhysicsWorld::PhysicsWorld() :
+	m_pCollisionConfig(nullptr),
+	m_pCollisionDispatcher(nullptr),
+	m_pOverlappingPairCache(nullptr),
+	m_pConstraintSolver(nullptr),
+	m_pDynamicWorld(nullptr),
+	m_pRigidBodyDraw(nullptr),
+	m_pCamera(nullptr)
 {
-	m_collisionConfig = NULL;
-	m_collisionDispatcher = NULL;
-	m_overlappingPairCache = NULL;
-	m_constraintSolver = NULL;
-	m_dynamicWorld = NULL;
-	m_camera = nullptr;
 }
 
 PhysicsWorld::~PhysicsWorld()
 {
-	delete m_dynamicWorld;
-	delete m_collisionConfig;
-	delete m_collisionDispatcher;
-	delete m_constraintSolver;
-	delete m_overlappingPairCache;
-	delete m_rigidBodyDraw;
 }
 
 
 void PhysicsWorld::Init()
 {
 	//•¨—ƒGƒ“ƒWƒ“‚ð‰Šú‰»
-	m_collisionConfig = new btDefaultCollisionConfiguration;
-	m_collisionDispatcher = new btCollisionDispatcher(m_collisionConfig);
-	m_overlappingPairCache = new btDbvtBroadphase();
-	m_constraintSolver = new btSequentialImpulseConstraintSolver();
+	m_pCollisionConfig.reset(new btDefaultCollisionConfiguration);
+	m_pCollisionDispatcher.reset(new btCollisionDispatcher(m_pCollisionConfig.get()));
+	m_pOverlappingPairCache.reset(new btDbvtBroadphase());
+	m_pConstraintSolver.reset(new btSequentialImpulseConstraintSolver());
 
-	m_dynamicWorld = new btDiscreteDynamicsWorld(
-		m_collisionDispatcher,
-		m_overlappingPairCache,
-		m_constraintSolver,
-		m_collisionConfig
-		);
-	m_dynamicWorld->setGravity(btVector3(0, -10, 0));
-	m_rigidBodyDraw = new RigidBodyDraw;
-	m_rigidBodyDraw->Init();
-	m_dynamicWorld->setDebugDrawer(m_rigidBodyDraw);
+	m_pDynamicWorld.reset(new btDiscreteDynamicsWorld(
+		m_pCollisionDispatcher.get(),
+		m_pOverlappingPairCache.get(),
+		m_pConstraintSolver.get(),
+		m_pCollisionConfig.get()
+		));
+	m_pDynamicWorld->setGravity(btVector3(0, -10, 0));
+	m_pRigidBodyDraw.reset(new RigidBodyDraw);
+	m_pRigidBodyDraw->Init();
+	m_pDynamicWorld->setDebugDrawer(m_pRigidBodyDraw.get());
 }
 
 void PhysicsWorld::Update()
 {
-	m_dynamicWorld->stepSimulation(GetGameTime().GetDeltaFrameTime());
+	m_pDynamicWorld->stepSimulation(GetGameTime().GetDeltaFrameTime());
 }
 
 void PhysicsWorld::Draw()
 {
-	if (m_camera != nullptr)
+	if (m_pCamera != nullptr)
 	{
 		//m_rigidBodyDraw->Draw(m_camera->GetViewMatrix(), m_camera->GetProjectionMatrix());
-		m_rigidBodyDraw->Reset();
+		m_pRigidBodyDraw->Reset();
 	}
 }
 
 void PhysicsWorld::AddRigidBody(btRigidBody* rb)
 {
-	m_dynamicWorld->addRigidBody(rb);
+	m_pDynamicWorld->addRigidBody(rb);
 }
 
 void PhysicsWorld::RemoveRigidBody(btRigidBody* rb)
 {
-	m_dynamicWorld->removeRigidBody(rb);
+	m_pDynamicWorld->removeRigidBody(rb);
 }

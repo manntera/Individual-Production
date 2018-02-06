@@ -17,14 +17,14 @@ public:
 	*/
 	void Create(btVector3 box)
 	{
-		m_boxShape = new btBoxShape(box);
+		m_boxShape.reset(new btBoxShape(box));
 	}
 
 	//コライダーを取得
-	btCollisionShape* GetBody()override
+	const btCollisionShape* GetBody() const override
 	{
-		return m_boxShape;
+		return m_boxShape.get();
 	}
 private:
-	btBoxShape*		m_boxShape;//コライダー
+	std::unique_ptr<btBoxShape>		m_boxShape;//コライダー
 };

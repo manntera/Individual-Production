@@ -4,9 +4,11 @@
 #include "../VertexCommon.h"
 #include "../EffectManager.h"
 
-MonochromeFilter::MonochromeFilter()
+MonochromeFilter::MonochromeFilter() :
+	m_primitive(),
+	m_pEffect(nullptr),
+	m_isActive(false)
 {
-	m_isActive = false;
 }
 
 MonochromeFilter::~MonochromeFilter()

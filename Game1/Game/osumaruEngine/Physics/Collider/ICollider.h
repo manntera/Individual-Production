@@ -4,5 +4,5 @@
 class ICollider : Uncopyable
 {
 public:
-	virtual btCollisionShape* GetBody() = 0;
+	virtual const btCollisionShape* GetBody() const = 0;
 };

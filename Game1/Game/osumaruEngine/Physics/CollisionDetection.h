@@ -45,7 +45,7 @@ public:
 	当たってるか？
 	trueなら当たってる。falseなら当たってない
 	*/
-	bool IsHit()
+	bool IsHit() const
 	{
 		return m_isHit;
 	}
@@ -56,31 +56,33 @@ public:
 	*/
 	void SetUserIndex(int userIndex)
 	{
-		m_rigidBody.GetBody()->setUserIndex(userIndex);
+		m_rigidBody.SetUserIndex(userIndex);
 	}
 
-	D3DXVECTOR3 GetCollisionNormal()
+	//当たったオブジェクトの法線を取得
+	const D3DXVECTOR3& GetCollisionNormal() const
 	{
 		return m_hitCollisionNormal;
 	}
 
 	//回転を取得
-	D3DXQUATERNION GetRotation()
+	const D3DXQUATERNION& GetRotation() const
 	{
 		return m_rotation;
 	}
 
 	//座標を取得
-	D3DXVECTOR3 GetPosition()
+	const D3DXVECTOR3& GetPosition() const
 	{
 		return m_position;
 	}
 
 	//ヒットしたコリジョンの属性を取得
-	int GetHitCollisionType()
+	int GetHitCollisionType() const
 	{
 		return m_collisionType;
 	}
+
 	//このコリジョンの属性を設定
 	void SetJudgmentType(int judgmentType)
 	{

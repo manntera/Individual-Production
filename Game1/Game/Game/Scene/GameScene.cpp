@@ -10,32 +10,29 @@
 #include "../HUD/TimeSprite.h"
 #include "../GhostPlayer/GhostPlayer.h"
 #include "TimeAttackResult.h"
-GameScene *g_gameScene;
-int GameScene::m_stageNum = 0;
-int GameScene::m_stageMaxNum = 3;
 
 
-GameScene::GameScene()
+GameScene::GameScene() :
+	m_isGameOver(false),
+	m_isGameClear(false),
+	m_pMap(nullptr),
+	m_pCamera(nullptr),
+	m_pSky(nullptr),
+	m_pBgm(nullptr),
+	m_stageNum(0),
+	m_stageMaxNum(3),
+	m_pTimeSprite(nullptr),
+	m_isInit(false),
+	m_isTimeAttack(false),
+	m_pGhost(nullptr),
+	m_isActive(false)
+	
 {
-	m_isGameClear = false;
-	m_isGameOver = false;
-	m_pTimeSprite = nullptr;
-	m_pGhost = nullptr;
-	m_isInit = false;
-	m_isTimeAttack = false;
 }
 
 GameScene::~GameScene()
 {
-	Delete(m_bgm);
-	if (m_pTimeSprite != nullptr)
-	{
-		Delete(m_pTimeSprite);
-	}
-	if (m_pGhost != nullptr)
-	{
-		Delete(m_pGhost);
-	}
+	Reset();
 }
 
 void GameScene::Init(int stageNum, bool isTimeAttack)
@@ -54,38 +51,41 @@ void GameScene::Init(int stageNum, bool isTimeAttack)
 
 bool GameScene::Start()
 {
-	m_sky = New<Sky>(0);
-	m_map = New<Map>(0);
-	m_camera = New<GameCamera>(CAMERA_PRIORITY);
-	m_map->Init(m_stageNum);
-	m_camera->Init();
+	m_pSky = New<Sky>(0);
+	m_pMap = New<Map>(0);
+	m_pCamera = New<GameCamera>(CAMERA_PRIORITY);
+	m_pMap->Init(m_stageNum);
+	m_pCamera->Init();
 	GetFade().FadeIn();
-	m_bgm = New<SoundSource>(0);
-	m_bgm->Init("Assets/sound/GameBgm.wav");
-	m_bgm->SetVolume(0.1f);
-	m_bgm->Play(true);
+	m_pBgm = New<SoundSource>(0);
+	m_pBgm->Init("Assets/sound/GameBgm.wav");
+	m_pBgm->SetVolume(0.1f);
+	m_pBgm->Play(true);
 	if (m_isTimeAttack)
 	{
 		m_pGhost = New<GhostPlayer>(PLAYER_PRIORITY);
-		Player* player = m_map->GetPlayer();
+		const Player* player = m_pMap->GetPlayer();
 		m_pTimeSprite = New<TimeSprite>(LAST_PRIORITY);
 		player->GhostDataStart();
 	}
-
+	m_isGameClear = false;
+	m_isGameOver = false;
 	return true;
 }
 
 void GameScene::Update()
 {
+	//フェードアウトの状態でフェードが終わると遷移する
 	if (!GetFade().IsExcute())
 	{
 		if (GetFade().GetCurrentState() == enFadeOut)
 		{
+			//ゲームクリアしたとき
 			if (m_isGameClear)
 			{
 				if (!m_isTimeAttack)
 				{
-					GameClearScene* gameClearScene = New<GameClearScene>(0);
+					New<GameClearScene>(0);
 					m_stageNum++;
 					m_stageMaxNum++;
 				}
@@ -93,10 +93,10 @@ void GameScene::Update()
 				{
 					TimeAttackResult* result = New<TimeAttackResult>(0);
 					result->Init(m_pTimeSprite->GetTime());
-					m_map->GetPlayer()->GhostDataFinish(m_pTimeSprite->GetTime(), true);
+					m_pMap->GetPlayer()->GhostDataFinish(m_pTimeSprite->GetTime(), true);
 				}
 			}
-			else if (m_isGameOver)
+			else if (m_isGameOver)	//ゲームオーバーの時
 			{
 				GameOverScene* gameOver = New<GameOverScene>(0);
 				gameOver->Init(m_isTimeAttack);
@@ -108,30 +108,50 @@ void GameScene::Update()
 				m_pGhost = nullptr;
 			}
 			Delete(this);
-			g_gameScene = nullptr;
+			m_isActive = false;
 		}
 	}
-	else
-	{
-		return;
-	}
 }
 
-Player* GameScene::GetPlayer()
+const Player* GameScene::GetPlayer() const
 {
-	return m_map->GetPlayer();
+	return m_pMap->GetPlayer();
 }
 
-Camera& GameScene::GetCamera()
+const Camera& GameScene::GetCamera() const
 {
-	return m_camera->GetCamera();
+	return m_pCamera->GetCamera();
 }
 
 void GameScene::BeforeDead()
 {
-	Delete(m_sky);
-	Delete(m_map);
-	Delete(m_camera);
+	if (m_pBgm != nullptr)
+	{
+		Delete(m_pBgm);
+		m_pBgm = nullptr;
+	}
+	if (m_pTimeSprite != nullptr)
+	{
+		Delete(m_pTimeSprite);
+		m_pTimeSprite = nullptr;
+	}
+	GhostDataFinish();
+	m_isInit = false;
+	if (m_pMap != nullptr)
+	{
+		Delete(m_pMap);
+		m_pMap = nullptr;
+	}
+	if (m_pSky != nullptr)
+	{
+		Delete(m_pSky);
+		m_pSky = nullptr;
+	}
+	if (m_pCamera != nullptr)
+	{
+		Delete(m_pCamera);
+		m_pCamera = nullptr;
+	}
 }
 
 void GameScene::GhostDataFinish()
@@ -169,6 +189,6 @@ void GameScene::GameOver()
 	sound->Play(false);
 	if (m_isTimeAttack)
 	{
-		m_map->GetPlayer()->GhostDataFinish(m_pTimeSprite->GetTime(), false);
+		m_pMap->GetPlayer()->GhostDataFinish(m_pTimeSprite->GetTime(), false);
 	}
 }

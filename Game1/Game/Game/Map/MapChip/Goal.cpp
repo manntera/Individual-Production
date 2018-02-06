@@ -22,15 +22,16 @@ void Goal::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, 
 void Goal::Update()
 {
 	MapChip::Update();
-	if (g_gameScene == nullptr)
+	if (!GetGameScene().IsActive())
 	{
 		return;
 	}
-	Player* player = g_gameScene->GetPlayer();
+	//プレイヤーがある一定の距離範囲内に入ったらゴール
+	const Player* player = GetGameScene().GetPlayer();
 	D3DXVECTOR3 distance = player->GetPosition() - m_position;
 	if (D3DXVec3Length(&distance) < 6.0f)
 	{
-		g_gameScene->GameClear();
+		GetGameScene().GameClear();
 	}
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 }

@@ -2,13 +2,13 @@
 #include "StopWatch.h"
 
 
-StopWatch::StopWatch()
+StopWatch::StopWatch() :
+	m_start(0),
+	m_end(0),
+	m_frequency(1),
+	m_time(0.0f),
+	m_millTime(0.0f)
 {
-	m_time = 0.0;
-	m_millTime = 0.0f;
-	m_start = 0;
-	m_end = 0;
-	m_frequency = 1;
 }
 
 StopWatch::~StopWatch()

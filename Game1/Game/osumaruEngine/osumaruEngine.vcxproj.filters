@@ -126,9 +126,6 @@
     <ClCompile Include="Physics\CollisionDetection.cpp">
       <Filter>ソース ファイル\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="Sound\Sound.cpp">
-      <Filter>ソース ファイル\Sound</Filter>
-    </ClCompile>
     <ClCompile Include="Sound\WaveFileOpen.cpp">
       <Filter>ソース ファイル\Sound</Filter>
     </ClCompile>
@@ -262,9 +259,6 @@
     </ClInclude>
     <ClInclude Include="Uncopyable.h">
       <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Sound\Sound.h">
-      <Filter>ソース ファイル\Sound</Filter>
     </ClInclude>
     <ClInclude Include="Sound\WaveFileOpen.h">
       <Filter>ソース ファイル\Sound</Filter>

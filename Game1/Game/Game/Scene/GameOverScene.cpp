@@ -5,10 +5,14 @@
 #include "Fade.h"
 
 
-GameOverScene::GameOverScene()
+GameOverScene::GameOverScene() :
+	m_sprite(),
+	m_choiceNum(0),
+	m_arrow(),
+	m_retry(),
+	m_finish(),
+	m_isTimeAttack(false)
 {
-	m_choiceNum = 0;
-	m_isTimeAttack = false;
 }
 
 GameOverScene::~GameOverScene()
@@ -34,20 +38,21 @@ bool GameOverScene::Start()
 	m_arrow.Init(texture);
 	m_arrow.SetPosition({ -250.0f, -100.0f });
 	GetFade().FadeIn();
-
 	return true;
 }
 
 void GameOverScene::Update()
 {
+	//選択を決定するとフェードアウトが始まり、それが終わると遷移
 	if (!GetFade().IsExcute())
 	{
 		if (GetFade().GetCurrentState() == enFadeOut)
 		{
+			//リトライを選んでいたらもう一回ゲームシーン
 			if (m_choiceNum == 0)
 			{
-				g_gameScene = New<GameScene>(0);
-				g_gameScene->Init(g_gameScene->GetStageNum(), m_isTimeAttack);
+				GetGameScene().Create();
+				GetGameScene().Init(GetGameScene().GetStageNum(), m_isTimeAttack);
 			}
 			else
 			{
@@ -60,6 +65,7 @@ void GameOverScene::Update()
 	{
 		return;
 	}
+	//矢印を上に動かす
 	if (GetPad().IsTriggerButton(enButtonUp))
 	{
 		m_choiceNum--;
@@ -71,6 +77,7 @@ void GameOverScene::Update()
 		sound->Init("Assets/sound/select.wav");
 		sound->Play(false);
 	}
+	//矢印を下に動かす
 	if (GetPad().IsTriggerButton(enButtonDown))
 	{
 		m_choiceNum++;
@@ -80,6 +87,7 @@ void GameOverScene::Update()
 	}
 	m_choiceNum %= 2;
 	m_arrow.SetPosition({ -250.0f, -100.0f + -100.0f * m_choiceNum });
+	//選択を決定
 	if (GetPad().IsPressButton(enButtonA))
 	{
 		GetFade().FadeOut();

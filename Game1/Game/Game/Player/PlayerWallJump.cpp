@@ -4,16 +4,22 @@
 #include "../GameCamera/GameCamera.h"
 #include "../Scene/GameScene.h"
 
-PlayerWallJump::PlayerWallJump()
+PlayerWallJump::PlayerWallJump() :
+	m_groundCollider(),
+	m_wallCollider(),
+	m_wallDetection(),
+	m_groundDetection(),
+	m_player(nullptr),
+	m_isWallShear(false),
+	m_isWallJump(false),
+	m_characterController(),
+	m_wallJumpDirection(0.0f, 0.0f, 0.0f),
+	m_wallShearGravity(-200.0f),
+	m_defaultGravity(0.0f),
+	m_wallDust(nullptr),
+	m_dustPos(nullptr),
+	m_wallJumpCount(0)
 {
-	m_isWallShear = false;
-	m_player = nullptr;
-	m_characterController = nullptr;
-	m_wallJumpDirection = { 0.0f, 0.0f, 0.0f };
-	m_isWallJump = false;
-	m_wallDust = nullptr;
-	m_wallShearGravity = -200.0f;
-	m_wallJumpCount = 0;
 }
 
 PlayerWallJump::~PlayerWallJump()
@@ -61,6 +67,7 @@ void PlayerWallJump::Update()
 		}
 		return;
 	}
+	//プレイヤーのワールド行列をを使って剛体の位置を更新
 	D3DXVECTOR3 position = m_player->GetPosition();
 	D3DXMATRIX worldMatrix = m_player->GetWorldMatrix();
 	D3DXVECTOR3 playerFront;
@@ -135,7 +142,7 @@ void PlayerWallJump::Update()
 					position,							//エミッターの座標
 					1									//パーティクルが1フレームで出る数
 				}
-				, &g_gameScene->GetCamera());
+				, &GetGameScene().GetCamera());
 			}
 		}
 	}

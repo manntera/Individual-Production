@@ -38,18 +38,18 @@ public:
 	void Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum,  int vertexStride, void *indexBuffer, int indexNum, EnFormatIndex indexFormat, EnPrimitiveType primitivetype );
 
 	//頂点バッファを取得。
-	LPDIRECT3DVERTEXBUFFER9 GetVertexBuffer()
+	const LPDIRECT3DVERTEXBUFFER9 GetVertexBuffer() const
 	{
 		return m_pVertexBuffer;
 	}
 
 	//インデックスバッファを取得。
-	LPDIRECT3DINDEXBUFFER9 GetIndexBuffer()
+	const LPDIRECT3DINDEXBUFFER9 GetIndexBuffer() const
 	{
 		return m_pIndexBuffer;
 	}
 	//頂点数を取得。
-	int GetVertexNum()
+	int GetVertexNum() const
 	{
 		return m_vertexNum;
 	}
@@ -57,22 +57,25 @@ public:
 	void Release();
 
 	//頂点定義を取得
-	LPDIRECT3DVERTEXDECLARATION9 GetVertexDecaration()
+	const LPDIRECT3DVERTEXDECLARATION9 GetVertexDecaration() const
 	{
 		return m_pVertexDecaration;
 	}
 
-	int GetPolygonNum()
+	//ポリゴン数を取得
+	int GetPolygonNum() const
 	{
 		return m_polygonNum;
 	}
 
-	int GetVertexStride()
+	//頂点ストライドを取得
+	int GetVertexStride() const
 	{
 		return m_vertexStride;
 	}
 
-	D3DPRIMITIVETYPE GetPrimitiveType()
+	//プリミティブタイプを取得
+	D3DPRIMITIVETYPE GetPrimitiveType() const
 	{
 		return m_primitiveType;
 	}
@@ -82,7 +85,7 @@ private:
 	LPDIRECT3DINDEXBUFFER9			m_pIndexBuffer;			//インデックスバッファ
 	LPDIRECT3DVERTEXDECLARATION9	m_pVertexDecaration;	//頂点定義
 	int								m_vertexNum;			//頂点数
-	D3DPRIMITIVETYPE				m_primitiveType;
-	int								m_polygonNum;
-	int								m_vertexStride;
+	D3DPRIMITIVETYPE				m_primitiveType;		//プリミティブの種類
+	int								m_polygonNum;			//ポリゴン数
+	int								m_vertexStride;			//頂点ストライド
 };		

@@ -3,18 +3,21 @@
 
 Fade* g_pFade = nullptr;
 
-Fade::Fade()
+Fade::Fade() :
+	m_fadeTime(0.5f),
+	m_timer(m_fadeTime),
+	m_sprite(),
+	m_alpha(0.0f),
+	m_isExcute(false),
+	m_state(enFadeOut)
+
 {
-	m_alpha = 0.0f;
-	m_fadeTime = 0.5f;
-	m_timer = m_fadeTime;
-	m_state = enFadeOut;
 	Add(this, PRIORITY_MAX - 1);
 }
 
 Fade::~Fade()
 {
-
+	Delete(this);
 }
 
 void Fade::Init()
@@ -39,6 +42,7 @@ void Fade::FadeOut()
 
 void Fade::Update()
 {
+	//一定時間たつまでフェイド中
 	if (m_timer < m_fadeTime)
 	{
 		m_timer += GetGameTime().GetDeltaFrameTime();
@@ -48,12 +52,12 @@ void Fade::Update()
 		m_isExcute = false;
 		m_timer = m_fadeTime;
 	}
+	//フェードしてる時間をアルファ値としてスプライトを半透明にする
 	float alpha = m_timer / m_fadeTime;
 	if (m_state == enFadeIn)
 	{
 		alpha = 1.0f - alpha;
 	}
-
 	m_sprite.SetAlpha(alpha);
 }
 

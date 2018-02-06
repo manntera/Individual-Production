@@ -14,10 +14,6 @@ WaveFileOpen::~WaveFileOpen()
 	{
 		delete[] m_format;
 	}
-	if (m_readMemory != nullptr)
-	{
-		delete[] m_readMemory;
-	}
 	mmioClose(m_hmmio, 0);
 }
 
@@ -88,7 +84,7 @@ void WaveFileOpen::Read()
 {
 	m_size = m_dataChunk.cksize;
 	//データ読み込み用のバッファを確保
-	m_readMemory = new char[m_size];
+	m_readMemory.reset(new char[m_size]);
 
 	MMIOINFO  mmioInfo;
 	if (0 != mmioGetInfo(m_hmmio, &mmioInfo, 0))
@@ -111,8 +107,7 @@ void WaveFileOpen::Read()
 				throw;
 			}
 		}
-
-		*((BYTE*)m_readMemory + cT) = *((BYTE*)mmioInfo.pchNext);
+		*((BYTE*)m_readMemory.get() + cT) = *((BYTE*)mmioInfo.pchNext);
 		mmioInfo.pchNext++;
 	}
 }

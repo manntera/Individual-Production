@@ -11,10 +11,10 @@ void RigidBody::Create(RigidBodyInfo& rbInfo)
 {
 	Release();
 
-	m_myMotionState = new btDefaultMotionState();
-	btRigidBody::btRigidBodyConstructionInfo btRBInfo(rbInfo.mass, m_myMotionState, rbInfo.collider->GetBody(), btVector3(0, 0, 0));
-	m_rigidBody = new btRigidBody(btRBInfo);
-	GetPhysicsWorld().AddRigidBody(m_rigidBody);
+	m_myMotionState.reset(new btDefaultMotionState());
+	btRigidBody::btRigidBodyConstructionInfo btRBInfo(rbInfo.mass, m_myMotionState.get(), const_cast<btCollisionShape*>(rbInfo.collider->GetBody()), btVector3(0, 0, 0));
+	m_rigidBody.reset(new btRigidBody(btRBInfo));
+	GetPhysicsWorld().AddRigidBody(m_rigidBody.get());
 	SetPosition(rbInfo.pos);
 	SetRotation(rbInfo.rot);
 	m_rigidBody->getOneBeforeWorldTransform().setOrigin({ rbInfo.pos.x, rbInfo.pos.y, rbInfo.pos.z });
@@ -24,15 +24,9 @@ void RigidBody::Create(RigidBodyInfo& rbInfo)
 
 void RigidBody::Release()
 {
-	if (m_rigidBody != nullptr)
+	if (m_rigidBody)
 	{
-		GetPhysicsWorld().RemoveRigidBody(m_rigidBody);
-		delete m_rigidBody;
-		m_rigidBody = nullptr;
-	}
-	if (m_myMotionState != nullptr)
-	{
-		delete m_myMotionState;
-		m_myMotionState = nullptr;
+		GetPhysicsWorld().RemoveRigidBody(m_rigidBody.get());
+		m_rigidBody.reset();
 	}
 }

@@ -24,7 +24,7 @@ public:
 	}
 
 	//座標を取得
-	D3DXVECTOR2 GetPosition()
+	const D3DXVECTOR2& GetPosition() const
 	{
 		return m_position;
 	}
@@ -42,7 +42,7 @@ public:
 	}
 
 	//サイズを取得
-	D3DXVECTOR2 GetSize()
+	const D3DXVECTOR2& GetSize() const
 	{
 		return m_size;
 	}

@@ -217,7 +217,6 @@
     <ClCompile Include="Random\Random.cpp" />
     <ClCompile Include="Resource\SkinModelDataResource.cpp" />
     <ClCompile Include="Resource\TextureResource.cpp" />
-    <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundEngine.cpp" />
     <ClCompile Include="Sound\SoundSource.cpp" />
     <ClCompile Include="Sound\WaveFileOpen.cpp" />
@@ -263,7 +262,6 @@
     <ClInclude Include="Random\Random.h" />
     <ClInclude Include="Resource\SkinModelDataResource.h" />
     <ClInclude Include="Resource\TextureResource.h" />
-    <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundEngine.h" />
     <ClInclude Include="Sound\SoundSource.h" />
     <ClInclude Include="Sound\WaveFileOpen.h" />

@@ -4,10 +4,16 @@
 #include "../VertexCommon.h"
 #include "../EffectManager.h"
 
-PostEffect::PostEffect()
+PostEffect::PostEffect() :
+	m_bloom(),
+	m_monochrome(),
+	m_dof(),
+	m_primitive(),
+	m_pEffect(nullptr),
+	m_frameBuffer(nullptr),
+	m_depthBuffer(nullptr)
+
 {
-	m_frameBuffer = nullptr;
-	m_depthBuffer = nullptr;
 }
 
 PostEffect::~PostEffect()
@@ -27,7 +33,7 @@ PostEffect::~PostEffect()
 
 void PostEffect::Init()
 {
-	m_bloom.Init(false);
+	m_bloom.Init(true);
 	m_bloom.SetWeight(30.0f);
 	m_monochrome.Init(false);
 	m_dof.Init(false);
@@ -46,14 +52,13 @@ void PostEffect::Init()
 	LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
 	device->GetRenderTarget(0, &m_frameBuffer);
 	device->GetDepthStencilSurface(&m_depthBuffer);
-	
 }
 
 void PostEffect::Draw()
 {
 	m_bloom.Draw();
-	//m_monochrome.Draw();
-	//m_dof.Draw();
+	m_monochrome.Draw();
+	m_dof.Draw();
 	LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
 	device->SetRenderTarget(0, m_frameBuffer);
 	device->SetDepthStencilSurface(m_depthBuffer);

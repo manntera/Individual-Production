@@ -422,7 +422,7 @@ public:
 		m_playerCollisionGroundFlg = flg;
 	}
 
-	bool getPlayerCollisionGroundFlg()
+	bool getPlayerCollisionGroundFlg() const
 	{
 		return m_playerCollisionGroundFlg;
 	}
@@ -432,7 +432,7 @@ public:
 		m_playerCollisionWallFlg = flg;
 	}
 
-	bool getPlayerCollisionWallFlg()
+	bool getPlayerCollisionWallFlg() const
 	{
 		return m_playerCollisionWallFlg;
 	}

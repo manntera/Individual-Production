@@ -2,19 +2,20 @@
 #include "GhostDataListManager.h"
 #include "../Scene/GameScene.h"
 
-GhostDataListManager::GhostDataListManager()
+GhostDataListManager::GhostDataListManager() :
+	m_pPosition(nullptr),
+	m_pRotation(nullptr),
+	m_pAnimation(nullptr),
+	m_ghostData(),
+	m_substitute(),
+	m_stageNum(0),
+	m_isActive(false)
 {
-	m_pPosition = nullptr;
-	m_pRotation = nullptr;
-	m_pAnimation = nullptr;
-	m_stageNum = 0;
 	m_ghostData.resize(STAGE_NUM);
-	m_substitute.clear();
 	for (int i = 0;i < STAGE_NUM;i++)
 	{
 		m_ghostData[i].time = 1000.0f;
 	}
-	m_isActive = false;
 }
 
 GhostDataListManager::~GhostDataListManager()
@@ -22,9 +23,9 @@ GhostDataListManager::~GhostDataListManager()
 
 }
 
-void GhostDataListManager::Start(D3DXVECTOR3* position, D3DXQUATERNION* rotation, Animation* animation)
+void GhostDataListManager::Start(const D3DXVECTOR3* position, const D3DXQUATERNION* rotation, const Animation* animation)
 {
-	m_stageNum = g_gameScene->GetStageNum();
+	m_stageNum = GetGameScene().GetStageNum();
 	m_pPosition = position;
 	m_pRotation = rotation;
 	m_pAnimation = animation;

@@ -18,11 +18,13 @@ private:
 
 public:
 
+	//インスタンスを取得
 	static Fade& GetInstance()
 	{
 		static Fade fade;
 		return fade;
 	}
+
 	//初期化
 	void Init();
 
@@ -39,19 +41,19 @@ public:
 	void AfterDraw()override;
 
 	//フェードの状態を取得
-	EnFadeState GetCurrentState()
+	EnFadeState GetCurrentState() const
 	{
 		return m_state;
 	}
 
 	//フェード中か？
-	bool IsExcute()
+	bool IsExcute() const
 	{
 		return m_isExcute;
 	}
 
 private:
-	float		m_fadeTime;		//フェードする時間
+	const float	m_fadeTime;		//フェードする時間
 	float		m_timer;		//タイマー
 	Sprite		m_sprite;		//スプライト
 	float		m_alpha;		//不透明度
@@ -59,6 +61,7 @@ private:
 	EnFadeState	m_state;		//フェードの状態
 };
 
+//フェードを取得
 static Fade& GetFade()
 {
 	return Fade::GetInstance();

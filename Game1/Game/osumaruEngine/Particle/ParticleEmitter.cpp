@@ -3,11 +3,13 @@
 #include "Particle.h"
 #include "../Engine.h"
 
-ParticleEmitter::ParticleEmitter()
+ParticleEmitter::ParticleEmitter() :
+	m_pCamera(nullptr),
+	m_info{},
+	m_lifeTimer(0.0f),
+	m_intervalTime(1.0f),
+	m_particleNum(1)
 {
-	m_intervalTime = 0.0f;
-	m_lifeTimer = 0.0f;
-	m_particleNum = 1;
 }
 
 ParticleEmitter::~ParticleEmitter()
@@ -15,10 +17,10 @@ ParticleEmitter::~ParticleEmitter()
 
 }
 
-void ParticleEmitter::Init(SParticleEmittInfo info, Camera* camera)
+void ParticleEmitter::Init(SParticleEmittInfo info, const Camera* camera)
 {
 	m_info = info;
-	m_camera = camera;
+	m_pCamera = camera;
 	m_lifeTimer = info.emitterLifeTime;
 	m_intervalTime = m_info.emittIntervalTime;
 	if (1 <= info.particleNum)
@@ -38,7 +40,7 @@ void ParticleEmitter::Update()
 		for (int i = 0; i < m_particleNum; i++)
 		{
 			Particle* particle = New<Particle>(2);
-			particle->Init(m_info, m_camera);
+			particle->Init(m_info, m_pCamera);
 		}
 	}
 	//õ–½‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡

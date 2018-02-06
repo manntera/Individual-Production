@@ -36,9 +36,11 @@ std::vector<std::vector<MapChipInfo>> mapChipInfo =
 
 
 
-Map::Map()
+Map::Map() :
+	m_mapChip(),
+	m_player(nullptr),
+	m_stopTime(-1.0f)
 {
-	m_stopTime = -1.0f;
 }
 
 Map::~Map()
@@ -88,24 +90,31 @@ void Map::Init(int stageNum)
 			mapChip = New<StaticMapObject>(STAGE_GIMMICK_PRIORITY);
 			break;
 		}
-
 		if (mapChip != nullptr)
 		{
+			//マップチップを生成
 			mapChip->Init(mInfo.m_position, mInfo.m_rotation, mInfo.m_modelName);
 			m_mapChip.push_back(mapChip);
+			//マップチップに自身のイテレーターとマップのインスタンスを渡す(削除の時に使う)
 			std::list<MapChip*>::iterator iterator = m_mapChip.end();
 			iterator--;
 			mapChip->SetIterator(this, iterator);
 		}
+	}
+	for (MapChip* mapChip : m_mapChip)
+	{
+		mapChip->SetPlayer(m_player);
 	}
 }
 
 
 void Map::Update()
 {
+	//マップの時間が止まっている時
 	if (0.0f < m_stopTime)
 	{
 		m_stopTime -= GetGameTime().GetDeltaFrameTime();
+		//時間がたったのでマップチップが動き出す
 		if (m_stopTime < 0.0f)
 		{
 			for (MapChip* mapChip : m_mapChip)
@@ -118,6 +127,7 @@ void Map::Update()
 
 void Map::StopTime()
 {
+	//マップチップの動きを一時停止
 	m_stopTime = 10.0f;
 	for (MapChip* mapChip : m_mapChip)
 	{

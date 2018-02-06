@@ -17,15 +17,15 @@ public:
 	*/
 	void Create(float radius, float height)
 	{
-		m_shape = new btCapsuleShape(radius, height);
+		m_shape.reset(new btCapsuleShape(radius, height));
 	}
 
 	//コライダーを取得
-	btCollisionShape* GetBody()override
+	const btCollisionShape* GetBody() const override
 	{
-		return m_shape;
+		return m_shape.get();
 	}
 
 private:
-	btCapsuleShape*		m_shape;	//コライダー
+	std::unique_ptr<btCapsuleShape>		m_shape;	//コライダー
 };

@@ -4,14 +4,15 @@
 #include "../EffectManager.h"
 #include "../VertexCommon.h"
 
-Bloom::Bloom()
+Bloom::Bloom() :
+	m_downSamplingTarget{},
+	m_luminanceTarget(),
+	m_combineTarget(),
+	m_pEffect(nullptr),
+	m_primitive(),
+	m_isActive(false)
 {
-	for (int i = 0; i < BLUR_RANGE; i++)
-	{
-		m_weight[i] = 1.0f;
-	}
 	SetWeight(1.0f);
-	m_isActive = false;
 }
 
 Bloom::~Bloom()
@@ -22,12 +23,12 @@ Bloom::~Bloom()
 void Bloom::SetWeight(float rate)
 {
 	float total = 0.0f;
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < BLUR_RANGE; i++)
 	{
 		m_weight[i] = expf(-0.5f * float(i * i) / rate);
 		total += 2.0f * m_weight[i];
 	}
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < BLUR_RANGE; i++)
 	{
 		m_weight[i] /= total;
 	}
@@ -41,7 +42,7 @@ void Bloom::Init(bool isActive)
 		return;
 	}
 	m_luminanceTarget.Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, D3DFMT_A16B16G16R16F, D3DFMT_D16);
-	m_combineTarget.Create(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT, D3DFMT_A16B16G16R16F, D3DFMT_D16);
+	m_combineTarget.Create(FRAME_BUFFER_WIDTH / 2, FRAME_BUFFER_HEIGHT / 2, D3DFMT_A16B16G16R16F, D3DFMT_D16);
 	for (int i = 0; i < DOWN_SAMPLING_NUM; i++)
 	{
 		m_downSamplingTarget[i][0].Create(FRAME_BUFFER_WIDTH >> i + 1, FRAME_BUFFER_HEIGHT >> i, D3DFMT_A16B16G16R16F, D3DFMT_D16);
@@ -175,14 +176,12 @@ void Bloom::Draw()
 		m_pEffect->End();
 		device->EndScene();
 	}
-
 	//ÅI‡¬
 	{
 		device->SetRenderTarget(0, GetMainRenderTarget().GetRenderTarget());
 		device->SetDepthStencilSurface(GetMainRenderTarget().GetDepthStencilBuffer());
 		DWORD alphaEnableBackup, srcBlendBackup, destBlendBackup;
-		device->GetRenderState(D3DRS_ALPHABLENDENABLE, 
-			&alphaEnableBackup);
+		device->GetRenderState(D3DRS_ALPHABLENDENABLE, &alphaEnableBackup);
 		device->GetRenderState(D3DRS_SRCBLEND, &srcBlendBackup);
 		device->GetRenderState(D3DRS_DESTBLEND, &destBlendBackup);
 		device->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);

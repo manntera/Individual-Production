@@ -20,8 +20,8 @@ public:
 	void Draw()override;
 private:
 	Sprite m_sprite;		//ゲームクリアのスプライト
-	int		m_choiceNum;	//現在選んでいる選択肢の番号
-	Sprite m_arrow;			
-	Sprite m_finish;		
-	Sprite m_nextStage;
+	int		m_choiceNum;	//現在選んでいる選択肢
+	Sprite m_arrow;			//矢印のスプライト
+	Sprite m_finish;		//タイトルへのスプライト
+	Sprite m_nextStage;		//次のステージへのスプライト
 };

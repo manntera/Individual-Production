@@ -3,23 +3,25 @@
 #include "../Engine.h"
 #include "SkinModel\SkinModel.h"
 
-ShadowMap::ShadowMap()
+ShadowMap::ShadowMap() :
+	m_renderTarget(),
+	m_position(0.0f, 0.0f, 0.0f),
+	m_target(0.0f, 0.0f, 0.0f),
+	m_up(0.0f, 1.0f, 0.0f),
+	m_viewMatrix{},
+	m_projMatrix{},
+	m_width(0),
+	m_height(0),
+	m_models()
 {
-	m_position = { 0.0f, 0.0f, 0.0f };
-	m_target = { 0.0f, 0.0f, 0.0f };
-	m_up = { 0.0f, 1.0f, 0.0f };
-	m_width = 0;
-	m_height = 0;
 }
 
 ShadowMap::~ShadowMap()
 {
-	Release();
 }
 
 void ShadowMap::Create(int width, int height)
 {
-	Release();
 	m_width = width;
 	m_height = height;
 	//シャドウマップを作成
@@ -80,7 +82,6 @@ void ShadowMap::Draw()
 		{
 			model->UpdateWorldMatrix(trans, rot, scale);
 		}
-		model->SetIsShadowEntry(false);
 	}
 	GetEngine().GetDevice()->EndScene();
 	GetEngine().GetDevice()->SetRenderTarget(0, renderTargetBackup);
@@ -90,12 +91,7 @@ void ShadowMap::Draw()
 	m_models.clear();
 }
 
-LPDIRECT3DTEXTURE9 ShadowMap::GetShadowMapTexture()
+const LPDIRECT3DTEXTURE9 ShadowMap::GetShadowMapTexture() const
 {
 	return m_renderTarget.GetTexture();
-}
-
-void ShadowMap::Release()
-{
-
 }

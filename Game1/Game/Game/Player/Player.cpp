@@ -7,31 +7,44 @@
 #include "../Map/MapChip/MapChip.h"
 #include "../GhostPlayer/GhostDataListManager.h"
 
-Player::Player()
+Player::Player() :
+	m_skinModel(),
+	m_skinModelData(),
+	m_light(),
+	m_rotation(0.0f, 0.0f, 0.0f, 1.0f),
+	m_localRotation(0.0f, 0.0f, 0.0f, 1.0f),
+	m_position(0.0f, 0.0f, 0.0f),
+	m_localPosition(0.0f, 0.0f, 0.0f),
+	m_scale(1.0f, 1.0f, 1.0f),
+	m_anim(),
+	m_characterController(),
+	m_stageGimmickMoveSpeed(0.0f, 0.0f, 0.0f),
+	m_movement(0.0f, 0.0f, 0.0f),
+	m_wallJump(),
+	m_jumpCount(0),
+	m_currentAnim(enAnimSetWait),
+	m_isJump(false),
+	m_parent(nullptr),
+	m_isParentRotation(false),
+	m_moveSpeed(0.0f),
+	m_acceleration(0.0f),
+	m_rotationFrameNum(3),
+	m_frameAngle(0.0f),
+	m_rotationCount(0)
+
 {
-	m_jumpCount = 0;
-	m_stageGimmickMoveSpeed = { 0.0f, 0.0f, 0.0f };
-	m_isJump = false;
-	m_currentAnim = enAnimSetWait;
-	m_movement = { 0.0f, 0.0f, 0.0f };
-	m_parent = nullptr;
-	m_moveSpeed = 0.0f;
-	m_acceleration = 0.0f;
-	m_rotationCount = 0;
-	m_rotationFrameNum = 3;
-	m_frameAngle = 0.0f;
 }
 
 Player::~Player()
 {
 }
 
-void Player::GhostDataFinish(float time, bool isClear)
+void Player::GhostDataFinish(float time, bool isClear) const
 {
 	GetGhostDataListManager().Finish(time, isClear);
 }
 
-void Player::GhostDataStart()
+void Player::GhostDataStart() const
 {
 	GetGhostDataListManager().Start(&m_position, &m_rotation, &m_anim);
 }
@@ -39,6 +52,7 @@ void Player::GhostDataStart()
 
 void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 {
+	//ライトの設定
 	float ambientLightColor = 0.6f;
 	float diffuseLightColor0 = 0.3f;
 	float diffuseLightColor1 = 0.3f;
@@ -63,27 +77,33 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	D3DXVec3Normalize(&lightDirection, &lightDirection);
 	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
 
+	//ワールド行列を更新
 	m_rotation = rotation;
 	m_position = position;
+	m_scale = { 1.0f, 1.0f, 1.0f };
+	m_skinModel.Update(m_position, m_rotation, m_scale);
+	//キャラクターコントローラー
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 	m_characterController.SetGravity(-40.0f);
-	m_scale = { 1.0f, 1.0f, 1.0f };
 	m_characterController.Init(2.0f, 2.5f, m_position);
 	m_skinModel.SetShadowCasterFlg(true);
-	m_skinModel.Update(m_position, m_rotation, m_scale);
 	//m_skinModel.SetShadowReceiverFlg(true);
 }
 
 bool Player::Start()
 {
+	//モデルの初期化
 	GetModelDataResource().Load(&m_skinModelData, &m_anim, "Assets/modelData/Unitychan.X");
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
-	m_modelNormalMap.Load("Assets/modelData/utc_normal.tga");
-	m_modelSpecularMap.Load("Assets/modelData/utc_spec.tga");
-	m_skinModel.SetNormalMap(&m_modelNormalMap);
-	m_skinModel.SetSpecularMap(&m_modelSpecularMap, &g_gameScene->GetCamera());
+	//法線マップとスペキュラマップを読み込み
+	Texture* texture = GetTextureResource().LoadTexture("Assets/modelData/utc_normal.tga");
+	m_skinModel.SetNormalMap(texture);
+	texture = GetTextureResource().LoadTexture("Assets/modelData/utc_spec.tga");
+	m_skinModel.SetSpecularMap(texture, &GetGameScene().GetCamera());
+
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+	//アニメーションの初期化
 	m_anim.SetAnimationEndTime(enAnimSetRun, 0.8f);
 	m_anim.SetAnimationEndTime(enAnimSetWallJump, 0.9f);
 	m_anim.SetAnimationLoopFlg(enAnimSetWallJump, false);
@@ -91,57 +111,33 @@ bool Player::Start()
 	m_anim.SetAnimationLoopFlg(enAnimSetJump, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetCliffRise, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetVerticalJump, false);
-	m_graspCliff.Init(this, 6.0f);
+
 	m_wallJump.Init(this, &m_characterController);
 	m_isParentRotation = false;
-	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 	return true;
 }
 
 
 void Player::Update()
 {
-	if (g_gameScene == nullptr )
+	if (!GetGameScene().IsActive())
 	{
 		return;
 	}
 	Move();
-	//m_graspCliff.Update();
 	m_wallJump.Update();
 	m_anim.Update(GetGameTime().GetDeltaFrameTime());
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 	if (m_characterController.IsOnGround())
 	{
+		//回転を何フレームかに分割して回転
 		DelayRotation(m_characterController.GetMoveSpeed());
 	}
 	if (m_position.y < -70.0f)
 	{
-		g_gameScene->GameOver();
+		GetGameScene().GameOver();
 	}
-
-	if (GetPad().IsTriggerButton(enButtonY))
-	{
-		//SoundSource* sound = New<SoundSource>(0);
-		//sound->Init("Assets/sound/univ1197a.wav", true);
-		//sound->Play(false);
-		//sound->SetPosition(m_position);
-		//ParticleEmitter* emitter = New<ParticleEmitter>(0);
-		//emitter->Init({
-		//	"Assets/particle/Explosion5.png",
-		//	10.0f,
-		//	10.0f,
-		//	{ 0.5f, 0.0f, 0.666f, 0.166f },
-		//	1.0f,
-		//	0.3f,
-		//	3.0f,
-		//	m_position
-		//}
-		//, &g_gameScene->GetCamera());
-	}
-	if (GetPad().IsTriggerButton(enButtonX))
-	{
-		g_gameScene->GameOver();
-	}
+	//シャドウマップのライトカメラを更新
 	GetShadowMap().SetLightCameraTarget(m_characterController.GetPosition());
 	D3DXVECTOR3 lightCameraPos = m_characterController.GetPosition();
 	lightCameraPos += {0.0f, 40.0f, 0.0f};
@@ -165,7 +161,7 @@ bool Player::CriffRiseEnd()
 		return false;
 	}
 	//崖を上り終わって座標を更新
-	D3DXMATRIX* matrix = m_skinModelData.GetFindBoneWorldMatrix("Character1_Reference");
+	const D3DXMATRIX* matrix = m_skinModelData.GetFindBoneWorldMatrix("Character1_Reference");
 	m_position.x = matrix->m[3][0];
 	m_position.y = matrix->m[3][1];
 	m_position.z = matrix->m[3][2];
@@ -179,6 +175,7 @@ bool Player::CriffRiseEnd()
 
 void Player::WallShear(D3DXVECTOR3 playerDirection)
 {
+	//壁ずりの時は移動速度を0にする
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 	m_currentAnim = enAnimSetWallShear;
 	m_anim.PlayAnimation(enAnimSetWallShear);
@@ -188,6 +185,7 @@ void Player::WallShear(D3DXVECTOR3 playerDirection)
 
 void Player::WallJump(D3DXVECTOR3 jumpDirection)
 {
+	//ジャンプのベクトルの大きさを調節
 	D3DXVECTOR3 jumpSpeed = jumpDirection;
 	jumpSpeed.y = 0.0f;
 	D3DXVec3Normalize(&jumpSpeed, &jumpSpeed);
@@ -198,6 +196,7 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 	m_jumpCount = 1;
 	m_currentAnim = enAnimSetWallJump;
 	m_anim.PlayAnimation(enAnimSetWallJump);
+	//ジャンプ音を再生
 	SoundSource* sound = New<SoundSource>(0);
 	sound->Init("Assets/sound/univ0001.wav");
 	sound->Play(false);
@@ -210,17 +209,20 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 
 bool Player::SetParent(MapChip* parent, bool parentRotation)
 {
+	//親がいる状態で他のマップチップが親になろうとすると失敗
 	if (m_parent != nullptr && parent != nullptr)
 	{
 		return false;
 	}
 	m_parent = parent;
+	//親子関係が切れた
 	if (m_parent == nullptr)
 	{
 		return false;
 	}
-	else
+	else//親子関係がついた
 	{
+		//親のローカルでの座標と回転を求める
 		D3DXMATRIX matrix = m_parent->GetWorldMatrix();
 		D3DXMatrixInverse(&matrix, NULL, &matrix);
 		D3DXVec3TransformCoord(&m_localPosition, &m_position, &matrix);
@@ -246,7 +248,7 @@ void Player::Move()
 		moveSpeed.x = 0.0f;
 		moveSpeed.z = 0.0f;
 	}
-	Camera& camera = g_gameScene->GetCamera();
+	const Camera& camera = GetGameScene().GetCamera();
 	//カメラの向きを移動方向として移動
 	D3DXVECTOR3 front = camera.GetTarget() - camera.GetPosition();
 	front.y = 0.0f;
@@ -261,6 +263,7 @@ void Player::Move()
 
 	const float acceleration = 0.3f;
 	const float speedLimit = 20.0f;
+	//動いていない時
 	if (stickDir.x == 0.0f && stickDir.z == 0.0f)
 	{
 		if (m_characterController.IsOnGround() && m_currentAnim != enAnimSetWait)
@@ -273,17 +276,18 @@ void Player::Move()
 	}
 	else
 	{
-
 		m_acceleration += acceleration;
 		m_moveSpeed += m_acceleration;
 		float speed = m_moveSpeed;
+		//移動速度が限界ならもう加速しない
 		if (speedLimit < speed)
 		{
 			speed = speedLimit;
 		}
-		if (!m_wallJump.IsWallShear() && !m_graspCliff.IsActive())
+		//壁に張り付いてない時
+		if (!m_wallJump.IsWallShear())
 		{
-
+			//地面についてる時
 			if (m_characterController.IsOnGround())
 			{
 				if (m_currentAnim != enAnimSetRun)
@@ -294,9 +298,8 @@ void Player::Move()
 				moveSpeed += stickDir;
 				moveSpeed *= speed;
 			}
-			else
+			else//ジャンプ中
 			{
-
 				D3DXVECTOR3 jumpSpeed = stickDir;
 				speed *= 0.05f;
 				jumpSpeed *= speed;
@@ -311,7 +314,7 @@ void Player::Move()
 				}
 			}
 		}
-		else
+		else//壁に張り付いてるとき
 		{
 			m_acceleration = 0.0f;
 			m_moveSpeed = 0.0f;
@@ -324,9 +327,10 @@ void Player::Move()
 		m_isJump = true;
 		m_jumpCount = 1;
 	}
-	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallShear() && !m_graspCliff.IsActive())
+	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallShear())
 	{
 		m_currentAnim = enAnimSetJump;
+		//2断面のジャンプの時
 		if (m_jumpCount != 0)
 		{
 			if (stickDir.x != 0.0f || stickDir.z != 0.0f)
@@ -340,16 +344,19 @@ void Player::Move()
 		}
 		else
 		{
+			//地面にいる時だけ地面を蹴る音を再生する
 			SoundSource* jumpSound;
 			jumpSound = New<SoundSource>(0);
 			jumpSound->Init("Assets/sound/Jump.wav");
 			jumpSound->Play(false);
 			jumpSound->SetVolume(0.3f);
+			//垂直飛びの時だけそのアニメーションを再生
 			if (stickDir.x == 0.0f && stickDir.z == 0.0f)
 			{
 				m_currentAnim = enAnimSetVerticalJump;
 			}
 		}
+		//上方向に移動速度を与える
 		moveSpeed.y = 30.0f;
 		m_anim.PlayAnimation(m_currentAnim);
 		Rotation(moveSpeed);
@@ -373,16 +380,13 @@ void Player::Move()
 		D3DXVECTOR3 position;
 		D3DXVec3TransformCoord(&position, &m_localPosition, &m_parent->GetWorldMatrix());
 		m_characterController.SetPosition(position);
-		if (!m_graspCliff.IsActive())
+		if (m_wallJump.IsWallShear())
 		{
-			if (m_wallJump.IsWallShear())
-			{
-				m_characterController.DynamicExecute();
-			}
-			else
-			{
-				m_characterController.Execute();
-			}
+			m_characterController.DynamicExecute();
+		}
+		else
+		{
+			m_characterController.Execute();
 		}
 		position = m_characterController.GetPosition();
 		D3DXMATRIX inverseMatrix;
@@ -391,10 +395,7 @@ void Player::Move()
 	}
 	else
 	{
-		if (!m_graspCliff.IsActive())
-		{
-			m_characterController.Execute();
-		}
+		m_characterController.Execute();
 	}
 
 	m_movement = m_characterController.GetPosition() - m_position;
@@ -426,7 +427,7 @@ void Player::DelayRotation(D3DXVECTOR3 rotationDirection)
 		front.z = worldMat.m[2][2];
 		D3DXVec3Normalize(&moveDir, &moveDir);
 		D3DXVec3Normalize(&front, &front);
-
+		//プレイヤーの向いてる方向と移動方向で内積を取りどのくらい回転させるか求める
 		float rad = D3DXVec3Dot(&front, &moveDir);
 		if (1.0f < rad)
 		{
@@ -438,13 +439,16 @@ void Player::DelayRotation(D3DXVECTOR3 rotationDirection)
 		}
 		rad = acosf(rad);
 		D3DXVECTOR3 cross;
+		//プレイヤーの向いてる方向と移動方向で外積を取って回転の向きを求める
 		D3DXVec3Cross(&cross, &front, &moveDir);
 		if (cross.y < 0.0f)
 		{
 			rad = -rad;
 		}
+		//回転量を分割する。
 		m_frameAngle = rad / m_rotationFrameNum;
 	}
+	//まだ回転し終わってなければ回転する
 	if (m_rotationCount < m_rotationFrameNum)
 	{
 		D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), m_frameAngle);
@@ -467,40 +471,42 @@ void Player::Rotation(D3DXVECTOR3 rotationDirection)
 {
 	D3DXVECTOR3 moveDir = rotationDirection;
 	moveDir.y = 0.0f;
+	//ほぼ動いてないなら早期リターン
 	if (D3DXVec3Length(&moveDir) < 0.001f)
 	{
 		return;
 	}
 	D3DXQUATERNION multi;
 	D3DXQuaternionIdentity(&multi);
-	//モデルを回転
+	//ワールド行列から向いてる方向を求める
 	D3DXMATRIX worldMat = m_skinModel.GetWorldMatrix();
 	D3DXVECTOR3 front;
-
 	front.x = worldMat.m[2][0];
 	front.y = 0.0f;
 	front.z = worldMat.m[2][2];
 	D3DXVec3Normalize(&moveDir, &moveDir);
 	D3DXVec3Normalize(&front, &front);
-
+	//向いてる方向と移動方向で内積を取る
 	float rad = D3DXVec3Dot(&front, &moveDir);
+	//絶対値が1.0fを超えてた場合の補正計算
 	if (1.0f < rad)
 	{
 		rad = 1.0f;
 	}
 	if (rad < -1.0f)
 	{
-		rad = 1.0f;
+		rad = -1.0f;
 	}
 	rad = acosf(rad);
+	//外積を取ってどっち向きに回すか判定
 	D3DXVECTOR3 cross;
 	D3DXVec3Cross(&cross, &front, &moveDir);
 	if (cross.y < 0.0f)
 	{
 		rad = -rad;
 	}
-
 	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), rad);
+	//親がいるときはローカルでの回転も更新する
 	if (m_parent != nullptr && m_isParentRotation)
 	{
 		D3DXQuaternionMultiply(&m_localRotation, &m_localRotation, &multi);
@@ -521,6 +527,7 @@ void Player::Draw()
 	DWORD zEnableStateBackup;
 	DWORD zwriteEnableStateBackup;
 
+	//シルエット描画
 	EnSkinModelShaderTechnique techniqueBackup = m_skinModel.GetCurrentShaderTechnique();
 	device->GetRenderState(D3DRS_ZFUNC, &zStateBackup);
 	device->GetRenderState(D3DRS_ZENABLE, &zEnableStateBackup);
@@ -531,16 +538,14 @@ void Player::Draw()
 	device->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
 	m_skinModel.SetShaderTechnique(enShaderTechniqueSilhouette);
 
-	m_skinModel.Draw(&g_gameScene->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera().GetProjectionMatrix());
+	m_skinModel.Draw(&GetGameScene().GetCamera().GetViewMatrix(), &GetGameScene().GetCamera().GetProjectionMatrix());
 
+	//普通の描画
 	m_skinModel.SetShaderTechnique(techniqueBackup);
 	device->SetRenderState(D3DRS_ZFUNC, zStateBackup);
 	device->SetRenderState(D3DRS_ZENABLE, zEnableStateBackup);
 	device->SetRenderState(D3DRS_ZWRITEENABLE, zwriteEnableStateBackup);
-
-	m_skinModel.Draw(&g_gameScene->GetCamera().GetViewMatrix(), &g_gameScene->GetCamera().GetProjectionMatrix());
+	m_skinModel.Draw(&GetGameScene().GetCamera().GetViewMatrix(), &GetGameScene().GetCamera().GetProjectionMatrix());
 	m_characterController.Draw();
 	m_wallJump.Draw();
-	m_graspCliff.Draw();
-
 }

@@ -3,7 +3,12 @@
 #include "../Scene/GameScene.h"
 #include "../Player/Player.h"
 
-GameCamera::GameCamera()
+GameCamera::GameCamera() :
+	m_rotation(0.0f, 0.0f, 0.0f, 1.0f),
+	m_camera(),
+	m_angleX(0.0f),
+	m_position(0.0f, 0.0f, 0.0f),
+	m_playerBoneMat(nullptr)
 {
 }
 
@@ -14,6 +19,7 @@ GameCamera::~GameCamera()
 
 void GameCamera::Init()
 {
+	//カメラの初期化
 	m_camera.Init();
 	m_camera.SetPosition({ 0.0, 40.0f, -40.0f });
 	m_camera.SetTarget({ 0.0f, 0.0f, 0.0f });
@@ -22,18 +28,26 @@ void GameCamera::Init()
 	m_camera.Update();
 	D3DXQuaternionIdentity(&m_rotation);
 	GetPhysicsWorld().SetCamera(&m_camera);
-	m_angleX = 0.0f;
-	Player*	player = g_gameScene->GetPlayer();
+	//プレイヤーのワールド行列からカメラの初期座標を設定
+	const Player*	player = GetGameScene().GetPlayer();
 	D3DXMATRIX mat = player->GetWorldMatrix();
-	m_target.x = -mat.m[2][0];
-	m_target.y = -mat.m[2][1];
-	m_target.z = -mat.m[2][2];
-	D3DXVec3Normalize(&m_target, &m_target);
+	m_position.x = -mat.m[2][0];
+	m_position.y = -mat.m[2][1];
+	m_position.z = -mat.m[2][2];
+	D3DXVec3Normalize(&m_position, &m_position);
+	m_position *= 50.0f;
+}
+
+bool GameCamera::Start()
+{
+
+	m_playerBoneMat = GetGameScene().GetPlayer()->FindBoneWorldMatrix("center");
+	return true;
 }
 
 void GameCamera::Update()
 {
-	if (g_gameScene == nullptr)
+	if (!GetGameScene().IsActive())
 	{
 		return;
 	}
@@ -41,6 +55,7 @@ void GameCamera::Update()
 	float angleX = 0.0f;
 	float stickY = GetPad().GetRightStickY();
 	float limitAngle = 80.0f;
+	//カメラが限界まで行ってなかったらカメラのX軸周りに回転させる
 	if (m_angleX < limitAngle / 180.0f * cPI && 0.0f < stickY || -limitAngle / 180.0f * cPI < m_angleX && stickY < 0.0f)
 	{
 		angleX = stickY * GetGameTime().GetDeltaFrameTime() * 30.0f / 180.0f * cPI * 3.0f;
@@ -62,14 +77,13 @@ void GameCamera::Update()
 	D3DXMATRIX rotMatrix;
 	D3DXMatrixRotationQuaternion(&rotMatrix, &m_rotation);
 	D3DXVECTOR3 position = { 0.0f, 0.0f, 0.0f };
-	position = m_target * 50.0f;
+	position = m_position;
 	D3DXVec3TransformCoord(&position, &position, &rotMatrix);
-	Player*	player = g_gameScene->GetPlayer();
-	D3DXMATRIX* playerWorldMat = player->FindBoneWorldMatrix("center");
 	D3DXVECTOR3 target;
-	target.x = playerWorldMat->m[3][0];
-	target.y = playerWorldMat->m[3][1];
-	target.z = playerWorldMat->m[3][2];
+	target.x = m_playerBoneMat->m[3][0];
+	target.y = m_playerBoneMat->m[3][1];
+	target.z = m_playerBoneMat->m[3][2];
+	//カメラの座標と注視点を設定して更新
 	m_camera.SetTarget(target);
 	position += target;
 	m_camera.SetPosition(position);

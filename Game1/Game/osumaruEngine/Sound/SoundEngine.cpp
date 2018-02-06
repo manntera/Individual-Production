@@ -81,7 +81,7 @@ void SoundEngine::Update()
 		emitter.OrientTop = D3DXVECTOR3(0, 1, 0);
 		emitter.ChannelCount = INPUTCHANNELS;
 		emitter.ChannelRadius = 1.0f;
-		emitter.pChannelAzimuths = sound->GetEmitterAzimuths();
+		emitter.pChannelAzimuths = const_cast<FLOAT32*>(sound->GetEmitterAzimuths());
 
 		// Use of Inner radius allows for smoother transitions as
 		// a sound travels directly through, above, or below the listener.

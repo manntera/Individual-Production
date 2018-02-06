@@ -6,6 +6,12 @@
 class StaticMapObject : public MapChip
 {
 public:
+	//コンストラクタ
+	StaticMapObject();
+
+	//デストラクタ
+	~StaticMapObject();
+
 	/*
 	初期化する関数
 	position	座標
@@ -24,5 +30,4 @@ public:
 private:
 	RigidBody		m_rigidBody;		//剛体
 	MeshCollider	m_meshCollider;		//コライダー
-	BoxCollider		m_boxCollider;		//テスト用のコライダー
 };

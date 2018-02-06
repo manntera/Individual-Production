@@ -1,18 +1,23 @@
 #include "engineStdafx.h"
 #include "Animation.h"
 
-Animation::Animation()
+Animation::Animation() :
+	m_pAnimController(nullptr),
+	m_numAnimSet(0),
+	m_animationSets(),
+	m_blendRateTable(),
+	m_animationEndTime(),
+	m_isAnimationLoop(),
+	m_localAnimationTime(0.0f),
+	m_currentAnimationSetNo(0),
+	m_currentTrackNo(0),
+	m_numMaxTracks(0),
+	m_isBlending(false),
+	m_isInterpolate(false),
+	m_interpolateEndTime(0.0f),
+	m_interpolateTime(0.0f),
+	m_isPlay(false)
 {
-	m_pAnimController = nullptr;
-	m_numAnimSet = 0;
-	m_isBlending = false;
-	m_isInterpolate = false;
-	m_numMaxTracks = 0;
-	m_interpolateEndTime = 0.0f;
-	m_interpolateTime = 0.0f;
-	m_currentAnimationSetNo = 0;
-	m_currentTrackNo = 0;
-	m_isPlay = false;
 }
 
 Animation::~Animation()
@@ -44,7 +49,6 @@ void Animation::Init(ID3DXAnimationController* anim)
 		m_animationEndTime[i] = -1.0;
 		m_isAnimationLoop[i] = true;
 	}
-	m_localAnimationTime = 0.0;
 }
 
 void Animation::PlayAnimation(int animationSetIndex)

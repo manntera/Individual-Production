@@ -7,7 +7,7 @@ struct ContactSingle : public btCollisionWorld::ContactResultCallback
 {
 	bool isHit = false;
 	D3DXVECTOR3 hitObjectNormal;
-	btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
+	const btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
 	int collisionType = enCollisionAttr_Unknown;
 	int judgmentType = enJudgment_Wall;
 
@@ -41,11 +41,16 @@ struct ContactSingle : public btCollisionWorld::ContactResultCallback
 	}
 };
 
-CollisionDetection::CollisionDetection()
+CollisionDetection::CollisionDetection() :
+	m_rigidBody(),
+	m_pCollider(nullptr),
+	m_position(0.0f, 0.0f, 0.0f),
+	m_rotation(0.0f, 0.0f, 0.0f, 1.0f),
+	m_isHit(false),
+	m_hitCollisionNormal(0.0f, 0.0f, 0.0f),
+	m_collisionType(0),
+	m_judgmentType(0)
 {
-	m_position = { 0.0f, 0.0f, 0.0f };
-	D3DXQuaternionIdentity(&m_rotation);
-	m_isHit = false;
 }
 
 CollisionDetection::~CollisionDetection()
@@ -66,8 +71,8 @@ void CollisionDetection::Init(ICollider* collider, D3DXVECTOR3 position, D3DXQUA
 	rbInfo.rot = m_rotation;
 	rbInfo.mass = 0.0f;
 	m_rigidBody.Create(rbInfo);
-	m_rigidBody.GetBody()->setActivationState(DISABLE_DEACTIVATION);
-	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Detection);
+	m_rigidBody.SetActivationState(DISABLE_DEACTIVATION);
+	m_rigidBody.SetUserIndex(enCollisionAttr_Detection);
 }
 
 void CollisionDetection::Execute()

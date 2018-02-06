@@ -43,7 +43,7 @@ public:
 	void Draw() override;
 
 	//座標を取得
-	D3DXVECTOR3 GetPosition() 
+	const D3DXVECTOR3& GetPosition() const
 	{
 		return m_position;
 	}
@@ -59,19 +59,19 @@ public:
 	boneName	ボーンの名前
 	ret			ボーンのワールド行列のポインタ
 	*/
-	D3DXMATRIX* FindBoneWorldMatrix(char* boneName)
+	const D3DXMATRIX* FindBoneWorldMatrix(char* boneName) const
 	{
 		return m_skinModelData.GetFindBoneWorldMatrix(boneName);
 	}
 
 	//ワールド行列を取得。
-	D3DXMATRIX GetWorldMatrix() 
+	const D3DXMATRIX& GetWorldMatrix() const
 	{
 		return m_skinModel.GetWorldMatrix();
 	}
 
 	//1フレームでの移動量を取得。
-	D3DXVECTOR3 GetMovement()
+	const D3DXVECTOR3& GetMovement() const
 	{
 		return m_movement;
 	}
@@ -104,11 +104,12 @@ public:
 	親子関係をつけたり外したりする関数
 	parent　		親のポインタ。親子関係を外す場合はnullptrを渡せばいい。
 	parentRotation	回転も親子関係をつけるか否か
+	return			親子関係がついたか？trueならついた、falseなら親子関係つけるのに失敗したか親子関係が切れた
 	*/
 	bool SetParent(MapChip* parent, bool parentRotation);
 
 	//モデルデータを取得
-	SkinModelData& GetSkinModelData()
+	const SkinModelData& GetSkinModelData() const
 	{
 		return m_skinModelData;
 	}
@@ -118,13 +119,13 @@ public:
 	time	ステージのクリアタイム
 	isClear	ステージをクリアしたか？
 	*/
-	void GhostDataFinish(float time, bool isClear);
+	void GhostDataFinish(float time, bool isClear) const;
 
 	//ゴーストデータの計測開始
-	void GhostDataStart();
+	void GhostDataStart() const;
 
 	//ライトを取得
-	Light& GetLight()
+	const Light& GetLight() const
 	{
 		return m_light;
 	}
@@ -149,11 +150,8 @@ private:
 	D3DXVECTOR3			m_scale;				//モデルのサイズ
 	Animation			m_anim;					//アニメーション
 	CharacterController m_characterController;	//キャラクターコントローラー
-	Texture				m_modelNormalMap;		//モデルの法線マップ
-	Texture				m_modelSpecularMap;		//モデルのスペキュラマップ
 	D3DXVECTOR3			m_stageGimmickMoveSpeed;//ステージギミックによってプレイヤーを動かされる時の移動速度
 	D3DXVECTOR3			m_movement;				//1フレームで移動した距離
-	PlayerGraspCliff	m_graspCliff;			//崖掴んでくれる奴
 	PlayerWallJump		m_wallJump;				//壁ジャンプしてくれる奴
 	int					m_jumpCount;			//ジャンプした回数
 	EnAnimationSet		m_currentAnim;			//現在再生してるアニメーション
@@ -162,7 +160,7 @@ private:
 	bool				m_isParentRotation;		//回転の親子関係をつけているか
 	float				m_moveSpeed;			//移動速度
 	float				m_acceleration;			//加速度
-	int					m_rotationFrameNum;		//回転を線形補間する時に使うフレーム数
+	const int			m_rotationFrameNum;		//回転を線形補間する時に使うフレーム数
 	float				m_frameAngle;			//1フレームで回転する回転量
 	int					m_rotationCount;		//回転を線形補間するためのカウンター
 };

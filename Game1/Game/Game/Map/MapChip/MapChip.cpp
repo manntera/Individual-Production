@@ -4,9 +4,19 @@
 #include "../../Scene/GameScene.h"
 #include "../Map.h"
 
-MapChip::MapChip()
+MapChip::MapChip() :
+	m_skinModelData(),
+	m_skinModel(),
+	m_light(),
+	m_position(0.0f, 0.0f, 0.0f),
+	m_rotation(0.0f, 0.0f, 0.0f, 1.0f),
+	m_scale(1.0f, 1.0f, 1.0f),
+	m_pMap(nullptr),
+	m_iterator(),
+	m_isActive(true),
+	m_pPlayer(nullptr)
+
 {
-	m_isActive = true;
 }
 
 MapChip::~MapChip()
@@ -77,11 +87,12 @@ bool MapChip::Start()
 
 void MapChip::Update()
 {
+	//‰e‚ð•`‰æ‚·‚é‚Ì‚ÅƒVƒƒƒhƒEƒ}ƒbƒv‚É“o˜^
 	m_skinModel.ShadowMapEntry();
 }
 
 void MapChip::Draw()
 {
-	Camera& camera = g_gameScene->GetCamera();
+	const Camera& camera = GetGameScene().GetCamera();
 	m_skinModel.Draw(&camera.GetViewMatrix(), &camera.GetProjectionMatrix());
 }

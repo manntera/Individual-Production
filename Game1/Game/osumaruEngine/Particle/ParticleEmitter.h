@@ -33,7 +33,7 @@ public:
 	info　パーティクルとエミッターの初期化情報
 	camera	ビルボード処理に使うカメラ
 	*/
-	void Init(SParticleEmittInfo info, Camera* camera);
+	void Init(SParticleEmittInfo info, const Camera* camera);
 
 	//更新関数
 	void Update()override;
@@ -45,7 +45,7 @@ public:
 	}
 
 private:
-	Camera*					m_camera;		//カメラ
+	const Camera*			m_pCamera;		//カメラ
 	SParticleEmittInfo		m_info;			//パーティクルとエミッターの初期化情報
 	float					m_lifeTimer;	//寿命
 	float					m_intervalTime;	//パーティクルを出すインターバルタイム

@@ -4,7 +4,8 @@
 
 
 
-EffectManager::EffectManager()
+EffectManager::EffectManager() :
+	m_effectDictionary()
 {
 
 }

@@ -18,12 +18,12 @@ public:
 	void Stop();
 
 	//Œo‰ßŽžŠÔ‚ðŽæ“¾(’PˆÊ‚Í•b)
-	double GetElapsedTime()
+	double GetElapsedTime() const
 	{
 		return m_time;
 	}
 
-	double GetElapsedTimeMill()
+	double GetElapsedTimeMill() const
 	{
 		return m_millTime;
 	}

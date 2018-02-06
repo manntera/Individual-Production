@@ -29,7 +29,7 @@ public:
 	//読み込み用のバッファを取得
 	char* GetSoundData()
 	{
-		return m_readMemory;
+		return m_readMemory.get();
 	}
 
 private:
@@ -37,10 +37,10 @@ private:
 	void Read();
 
 private:
-	HMMIO			m_hmmio;			//WAVEファイルのハンドル
-	MMCKINFO		m_riffChunk;		//一番親のチャンク
-	MMCKINFO		m_dataChunk;		//波形データを持つチャンク
-	DWORD			m_size;				//データのサイズ
-	char*			m_readMemory;		//データを読み込む用のバッファ
-	WAVEFORMATEX*	m_format;			//WAVEファイルのフォーマット
+	HMMIO							m_hmmio;			//WAVEファイルのハンドル
+	MMCKINFO						m_riffChunk;		//一番親のチャンク
+	MMCKINFO						m_dataChunk;		//波形データを持つチャンク
+	DWORD							m_size;				//データのサイズ
+	std::unique_ptr<char[]>			m_readMemory;		//データを読み込む用のバッファ
+	WAVEFORMATEX*					m_format;			//WAVEファイルのフォーマット
 };

@@ -1,7 +1,8 @@
 #pragma once
 
 
-enum EnCollisionAttr {
+enum EnCollisionAttr 
+{
 	enCollisionAttr_Unknown = -1,
 	enCollisionAttr_Ground,
 	enCollisionAttr_Character,

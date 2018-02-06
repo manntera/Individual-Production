@@ -19,31 +19,31 @@ public:
 	void Create(int width, int height, D3DFORMAT format, D3DFORMAT depthFormat);
 
 	//テクスチャを取得
-	LPDIRECT3DTEXTURE9 GetTexture()
+	const LPDIRECT3DTEXTURE9 GetTexture() const
 	{
 		return m_pTexture;
 	}
 
 	//レンダーターゲットを取得
-	LPDIRECT3DSURFACE9 GetRenderTarget()
+	const LPDIRECT3DSURFACE9 GetRenderTarget() const
 	{
 		return m_pRenderTarget;
 	}
 
 	//深度ステンシルバッファを取得
-	LPDIRECT3DSURFACE9 GetDepthStencilBuffer()
+	const LPDIRECT3DSURFACE9 GetDepthStencilBuffer() const
 	{
 		return m_pDepthBuffer;
 	}
 
 	//テクスチャの幅を取得
-	int GetWidth()
+	int GetWidth() const
 	{
 		return m_width;
 	}
 
 	//テクスチャの高さを取得。
-	int GetHeight()
+	int GetHeight() const
 	{
 		return m_height;
 	}

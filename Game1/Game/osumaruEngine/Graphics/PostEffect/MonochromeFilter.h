@@ -22,5 +22,5 @@ public:
 private:
 	Primitive		m_primitive;	//プリミティブ
 	LPD3DXEFFECT	m_pEffect;		//エフェクト
-	bool				m_isActive;	//アクティブか？
+	bool			m_isActive;	//アクティブか？
 };

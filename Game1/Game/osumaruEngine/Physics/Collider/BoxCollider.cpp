@@ -1,13 +1,12 @@
 #include "engineStdafx.h"
 #include "BoxCollider.h"
 
-BoxCollider::BoxCollider()
+BoxCollider::BoxCollider() :
+	m_boxShape(nullptr)
 {
-	m_boxShape = nullptr;
 }
 
 BoxCollider::~BoxCollider()
 {
-	delete m_boxShape;
 }
 

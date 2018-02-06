@@ -6,18 +6,31 @@ class Sky;
 class Player;
 class TimeSprite;
 class GhostPlayer;
+//遊べるステージの最大数
+const int STAGE_NUM = 3;
 
 //ゲームシーンクラス
-
 class GameScene : public GameObject
 {
-public:
+private:
 	//コンストラクタ
 	GameScene();
 
 	//デストラクタ
 	~GameScene();
 
+public:
+
+	//インスタンスを取得
+	static GameScene& GetInstance()
+	{
+		static GameScene gameScene;
+		return gameScene;
+	}
+
+	/*
+	初期化関数
+	*/
 	void Init(int stageNum, bool isTimeAttack);
 
 	//初期化関数
@@ -30,10 +43,10 @@ public:
 	void BeforeDead()override;
 	
 	//カメラの取得
-	Camera& GetCamera();
+	const Camera& GetCamera() const;
 
 	//プレイヤーの取得
-	Player* GetPlayer();
+	const Player* GetPlayer() const;
 
 	//ゲームクリアするときに外部から呼び出す関数
 	void GameClear();
@@ -44,30 +57,48 @@ public:
 	void GhostDataFinish();
 
 	//今のステージの番号を取得
-	static int GetStageNum()
+	int GetStageNum() const
 	{
 		return m_stageNum;
 	}
 
-	static int GetStageMaxNum()
+	//今解放されているステージの最大数
+	int GetStageMaxNum() const
 	{
 		return m_stageMaxNum;
 	}
 
-private:
+	//ゲームシーンを作成
+	void Create()
+	{
+		Add(this, 0);
+		m_isActive = true;
+	}
 
+	//アクティブか？
+	bool IsActive() const
+	{
+		return m_isActive;
+	}
+
+private:
 	bool			m_isGameOver;	//ゲームオーバーか？
 	bool			m_isGameClear;	//ゲームクリアか？
-	Map*			m_map;			//マップ
-	GameCamera*		m_camera;		//カメラ
-	Sky*			m_sky;			//スカイボックス
-	SoundSource*	m_bgm;			//BGM
-	static int		m_stageNum;		//現在のステージの番号
-	static int		m_stageMaxNum;	//一番進んでいるステージの番号
+	Map*			m_pMap;			//マップ
+	GameCamera*		m_pCamera;		//カメラ
+	Sky*			m_pSky;			//スカイボックス
+	SoundSource*	m_pBgm;			//BGM
+	int				m_stageNum;		//現在のステージの番号
+	int				m_stageMaxNum;	//一番進んでいるステージの番号
 	TimeSprite*		m_pTimeSprite;	//タイム表示のスプライト
 	bool			m_isInit;		//初期化したか？
 	bool			m_isTimeAttack;	//タイムアタックか？
 	GhostPlayer*	m_pGhost;		//ゴーストプレイヤー
+	bool			m_isActive;		//生きてるか死んでるか
 };
-const int STAGE_NUM = 3;
-extern GameScene *g_gameScene;
+
+//ゲームシーンを取得。
+static GameScene& GetGameScene()
+{
+	return GameScene::GetInstance();
+}

@@ -4,9 +4,15 @@
 #include "VertexCommon.h"
 #include "EffectManager.h"
 
-Sprite::Sprite()
+Sprite::Sprite() :
+	m_alpha(1.0f),
+	m_pTexture(nullptr),
+	m_position(0.0f, 0.0f),
+	m_centerPosition(0.0f, 0.0f),
+	m_size(1.0f, 1.0f),
+	m_pEffect(nullptr),
+	m_primitive()
 {
-	m_alpha = 1.0f;
 }
 
 Sprite::~Sprite()

@@ -1,6 +1,7 @@
 #pragma once
 class MapChip;
 class Player;
+//マップチップのタグ
 enum EnMapChipTag
 {
 	enMapTagUntagged,
@@ -39,7 +40,7 @@ public:
 	void BeforeDead()override;
 
 	//プレイヤーを取得
-	Player* GetPlayer()
+	const Player* GetPlayer() const
 	{
 		return m_player;
 	}
@@ -50,10 +51,11 @@ public:
 	*/
 	void MapChipErase(std::list<MapChip*>::iterator iterator);
 
+	//時間を止める関数
 	void StopTime();
 
 private:
-	std::list<MapChip*> m_mapChip;		//マップチップ
-	Player*	m_player;					//プレイヤー
-	float	m_stopTime;
+	std::list<MapChip*> m_mapChip;					//マップチップ
+	Player*				m_player;					//プレイヤー
+	float				m_stopTime;					//ステージギミックを止めてる間のカウンター
 };

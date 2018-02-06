@@ -1,6 +1,6 @@
 #pragma once
 #include "GhostCommon.h"
-//ゴーストデータを記録するクラス
+//ゴーストデータを記録し管理するクラス
 
 class GhostDataListManager : public GameObject
 {
@@ -17,7 +17,7 @@ public:
 	rotation	プレイヤーの回転のアドレス
 	animation	プレイヤーのアニメーション
 	*/
-	void Start(D3DXVECTOR3* position, D3DXQUATERNION* rotation, Animation* animation);
+	void Start(const D3DXVECTOR3* position, const D3DXQUATERNION* rotation, const Animation* animation);
 
 	/*
 	計測終了する関数
@@ -30,20 +30,21 @@ public:
 	void Update()override;
 
 	//ゴーストデータを取得
-	std::list<GhostData>& GetGhostData()
+	const std::list<GhostData>& GetGhostData() const
 	{
 		return m_ghostData[m_stageNum].ghostData;
 	}
 
+	//自身のインスタンスを取得
 	static GhostDataListManager& GetInstance() 
 	{
 		static GhostDataListManager ghostDataListManager;
 		return ghostDataListManager;
 	}
 private:
-	D3DXVECTOR3*				m_pPosition;		//プレイヤーの座標
-	D3DXQUATERNION*				m_pRotation;		//プレイヤーの回転
-	Animation*					m_pAnimation;		//プレイヤーのアニメーション
+	const D3DXVECTOR3*			m_pPosition;		//プレイヤーの座標
+	const D3DXQUATERNION*		m_pRotation;		//プレイヤーの回転
+	const Animation*			m_pAnimation;		//プレイヤーのアニメーション
 	std::vector<GhostDataList>	m_ghostData;		//ステージ毎のゴーストデータリスト
 	std::list<GhostData>		m_substitute;		//ゴーストデータリスト
 	int							m_stageNum;			//ステージの番号
@@ -51,6 +52,7 @@ private:
 };
 
 
+//ゴーストデータリストマネージャーを取得。
 static GhostDataListManager& GetGhostDataListManager()
 {
 	return GhostDataListManager::GetInstance();

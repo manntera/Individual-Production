@@ -677,7 +677,7 @@ void SkinModelData::LoadModelData(const char* filePath, Animation* anim)
 	}
 }
 
-void SkinModelData::CloneModelData(SkinModelData& modelData, Animation* anim)
+void SkinModelData::CloneModelData(const SkinModelData& modelData, Animation* anim)
 {
 	m_isClone = true;
 	m_frameRoot = new D3DXFRAME_DERIVED;
@@ -714,7 +714,6 @@ void SkinModelData::SetOutputAnimationRegist(LPD3DXFRAME frame, LPD3DXANIMATIONC
 	{
 		SetOutputAnimationRegist(frame->pFrameFirstChild, animCtr);
 	}
-
 }
 
 void SkinModelData::CloneSkelton(LPD3DXFRAME& destFrame, LPD3DXFRAME srcFrame)
@@ -753,12 +752,12 @@ void SkinModelData::UpdateBoneMatrix(const D3DXMATRIX& matWorld)
 	UpdateFrameMatrices(m_frameRoot, &matWorld);
 }
 
-LPD3DXMESH SkinModelData::GetOrgMeshFirst()
+const LPD3DXMESH SkinModelData::GetOrgMeshFirst() const
 {
 	return GetOrgMesh(m_frameRoot);
 }
 
-LPD3DXMESH SkinModelData::GetOrgMesh(LPD3DXFRAME frame)
+const LPD3DXMESH SkinModelData::GetOrgMesh(LPD3DXFRAME frame) const 
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(frame->pMeshContainer);
 	if (pMeshContainer != NULL)
@@ -785,12 +784,12 @@ LPD3DXMESH SkinModelData::GetOrgMesh(LPD3DXFRAME frame)
 	return NULL;
 }
 
-D3DXMATRIX* SkinModelData::GetFindBoneWorldMatrix(char* boneName)
+const D3DXMATRIX* SkinModelData::GetFindBoneWorldMatrix(char* boneName) const
 {
 	return FindBoneWorldMatrix(m_frameRoot, boneName);
 }
 
-D3DXMATRIX* SkinModelData::FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName)
+const D3DXMATRIX* SkinModelData::FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName) const
 {
 	if (frame->Name != NULL && !strcmp(frame->Name, boneName))
 	{
@@ -800,7 +799,7 @@ D3DXMATRIX* SkinModelData::FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName
 	if (frame->pFrameSibling != NULL)
 	{
 		//ŒZ’í
-		D3DXMATRIX* matrix = FindBoneWorldMatrix(frame->pFrameSibling, boneName);
+		const D3DXMATRIX* matrix = FindBoneWorldMatrix(frame->pFrameSibling, boneName);
 		if (matrix != nullptr)
 		{
 			return matrix;
@@ -808,7 +807,7 @@ D3DXMATRIX* SkinModelData::FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName
 	}
 	if (frame->pFrameFirstChild != NULL)
 	{
-		D3DXMATRIX* matrix = FindBoneWorldMatrix(frame->pFrameFirstChild, boneName);
+		const D3DXMATRIX* matrix = FindBoneWorldMatrix(frame->pFrameFirstChild, boneName);
 		if (matrix != nullptr)
 		{
 			return matrix;

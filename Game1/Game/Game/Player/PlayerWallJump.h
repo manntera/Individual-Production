@@ -6,7 +6,6 @@ class Player;
 class PlayerWallJump
 {
 public:
-
 	//コンストラクタ
 	PlayerWallJump();
 
@@ -24,13 +23,13 @@ public:
 	void Update();
 
 	//壁ずり中か？
-	bool IsWallShear()
+	bool IsWallShear() const
 	{
 		return m_isWallShear;
 	}
 
 	//壁ジャンプしたか
-	bool IsWallJump()
+	bool IsWallJump() const
 	{
 		return m_isWallJump && m_wallJumpCount ==0;
 	}
@@ -49,9 +48,9 @@ private:
 	bool					m_isWallJump;			//壁ジャンプ中か？
 	CharacterController*	m_characterController;	//プレイヤーのキャラクターコントローラー
 	D3DXVECTOR3				m_wallJumpDirection;	//壁ジャンプするときの方向
-	float					m_wallShearGravity;		//壁ずりの時の重力
+	const float				m_wallShearGravity;		//壁ずりの時の重力
 	float					m_defaultGravity;		//普通の時の重力
 	ParticleEmitter*		m_wallDust;				//パーティクル
-	D3DXMATRIX*				m_dustPos;				//パーティクルを出す時の位置
+	const D3DXMATRIX*		m_dustPos;				//パーティクルを出す時の位置
 	int						m_wallJumpCount;		//壁ジャンプしてからのカウンター
 };

@@ -12,7 +12,7 @@ struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 	D3DXVECTOR3 startPos = { 0.0f, 0.0f, 0.0f };	//レイの始点。
 	D3DXVECTOR3 hitNormal = { 0.0f, 0.0f, 0.0f };	//衝突点の法線
 	const btCollisionObject* hitObject = nullptr;
-	btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
+	const btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
 	float dist = FLT_MAX;							//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
 													//衝突したときに呼ばれるコールバック関数。
 	virtual btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
@@ -62,7 +62,7 @@ struct SweepResultCeiling : public btCollisionWorld::ConvexResultCallback
 	D3DXVECTOR3 startPos = { 0.0f, 0.0f, 0.0f };	//レイの始点。
 	D3DXVECTOR3 hitNormal = { 0.0f, 0.0f, 0.0f };	//衝突点の法線
 	const btCollisionObject* hitObject = nullptr;
-	btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
+	const btCollisionObject* me = nullptr;				//自分自身。自分自身との衝突を除外するためのメンバ。
 	float dist = FLT_MAX;							//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
 													//衝突したときに呼ばれるコールバック関数。
 	virtual btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
@@ -114,7 +114,7 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 	float		distance = 0.0f;
 	float dist = FLT_MAX;							//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
 	D3DXVECTOR3	hitNormal = { 0.0f, 0.0f, 0.0f };	//衝突点の法線
-	btCollisionObject* me = NULL;					//自分自身。自分自身との衝突を除外するためのメンバ。
+	const btCollisionObject* me = NULL;					//自分自身。自分自身との衝突を除外するためのメンバ。
 	const btCollisionObject* hitObject = NULL;
 													//衝突したときに呼ばれるコールバック関数
 	virtual btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
@@ -168,16 +168,20 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 	}
 };
 
-CharacterController::CharacterController()
+CharacterController::CharacterController() :
+	m_position(0.0f, 0.0f, 0.0f),
+	m_moveSpeed(0.0f, 0.0f, 0.0f),
+	m_isJump(false),
+	m_isOnGround(true),
+	m_collider(),
+	m_radius(0.0f),
+	m_height(0.0f),
+	m_rigidBody(),
+	m_gravity(-9.8f),
+	m_groundHitObject(nullptr),
+	m_wallHitObject(nullptr),
+	m_wallNormal(0.0f, 0.0f, 0.0f)
 {
-	m_isJump = false;
-	m_isOnGround = true;
-	m_radius = 0.0f;
-	m_height = 0.0f;
-	m_gravity = -9.8f;
-	m_wallHitObject = nullptr;
-	m_groundHitObject = nullptr;
-	m_wallNormal = { 0.0f, 0.0f, 0.0f };
 }
 
 CharacterController::~CharacterController()
@@ -202,8 +206,8 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 	//剛体の位置を更新。
 	m_rigidBody.SetPosition(m_position);
 	//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
-	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Character);
-	m_rigidBody.GetBody()->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	m_rigidBody.SetUserIndex(enCollisionAttr_Character);
+	m_rigidBody.SetCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 }
 
 void CharacterController::Execute()
@@ -432,7 +436,7 @@ void CharacterController::DynamicExecute()
 	}
 	//移動確定。
 	m_position = nextPosition;
-	btRigidBody* btBody = m_rigidBody.GetBody();
+	const btRigidBody* btBody = m_rigidBody.GetBody();
 	//剛体を動かす。
 	btBody->setActivationState(DISABLE_DEACTIVATION);
 	//剛体の一を更新
@@ -496,5 +500,5 @@ void CharacterController::Draw()
 
 	btVector3& position = transform.getOrigin();
 	//position.setY(position.y() + m_radius + m_height * 0.5f);
-	GetPhysicsWorld().DebugDraw(transform, m_collider.GetBody());
+	GetPhysicsWorld().DebugDraw(transform, const_cast<btCollisionShape*>(m_collider.GetBody()));
 }

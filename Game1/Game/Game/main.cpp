@@ -18,6 +18,7 @@ int WINAPI wWinMain(
 	//Direct3D‚ğ‰Šú‰»
 	GetEngine().InitD3D(hInst);
 	New<TitleScene>(0);
+	TimeAttackResult::TimeInit();
 	GetFade().Init();
 	GetEngine().GameLoop();
 	return 0;

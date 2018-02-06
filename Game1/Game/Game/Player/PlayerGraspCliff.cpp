@@ -2,11 +2,16 @@
 #include "PlayerGraspCliff.h"
 #include "Player.h"
 
-PlayerGraspCliff::PlayerGraspCliff()
+PlayerGraspCliff::PlayerGraspCliff() :
+	m_cliffRiseDetectionLow(),
+	m_cliffRiseDetectionUp(),
+	m_cliffRiseDetectionBack(),
+	m_boxCollider(),
+	m_player(nullptr),
+	m_playerHeight(0.0f),
+	m_isActive(false)
+
 {
-	m_isActive = false;
-	m_playerHeight = 0.0f;
-	m_player = nullptr;
 }
 
 PlayerGraspCliff::~PlayerGraspCliff()
@@ -111,6 +116,6 @@ void PlayerGraspCliff::Draw()
 		trans.setOrigin(btVector3(position.x, position.y, position.z));
 		trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 
-		//GetPhysicsWorld().DebugDraw(trans, m_boxCollider.GetBody());
+		GetPhysicsWorld().DebugDraw(trans, m_boxCollider.GetBody());
 	}
 }

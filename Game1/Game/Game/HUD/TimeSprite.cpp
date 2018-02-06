@@ -1,9 +1,13 @@
 #include "stdafx.h"
 #include "TimeSprite.h"
 
-TimeSprite::TimeSprite()
+TimeSprite::TimeSprite() :
+	m_timeSprite(),
+	m_colonSprite{},
+	m_numSprite{},
+	m_numTexture{},
+	m_time(0.0f)
 {
-	m_time = 0.0f;
 }
 
 TimeSprite::~TimeSprite()
@@ -13,12 +17,14 @@ TimeSprite::~TimeSprite()
 
 bool TimeSprite::Start()
 {
+	//数字のテクスチャを読み込み
 	for (int i = 0; i < NUM_MAX; i++)
 	{
 		char filePath[64];
 		sprintf(filePath, "Assets/sprite/%d.png", i);
 		m_numTexture[i] = GetTextureResource().LoadTexture(filePath);
 	}
+	//スプライトを初期化
 	D3DXVECTOR2 spritePos = { -575.0f, 300.0f };
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/Time.png");
 	m_timeSprite.Init(texture);
@@ -47,6 +53,7 @@ bool TimeSprite::Start()
 void TimeSprite::Update()
 {
 	m_time += GetGameTime().GetDeltaFrameTime();
+	//60秒以上経っていたら1分にするために桁を繰り上げ
 	int minute = (int)m_time / 10 % 10 / 6;
 	if (1 <= minute)
 	{
@@ -61,7 +68,7 @@ void TimeSprite::Update()
 	}
 }
 
-void TimeSprite::Draw()
+void TimeSprite::AfterDraw()
 {
 	for (int i = 0; i < TIME_MAX * DIGIT_MAX; i++)
 	{

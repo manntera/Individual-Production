@@ -29,23 +29,18 @@ const CorrespondencePad correspondencePad[enButtonNum] =
 	{ enButtonLB,			XINPUT_GAMEPAD_LEFT_SHOULDER,	'7' },
 	{ enButtonLStickPush,	XINPUT_GAMEPAD_LEFT_THUMB,		'9' }
 };
-Pad::Pad()
+Pad::Pad() :
+	m_padNum(0),
+	m_rightStickX(0.0f),
+	m_rightStickY(0.0f),
+	m_leftStickX(0.0f),
+	m_leftStickY(0.0f),
+	m_rightTrigger(0.0f),
+	m_leftTrigger(0.0f),
+	m_isPadPress{},
+	m_isPadTrigger{},
+	m_state{}
 {
-	m_padNum = 0;
-	for (bool& isPad : m_isPadPress)
-	{
-		isPad = false;
-	}
-	for (bool& isPad : m_isPadTrigger)
-	{
-		isPad = false;
-	}
-	m_rightStickX = 0.0f;
-	m_rightStickY = 0.0f;
-	m_leftStickX = 0.0f; 
-	m_leftStickY = 0.0f;
-	m_rightTrigger = 0.0f;
-	m_leftTrigger = 0.0f;
 }
 
 Pad::~Pad()

@@ -7,13 +7,20 @@
 #include "../Camera.h"
 #include "ParticleEmitter.h"
 
-Particle::Particle()
+Particle::Particle() :
+	m_size(1.0f, 1.0f),
+	m_pTexture(nullptr),
+	m_primitive(),
+	m_worldMatrix{},
+	m_rotation(0.0f, 0.0f, 0.0f, 1.0f),
+	m_pEffect(nullptr),
+	m_position(0.0f, 0.0f, 0.0f),
+	m_camera(nullptr),
+	m_lifeTimer(0.0f),
+	m_angle(0.0f),
+	m_gravity(0.0f, 0.0f, 0.0f),
+	m_speed(0.0f, 0.0f, 0.0f)
 {
-	m_pEffect = nullptr;
-	m_lifeTimer = 0.0f;
-	m_size = { 1.0f, 1.0f};
-	m_speed = { 0.0f, 0.0f, 0.0f };
-	m_camera = nullptr;
 }
 
 Particle::~Particle()
@@ -21,7 +28,7 @@ Particle::~Particle()
 	m_primitive.Release();
 }
 
-void Particle::Init(SParticleEmittInfo& info, Camera* camera)
+void Particle::Init(SParticleEmittInfo& info, const Camera* camera)
 {
 	m_gravity = info.gravity;
 	m_camera = camera;
@@ -32,7 +39,7 @@ void Particle::Init(SParticleEmittInfo& info, Camera* camera)
 	addPos.z *= (float)GetRandom().GetRandDouble() * 2.0f - 1.0f;
 	m_position += addPos;
 	m_lifeTimer = info.lifeTime;
-	m_texture = GetTextureResource().LoadTexture(info.filePath);
+	m_pTexture = GetTextureResource().LoadTexture(info.filePath);
 	//頂点バッファを作成
 	VERTEX_PT elements[4] =
 	{
@@ -114,7 +121,7 @@ void Particle::Draw()
 	m_pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 	m_pEffect->BeginPass(0);
 
-	m_pEffect->SetTexture("g_tex", m_texture->GetBody());
+	m_pEffect->SetTexture("g_tex", m_pTexture->GetBody());
 	m_pEffect->SetMatrix("g_world", &worldViewProjMat);
 	m_pEffect->CommitChanges();
 	pD3DDevice->SetVertexDeclaration(m_primitive.GetVertexDecaration());

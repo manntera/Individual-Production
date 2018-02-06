@@ -3,6 +3,23 @@
 #include "../../Scene/GameScene.h"
 #include "../../Player/Player.h"
 
+HindranceObject::HindranceObject() :
+	m_moveSpeed(0.0f, 0.0f, 0.0f),
+	m_acceleration(0.0f, 0.0f, 0.0f),
+	m_rigidBody(),
+	m_boxCollider(),
+	m_isChild(false),
+	m_timerLimit(60),
+	m_timer(GetRandom().GetRandInt() % m_timerLimit)
+{
+
+}
+
+HindranceObject::~HindranceObject()
+{
+
+}
+
 void HindranceObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
@@ -20,22 +37,17 @@ void HindranceObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *
 
 	//剛体を作成
 	m_rigidBody.Create(rInfo);
-	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_MoveFloor);
-	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
+	m_rigidBody.SetUserIndex(enCollisionAttr_MoveFloor);
+	m_rigidBody.SetPlayerCollisionGroundFlg(false);
 
-	m_timerLimit = 60;
-	m_timer = GetRandom().GetRandInt() % m_timerLimit;
-
-
-	D3DXMATRIX worldMatrix = m_skinModel.GetWorldMatrix();
+	//モデルの方向で移動速度と加速度を初期化
+	const D3DXMATRIX& worldMatrix = m_skinModel.GetWorldMatrix();
 	m_acceleration.x = worldMatrix.m[2][0];
 	m_acceleration.y = worldMatrix.m[2][1];
 	m_acceleration.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&m_acceleration, &m_acceleration);
 	m_acceleration *= 0.15f;
-	m_moveSpeed = { 0.0f, 0.0f, 0.0f };
 	m_moveSpeed += m_acceleration * (m_timer - m_timerLimit / 2);
-	m_isChild = false;
 }
 
 void HindranceObject::Update()
@@ -53,19 +65,19 @@ void HindranceObject::Update()
 	m_timer++;
 	m_moveSpeed += m_acceleration;
 	m_position += m_moveSpeed;
+	//子供がいない状態でプレイヤーが当たったら親子関係をつける
 	if (!m_isChild && (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg() || m_rigidBody.GetBody()->getPlayerCollisionWallFlg()))
 	{
-		m_isChild = g_gameScene->GetPlayer()->SetParent(this, true);
+		m_isChild = m_pPlayer->SetParent(this, true);
 	}
+	//プレイヤーが子供の時にプレイヤーが離れたたら親子関係を切る
 	if (m_isChild && !m_rigidBody.GetBody()->getPlayerCollisionGroundFlg() && !m_rigidBody.GetBody()->getPlayerCollisionWallFlg())
 	{
-		m_isChild = g_gameScene->GetPlayer()->SetParent(nullptr, true);
+		m_isChild = m_pPlayer->SetParent(nullptr, true);
 	}
-	D3DXVECTOR3 rigidBodyPos = m_position;
-	rigidBodyPos.y -= 3.0f;
-	m_rigidBody.SetPosition(rigidBodyPos);
-	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
-	m_rigidBody.GetBody()->setPlayerCollisionWallFlg(false);
+	m_rigidBody.SetPosition(m_position);
+	m_rigidBody.SetPlayerCollisionGroundFlg(false);
+	m_rigidBody.SetPlayerCollisionWallFlg(false);
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 
 }

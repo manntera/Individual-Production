@@ -32,7 +32,7 @@ public:
 	void Execute();
 
 	//座標を取得。
-	D3DXVECTOR3 GetPosition()
+	const D3DXVECTOR3& GetPosition() const
 	{
 		return m_position;
 	}
@@ -55,7 +55,7 @@ public:
 	}
 	
 	//移動速度を取得。
-	D3DXVECTOR3 GetMoveSpeed()
+	const D3DXVECTOR3& GetMoveSpeed() const
 	{
 		return m_moveSpeed;
 	}
@@ -74,13 +74,13 @@ public:
 	}
 
 	//地面に接地しているか？
-	bool IsOnGround()
+	bool IsOnGround() const
 	{
 		return m_isOnGround;
 	}
 
 	//コライダーを取得。
-	CapsuleCollider* GetCollider()
+	const CapsuleCollider* GetCollider() const
 	{
 		return &m_collider;
 	}
@@ -91,7 +91,7 @@ public:
 		m_gravity = gravity;
 	}
 
-	float GetGravity()
+	float GetGravity() const
 	{
 		return m_gravity;
 	}
@@ -99,24 +99,24 @@ public:
 	//剛体を削除。
 	void RemovedRigidBody();
 
-	const btCollisionObject* GetGroundCollisionObject()
+	const btCollisionObject* GetGroundCollisionObject() const
 	{
 		return m_groundHitObject;
 	}
 
-	const btCollisionObject* GetWallCollisionObject()
+	const btCollisionObject* GetWallCollisionObject() const
 	{
 		return m_wallHitObject;
 	}
 
-	D3DXVECTOR3 GetWallNormal()
+	const D3DXVECTOR3& GetWallNormal() const
 	{
 		return m_wallNormal;
 	}
 
 	void SetUserIndex(int userNum)
 	{
-		m_rigidBody.GetBody()->setUserIndex(userNum);
+		m_rigidBody.SetUserIndex(userNum);
 	}
 
 	void StaticExecute();
@@ -124,17 +124,16 @@ public:
 	void DynamicExecute();
 
 	void Draw();
-
 private:
-	D3DXVECTOR3		m_position;			//座標
-	D3DXVECTOR3		m_moveSpeed;		//移動速度
-	bool			m_isJump;			//ジャンプしているか？
-	bool			m_isOnGround;		//地面に設置しているか？
-	CapsuleCollider	m_collider;			//コライダー
-	float			m_radius;			//半径
-	float			m_height;			//高さ
-	RigidBody		m_rigidBody;		//剛体
-	float			m_gravity;			//重力
+	D3DXVECTOR3		m_position;					//座標
+	D3DXVECTOR3		m_moveSpeed;				//移動速度
+	bool			m_isJump;					//ジャンプしているか？
+	bool			m_isOnGround;				//地面に設置しているか？
+	CapsuleCollider	m_collider;					//コライダー
+	float			m_radius;					//半径
+	float			m_height;					//高さ
+	RigidBody		m_rigidBody;				//剛体
+	float			m_gravity;					//重力
 	const btCollisionObject* m_groundHitObject;
 	const btCollisionObject* m_wallHitObject;
 	D3DXVECTOR3		m_wallNormal;

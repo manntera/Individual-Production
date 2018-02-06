@@ -42,7 +42,7 @@ public:
 	viewMatrix		カメラのビュー行列
 	projMatrix		カメラのプロジェクション行列
 	*/
-	void Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix);
+	void Draw(const D3DXMATRIX* viewMatrix, const D3DXMATRIX* projMatrix);
 
 	/*
 	ワールド行列を更新。
@@ -69,18 +69,18 @@ public:
 	*/
 	void SetLight(Light *light)
 	{
-		this->m_light = light;
+		this->m_pLight = light;
 	}
 
 	//ワールド行列を取得。
-	D3DXMATRIX GetWorldMatrix()
+	const D3DXMATRIX& GetWorldMatrix() const
 	{
 		return m_worldMatrix;
 	}
 	/*
 	オリジナルメッシュの先頭を取得する
 	*/
-	LPD3DXMESH GetOrgMeshFirst();
+	const LPD3DXMESH GetOrgMeshFirst() const;
 
 	//法線マップをセット
 	void SetNormalMap(Texture* texture)
@@ -90,7 +90,7 @@ public:
 	}
 
 	//スペキュラマップを設定
-	void SetSpecularMap(Texture* texture, Camera* camera)
+	void SetSpecularMap(Texture* texture, const Camera* camera)
 	{
 		m_pSpecularMap = texture;
 		m_pCamera = camera;
@@ -125,7 +125,7 @@ public:
 	}
 
 	//今のシェーダーテクニックを取得
-	EnSkinModelShaderTechnique GetCurrentShaderTechnique()
+	EnSkinModelShaderTechnique GetCurrentShaderTechnique() const
 	{
 		return m_currentShaderTechnique;
 	}
@@ -137,33 +137,31 @@ public:
 	}
 
 	//地面に垂直な部分があるモデルか？
-	bool IsShadowCompesation()
+	bool IsShadowCompesation() const
 	{
 		return m_isShadowCompesation;
 	}
 
 
 	//座標の取得。
-	D3DXVECTOR3 GetPosition()
+	const D3DXVECTOR3& GetPosition() const
 	{
 		return m_position;
 	}
 
 	//スケールの取得。
-	D3DXVECTOR3 GetScale()
+	const D3DXVECTOR3& GetScale() const
 	{
 		return m_scale;
 	}
 
 	//回転を取得。
-	D3DXQUATERNION GetRotation()
+	const D3DXQUATERNION& GetRotation() const
 	{
 		return m_rotation;
 	}
-	void SetIsShadowEntry(bool isShadowEntry)
-	{
-		m_isShadowEntry = isShadowEntry;
-	}
+
+
 private:
 	bool						m_isShadowMapCaster;						//影を落とすか？
 	bool						m_isShadowMapReceiver;						//影を落とされるか？
@@ -175,15 +173,15 @@ private:
 	bool						m_isHasSpecularMap;							//スペキュラマップを持っているか？	
 	D3DXMATRIX					m_worldMatrix;								//ワールド行列
 	D3DXMATRIX					m_rotationMatrix;							//回転行列
-	SkinModelData*				m_skinModelData;							//スキンモデルデータ
+	SkinModelData*				m_pSkinModelData;							//スキンモデルデータ
 	ID3DXEffect*				m_pEffect;									//エフェクト
 	Animation					m_animation;								//アニメーション
-	Light*						m_light;									//ライト
-	Camera*						m_pCamera;									//スペキュラで使うカメラ
+	Light*						m_pLight;									//ライト
+	const Camera*				m_pCamera;									//スペキュラで使うカメラ
 	bool						m_isShadowCompesation;						//地面に垂直な部分に落ちる影の補正するか？
 	D3DXVECTOR3					m_position;									//モデルの座標
 	D3DXVECTOR3					m_scale;									//モデルのスケール
 	D3DXQUATERNION				m_rotation;									//モデルの回転
-	bool						m_isShadowEntry;
-	float						m_ditheringRate;
+	bool						m_isShadowEntry;							//シャドウマップに登録されているか？
+	float						m_ditheringRate;							//ディザリングの透明度
 };

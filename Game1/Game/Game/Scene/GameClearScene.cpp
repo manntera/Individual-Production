@@ -4,18 +4,22 @@
 #include "TitleScene.h"
 #include "Fade.h"
 
-GameClearScene::GameClearScene()
+GameClearScene::GameClearScene() :
+	m_sprite(),
+	m_choiceNum(0),
+	m_arrow(),
+	m_finish(),
+	m_nextStage()
 {
-	m_choiceNum = 0;
 }
 
 GameClearScene::~GameClearScene()
 {
-	GetFade().FadeOut();
 }
 
 bool GameClearScene::Start()
 {
+	//スプライトの初期化
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/CLEAR.png");
 	m_sprite.Init(texture);
 	m_sprite.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
@@ -34,18 +38,20 @@ bool GameClearScene::Start()
 
 void GameClearScene::Update()
 {
+	//選択決定でフェードアウトが始まり、それが終わったら遷移
 	if (!GetFade().IsExcute())
 	{
 		if (GetFade().GetCurrentState() == enFadeOut)
 		{
-			if (GameScene::GetStageNum() == STAGE_NUM || m_choiceNum == 1)
+			//次のステージがないかタイトルへを選んでいたらタイトルに行く
+			if (GetGameScene().GetStageNum() == STAGE_NUM || m_choiceNum == 1)
 			{
 				New<TitleScene>(0);
 			}
 			else
 			{
-				g_gameScene = New<GameScene>(0);
-				g_gameScene->Init(g_gameScene->GetStageNum(), false);
+				GetGameScene().Create();
+				GetGameScene().Init(GetGameScene().GetStageNum(), false);
 			}
 			Delete(this);
 		}
@@ -54,6 +60,7 @@ void GameClearScene::Update()
 	{
 		return;
 	}
+	//矢印を上に動かす
 	if (GetPad().IsTriggerButton(enButtonUp))
 	{
 		m_choiceNum--;
@@ -65,6 +72,7 @@ void GameClearScene::Update()
 		sound->Init("Assets/sound/select.wav");
 		sound->Play(false);
 	}
+	//矢印を下に動かす
 	if (GetPad().IsTriggerButton(enButtonDown))
 	{
 		m_choiceNum++;
@@ -74,6 +82,7 @@ void GameClearScene::Update()
 	}
 	m_choiceNum %= 2;
 	m_arrow.SetPosition({ -300.0f, -100.0f + -100.0f * m_choiceNum });
+	//選択を決定
 	if (GetPad().IsPressButton(enButtonA))
 	{
 

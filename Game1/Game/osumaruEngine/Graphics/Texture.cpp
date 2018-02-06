@@ -2,9 +2,10 @@
 #include "Texture.h"
 #include "../Engine.h"
 
-Texture::Texture()
+Texture::Texture() :
+	m_pTexture(nullptr),
+	m_srcInfo{}
 {
-	m_pTexture = nullptr;
 }
 
 Texture::~Texture()

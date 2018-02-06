@@ -19,11 +19,11 @@ public:
 	void Create(float radius);
 
 	//コライダーを取得
-	btSphereShape* GetBody()override
+	const btSphereShape* GetBody() const override
 	{
-		return m_sphereShape;
+		return m_sphereShape.get();
 	}
 
 private:
-	btSphereShape* m_sphereShape;	//球のコライダー
+	std::unique_ptr<btSphereShape> m_sphereShape;	//球のコライダー
 };

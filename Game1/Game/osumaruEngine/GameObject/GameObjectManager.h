@@ -1,6 +1,7 @@
 #pragma once
 class GameObject;
 #include "../Graphics/PostEffect/PostEffect.h"
+//オブジェクトマネージャー
 
 struct GameObjectData
 {
@@ -23,7 +24,10 @@ public:
 	void Delete(GameObject* deleteObject);
 
 
-	//ゲームのオブジェクトを生成する
+	/*
+	オブジェクトを生成する。
+	priority	オブジェクトの優先度
+	*/
 	template<class T>
 	T* New(int priority)
 	{
@@ -36,6 +40,11 @@ public:
 		return newObject;
 	}
 
+	/*
+	オブジェクトを登録
+	object		登録するオブジェクト
+	priority	オブジェクトの優先度
+	*/
 	void Add(GameObject* object, int priority)
 	{
 		m_objectVector[priority].push_back({ object, false });

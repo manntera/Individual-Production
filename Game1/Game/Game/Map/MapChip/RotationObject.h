@@ -6,6 +6,12 @@ class RotationObject : public MapChip
 {
 public:
 
+	//コンストラクタ
+	RotationObject();
+
+	//デストラクタ
+	~RotationObject();
+
 	/*
 	初期化する関数
 	position	座標
@@ -19,7 +25,7 @@ public:
 	void Update()override;
 
 	//描画関数
-	void Draw();
+	void Draw()override;
 private:
 	RigidBody		m_rigidBody;		//剛体
 	MeshCollider	m_meshCollider;		//コライダー

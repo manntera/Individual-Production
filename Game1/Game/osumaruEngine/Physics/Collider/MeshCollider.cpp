@@ -3,10 +3,14 @@
 #include "../../Graphics/SkinModel/SkinModel.h"
 
 
-MeshCollider::MeshCollider()
+MeshCollider::MeshCollider() :
+	m_vertexBufferArray{},
+	m_indexBufferArray{},
+	m_aabbMax(0.0f, 0.0f, 0.0f),
+	m_aabbMin(0.0f, 0.0f, 0.0f),
+	m_meshShape(nullptr),
+	m_stridingMeshInterface(nullptr)
 {
-	m_stridingMeshInterface = nullptr;
-	m_meshShape = nullptr;
 }
 
 MeshCollider::~MeshCollider()
@@ -19,13 +23,11 @@ MeshCollider::~MeshCollider()
 	{
 		delete ib;
 	}
-	delete m_stridingMeshInterface;
-	delete m_meshShape;
 }
 
 void MeshCollider::CreateFromSkinModel(SkinModel* model, const D3DXMATRIX* offsetMatrix)
 {
-	m_stridingMeshInterface = new btTriangleIndexVertexArray;
+	m_stridingMeshInterface.reset(new btTriangleIndexVertexArray);
 	LPD3DXMESH mesh = model->GetOrgMeshFirst();
 	if (mesh != NULL)
 	{
@@ -126,7 +128,7 @@ void MeshCollider::CreateFromSkinModel(SkinModel* model, const D3DXMATRIX* offse
 		indexedMesh.m_vertexStride = sizeof(D3DXVECTOR3);
 		m_stridingMeshInterface->addIndexedMesh(indexedMesh);
 	}
-	m_meshShape = new btBvhTriangleMeshShape(m_stridingMeshInterface, true);
+	m_meshShape.reset(new btBvhTriangleMeshShape(m_stridingMeshInterface.get(), true));
 }
 
 

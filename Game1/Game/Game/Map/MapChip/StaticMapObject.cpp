@@ -1,20 +1,28 @@
 #include "stdafx.h"
 #include "StaticMapObject.h"
 
+StaticMapObject::StaticMapObject() :
+	m_rigidBody(),
+	m_meshCollider()
+{
+
+}
+
+StaticMapObject::~StaticMapObject()
+{
+
+}
+
 void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
 
 	//メッシュコライダーからAABBを作成
 	m_meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
-	D3DXVECTOR3 meshAabbMax = m_meshCollider.GetAabbMax();
-	m_boxCollider.Create(btVector3(meshAabbMax.x, meshAabbMax.y, meshAabbMax.z));
 	RigidBodyInfo rInfo;
 	rInfo.collider = &m_meshCollider;
 	rInfo.mass = 0.0f;
 	rInfo.pos = m_position;
-	D3DXQUATERNION rot;
-	D3DXQuaternionIdentity(&rot);
 	rInfo.rot = m_rotation;
 
 	//剛体を作成

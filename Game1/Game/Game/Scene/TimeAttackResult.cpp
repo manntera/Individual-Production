@@ -3,27 +3,30 @@
 #include "TitleScene.h"
 #include "Fade.h"
 
-int TimeAttackResult::m_times[STAGE_NUM][RANK_NUM + 1] = { 
-		{ 50000, 50000, 50000, 50000, 50000, 50000 },
-		{ 50000, 50000, 50000, 50000, 50000, 50000 }, 
-		{ 50000, 50000, 50000, 50000, 50000, 50000 }
-};
+int TimeAttackResult::m_times[STAGE_NUM][RANK_NUM + 1] = {};
 
-TimeAttackResult::TimeAttackResult()
+TimeAttackResult::TimeAttackResult() :
+	m_choiceNum(0),
+	m_arrow(),
+	m_finish(),
+	m_retry(),
+	m_rankNum(0),
+	m_back(),
+	m_colonSprite{},
+	m_numSprite{},
+	m_numTexture{},
+	m_alpha(0.0f),
+	m_stageNum(GetGameScene().GetStageNum())
 {
-	m_stageNum = 0;
-	m_rankNum = 0;
-	m_alpha = 0.0f;
 }
 
 TimeAttackResult::~TimeAttackResult()
 {
-	GetFade().FadeOut();
 }
 
 void TimeAttackResult::Init(float time)
 {
-	m_stageNum = GameScene::GetStageNum();
+	//今回のタイムをランキングの中でソート
 	m_times[m_stageNum][RANK_NUM] = (int)(time * 100.0f);
 	int i;
 	for (i = RANK_NUM;0 < i;i--)
@@ -44,6 +47,7 @@ void TimeAttackResult::Init(float time)
 
 bool TimeAttackResult::Start()
 {
+	//スプライトを初期化
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/TimeAttackBack.png");
 	m_back.Init(texture);
 	m_back.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
@@ -110,18 +114,20 @@ bool TimeAttackResult::Start()
 
 void TimeAttackResult::Update()
 {
+	//フェードアウトの状態でフェードが終わったら遷移する
 	if (!GetFade().IsExcute())
 	{
 		if (GetFade().GetCurrentState() == enFadeOut)
 		{
+			//タイトルへを選んでいたらタイトルへ遷移
 			if (m_choiceNum == 1)
 			{
 				New<TitleScene>(0);
 			}
 			else
 			{
-				g_gameScene = New<GameScene>(0);
-				g_gameScene->Init(g_gameScene->GetStageNum(), true);
+				GetGameScene().Create();
+				GetGameScene().Init(GetGameScene().GetStageNum(), true);
 			}
 			Delete(this);
 		}
@@ -130,6 +136,7 @@ void TimeAttackResult::Update()
 	{
 		return;
 	}
+	//矢印を上に動かす
 	if (GetPad().IsTriggerButton(enButtonUp))
 	{
 		m_choiceNum--;
@@ -141,6 +148,7 @@ void TimeAttackResult::Update()
 		sound->Init("Assets/sound/select.wav");
 		sound->Play(false);
 	}
+	//矢印を下に動かす
 	if (GetPad().IsTriggerButton(enButtonDown))
 	{
 		m_choiceNum++;
@@ -150,6 +158,7 @@ void TimeAttackResult::Update()
 	}
 	m_choiceNum %= 2;
 	m_arrow.SetPosition({ -550.0f, -100.0f + -100.0f * m_choiceNum });
+	//選択を決定
 	if (GetPad().IsPressButton(enButtonA))
 	{
 
@@ -158,6 +167,7 @@ void TimeAttackResult::Update()
 		sound->Init("Assets/sound/enter2.wav");
 		sound->Play(false);
 	}
+	//ランク内であればアルファ値を変えて点滅させる
 	if (m_rankNum != RANK_NUM)
 	{
 		static float alphaSpeed = 0.03f;
@@ -197,4 +207,16 @@ void TimeAttackResult::Draw()
 	m_retry.Draw();
 	m_finish.Draw();
 	m_arrow.Draw();
+}
+
+void TimeAttackResult::TimeInit()
+{
+	//ランキングのタイムを5分で初期化
+	for (int i = 0; i < STAGE_NUM;i++)
+	{
+		for (int j = 0;j < RANK_NUM + 1;j++)
+		{
+			m_times[i][j] = 50000;
+		}
+	}
 }

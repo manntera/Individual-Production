@@ -5,6 +5,12 @@
 class HindranceObject : public MapChip
 {
 public:
+	//コンストラクタ
+	HindranceObject();
+
+	//デストラクタ
+	~HindranceObject();
+
 	/*
 	初期化する関数
 	position	座標
@@ -17,6 +23,7 @@ public:
 	//更新関数
 	void Update()override;
 
+	//描画関数
 	void Draw()override;
 private:
 	D3DXVECTOR3		m_moveSpeed;		//移動速度
@@ -24,6 +31,6 @@ private:
 	RigidBody		m_rigidBody;		//剛体
 	BoxCollider		m_boxCollider;		//コライダー
 	bool			m_isChild;			//子供がいるかどうか
+	const int		m_timerLimit;		//タイマーの限界
 	int				m_timer;			//一定時間たつと移動速度を反転させるためのタイマー
-	int				m_timerLimit;		//タイマーの限界
 };

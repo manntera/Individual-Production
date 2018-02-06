@@ -4,7 +4,14 @@
 #include "Fade.h"
 #include "StageSelect.h"
 
-TitleScene::TitleScene()
+TitleScene::TitleScene() :
+	m_titleBack(),
+	m_title(),
+	m_start(),
+	m_continue(),
+	m_timeAttack(),
+	m_arrow(),
+	m_choiceNum(0)
 {
 
 }
@@ -19,6 +26,7 @@ bool TitleScene::Start()
 	{
 		return false;
 	}
+	//スプライトを初期化
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/TitleBack.png");
 	m_titleBack.Init(texture);
 	m_titleBack.SetSize({(float)FRAME_BUFFER_WIDTH, (float)FRAME_BUFFER_HEIGHT});
@@ -39,27 +47,27 @@ bool TitleScene::Start()
 	m_arrow.SetPosition({ -275.0f, -100.0f });
 	m_arrow.SetSize({ 100.0f, 100.0f });
 	GetFade().FadeIn();
-	m_choiceNum = 0;
 	return true;
 }
 
 void TitleScene::Update()
 {
+	//フェードアウトの状態でフェードが終わると遷移する
 	if (!GetFade().IsExcute())
 	{
 		if (GetFade().GetCurrentState() == enFadeOut)
 		{
 			switch (m_choiceNum)
 			{
-			case 0:
-				g_gameScene = New<GameScene>(0);
-				g_gameScene->Init(0, false);
+			case enSceneStart:
+				GetGameScene().Create();
+				GetGameScene().Init(0, false);
 				break;
-			case 1:
-				g_gameScene = New<GameScene>(0);
-				g_gameScene->Init(GameScene::GetStageNum(), false);
+			case enSceneContinue:
+				GetGameScene().Create();
+				GetGameScene().Init(GetGameScene().GetStageNum(), false);
 				break;
-			case 2:
+			case enSceneTimeAttack:
 				New<StageSelect>(0);
 				break;
 			default:
@@ -87,7 +95,7 @@ void TitleScene::Update()
 		sound->Play(false);
 		if (m_choiceNum < 0)
 		{
-			m_choiceNum = 2;
+			m_choiceNum = enSceneTimeAttack;
 		}
 	}
 	if (GetPad().IsTriggerButton(enButtonDown))

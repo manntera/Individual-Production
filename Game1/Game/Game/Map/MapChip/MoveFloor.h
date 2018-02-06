@@ -5,6 +5,12 @@
 class MoveFloor : public MapChip
 {
 public:
+
+	//コンストラクタ
+	MoveFloor();
+
+	//デストラクタ
+	~MoveFloor();
 	/*
 	初期化する関数
 	position	座標

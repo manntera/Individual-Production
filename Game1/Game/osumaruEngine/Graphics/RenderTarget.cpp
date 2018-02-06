@@ -3,12 +3,13 @@
 #include "../Engine.h"
 
 
-RenderTarget::RenderTarget()
+RenderTarget::RenderTarget() :
+	m_pTexture(nullptr),
+	m_pDepthBuffer(nullptr),
+	m_pRenderTarget(nullptr),
+	m_width(0),
+	m_height(0)
 {
-	m_pTexture = nullptr;
-	m_pDepthBuffer = nullptr;
-	m_pDepthBuffer = nullptr;
-	m_pRenderTarget = nullptr;
 }
 
 RenderTarget::~RenderTarget()
@@ -18,6 +19,7 @@ RenderTarget::~RenderTarget()
 
 void RenderTarget::Create(int width, int height, D3DFORMAT format, D3DFORMAT depthFormat)
 {
+	Release();
 	m_width = width;
 	m_height = height;
 	//シャドウマップを作成
@@ -51,6 +53,10 @@ void RenderTarget::Release()
 	{
 		m_pTexture->Release();
 		m_pTexture = nullptr;
+	}
+	if (m_pRenderTarget != nullptr)
+	{
+		m_pRenderTarget->Release();
 		m_pRenderTarget = nullptr;
 	}
 	if (m_pDepthBuffer != nullptr)

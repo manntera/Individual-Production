@@ -38,7 +38,7 @@ public:
 	ボタンを押しているか調べる関数
 	button			押されているか調べたいボタンのenum
 	*/
-	bool IsTriggerButton(EnPadButton button)
+	bool IsTriggerButton(EnPadButton button) const
 	{
 		return m_isPadTrigger[button];
 	}
@@ -47,42 +47,42 @@ public:
 	ボタンを押しているか調べる関数
 	button			押されているか調べたいボタンのenum
 	*/
-	bool IsPressButton(EnPadButton button)
+	bool IsPressButton(EnPadButton button) const
 	{
 		return m_isPadPress[button];
 	}
 
 	//左スティックのX軸の入力量を取得(-1.0から1.0の間
-	float GetLeftStickX()
+	float GetLeftStickX() const
 	{
 		return m_leftStickX;
 	}
 
 	//左スティックのY軸の入力量を取得(-1.0から1.0の間
-	float GetLeftStickY()
+	float GetLeftStickY() const
 	{
 		return m_leftStickY;
 	}
 
 	//右スティックのX軸の入力量を取得(-1.0から1.0の間
-	float GetRightStickX()
+	float GetRightStickX() const
 	{
 		return m_rightStickX;
 	}
 
 	//右スティックのY軸の入力量を取得(-1.0から1.0の間
-	float GetRightStickY()
+	float GetRightStickY() const
 	{
 		return m_rightStickY;
 	}
 
 	//パッドの左のトリガーの入力量を取得(0.0から1.0
-	float GetLeftTrigger()
+	float GetLeftTrigger() const
 	{
 		return m_leftTrigger;
 	}
 	//パッドの右のトリガーの入力量を取得(0.0から1.0
-	float GetRightTrigger()
+	float GetRightTrigger() const
 	{
 		return m_rightTrigger;
 	}

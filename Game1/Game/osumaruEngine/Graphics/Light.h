@@ -6,9 +6,11 @@ public:
 	static const int	DIFFUSE_LIGHT_NUM = 4;	//平行光源の数。
 public:
 	//コンストラクタ
-	Light()
+	Light() :
+		m_diffuseLightDirection{},
+		m_diffuseLightColor{},
+		m_ambientLight(0.0f, 0.0f, 0.0f, 0.0f)
 	{
-		memset(this, 0, sizeof(Light));
 	}
 
 	//デストラクタ
@@ -60,7 +62,7 @@ public:
 	}
 
 	//アンビエントライトを取得。
-	D3DXVECTOR4 GetAmbientLight()
+	const D3DXVECTOR4& GetAmbientLight() const
 	{
 		return m_ambientLight;
 	}

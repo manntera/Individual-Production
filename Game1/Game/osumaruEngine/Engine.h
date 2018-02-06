@@ -108,12 +108,14 @@ public:
 		}
 		PostQuitMessage(0);
 	}
+
 	//インスタンスの生成
 	template<class T> 
 	T* New(int priority)
 	{
 		return m_objectManager.New<T>(priority);
 	}
+
 	//インスタンスの削除
 	void Delete(GameObject* deleteObject)
 	{
@@ -126,33 +128,32 @@ public:
 		m_objectManager.Add(object, priority);
 	}
 
-	
-
 	//パッドの取得
 	Pad& GetPad()
 	{
 		return m_pad;
 	}
 
+	//サウンドエンジンを取得
 	SoundEngine& GetSoundEngine()
 	{
 		return m_soundEngine;
 	}
 private:
-	LPDIRECT3D9				m_pD3D;
-	LPDIRECT3DDEVICE9		m_pD3DDevice;			//デバイス
-	std::unique_ptr<EffectManager>			m_effectManager;		//エフェクトマネージャー
-	WNDCLASSEX				m_wc;
-	GameObjectManager		m_objectManager;		//オブジェクトマネージャー
-	std::unique_ptr<PhysicsWorld>			m_physicsWorld;			//物理ワールド
-	Pad						m_pad;					//パッドの入力
-	ShadowMap				m_shadowMap;			//シャドウマップ
-	SoundEngine				m_soundEngine;
-	TextureResource			m_textureResource;
-	SkinModelDataResource	m_skinModelDataResource;
-	RenderTarget			m_renderTarget[2];			//メインのレンダリングターゲット
-	int						m_currentRenderTargetNum;
-	PostEffect				m_postEffect;
+	LPDIRECT3D9								m_pD3D;						//DirectX9
+	LPDIRECT3DDEVICE9						m_pD3DDevice;				//デバイス
+	std::unique_ptr<EffectManager>			m_effectManager;			//エフェクトマネージャー
+	WNDCLASSEX								m_wc;						//ウィンドウクラス
+	GameObjectManager						m_objectManager;			//オブジェクトマネージャー
+	std::unique_ptr<PhysicsWorld>			m_physicsWorld;				//物理ワールド
+	Pad										m_pad;						//パッドの入力
+	ShadowMap								m_shadowMap;				//シャドウマップ
+	SoundEngine								m_soundEngine;				//サウンドエンジン
+	TextureResource							m_textureResource;			//テクスチャーリソース
+	SkinModelDataResource					m_skinModelDataResource;	//モデルデータリソース
+	RenderTarget							m_renderTarget[2];			//メインのレンダリングターゲット
+	int										m_currentRenderTargetNum;	//今のメインレンダリングターゲットの番号
+	PostEffect								m_postEffect;				//ポストエフェクト
 };
 //エンジンクラスのインスタンスを取得。
 static Engine& GetEngine()
@@ -214,7 +215,7 @@ static RenderTarget& GetMainRenderTarget()
 	return GetEngine().GetMainRenderTarget();
 }
 
-static DepthOfField& GetDepthOfField()
+static const DepthOfField& GetDepthOfField()
 {
 	return GetEngine().GetPostEffect().GetDepthOfField();
 }

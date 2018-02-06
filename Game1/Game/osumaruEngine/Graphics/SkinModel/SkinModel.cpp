@@ -16,14 +16,14 @@ void DrawMeshContainer(
 	LPD3DXEFFECT pEffect,
 	D3DXMATRIX* worldMatrix,
 	D3DXMATRIX* rotationMatrix,
-	D3DXMATRIX* viewMatrix,
-	D3DXMATRIX* projMatrix,
+	const D3DXMATRIX* viewMatrix,
+	const D3DXMATRIX* projMatrix,
 	Light* light,
 	bool isHasNormal,
 	Texture* normalMap,
 	bool isHasSpecular,
 	Texture* specularMap,
-	D3DXVECTOR3* cameraPos,
+	const D3DXVECTOR3* cameraPos,
 	bool isShadowReceiver,
 	bool isShadowCaster,
 	ShaderTechnique* shaderTechnique,
@@ -165,14 +165,14 @@ void DrawFrame(
 	LPD3DXEFFECT pEffect,
 	D3DXMATRIX* worldMatrix,
 	D3DXMATRIX* rotationMatrix,
-	D3DXMATRIX* viewMatrix,
-	D3DXMATRIX* projMatrix,
+	const D3DXMATRIX* viewMatrix,
+	const D3DXMATRIX* projMatrix,
 	Light* light,
 	bool isHasNormal,
 	Texture* normalMap,
 	bool isHasSpecular,
 	Texture* specularMap,
-	D3DXVECTOR3* cameraPos,
+	const D3DXVECTOR3* cameraPos,
 	bool isShadowReceiver,
 	bool isShadowCaster,
 	ShaderTechnique* shaderTechnique,
@@ -254,21 +254,29 @@ void DrawFrame(
 	}
 }
 
-SkinModel::SkinModel()
+SkinModel::SkinModel() :
+	m_isShadowMapCaster(false),
+	m_isShadowMapReceiver(false),
+	m_shaderTechnique{},
+	m_currentShaderTechnique(enShaderTechniqueNormal),
+	m_pNormalMap(nullptr),
+	m_pSpecularMap(nullptr),
+	m_isHasNormalMap(false),
+	m_isHasSpecularMap(false),
+	m_worldMatrix({0.0f}),
+	m_rotationMatrix({0.0f}),
+	m_pSkinModelData(nullptr),
+	m_pEffect(nullptr),
+	m_animation(),
+	m_pLight(nullptr),
+	m_pCamera(nullptr),
+	m_isShadowCompesation(false),
+	m_position(0.0f, 0.0f, 0.0f),
+	m_scale(1.0f, 1.0f, 1.0f),
+	m_rotation(0.0f, 0.0f, 0.0f, 1.0f),
+	m_isShadowEntry(false),
+	m_ditheringRate(0.0f)
 {
-	m_skinModelData = nullptr;
-	m_light = nullptr;
-	m_pEffect = nullptr;
-	m_isHasNormalMap = false;
-	m_isHasSpecularMap = false;
-	m_pNormalMap = nullptr;
-	m_pSpecularMap = nullptr;
-	m_pCamera = nullptr;
-	m_isShadowMapCaster = false;
-	m_isShadowMapReceiver = false;
-	m_isShadowCompesation = false;
-	m_isShadowEntry = false;
-	m_ditheringRate = 0.0f;
 }
 
 SkinModel::~SkinModel()
@@ -278,8 +286,9 @@ SkinModel::~SkinModel()
 void SkinModel::Init(SkinModelData* modelData)
 {
 	m_pEffect = GetEffectManager().LoadEffect("Assets/Shader/Model.fx");
-	m_skinModelData = modelData;
+	m_pSkinModelData = modelData;
 	m_currentShaderTechnique = enShaderTechniqueNormal;
+	//テクニックを初期化
 	m_shaderTechnique[enShaderTechniqueNormal].SkinModelTechnique = m_pEffect->GetTechniqueByName("SkinModel");
 	m_shaderTechnique[enShaderTechniqueNormal].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("NoSkinModel");
 	m_shaderTechnique[enShaderTechniqueSilhouette].SkinModelTechnique = m_pEffect->GetTechniqueByName("SilhouetteSkinModel");
@@ -310,9 +319,9 @@ void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVEC
 	D3DXMatrixTranslation(&mTrans, m_position.x, m_position.y, m_position.z);
 	D3DXMatrixRotationQuaternion(&m_rotationMatrix, &m_rotation);
 	m_worldMatrix = mScale * m_rotationMatrix * mTrans;
-	if (m_skinModelData)
+	if (m_pSkinModelData)
 	{
-		m_skinModelData->UpdateBoneMatrix(m_worldMatrix);		//ボーン行列を更新
+		m_pSkinModelData->UpdateBoneMatrix(m_worldMatrix);		//ボーン行列を更新
 	}
 	
 }
@@ -323,7 +332,7 @@ void SkinModel::Update(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
 	UpdateWorldMatrix(trans, rot, scale);
 }
 
-void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
+void SkinModel::Draw(const D3DXMATRIX* viewMatrix, const D3DXMATRIX* projMatrix)
 {
 	D3DXVECTOR4 position = {m_position.x, m_position.y, m_position.z, 1.0f};
 	D3DXMATRIX viewProjMat;
@@ -334,22 +343,22 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 	D3DXVec4Transform(&position, &position, &viewProjMat);
 
 	m_ditheringRate = position.z / position.w;
-	D3DXVECTOR3* cameraPos = nullptr;
+	const D3DXVECTOR3* cameraPos = nullptr;
 	if (m_pCamera != nullptr)
 	{
 		cameraPos = &m_pCamera->GetPosition();
 	}
-	if (m_skinModelData)
+	if (m_pSkinModelData)
 	{
 		DrawFrame(
 			GetEngine().GetDevice(),
-			m_skinModelData->GetFrameRoot(),
+			m_pSkinModelData->GetFrameRoot(),
 			m_pEffect,
 			&m_worldMatrix,
 			&m_rotationMatrix,
 			viewMatrix,
 			projMatrix,
-			m_light,
+			m_pLight,
 			m_isHasNormalMap,
 			m_pNormalMap,
 			m_isHasSpecularMap,
@@ -360,14 +369,15 @@ void SkinModel::Draw(D3DXMATRIX* viewMatrix, D3DXMATRIX* projMatrix)
 			m_shaderTechnique,
 			m_currentShaderTechnique,
 			m_ditheringRate);
+		m_isShadowEntry = false;
 	}
 }
 
-LPD3DXMESH SkinModel::GetOrgMeshFirst()
+const LPD3DXMESH SkinModel::GetOrgMeshFirst() const
 {
-	if (m_skinModelData != nullptr)
+	if (m_pSkinModelData != nullptr)
 	{
-		return m_skinModelData->GetOrgMeshFirst();
+		return m_pSkinModelData->GetOrgMeshFirst();
 	}
 	return nullptr;
 }

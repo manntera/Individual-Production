@@ -17,6 +17,7 @@ public:
 	//‰Šú‰»
 	void Init();
 
+	//XVŠÖ”
 	void Update();
 
 	void Add3dSound(SoundSource* sound)

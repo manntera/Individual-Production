@@ -17,19 +17,19 @@ public:
 	void Load(char* filePath);
 
 	//テクスチャを取得。
-	LPDIRECT3DTEXTURE9& GetBody()
+	const LPDIRECT3DTEXTURE9& GetBody() const
 	{
 		return m_pTexture;
 	}
 
 	//テクスチャの幅を取得。
-	int GetWidth()
+	int GetWidth() const
 	{
 		return m_srcInfo.Width;
 	}
 
 	//テクスチャの高さを取得。
-	int GetHeight()
+	int GetHeight() const
 	{
 		return m_srcInfo.Height;
 	}

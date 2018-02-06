@@ -5,16 +5,15 @@ class Camera;
 /*
 物理ワールド
 */
-
 class PhysicsWorld : Uncopyable
 {
-	btDefaultCollisionConfiguration*		m_collisionConfig;
-	btCollisionDispatcher*					m_collisionDispatcher;		//衝突解決処理
-	btBroadphaseInterface*					m_overlappingPairCache;		//ブロードフェーズ。
-	btSequentialImpulseConstraintSolver*	m_constraintSolver;			//コンストレイントソルバー。拘束条件の解決処理
-	btDiscreteDynamicsWorld*				m_dynamicWorld;				//ワールド
-	RigidBodyDraw*							m_rigidBodyDraw;
-	Camera*									m_camera;
+	std::unique_ptr<btDefaultCollisionConfiguration>		m_pCollisionConfig;
+	std::unique_ptr<btCollisionDispatcher>					m_pCollisionDispatcher;		//衝突解決処理
+	std::unique_ptr<btBroadphaseInterface>					m_pOverlappingPairCache;		//ブロードフェーズ。
+	std::unique_ptr<btSequentialImpulseConstraintSolver>	m_pConstraintSolver;			//コンストレイントソルバー。拘束条件の解決処理
+	std::unique_ptr<btDiscreteDynamicsWorld>				m_pDynamicWorld;				//ワールド
+	std::unique_ptr<RigidBodyDraw>							m_pRigidBodyDraw;
+	Camera*													m_pCamera;
 public:
 	//コンストラクタ
 	PhysicsWorld();
@@ -31,9 +30,9 @@ public:
 	void Draw();
 
 	//ダイナミックワールドを取得。
-	btDiscreteDynamicsWorld* GetDynamicWorld()
+	const btDiscreteDynamicsWorld* GetDynamicWorld() const
 	{
-		return m_dynamicWorld;
+		return m_pDynamicWorld.get();
 	}
 	//剛体を物理ワールドに追加
 	void AddRigidBody(btRigidBody* rb);
@@ -43,9 +42,16 @@ public:
 
 	void SetCamera(Camera* camera)
 	{
-		m_camera = camera;
+		m_pCamera = camera;
 	}
 
+	/*
+	物理ワールドでレイを飛ばす
+	castShape			剛体
+	convexFromWorld		レイの始点
+	convexToWorld		レイの終点
+	resultCallback		コールバック
+	*/
 	void ConvexSweepTest(
 		const btConvexShape* castShape,
 		const btTransform& convexFromWorld,
@@ -53,20 +59,30 @@ public:
 		btCollisionWorld::ConvexResultCallback& resultCallback,
 		btScalar allowedCcdPenetration = 0.0f)
 	{
-		m_dynamicWorld->convexSweepTest(castShape, convexFromWorld, convexToWorld, resultCallback, allowedCcdPenetration);
+		m_pDynamicWorld->convexSweepTest(castShape, convexFromWorld, convexToWorld, resultCallback, allowedCcdPenetration);
 	}
 
+	/*
+	物理ワールドで剛体が何かに当たってるいかテスト
+	collisionObject		剛体
+	resultCallback		コールバック
+	*/
 	void ContactTest(
-		btCollisionObject* collisionObject,
+		const btCollisionObject* collisionObject,
 		btCollisionWorld::ContactResultCallback& resultCallback)
 	{
-		m_dynamicWorld->contactTest(collisionObject, resultCallback);
+		m_pDynamicWorld->contactTest(const_cast<btCollisionObject*>(collisionObject), resultCallback);
 	}
 
+	/*
+	剛体をライン描画
+	worldTrans		ワールド行列
+	colShape		剛体
+	*/
 	void  DebugDraw(
-		btTransform& worldTrans,
-		btCollisionShape* colShape)
+		const btTransform& worldTrans,
+		const btCollisionShape* colShape)
 	{
-		m_dynamicWorld->debugDrawObject(worldTrans, colShape, {1.0f, 0.0f, 0.0f});
+		m_pDynamicWorld->debugDrawObject(worldTrans, colShape, {0.0f, 0.0f, 0.0f});
 	}
 };

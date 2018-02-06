@@ -1,4 +1,5 @@
 #pragma once
+//オブジェクトのインターフェース
 
 class GameObject : Uncopyable
 {
@@ -24,13 +25,19 @@ public:
 	//死ぬ前に一回だけ呼ばれる関数
 	virtual void BeforeDead() {};
 
+	void Reset()
+	{
+		m_isStart = false;
+		m_isDelete = false;
+	}
+
 	//死んでいるか？
-	bool IsDelete()
+	bool IsDelete() const
 	{
 		return m_isDelete;
 	}
 	//初期化済みか？
-	bool IsStart()
+	bool IsStart() const
 	{
 		return m_isStart;
 	}

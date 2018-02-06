@@ -7,15 +7,20 @@
 class PostEffect
 {
 public:
+	//コンストラクタ
 	PostEffect();
 
+	//デストラクタ
 	~PostEffect();
 
+	//初期化関数
 	void Init();
 
+	//描画関数
 	void Draw();
 
-	DepthOfField& GetDepthOfField()
+	//被写界深度を取得
+	const DepthOfField& GetDepthOfField() const
 	{
 		return m_dof;
 	}

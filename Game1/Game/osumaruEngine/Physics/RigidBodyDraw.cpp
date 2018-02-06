@@ -5,9 +5,13 @@
 
 
 
-RigidBodyDraw::RigidBodyDraw()
+RigidBodyDraw::RigidBodyDraw() :
+	m_indexBuffer(NULL),
+	m_vertexBuffer(NULL),
+	m_primitive(),
+	m_count(0),
+	m_pEffect()
 {
-	m_count = 0;
 }
 
 RigidBodyDraw::~RigidBodyDraw()

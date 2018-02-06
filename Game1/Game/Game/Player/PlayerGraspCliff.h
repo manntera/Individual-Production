@@ -23,7 +23,7 @@ public:
 	void Update();
 
 	//ŠR‚ğã‚Á‚Ä‚¢‚é‚©H
-	bool IsActive()
+	bool IsActive() const
 	{
 		return m_isActive;
 	}

@@ -3,10 +3,13 @@
 #include "Fade.h"
 #include "TitleScene.h"
 
-StageSelect::StageSelect()
+StageSelect::StageSelect() :
+	m_stageNum{},
+	m_arrow(),
+	m_back(),
+	m_choiceNum(0),
+	m_isBackScene(false)
 {
-	m_choiceNum = 0;
-	m_isBackScene = false;
 }
 
 StageSelect::~StageSelect()
@@ -53,8 +56,8 @@ void StageSelect::Update()
 			}
 			else
 			{
-				g_gameScene = New<GameScene>(0);
-				g_gameScene->Init(m_choiceNum, true);
+				GetGameScene().Create();
+				GetGameScene().Init(m_choiceNum, true);
 			}
 			Delete(this);
 		}
@@ -64,6 +67,7 @@ void StageSelect::Update()
 		return;
 	}
 
+	//ëIëÇåàíË
 	if (GetPad().IsPressButton(enButtonA))
 	{
 		GetFade().FadeOut();
@@ -71,6 +75,7 @@ void StageSelect::Update()
 		sound->Init("Assets/sound/enter2.wav");
 		sound->Play(false);
 	}
+	//ÉLÉÉÉìÉZÉã
 	else if (GetPad().IsTriggerButton(enButtonB))
 	{
 		GetFade().FadeOut();
@@ -79,18 +84,19 @@ void StageSelect::Update()
 		sound->Init("Assets/sound/cancel.wav");
 		sound->Play(false);
 	}
-
+	//ñÓàÛÇè„Ç…ìÆÇ©Ç∑
 	if (GetPad().IsTriggerButton(enButtonUp))
 	{
 		m_choiceNum--;
 		if (m_choiceNum < 0)
 		{
-			m_choiceNum = GameScene::GetStageMaxNum() - 1;
+			m_choiceNum = GetGameScene().GetStageMaxNum() - 1;
 		}
 		SoundSource* sound = New<SoundSource>(0);
 		sound->Init("Assets/sound/select.wav");
 		sound->Play(false);
 	}
+	//ñÓàÛÇâ∫Ç…ìÆÇ©Ç∑
 	if (GetPad().IsTriggerButton(enButtonDown))
 	{
 		m_choiceNum++;
@@ -99,9 +105,9 @@ void StageSelect::Update()
 		sound->Play(false);
 	}
 
-	if (GameScene::GetStageMaxNum() != 0)
+	if (GetGameScene().GetStageMaxNum() != 0)
 	{
-		m_choiceNum %= GameScene::GetStageMaxNum();
+		m_choiceNum %= GetGameScene().GetStageMaxNum();
 	}
 	else
 	{
@@ -113,7 +119,7 @@ void StageSelect::Update()
 void StageSelect::Draw()
 {
 	m_back.Draw();
-	for (int i = 0;i < GameScene::GetStageMaxNum();i++)
+	for (int i = 0;i < GetGameScene().GetStageMaxNum();i++)
 	{
 		m_stageNum[i].Draw();
 	}

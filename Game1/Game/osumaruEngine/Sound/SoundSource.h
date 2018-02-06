@@ -55,7 +55,7 @@ public:
 	{
 		return m_sourceVoice;
 	}
-	D3DXVECTOR3 GetPosition()
+	D3DXVECTOR3& GetPosition()
 	{
 		return m_position;
 	}

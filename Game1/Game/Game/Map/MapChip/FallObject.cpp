@@ -2,11 +2,13 @@
 #include "FallObject.h"
 #include "../../Scene/GameScene.h"
 
-FallObject::FallObject()
+FallObject::FallObject() :
+	m_isFall(false),
+	m_rigidBody(),
+	m_boxCollider(),
+	m_particle(nullptr),
+	m_timer(0.0f)
 {
-	m_particle = nullptr;
-	m_timer = 0.0f;
-	m_isFall = false;
 }
 
 FallObject::~FallObject()
@@ -17,6 +19,7 @@ FallObject::~FallObject()
 void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
+	//剛体を初期化
 	MeshCollider mesh;
 	mesh.CreateFromSkinModel(&m_skinModel, NULL);
 	D3DXVECTOR3 aabb = (mesh.GetAabbMax() - mesh.GetAabbMin()) / 2.0f;
@@ -27,7 +30,8 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 	rbInfo.rot = m_rotation;
 	rbInfo.collider = &m_boxCollider;
 	m_rigidBody.Create(rbInfo);
-	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
+	m_rigidBody.SetPlayerCollisionGroundFlg(false);
+	//パーティクルを初期化
 	m_particle = New<ParticleEmitter>(CAMERA_PRIORITY);
 	m_particle->Init({
 		"Assets/particle/WallDust.png",						//テクスチャのファイルパス
@@ -42,7 +46,7 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 		{ m_position.x, m_position.y - 11.0f, m_position.z },//エミッターの座標
 		2													//1フレームで出るパーティクルの数
 	}
-	, &g_gameScene->GetCamera());
+	, &GetGameScene().GetCamera());
 	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 }
 
@@ -65,6 +69,7 @@ void FallObject::Update()
 	{
 		m_position.y -= 0.4f;
 		m_timer += GetGameTime().GetDeltaFrameTime();
+		//落ち始めてある程度時間がたつと消える
 		if (3.0f < m_timer)
 		{
 			MapChipDelete();
@@ -72,8 +77,9 @@ void FallObject::Update()
 	}
 	//剛体を移動
 	m_rigidBody.SetPosition(m_position);
+	m_rigidBody.SetPlayerCollisionGroundFlg(false);
+
 	m_skinModel.Update(m_position, m_rotation, m_scale);
-	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
 }
 
 void FallObject::ParticleDelete()

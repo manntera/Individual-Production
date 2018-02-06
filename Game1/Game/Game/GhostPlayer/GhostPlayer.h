@@ -21,9 +21,10 @@ public:
 	void Draw()override;
 
 private:
-	SkinModelData m_modelData;					//スキンモデルデータ
-	SkinModel m_model;							//スキンモデル
-	Animation m_animation;						//アニメーション
-	std::list<GhostData>::iterator m_ghostData;	//ゴーストデータのイテレーター
-	int m_currentAnimationNum;					//現在再生中のアニメーションの番号
+	SkinModelData							m_modelData;			//スキンモデルデータ
+	SkinModel								m_model;				//スキンモデル
+	Animation								m_animation;			//アニメーション
+	std::list<GhostData>::const_iterator	m_ghostData;			//ゴーストデータのイテレーター
+	int										m_currentAnimationNum;	//現在再生中のアニメーションの番号
+	Light									m_light;				//モデルのライト
 };

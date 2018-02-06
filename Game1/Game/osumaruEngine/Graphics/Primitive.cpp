@@ -5,12 +5,16 @@
 #include "VertexCommon.h"
 
 
-Primitive::Primitive()
+Primitive::Primitive() :
+	m_pVertexBuffer(nullptr),
+	m_pIndexBuffer(nullptr),
+	m_pVertexDecaration(nullptr),
+	m_vertexNum(0),
+	m_primitiveType(D3DPT_LINELIST),
+	m_polygonNum(0),
+	m_vertexStride(0)
+
 {
-	m_pIndexBuffer = nullptr;
-	m_pVertexBuffer = nullptr;
-	m_pVertexDecaration = nullptr;
-	m_vertexNum = 0;
 }
 
 Primitive::~Primitive()

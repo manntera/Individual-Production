@@ -5,7 +5,14 @@
 #include "../Player/Player.h"
 #include "GhostDataListManager.h"
 
-GhostPlayer::GhostPlayer()
+GhostPlayer::GhostPlayer() :
+	m_modelData(),
+	m_model(),
+	m_animation(),
+	m_ghostData(),
+	m_currentAnimationNum(0),
+	m_light()
+
 {
 }
 
@@ -16,16 +23,19 @@ GhostPlayer::~GhostPlayer()
 
 bool GhostPlayer::Start()
 {
-	//ゴーストデータが空の場合デリート
+	//ゴーストデータが無い場合デリート
 	if (GetGhostDataListManager().GetGhostData().empty())
 	{
-		g_gameScene->GhostDataFinish();
+		GetGameScene().GhostDataFinish();
 		return true;
 	}
-	Player* player = g_gameScene->GetPlayer();
+	//プレイヤーをもとにモデルデータを作成
+	const Player* player = GetGameScene().GetPlayer();
 	m_modelData.CloneModelData(player->GetSkinModelData(), &m_animation);
 	m_model.Init(&m_modelData);
-	m_model.SetLight(&player->GetLight());
+	m_light = player->GetLight();
+	m_model.SetLight(&m_light);
+	//ゴーストデータの最初のイテレーターを取得
 	m_ghostData = GetGhostDataListManager().GetGhostData().begin();
 	m_animation.PlayAnimation(m_ghostData->currentAnimationNum);
 	m_currentAnimationNum = m_ghostData->currentAnimationNum;
@@ -47,6 +57,6 @@ void GhostPlayer::Update()
 
 void GhostPlayer::Draw()
 {
-	Camera& camera = g_gameScene->GetCamera();
+	const Camera& camera = GetGameScene().GetCamera();
 	m_model.Draw(&camera.GetViewMatrix(), &camera.GetProjectionMatrix());
 }

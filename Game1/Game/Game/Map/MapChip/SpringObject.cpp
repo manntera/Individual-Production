@@ -3,11 +3,24 @@
 #include "../../Scene/GameScene.h"
 #include "../../Player/Player.h"
 
+SpringObject::SpringObject() :
+	m_rigidBody(),
+	m_boxCollider(),
+	m_anim()
+{
+	
+}
+
+SpringObject::~SpringObject()
+{
+
+}
+
 void SpringObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName, &m_anim);
 
-	//メッシュコライダーを作成
+	//メッシュコライダーを作成してaabbを求める
 	MeshCollider meshCollider;
 	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
 	D3DXVECTOR3 boxSize = meshCollider.GetAabbMax();
@@ -22,8 +35,8 @@ void SpringObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* mod
 	rInfo.rot = m_rotation;
 
 	m_rigidBody.Create(rInfo);
-	m_rigidBody.GetBody()->setUserIndex(enCollisionAttr_Spring);
-	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
+	m_rigidBody.SetUserIndex(enCollisionAttr_Spring);
+	m_rigidBody.SetPlayerCollisionGroundFlg(false);
 	m_anim.SetAnimationLoopFlg(1, false);
 }
 
@@ -43,10 +56,10 @@ void SpringObject::Update()
 		springDirection.z = rotationMat.m[1][2];
 		D3DXVec3Normalize(&springDirection, &springDirection);
 		springDirection *= 2.0f;
-		g_gameScene->GetPlayer()->SetStageGimmickMoveSpeed(springDirection);
+		m_pPlayer->SetStageGimmickMoveSpeed(springDirection);
 		m_anim.PlayAnimation(1);
 	}
-	m_rigidBody.GetBody()->setPlayerCollisionGroundFlg(false);
+	m_rigidBody.SetPlayerCollisionGroundFlg(false);
 	m_anim.Update(GetGameTime().GetDeltaFrameTime());
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 }

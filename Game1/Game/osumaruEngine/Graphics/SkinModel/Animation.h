@@ -71,19 +71,19 @@ public:
 	アニメーションのループフラグを取得
 	animationNum		ループフラグを取得したいアニメーションの番号
 	*/
-	bool GetAnimationLoopFlg(int animationNum)
+	bool GetAnimationLoopFlg(int animationNum) const
 	{
 		return m_isAnimationLoop[animationNum];
 	}
 
 	//現在再生中のアニメーションの番号を取得
-	int GetCurrentAnimationNum()
+	int GetCurrentAnimationNum() const
 	{
 		return m_currentAnimationSetNo;
 	}
 
 	//再生中か？
-	bool IsPlay()
+	bool IsPlay() const
 	{
 		return m_isPlay;
 	}

@@ -5,6 +5,12 @@
 class SpringObject : public MapChip
 {
 public:
+	//コンストラクタ
+	SpringObject();
+
+	//デストラクタ
+	~SpringObject();
+
 	/*
 	初期化する関数
 	position	座標

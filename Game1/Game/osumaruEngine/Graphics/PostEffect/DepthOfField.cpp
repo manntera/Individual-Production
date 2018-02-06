@@ -4,17 +4,21 @@
 #include "../EffectManager.h"
 #include "../../Engine.h"
 
-DepthOfField::DepthOfField()
+DepthOfField::DepthOfField() :
+	m_isActive(false),
+	m_depthTarget(),
+	m_blur{},
+	m_pEffect(nullptr),
+	m_primitive()
 {
-	m_isActive = false;
 	float total = 0.0f;
 	float rate = 1.0f;
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < BLUR_RANGE; i++)
 	{
 		m_weight[i] = expf(-0.5f * float(i * i) / rate);
 		total += 2.0f * m_weight[i];
 	}
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < BLUR_RANGE; i++)
 	{
 		m_weight[i] /= total;
 	}
