@@ -652,7 +652,7 @@
 //star
 {
 	"star",
-	D3DXVECTOR3(-11.60f, 199.70f, -51.70f),             //平行移動
+	D3DXVECTOR3(-13.30f, 198.50f, -51.70f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagGoal, //タグ
 },
@@ -743,7 +743,7 @@
 //clock
 {
 	"clock",
-	D3DXVECTOR3(17.70f, 158.90f, -79.90f),             //平行移動
+	D3DXVECTOR3(17.34f, 159.02f, -79.90f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagStopTime, //タグ
 },

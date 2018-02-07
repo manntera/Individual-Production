@@ -29,7 +29,7 @@ void Goal::Update()
 	//プレイヤーがある一定の距離範囲内に入ったらゴール
 	const Player* player = GetGameScene().GetPlayer();
 	D3DXVECTOR3 distance = player->GetPosition() - m_position;
-	if (D3DXVec3Length(&distance) < 6.0f)
+	if (D3DXVec3Length(&distance) < 12.0f)
 	{
 		GetGameScene().GameClear();
 	}

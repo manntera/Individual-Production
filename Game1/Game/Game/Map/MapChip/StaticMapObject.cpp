@@ -3,7 +3,7 @@
 
 StaticMapObject::StaticMapObject() :
 	m_rigidBody(),
-	m_meshCollider()
+	m_boxCollider()
 {
 
 }
@@ -18,9 +18,12 @@ void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* 
 	MapChip::Init(position, rotation, modelName);
 
 	//メッシュコライダーからAABBを作成
-	m_meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
+	MeshCollider meshCollider;
+	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
+	D3DXVECTOR3 size = (meshCollider.GetAabbMax() - meshCollider.GetAabbMin()) / 2.0f;
+	m_boxCollider.Create({size.x, size.y, size.z});
 	RigidBodyInfo rInfo;
-	rInfo.collider = &m_meshCollider;
+	rInfo.collider = &m_boxCollider;
 	rInfo.mass = 0.0f;
 	rInfo.pos = m_position;
 	rInfo.rot = m_rotation;
@@ -28,6 +31,7 @@ void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* 
 	//剛体を作成
 	m_rigidBody.Create(rInfo);
 	m_skinModel.Update(m_position, m_rotation, m_scale);
+	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 }
 
 
@@ -40,5 +44,5 @@ void StaticMapObject::Update()
 void StaticMapObject::Draw()
 {
 	MapChip::Draw();
-	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_boxCollider.GetBody());
 }

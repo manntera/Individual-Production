@@ -1,22 +1,25 @@
 #include "stdafx.h"
-#include "FallObject.h"
+#include "FallObject2.h"
 #include "../../Scene/GameScene.h"
 
-FallObject::FallObject() :
+FallObject2::FallObject2() :
 	m_isFall(false),
 	m_rigidBody(),
 	m_boxCollider(),
 	m_particle(nullptr),
-	m_timer(0.0f)
+	m_timer(0.0f),
+	m_animationTimer(0.0f),
+	m_animationMove(0.0f, 0.0f, 0.0f),
+	m_frameNum(0)
 {
 }
 
-FallObject::~FallObject()
+FallObject2::~FallObject2()
 {
 	ParticleDelete();
 }
 
-void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
+void FallObject2::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
 	//剛体を初期化
@@ -48,11 +51,16 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 	}
 	, &GetGameScene().GetCamera());
 	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
+	m_animationMove.x = (float)GetRandom().GetRandDouble();
+	m_animationMove.y = (float)GetRandom().GetRandDouble();
+	m_animationMove.z = (float)GetRandom().GetRandDouble();
+	D3DXVec3Normalize(&m_animationMove, &m_animationMove);
+	m_animationMove *= 0.18f;
 }
 
 
 
-void FallObject::Update()
+void FallObject2::Update()
 {
 	MapChip::Update();
 	if (!m_isActive)
@@ -67,12 +75,26 @@ void FallObject::Update()
 	}
 	if (m_isFall)
 	{
-		m_position.y -= 0.15f;
-		m_timer += GetGameTime().GetDeltaFrameTime();
-		//落ち始めてある程度時間がたつと消える
-		if (3.0f < m_timer)
+		if (m_animationTimer < 3.0f)
 		{
-			MapChipDelete();
+
+			m_position += m_animationMove;
+			if (m_frameNum % 2 == 0)
+			{
+				m_animationMove *= -1.0f;
+			}
+			m_animationTimer += GetGameTime().GetDeltaFrameTime();
+			m_frameNum++;
+		}
+		else
+		{
+			m_position.y -= 0.15f;
+			m_timer += GetGameTime().GetDeltaFrameTime();
+			//落ち始めてある程度時間がたつと消える
+			if (3.0f < m_timer)
+			{
+				MapChipDelete();
+			}
 		}
 	}
 	//剛体を移動
@@ -82,7 +104,7 @@ void FallObject::Update()
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
 
-void FallObject::ParticleDelete()
+void FallObject2::ParticleDelete()
 {
 	if (m_particle != nullptr)
 	{
@@ -92,7 +114,7 @@ void FallObject::ParticleDelete()
 }
 
 
-void FallObject::Draw()
+void FallObject2::Draw()
 {
 	MapChip::Draw();
 	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_boxCollider.GetBody());

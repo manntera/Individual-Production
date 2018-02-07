@@ -43,6 +43,7 @@ void RotationObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* m
 	axis.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&axis, &axis);
 	D3DXQuaternionRotationAxis(&m_multi, &axis, 1.0f / 180.0f * cPI);
+	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 }
 
 void RotationObject::Update()

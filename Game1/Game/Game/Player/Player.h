@@ -163,4 +163,5 @@ private:
 	const int			m_rotationFrameNum;		//回転を線形補間する時に使うフレーム数
 	float				m_frameAngle;			//1フレームで回転する回転量
 	int					m_rotationCount;		//回転を線形補間するためのカウンター
+	const float			m_jumpSpeed;
 };

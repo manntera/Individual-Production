@@ -83,6 +83,6 @@ public:
 		const btTransform& worldTrans,
 		const btCollisionShape* colShape)
 	{
-		m_pDynamicWorld->debugDrawObject(worldTrans, colShape, {0.0f, 0.0f, 0.0f});
+		m_pDynamicWorld->debugDrawObject(worldTrans, colShape, {1.0f, 0.0f, 0.0f});
 	}
 };

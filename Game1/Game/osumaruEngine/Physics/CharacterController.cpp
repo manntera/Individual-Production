@@ -212,13 +212,8 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 
 void CharacterController::Execute()
 {
-	StaticExecute();
-	DynamicExecute();
-	//StaticExecute();
-}
 
-void CharacterController::DynamicExecute()
-{
+	StaticExecute();
 	PhysicsWorld& physicsWorld = GetPhysicsWorld();
 	//速度に重力加速度を加える。
 	m_moveSpeed.y += m_gravity * GetGameTime().GetDeltaFrameTime();
@@ -471,7 +466,7 @@ void CharacterController::StaticExecute()
 		callback.startPos = startPos;
 		callback.ray = D3DXVECTOR3(end.getOrigin() - start.getOrigin());
 		GetPhysicsWorld().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
-		if(callback.isHit && callback.isRay && rayLength - callback.dist < m_radius - 0.001f)
+		if(callback.isHit && callback.isRay/* && rayLength - callback.dist < m_radius - 0.001f*/)
 		{
 			D3DXVECTOR3 hitNormal = callback.hitNormal;
 			hitNormal.y = 0.0f;
@@ -485,8 +480,8 @@ void CharacterController::StaticExecute()
 			m_position += hitNormal;
 		}
 	}
-	//剛体の一を更新
-	m_rigidBody.SetPosition(m_position);
+	//剛体の位置を更新
+	//m_rigidBody.SetPosition(m_position);
 }
 
 void CharacterController::RemovedRigidBody()

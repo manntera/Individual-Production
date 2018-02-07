@@ -47,16 +47,16 @@
 	D3DXQUATERNION(0.00f, -0.63f, 0.00f, 0.77f ),  //回転
 	enMapTagUntagged, //タグ
 },
-//GroundBrock
+//GroundBrock2
 {
-	"GroundBrock",
+	"GroundBrock2",
 	D3DXVECTOR3(-43.50f, 47.60f, 152.10f),             //平行移動
 	D3DXQUATERNION(0.00f, -0.91f, 0.00f, 0.42f ),  //回転
 	enMapTagFall, //タグ
 },
-//GroundBrock
+//GroundBrock2
 {
-	"GroundBrock",
+	"GroundBrock2",
 	D3DXVECTOR3(-59.10f, 57.40f, 99.90f),             //平行移動
 	D3DXQUATERNION(0.00f, -1.00f, 0.00f, 0.00f ),  //回転
 	enMapTagFall, //タグ

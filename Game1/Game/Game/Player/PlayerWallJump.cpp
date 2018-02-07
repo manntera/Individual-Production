@@ -14,7 +14,7 @@ PlayerWallJump::PlayerWallJump() :
 	m_isWallJump(false),
 	m_characterController(),
 	m_wallJumpDirection(0.0f, 0.0f, 0.0f),
-	m_wallShearGravity(-200.0f),
+	m_wallShearGravity(-100.0f),
 	m_defaultGravity(0.0f),
 	m_wallDust(nullptr),
 	m_dustPos(nullptr),
@@ -95,10 +95,9 @@ void PlayerWallJump::Update()
 		D3DXVECTOR3 movement = m_player->GetMovement();
 		movement.y = 0.0f;
 
-		//ジャンプ中で壁に当たって移動速度がある程度あるとき
+		//ジャンプ中で壁に当たってるとき
 		if (m_characterController->IsJump() && 
-			m_wallDetection.IsHit()/* &&
-			0.12f < D3DXVec3Length(&movement)*/)
+			m_characterController->GetWallCollisionObject() != nullptr)
 		{
 			//壁の法線とプレイヤーの向きで内積を計算
 			D3DXVECTOR3 wallNormal = m_wallDetection.GetCollisionNormal();
@@ -114,7 +113,7 @@ void PlayerWallJump::Update()
 			float dot = D3DXVec3Dot(&playerDirection, &wallNormal);
 			float rad = 30.0f / 180.0f * cPI;
 			//壁に対して入射角がある程度あった場合壁に張り付く
-			//if (sin(rad) < dot)
+			if (sin(rad) < dot)
 			{
 				m_wallDetection.SetJudgmentType(enJudgment_Wall);
 				m_isWallShear = true;

@@ -121,8 +121,6 @@ public:
 
 	void StaticExecute();
 
-	void DynamicExecute();
-
 	void Draw();
 private:
 	D3DXVECTOR3		m_position;					//ç¿ïW

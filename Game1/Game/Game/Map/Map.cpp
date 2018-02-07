@@ -11,6 +11,7 @@
 #include "MapChip/FallObject.h"
 #include "MapChip\ScoreUpItem.h"
 #include "MapChip\StopTimeItem.h"
+#include "MapChip\FallObject2.h"
 
 struct MapChipInfo
 {
@@ -24,6 +25,9 @@ std::vector<std::vector<MapChipInfo>> mapChipInfo =
 {
 	{
 #include "Location1.h"
+	},
+	{
+#include "Location2.h"
 	},
 	{
 #include "Location4.h"
@@ -75,7 +79,7 @@ void Map::Init(int stageNum)
 			mapChip = New<HindranceObject>(STAGE_GIMMICK_PRIORITY);
 			break;
 		case enMapTagFall:
-			mapChip = New<FallObject>(STAGE_GIMMICK_PRIORITY);
+			mapChip = New<FallObject2>(STAGE_GIMMICK_PRIORITY);
 			break;
 		case enMapTagMapChip:
 			mapChip = New<MapChip>(STAGE_GIMMICK_PRIORITY);

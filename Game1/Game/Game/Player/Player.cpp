@@ -30,7 +30,8 @@ Player::Player() :
 	m_acceleration(0.0f),
 	m_rotationFrameNum(3),
 	m_frameAngle(0.0f),
-	m_rotationCount(0)
+	m_rotationCount(0),
+	m_jumpSpeed(27.0f)
 
 {
 }
@@ -84,7 +85,7 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 	//キャラクターコントローラー
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
-	m_characterController.SetGravity(-40.0f);
+	m_characterController.SetGravity(-28.0f);
 	m_characterController.Init(2.0f, 2.5f, m_position);
 	m_skinModel.SetShadowCasterFlg(true);
 	//m_skinModel.SetShadowReceiverFlg(true);
@@ -189,8 +190,8 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 	D3DXVECTOR3 jumpSpeed = jumpDirection;
 	jumpSpeed.y = 0.0f;
 	D3DXVec3Normalize(&jumpSpeed, &jumpSpeed);
-	jumpSpeed *= 25.0f;
-	jumpSpeed.y = 30.0f;
+	jumpSpeed *= 12.0f;
+	jumpSpeed.y = m_jumpSpeed;
 	m_characterController.SetMoveSpeed(jumpSpeed);
 	Rotation(jumpSpeed);
 	m_jumpCount = 1;
@@ -262,7 +263,7 @@ void Player::Move()
 	stickDir += front * GetPad().GetLeftStickY();
 
 	const float acceleration = 0.3f;
-	const float speedLimit = 20.0f;
+	const float speedLimit = 16.0f;
 	//動いていない時
 	if (stickDir.x == 0.0f && stickDir.z == 0.0f)
 	{
@@ -302,7 +303,7 @@ void Player::Move()
 			{
 				D3DXVECTOR3 jumpSpeed = stickDir;
 				speed *= 0.05f;
-				jumpSpeed *= speed;
+				jumpSpeed *= speed * 0.5f;
 				moveSpeed += jumpSpeed;
 				D3DXVECTOR3 moveDirection = moveSpeed;
 				moveDirection.y = 0.0f;
@@ -357,7 +358,7 @@ void Player::Move()
 			}
 		}
 		//上方向に移動速度を与える
-		moveSpeed.y = 30.0f;
+		moveSpeed.y = m_jumpSpeed;
 		m_anim.PlayAnimation(m_currentAnim);
 		Rotation(moveSpeed);
 		SoundSource* sound = New<SoundSource>(0);
@@ -380,14 +381,7 @@ void Player::Move()
 		D3DXVECTOR3 position;
 		D3DXVec3TransformCoord(&position, &m_localPosition, &m_parent->GetWorldMatrix());
 		m_characterController.SetPosition(position);
-		if (m_wallJump.IsWallShear())
-		{
-			m_characterController.DynamicExecute();
-		}
-		else
-		{
-			m_characterController.Execute();
-		}
+		m_characterController.Execute();
 		position = m_characterController.GetPosition();
 		D3DXMATRIX inverseMatrix;
 		D3DXMatrixInverse(&inverseMatrix, NULL, &m_parent->GetWorldMatrix());

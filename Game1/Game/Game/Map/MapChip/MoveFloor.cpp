@@ -46,6 +46,7 @@ void MoveFloor::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *modelN
 	m_moveSpeed.z = worldMatrix.m[2][2];
 	D3DXVec3Normalize(&m_moveSpeed, &m_moveSpeed);
 	m_moveSpeed *= 0.2f;
+	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 }
 
 void MoveFloor::Update()

@@ -38,6 +38,7 @@ void SpringObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* mod
 	m_rigidBody.SetUserIndex(enCollisionAttr_Spring);
 	m_rigidBody.SetPlayerCollisionGroundFlg(false);
 	m_anim.SetAnimationLoopFlg(1, false);
+	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 }
 
 void SpringObject::Update()

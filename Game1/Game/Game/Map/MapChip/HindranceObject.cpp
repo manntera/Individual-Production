@@ -48,6 +48,7 @@ void HindranceObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char *
 	D3DXVec3Normalize(&m_acceleration, &m_acceleration);
 	m_acceleration *= 0.15f;
 	m_moveSpeed += m_acceleration * (m_timer - m_timerLimit / 2);
+	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 }
 
 void HindranceObject::Update()

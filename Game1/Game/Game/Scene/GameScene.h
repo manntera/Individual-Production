@@ -7,7 +7,7 @@ class Player;
 class TimeSprite;
 class GhostPlayer;
 //遊べるステージの最大数
-const int STAGE_NUM = 3;
+const int STAGE_NUM = 4;
 
 //ゲームシーンクラス
 class GameScene : public GameObject
