@@ -21,9 +21,10 @@ GameOverScene::~GameOverScene()
 
 bool GameOverScene::Start()
 {
+
 	if (GetFade().IsExcute())
 	{
-		return false;
+		true;
 	}
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/GAMEOVER.png");
 	m_sprite.Init(texture);

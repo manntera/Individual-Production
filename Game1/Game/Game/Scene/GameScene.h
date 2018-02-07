@@ -81,6 +81,11 @@ public:
 		return m_isActive;
 	}
 
+	void LoadComp()
+	{
+		m_isLoad = true;
+	}
+
 private:
 	bool			m_isGameOver;	//ゲームオーバーか？
 	bool			m_isGameClear;	//ゲームクリアか？
@@ -95,6 +100,7 @@ private:
 	bool			m_isTimeAttack;	//タイムアタックか？
 	GhostPlayer*	m_pGhost;		//ゴーストプレイヤー
 	bool			m_isActive;		//生きてるか死んでるか
+	bool			m_isLoad;		//ロードが終わったか
 };
 
 //ゲームシーンを取得。

@@ -22,9 +22,10 @@ TitleScene::~TitleScene()
 
 bool TitleScene::Start()
 {
+
 	if (GetFade().IsExcute())
 	{
-		return false;
+		true;
 	}
 	//スプライトを初期化
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/TitleBack.png");

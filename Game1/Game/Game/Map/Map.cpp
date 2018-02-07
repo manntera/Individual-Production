@@ -12,6 +12,7 @@
 #include "MapChip\ScoreUpItem.h"
 #include "MapChip\StopTimeItem.h"
 #include "MapChip\FallObject2.h"
+#include "../Scene/GameScene.h"
 
 struct MapChipInfo
 {
@@ -43,7 +44,8 @@ std::vector<std::vector<MapChipInfo>> mapChipInfo =
 Map::Map() :
 	m_mapChip(),
 	m_player(nullptr),
-	m_stopTime(-1.0f)
+	m_stopTime(-1.0f),
+	m_isLoad(false)
 {
 }
 
@@ -126,6 +128,11 @@ void Map::Update()
 				mapChip->SetIsActive(true);
 			}
 		}
+	}
+	if (!m_isLoad)
+	{
+		GetGameScene().LoadComp();
+		m_isLoad = true;
 	}
 }
 

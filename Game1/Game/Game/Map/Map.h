@@ -58,4 +58,5 @@ private:
 	std::list<MapChip*> m_mapChip;					//マップチップ
 	Player*				m_player;					//プレイヤー
 	float				m_stopTime;					//ステージギミックを止めてる間のカウンター
+	bool				m_isLoad;					//モデルの読み込めたかのフラグ
 };

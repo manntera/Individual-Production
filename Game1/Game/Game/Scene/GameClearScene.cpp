@@ -19,6 +19,10 @@ GameClearScene::~GameClearScene()
 
 bool GameClearScene::Start()
 {
+	if (GetFade().IsExcute())
+	{
+		true;
+	}
 	//スプライトの初期化
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/CLEAR.png");
 	m_sprite.Init(texture);

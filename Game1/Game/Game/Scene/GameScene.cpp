@@ -25,7 +25,8 @@ GameScene::GameScene() :
 	m_isInit(false),
 	m_isTimeAttack(false),
 	m_pGhost(nullptr),
-	m_isActive(false)
+	m_isActive(false),
+	m_isLoad(false)
 	
 {
 }
@@ -51,26 +52,43 @@ void GameScene::Init(int stageNum, bool isTimeAttack)
 
 bool GameScene::Start()
 {
-	m_pSky = New<Sky>(0);
-	m_pMap = New<Map>(0);
-	m_pCamera = New<GameCamera>(CAMERA_PRIORITY);
-	m_pMap->Init(m_stageNum);
-	m_pCamera->Init();
-	GetFade().FadeIn();
-	m_pBgm = New<SoundSource>(0);
-	m_pBgm->Init("Assets/sound/GameBgm.wav");
-	m_pBgm->SetVolume(0.1f);
-	m_pBgm->Play(true);
-	if (m_isTimeAttack)
+	static bool isInit = true;
+	if (isInit)
 	{
-		m_pGhost = New<GhostPlayer>(PLAYER_PRIORITY);
-		const Player* player = m_pMap->GetPlayer();
-		m_pTimeSprite = New<TimeSprite>(LAST_PRIORITY);
-		player->GhostDataStart();
+		m_pSky = New<Sky>(0);
+		m_pMap = New<Map>(0);
+		m_pCamera = New<GameCamera>(CAMERA_PRIORITY);
+		m_pMap->Init(m_stageNum);
+		m_pCamera->Init();
+		m_pBgm = New<SoundSource>(0);
+		m_pBgm->Init("Assets/sound/GameBgm.wav");
+		m_pBgm->SetVolume(0.1f);
+		m_pBgm->Play(true);
+		if (m_isTimeAttack)
+		{
+			m_pGhost = New<GhostPlayer>(PLAYER_PRIORITY);
+			const Player* player = m_pMap->GetPlayer();
+			m_pTimeSprite = New<TimeSprite>(LAST_PRIORITY);
+			player->GhostDataStart();
+		}
+		m_isGameClear = false;
+		m_isGameOver = false;
+		isInit = false;
+		return false;
 	}
-	m_isGameClear = false;
-	m_isGameOver = false;
-	return true;
+	else
+	{
+		if (m_isLoad)
+		{
+			GetFade().FadeIn();
+			isInit = true;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
 
 void GameScene::Update()
@@ -137,6 +155,8 @@ void GameScene::BeforeDead()
 	}
 	GhostDataFinish();
 	m_isInit = false;
+	m_isLoad = false;
+	m_isTimeAttack = false;
 	if (m_pMap != nullptr)
 	{
 		Delete(m_pMap);

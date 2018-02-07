@@ -16,6 +16,7 @@ GhostDataListManager::GhostDataListManager() :
 	{
 		m_ghostData[i].time = 1000.0f;
 	}
+	Add(this, LAST_PRIORITY);
 }
 
 GhostDataListManager::~GhostDataListManager()

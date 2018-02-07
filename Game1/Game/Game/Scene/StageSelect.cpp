@@ -19,9 +19,10 @@ StageSelect::~StageSelect()
 
 bool StageSelect::Start()
 {
+
 	if (GetFade().IsExcute())
 	{
-		return false;
+		true;
 	}
 	Texture* texture;
 	D3DXVECTOR2 position = { 0.0f, 250.0f };
