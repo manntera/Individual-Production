@@ -31,7 +31,8 @@ void Sky::Update()
 	D3DXQUATERNION rotation;
 	D3DXQuaternionIdentity(&rotation);
 	D3DXVECTOR3 position = { 0.0f, 0.0f, 0.0f };
-	D3DXVECTOR3 scale = { 1.0f, 1.0f, 1.0f };
+	float scaleValue = 1.0f;
+	D3DXVECTOR3 scale = { scaleValue, scaleValue, scaleValue };
 	m_skinModel.Update(position, rotation, scale);
 }
 

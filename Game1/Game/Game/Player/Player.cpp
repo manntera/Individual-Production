@@ -134,7 +134,7 @@ void Player::Update()
 		//回転を何フレームかに分割して回転
 		DelayRotation(m_characterController.GetMoveSpeed());
 	}
-	if (m_position.y < -70.0f)
+	if (/*m_position.y < -70.0f*/GetPad().IsTriggerButton(enButtonX))
 	{
 		GetGameScene().GameOver();
 	}
@@ -328,7 +328,7 @@ void Player::Move()
 		m_isJump = true;
 		m_jumpCount = 1;
 	}
-	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallShear())
+	if (GetPad().IsTriggerButton(enButtonA) && /*m_jumpCount < 2 &&*/ !m_wallJump.IsWallShear())
 	{
 		m_currentAnim = enAnimSetJump;
 		//2断面のジャンプの時

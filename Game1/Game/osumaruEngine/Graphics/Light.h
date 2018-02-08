@@ -11,6 +11,11 @@ public:
 		m_diffuseLightColor{},
 		m_ambientLight(0.0f, 0.0f, 0.0f, 0.0f)
 	{
+		for (int i = 0;i < DIFFUSE_LIGHT_NUM;i++)
+		{
+			m_diffuseLightColor[i] = { 0.0f, 0.0f, 0.0f, 1.0f };
+			m_diffuseLightDirection[i] = { 1.0f, 0.0f, 0.0f, 1.0f };
+		}
 	}
 
 	//デストラクタ
