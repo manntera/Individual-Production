@@ -17,7 +17,7 @@ public:
 	filePath		読み込むファイルのパス。
 	return			読み込んだエフェクト
 	*/
-	LPD3DXEFFECT LoadEffect(char* filePath);
+	LPD3DXEFFECT LoadEffect(const char* filePath);
 
 	//リリース
 	void Release();

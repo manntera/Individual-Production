@@ -14,6 +14,8 @@ ShadowMap::ShadowMap() :
 	m_height(0),
 	m_models()
 {
+	D3DXMatrixIdentity(&m_viewMatrix);
+	D3DXMatrixIdentity(&m_projMatrix);
 }
 
 ShadowMap::~ShadowMap()

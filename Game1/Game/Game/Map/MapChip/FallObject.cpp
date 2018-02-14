@@ -16,7 +16,7 @@ FallObject::~FallObject()
 	ParticleDelete();
 }
 
-void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
+void FallObject::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
 	//剛体を初期化
@@ -31,6 +31,7 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 	rbInfo.collider = &m_boxCollider;
 	m_rigidBody.Create(rbInfo);
 	m_rigidBody.SetPlayerCollisionGroundFlg(false);
+
 	//パーティクルを初期化
 	m_particle = New<ParticleEmitter>(CAMERA_PRIORITY);
 	m_particle->Init({
@@ -44,7 +45,8 @@ void FallObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* model
 		1.0f,												//パーティクルが出るまでのインターバル
 		0.0f,												//エミッターの寿命
 		{ m_position.x, m_position.y - 11.0f, m_position.z },//エミッターの座標
-		2													//1フレームで出るパーティクルの数
+		2,													//1フレームで出るパーティクルの数
+		true												//最初にパーティクルをエミットする時だけ時間をランダムにするか
 	}
 	, &GetGameScene().GetCamera());
 	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
@@ -67,10 +69,10 @@ void FallObject::Update()
 	}
 	if (m_isFall)
 	{
-		m_position.y -= 0.15f;
+		m_position.y -= 0.2f;
 		m_timer += GetGameTime().GetDeltaFrameTime();
 		//落ち始めてある程度時間がたつと消える
-		if (3.0f < m_timer)
+		if (3.5f < m_timer)
 		{
 			MapChipDelete();
 		}

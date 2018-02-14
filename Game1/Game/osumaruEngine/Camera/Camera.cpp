@@ -12,6 +12,8 @@ Camera::Camera() :
 	m_Near(0.1f),
 	m_Aspect((float)FRAME_BUFFER_WIDTH / (float)FRAME_BUFFER_HEIGHT)
 {
+	D3DXMatrixIdentity(&m_viewMatrix);
+	D3DXMatrixIdentity(&m_projectionMatrix);
 }
 
 Camera::~Camera()
@@ -48,7 +50,7 @@ float Camera::GetNear() const
 	return m_Near;
 }
 
-void Camera::SetTarget(D3DXVECTOR3 target)
+void Camera::SetTarget(const D3DXVECTOR3& target)
 {
 	m_target = target;
 }
@@ -58,7 +60,7 @@ const D3DXVECTOR3& Camera::GetTarget() const
 	return m_target;
 }
 
-void Camera::SetPosition(D3DXVECTOR3 position)
+void Camera::SetPosition(const D3DXVECTOR3& position)
 {
 	m_position = position;
 }
@@ -68,7 +70,7 @@ const D3DXVECTOR3& Camera::GetPosition() const
 	return m_position;
 }
 
-void Camera::SetUp(D3DXVECTOR3 up)
+void Camera::SetUp(const D3DXVECTOR3& up)
 {
 	m_up = up;
 }
@@ -78,7 +80,7 @@ const D3DXVECTOR3& Camera::GetUp() const
 	return m_up;
 }
 
-void Camera::SetViewMatrix(D3DXMATRIX view)
+void Camera::SetViewMatrix(const D3DXMATRIX& view)
 {
 	m_viewMatrix = view;
 }
@@ -88,7 +90,7 @@ const D3DXMATRIX& Camera::GetViewMatrix() const
 	return m_viewMatrix;
 }
 
-void Camera::SetProjectionMatrix(D3DXMATRIX projection)
+void Camera::SetProjectionMatrix(const D3DXMATRIX& projection)
 {
 	m_projectionMatrix = projection;
 }

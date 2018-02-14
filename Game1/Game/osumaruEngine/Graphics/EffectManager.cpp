@@ -15,7 +15,7 @@ EffectManager::~EffectManager()
 	Release();
 }
 
-LPD3DXEFFECT EffectManager::LoadEffect(char* filePath)
+LPD3DXEFFECT EffectManager::LoadEffect(const char* filePath)
 {
 	LPD3DXEFFECT effect = nullptr;
 	int hash = MakeHash(filePath);

@@ -177,7 +177,8 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Camera\SpringCamera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Font\Font.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
@@ -224,7 +225,8 @@
     <ClCompile Include="Timer\StopWatch.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Camera\SpringCamera.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Font\Font.h" />
     <ClInclude Include="GameObject\GameObject.h" />

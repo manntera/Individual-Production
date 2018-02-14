@@ -20,7 +20,7 @@ GameScene::GameScene() :
 	m_pSky(nullptr),
 	m_pBgm(nullptr),
 	m_stageNum(0),
-	m_stageMaxNum(3),
+	m_stageMaxNum(4),
 	m_pTimeSprite(nullptr),
 	m_isInit(false),
 	m_isTimeAttack(false),
@@ -104,8 +104,14 @@ void GameScene::Update()
 				if (!m_isTimeAttack)
 				{
 					New<GameClearScene>(0);
-					m_stageNum++;
-					m_stageMaxNum++;
+					if (m_stageNum < STAGE_NUM)
+					{
+						if (m_stageNum == m_stageMaxNum)
+						{
+							m_stageMaxNum++;
+						}
+						m_stageNum++;
+					}
 				}
 				else
 				{

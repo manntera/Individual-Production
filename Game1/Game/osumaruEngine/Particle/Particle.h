@@ -20,7 +20,7 @@ public:
 	info	パーティクルの初期化情報
 	camera	ビルボード処理に使うカメラ
 	*/
-	void Init(SParticleEmittInfo& info, const Camera* camera);
+	void Init(const SParticleEmittInfo& info, const Camera* camera);
 
 	//更新関数
 	void Update()override;

@@ -19,7 +19,7 @@ public:
 	anim		アニメーション
 	fileName	モデルのファイルパス
 	*/
-	void Load(SkinModelData* modelData, Animation* anim,  char* fileName);
+	void Load(SkinModelData* modelData, Animation* anim,  const char* fileName);
 
 private:
 	std::map<int, SkinModelData*>	m_modelDatas;	//モデルデータのリスト

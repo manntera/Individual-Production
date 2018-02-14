@@ -1,15 +1,15 @@
 #pragma once
 #include "MapChip.h"
-//ゴールクラス、プレイヤーが当たるとゲームクリアになる
+//ゴールを示すオブジェクト
 
-class Goal : public MapChip
+class GoalObject : public MapChip
 {
 public:
 	//コンストラクタ
-	Goal();
+	GoalObject();
 
 	//デストラクタ
-	~Goal();
+	~GoalObject();
 
 	/*
 	初期化する関数
@@ -23,6 +23,5 @@ public:
 	//更新関数
 	void Update()override;
 private:
-	RigidBody		m_rigidBody;		//剛体
-	BoxCollider		m_boxCollider;		//コライダー
+	D3DXQUATERNION m_multi;
 };

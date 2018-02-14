@@ -38,19 +38,19 @@ public:
 	const LPDIRECT3DTEXTURE9 GetShadowMapTexture() const;
 
 	//ライトの注視点を設定
-	void SetLightCameraTarget(D3DXVECTOR3 target)
+	void SetLightCameraTarget(const D3DXVECTOR3& target)
 	{
 		m_target = target;
 	}
 
 	//座標を設定
-	void SetLightCameraUp(D3DXVECTOR3 up)
+	void SetLightCameraUp(const D3DXVECTOR3& up)
 	{
 		m_up = up;
 	}
 	
 	//座標を設定
-	void SetLightCameraPosition(D3DXVECTOR3 position)
+	void SetLightCameraPosition(const D3DXVECTOR3& position)
 	{
 		m_position = position;
 	}

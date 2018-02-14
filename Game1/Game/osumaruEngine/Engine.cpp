@@ -15,7 +15,7 @@ LRESULT WINAPI MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-int MakeHash(char* string)
+int MakeHash(const char* string)
 {
 	int hash = 0;
 	int len = (int)strlen(string);

@@ -15,7 +15,7 @@ TextureResource::~TextureResource()
 	}
 }
 
-Texture* TextureResource::LoadTexture(char* filePath)
+Texture* TextureResource::LoadTexture(const char* filePath)
 {
 	int hash = MakeHash(filePath);
 	auto& map = m_textures.find(hash);

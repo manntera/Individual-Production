@@ -619,7 +619,7 @@
 	"GroundBrock",
 	D3DXVECTOR3(-13.20f, 174.10f, -51.80f),             //平行移動
 	D3DXQUATERNION(0.00f, -0.71f, 0.00f, 0.71f ),  //回転
-	enMapTagUntagged, //タグ
+	enMapTagGoal, //タグ
 },
 //GroundBrock
 {
@@ -654,7 +654,7 @@
 	"star",
 	D3DXVECTOR3(-13.30f, 198.50f, -51.70f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-	enMapTagGoal, //タグ
+	enMapTagGoalObject, //タグ
 },
 //clock
 {

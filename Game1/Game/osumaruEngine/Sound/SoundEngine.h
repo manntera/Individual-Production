@@ -34,21 +34,21 @@ public:
 		}
 	}
 
-	void SetListenerPosition(D3DXVECTOR3 position)
+	void SetListenerPosition(const D3DXVECTOR3& position)
 	{
 		m_3dListener.Position.x = position.x;
 		m_3dListener.Position.y = position.y;
 		m_3dListener.Position.z = position.z;
 	}
 
-	void SetListenerFront(D3DXVECTOR3 front)
+	void SetListenerFront(const D3DXVECTOR3& front)
 	{
 		m_3dListener.OrientFront.x = front.x;
 		m_3dListener.OrientFront.y = front.y;
 		m_3dListener.OrientFront.z = front.z;
 	}
 
-	void SetListenerUp(D3DXVECTOR3 up)
+	void SetListenerUp(const D3DXVECTOR3& up)
 	{
 		m_3dListener.OrientTop.x = up.x;
 		m_3dListener.OrientTop.y = up.y;

@@ -4,7 +4,7 @@
 #include "../Engine.h"
 #include "../Graphics/EffectManager.h"
 #include "../Physics/CharacterController.h"
-#include "../Camera.h"
+#include "../Camera/Camera.h"
 #include "ParticleEmitter.h"
 
 Particle::Particle() :
@@ -28,7 +28,7 @@ Particle::~Particle()
 	m_primitive.Release();
 }
 
-void Particle::Init(SParticleEmittInfo& info, const Camera* camera)
+void Particle::Init(const SParticleEmittInfo& info, const Camera* camera)
 {
 	m_gravity = info.gravity;
 	m_camera = camera;

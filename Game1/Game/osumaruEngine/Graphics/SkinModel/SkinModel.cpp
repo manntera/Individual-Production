@@ -5,7 +5,7 @@
 #include "../EffectManager.h"
 #include "../Light.h"
 #include "../Texture.h"
-#include "../../Camera.h"
+#include "../../Camera/Camera.h"
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices;
 
@@ -18,11 +18,11 @@ void DrawMeshContainer(
 	D3DXMATRIX* rotationMatrix,
 	const D3DXMATRIX* viewMatrix,
 	const D3DXMATRIX* projMatrix,
-	Light* light,
+	const Light* light,
 	bool isHasNormal,
-	Texture* normalMap,
+	const Texture* normalMap,
 	bool isHasSpecular,
-	Texture* specularMap,
+	const Texture* specularMap,
 	const D3DXVECTOR3* cameraPos,
 	bool isShadowReceiver,
 	bool isShadowCaster,
@@ -167,11 +167,11 @@ void DrawFrame(
 	D3DXMATRIX* rotationMatrix,
 	const D3DXMATRIX* viewMatrix,
 	const D3DXMATRIX* projMatrix,
-	Light* light,
+	const Light* light,
 	bool isHasNormal,
-	Texture* normalMap,
+	const Texture* normalMap,
 	bool isHasSpecular,
-	Texture* specularMap,
+	const Texture* specularMap,
 	const D3DXVECTOR3* cameraPos,
 	bool isShadowReceiver,
 	bool isShadowCaster,
@@ -277,6 +277,8 @@ SkinModel::SkinModel() :
 	m_isShadowEntry(false),
 	m_ditheringRate(0.0f)
 {
+	D3DXMatrixIdentity(&m_worldMatrix);
+	D3DXMatrixIdentity(&m_rotationMatrix);
 }
 
 SkinModel::~SkinModel()
@@ -309,7 +311,7 @@ void SkinModel::ShadowMapEntry()
 	}
 }
 
-void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
+void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale)
 {
 	m_scale = scale;
 	m_position = trans;
@@ -326,7 +328,7 @@ void SkinModel::UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVEC
 	
 }
 
-void SkinModel::Update(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale)
+void SkinModel::Update(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale)
 {
 	ShadowMapEntry();
 	UpdateWorldMatrix(trans, rot, scale);

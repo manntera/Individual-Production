@@ -15,6 +15,7 @@ enum EnMapChipTag
 	enMapTagHindrance,
 	enMapTagScoreUp,
 	enMapTagStopTime,
+	enMapTagGoalObject,
 	enMapTagNum,
 };
 

@@ -13,7 +13,7 @@ struct RigidBodyInfo
 	}
 	D3DXVECTOR3 pos;			//座標
 	D3DXQUATERNION rot;			//回転
-	ICollider* collider;		//コライダー
+	const ICollider* collider;		//コライダー
 	float mass;					//質量、動かないものは0.0fでいい
 };
 
@@ -42,7 +42,7 @@ public:
 	rbInfo.collider	コライダー(ICollider*)
 	mass			質量(float)
 	*/
-	void Create(RigidBodyInfo& rbInfo);
+	void Create(const RigidBodyInfo& rbInfo);
 
 	//リリース関数
 	void Release();

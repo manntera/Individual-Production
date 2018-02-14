@@ -7,7 +7,7 @@
 
 
 
-void RigidBody::Create(RigidBodyInfo& rbInfo)
+void RigidBody::Create(const RigidBodyInfo& rbInfo)
 {
 	Release();
 

@@ -38,13 +38,13 @@ public:
 	}
 
 	//座標を設定。
-	void SetPosition(D3DXVECTOR3 pos)
+	void SetPosition(const D3DXVECTOR3& pos)
 	{
 		m_position = pos;
 	}
 
 	//移動速度を設定。
-	void SetMoveSpeed(D3DXVECTOR3 moveSpeed)
+	void SetMoveSpeed(const D3DXVECTOR3& moveSpeed)
 	{
 		m_moveSpeed = moveSpeed;
 		//上向きに移動速度が与えられていた場合ジャンプするとみなす

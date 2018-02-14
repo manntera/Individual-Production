@@ -13,7 +13,7 @@ Texture::~Texture()
 	Release();
 }
 
-void Texture::Load(char *filePath)
+void Texture::Load(const char *filePath)
 {
 	Release();
 	D3DXCreateTextureFromFileEx(

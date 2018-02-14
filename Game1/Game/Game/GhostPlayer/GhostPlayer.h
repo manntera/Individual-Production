@@ -27,4 +27,5 @@ private:
 	std::list<GhostData>::const_iterator	m_ghostData;			//ゴーストデータのイテレーター
 	int										m_currentAnimationNum;	//現在再生中のアニメーションの番号
 	Light									m_light;				//モデルのライト
+	bool									m_isGoal;				//ゴールしたか？
 };

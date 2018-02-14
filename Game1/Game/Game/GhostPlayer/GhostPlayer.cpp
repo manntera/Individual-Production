@@ -11,7 +11,8 @@ GhostPlayer::GhostPlayer() :
 	m_animation(),
 	m_ghostData(),
 	m_currentAnimationNum(0),
-	m_light()
+	m_light(),
+	m_isGoal(false)
 
 {
 }
@@ -39,20 +40,39 @@ bool GhostPlayer::Start()
 	m_ghostData = GetGhostDataListManager().GetGhostData().begin();
 	m_animation.PlayAnimation(m_ghostData->currentAnimationNum);
 	m_currentAnimationNum = m_ghostData->currentAnimationNum;
+	m_animation.SetAnimationLoopFlg(enAnimSetDelight, true);
 	return true;
 }
 
 
 void GhostPlayer::Update()
 {
-	m_model.Update(m_ghostData->position, m_ghostData->rotation, {1.0f, 1.0f, 1.0f});
-	if (m_currentAnimationNum != m_ghostData->currentAnimationNum)
+	if (!m_isGoal)
 	{
-		m_currentAnimationNum = m_ghostData->currentAnimationNum;
-		m_animation.PlayAnimation(m_currentAnimationNum);
+		if (m_currentAnimationNum != m_ghostData->currentAnimationNum)
+		{
+			m_currentAnimationNum = m_ghostData->currentAnimationNum;
+			m_animation.PlayAnimation(m_currentAnimationNum);
+		}
+		m_animation.Update(m_ghostData->animationUpdateTime);
+		m_ghostData++;
+		if (GetGhostDataListManager().GetGhostData().end() == m_ghostData)
+		{
+			m_isGoal = true;
+			m_ghostData--;
+			m_ghostData--;
+		}
 	}
-	m_animation.Update(m_ghostData->animationUpdateTime);
-	m_ghostData++;
+	else
+	{
+		if (m_currentAnimationNum != enAnimSetDelight)
+		{
+			m_currentAnimationNum = enAnimSetDelight;
+			m_animation.PlayAnimation(enAnimSetDelight);
+		}
+		m_animation.Update(GetGameTime().GetDeltaFrameTime());
+	}
+	m_model.Update(m_ghostData->position, m_ghostData->rotation, { 1.0f, 1.0f, 1.0f });
 }
 
 void GhostPlayer::Draw()

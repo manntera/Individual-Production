@@ -35,7 +35,7 @@ public:
 	indexFormat			インデックスバッファのフォーマット
 	primitiveType		プリミティブの種類
 	*/
-	void Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum,  int vertexStride, void *indexBuffer, int indexNum, EnFormatIndex indexFormat, EnPrimitiveType primitivetype );
+	void Create(const D3DVERTEXELEMENT9 *vertexLayout, const void *vertexBuffer, int vertexNum,  int vertexStride, const void *indexBuffer, int indexNum, EnFormatIndex indexFormat, EnPrimitiveType primitivetype );
 
 	//頂点バッファを取得。
 	const LPDIRECT3DVERTEXBUFFER9 GetVertexBuffer() const

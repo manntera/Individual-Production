@@ -12,24 +12,31 @@ Goal::~Goal()
 
 }
 
-void Goal::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
+void Goal::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
-	m_light.SetAmbiemtLight({ 70.0f, 70.0f, 1.0f, 1.0f });
-	m_skinModel.Update(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
+	//m_light.SetAmbiemtLight({ 70.0f, 70.0f, 1.0f, 1.0f });
+	//メッシュコライダーからAABBを作成
+	MeshCollider meshCollider;
+	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
+	D3DXVECTOR3 size = (meshCollider.GetAabbMax() - meshCollider.GetAabbMin()) / 2.0f;
+	m_boxCollider.Create({ size.x, size.y, size.z });
+	RigidBodyInfo rInfo;
+	rInfo.collider = &m_boxCollider;
+	rInfo.mass = 0.0f;
+	rInfo.pos = m_position;
+	rInfo.rot = m_rotation;
+
+	//剛体を作成
+	m_rigidBody.Create(rInfo);
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
 
 void Goal::Update()
 {
 	MapChip::Update();
-	if (!GetGameScene().IsActive())
-	{
-		return;
-	}
 	//プレイヤーがある一定の距離範囲内に入ったらゴール
-	const Player* player = GetGameScene().GetPlayer();
-	D3DXVECTOR3 distance = player->GetPosition() - m_position;
-	if (D3DXVec3Length(&distance) < 12.0f)
+	if (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
 	{
 		GetGameScene().GameClear();
 	}

@@ -2,7 +2,7 @@
 #include "Physics.h"
 #include "RigidBody.h"
 #include "RigidBodyDraw.h"
-#include "../Camera.h"
+#include "../Camera/Camera.h"
 
 PhysicsWorld::PhysicsWorld() :
 	m_pCollisionConfig(nullptr),

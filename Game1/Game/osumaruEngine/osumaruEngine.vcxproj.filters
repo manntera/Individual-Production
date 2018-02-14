@@ -52,6 +52,9 @@
     <Filter Include="ソース ファイル\Random">
       <UniqueIdentifier>{db3d6a04-8a16-4136-b32d-cac5e67b4a8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Camera">
+      <UniqueIdentifier>{7b6f6fae-337a-424c-acd3-487fcd02c0c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="graphics\EffectManager.cpp">
@@ -117,9 +120,6 @@
     <ClCompile Include="Graphics\ShadowMap.cpp">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>ソース ファイル\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Physics\Collider\SphereCollider.cpp">
       <Filter>ソース ファイル\Physics\Collider</Filter>
     </ClCompile>
@@ -176,6 +176,12 @@
     </ClCompile>
     <ClCompile Include="Random\Random.cpp">
       <Filter>ソース ファイル\Random</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Camera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\SpringCamera.cpp">
+      <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -245,9 +251,6 @@
     <ClInclude Include="Physics\Collider\BoxCollider.h">
       <Filter>ソース ファイル\Physics\Collider</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>ソース ファイル\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\ShadowMap.h">
       <Filter>ソース ファイル\Graphics</Filter>
     </ClInclude>
@@ -310,6 +313,12 @@
     </ClInclude>
     <ClInclude Include="Random\Random.h">
       <Filter>ソース ファイル\Random</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>ソース ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\SpringCamera.h">
+      <Filter>ソース ファイル\Camera</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

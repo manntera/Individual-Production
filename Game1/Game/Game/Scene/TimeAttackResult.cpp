@@ -22,6 +22,7 @@ TimeAttackResult::TimeAttackResult() :
 
 TimeAttackResult::~TimeAttackResult()
 {
+
 }
 
 void TimeAttackResult::Init(float time)
@@ -214,14 +215,40 @@ void TimeAttackResult::Draw()
 	m_arrow.Draw();
 }
 
-void TimeAttackResult::TimeInit()
+void TimeAttackResult::TimeDataRead()
 {
-	//ランキングのタイムを5分で初期化
-	for (int i = 0; i < STAGE_NUM;i++)
+	//ランキングのタイムを初期化
+	FILE* file;
+	const int DATA_MAX = 5;
+	file = fopen("Assets/SaveData/Time.txt", "r");
+	char data[DATA_MAX + 2];
+	for (int i = 0;i < STAGE_NUM;i++)
 	{
 		for (int j = 0;j < RANK_NUM + 1;j++)
 		{
-			m_times[i][j] = 50000;
+			fgets(data, DATA_MAX + 2, file);
+			int inNum = 0;
+			for (int k = 0;k < DATA_MAX;k++)
+			{
+				inNum *= 10;
+				inNum += data[k] - '0';
+			}
+			m_times[i][j] = inNum;
 		}
 	}
+	fclose(file);
+}
+
+void TimeAttackResult::TimeDataSave()
+{
+	FILE* file;
+	file = fopen("Assets/SaveData/Time.txt", "w");
+	for (int i = 0;i < STAGE_NUM;i++)
+	{
+		for (int j = 0;j < RANK_NUM + 1;j++)
+		{
+			fprintf(file, "%05d\n", m_times[i][j]);
+		}
+	}
+	fclose(file);
 }

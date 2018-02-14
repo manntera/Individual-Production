@@ -9,7 +9,7 @@
 #include "../osumaruEngine/Graphics/SkinModel/SkinModel.h"
 #include "../osumaruEngine/Graphics/SkinModel/SkinModelData.h"
 #include "../osumaruEngine/Graphics/SkinModel/Animation.h"
-#include "../osumaruEngine/Camera.h"
+#include "../osumaruEngine/Camera/Camera.h"
 #include "../osumaruEngine/Graphics/Light.h"
 #include "../osumaruEngine/Physics/Physics.h"
 #include "../osumaruEngine/Physics/RigidBody.h"
@@ -27,7 +27,9 @@
 #include "../osumaruEngine/Particle/Particle.h"
 #include "../osumaruEngine/Particle/ParticleEmitter.h"
 #include "../osumaruEngine/Font/Font.h"
-
+#include <fstream>
+#include <iostream>
+#include <stdio.h>
 
 const int PLAYER_PRIORITY = 1;
 const int STAGE_GIMMICK_PRIORITY = 0;

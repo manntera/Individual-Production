@@ -19,7 +19,7 @@ public:
 	modelName	読み込むモデルの名前
 	anim		アニメーション付きのモデルの場合アニメーションを入れる入れ物
 	*/
-	void Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim = nullptr)override;
+	void Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const char* modelName, Animation* anim = nullptr)override;
 
 	//更新関数
 	void Update()override;

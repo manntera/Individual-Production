@@ -19,7 +19,7 @@ FallObject2::~FallObject2()
 	ParticleDelete();
 }
 
-void FallObject2::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
+void FallObject2::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
 	//剛体を初期化
@@ -47,7 +47,8 @@ void FallObject2::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* mode
 		1.0f,												//パーティクルが出るまでのインターバル
 		0.0f,												//エミッターの寿命
 		{ m_position.x, m_position.y - 11.0f, m_position.z },//エミッターの座標
-		2													//1フレームで出るパーティクルの数
+		2,													//1フレームで出るパーティクルの数
+		true												//最初にパーティクルをエミットする時だけ時間をランダムにするか
 	}
 	, &GetGameScene().GetCamera());
 	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
@@ -75,7 +76,7 @@ void FallObject2::Update()
 	}
 	if (m_isFall)
 	{
-		if (m_animationTimer < 3.0f)
+		if (m_animationTimer < 1.2f)
 		{
 
 			m_position += m_animationMove;
@@ -88,10 +89,10 @@ void FallObject2::Update()
 		}
 		else
 		{
-			m_position.y -= 0.15f;
+			m_position.y -= 0.2f;
 			m_timer += GetGameTime().GetDeltaFrameTime();
 			//落ち始めてある程度時間がたつと消える
-			if (3.0f < m_timer)
+			if (3.5f < m_timer)
 			{
 				MapChipDelete();
 			}

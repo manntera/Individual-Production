@@ -176,6 +176,7 @@
     <ClCompile Include="Map\MapChip\FallObject.cpp" />
     <ClCompile Include="Map\MapChip\FallObject2.cpp" />
     <ClCompile Include="Map\MapChip\Goal.cpp" />
+    <ClCompile Include="Map\MapChip\GoalObject.cpp" />
     <ClCompile Include="Map\MapChip\HindranceObject.cpp" />
     <ClCompile Include="Map\MapChip\MapChip.cpp" />
     <ClCompile Include="Map\MapChip\MoveFloor.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Map\MapChip\FallObject.h" />
     <ClInclude Include="Map\MapChip\FallObject2.h" />
     <ClInclude Include="Map\MapChip\Goal.h" />
+    <ClInclude Include="Map\MapChip\GoalObject.h" />
     <ClInclude Include="Map\MapChip\HindranceObject.h" />
     <ClInclude Include="Map\MapChip\MapChip.h" />
     <ClInclude Include="Map\MapChip\MoveFloor.h" />

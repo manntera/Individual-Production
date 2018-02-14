@@ -16,6 +16,7 @@ struct SParticleEmittInfo
 	float	emitterLifeTime;	//エミッターの寿命
 	D3DXVECTOR3 emitterPosition;//エミッターの座標
 	int particleNum;			//同時に出るパーティクルの数
+	bool isFirstTimeRandom;		//一番最初にパーティクル出すときだけ時間をずらすか
 };
 
 //パーティクルエミッター
@@ -33,13 +34,13 @@ public:
 	info　パーティクルとエミッターの初期化情報
 	camera	ビルボード処理に使うカメラ
 	*/
-	void Init(SParticleEmittInfo info, const Camera* camera);
+	void Init(const SParticleEmittInfo& info, const Camera* camera);
 
 	//更新関数
 	void Update()override;
 
 	//座標を設定。
-	void SetPosition(D3DXVECTOR3 position)
+	void SetPosition(const D3DXVECTOR3& position)
 	{
 		m_info.emitterPosition = position;
 	}

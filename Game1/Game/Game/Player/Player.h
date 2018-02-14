@@ -13,6 +13,7 @@ enum EnAnimationSet
 	enAnimSetJump,
 	enAnimSetCliffRise,
 	enAnimSetVerticalJump,
+	enAnimSetDelight,
 	enAnimSetNum,
 };
 class MapChip;
@@ -52,14 +53,14 @@ public:
 	ステージギミックによりプレイヤーが動かされる時の移動速度を設定。
 	moveSpeed	プレイヤーを動かす方向と速度
 	*/
-	void SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed);
+	void SetStageGimmickMoveSpeed(const D3DXVECTOR3& moveSpeed);
 
 	/*
 	ボーンの名前検索でボーンのワード行列を取得。
 	boneName	ボーンの名前
 	ret			ボーンのワールド行列のポインタ
 	*/
-	const D3DXMATRIX* FindBoneWorldMatrix(char* boneName) const
+	const D3DXMATRIX* FindBoneWorldMatrix(const char* boneName) const
 	{
 		return m_skinModelData.GetFindBoneWorldMatrix(boneName);
 	}
@@ -80,7 +81,7 @@ public:
 	崖を上るときにPlayerGraspCliffから呼び出す関数
 	moveDirection	壁の法線
 	*/
-	void CliffRiseStart(D3DXVECTOR3 moveDirection);
+	void CliffRiseStart(const D3DXVECTOR3& moveDirection);
 
 	/*
 	崖を上っている時にPlayerGraspCliffから呼び出す関数
@@ -92,13 +93,13 @@ public:
 	壁に張り付いた時に呼び出す関数
 	playerDirection		プレイヤーの方向
 	*/
-	void WallShear(D3DXVECTOR3 playerDirection);
+	void WallShear(const D3DXVECTOR3& playerDirection);
 
 	/*
 	壁ジャンプする時に呼び出す関数
 	jumpDirection		プレイヤーがジャンプする方向
 	*/
-	void WallJump(D3DXVECTOR3 jumpDirection);
+	void WallJump(const D3DXVECTOR3& jumpDirection);
 
 	/*
 	親子関係をつけたり外したりする関数
@@ -106,7 +107,7 @@ public:
 	parentRotation	回転も親子関係をつけるか否か
 	return			親子関係がついたか？trueならついた、falseなら親子関係つけるのに失敗したか親子関係が切れた
 	*/
-	bool SetParent(MapChip* parent, bool parentRotation);
+	bool SetParent(const MapChip* parent, bool parentRotation);
 
 	//モデルデータを取得
 	const SkinModelData& GetSkinModelData() const
@@ -134,10 +135,10 @@ private:
 	void Move();
 
 	//モデルを移動方向に合わせてディレイをかけながら回転させる関数
-	void DelayRotation(D3DXVECTOR3 rotationDirection);
+	void DelayRotation(const D3DXVECTOR3& rotationDirection);
 
 	//モデルを移動方向に合わせて回転させる関数
-	void Rotation(D3DXVECTOR3 rotationDirection);
+	void Rotation(const D3DXVECTOR3& rotationDirection);
 
 private:
 	SkinModel			m_skinModel;			//スキンモデル
@@ -156,7 +157,7 @@ private:
 	int					m_jumpCount;			//ジャンプした回数
 	EnAnimationSet		m_currentAnim;			//現在再生してるアニメーション
 	bool				m_isJump;				//ジャンプしてるか？
-	MapChip*			m_parent;				//親
+	const MapChip*		m_parent;				//親
 	bool				m_isParentRotation;		//回転の親子関係をつけているか
 	float				m_moveSpeed;			//移動速度
 	float				m_acceleration;			//加速度

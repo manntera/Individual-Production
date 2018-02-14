@@ -41,6 +41,12 @@ public:
 		static GhostDataListManager ghostDataListManager;
 		return ghostDataListManager;
 	}
+
+	//ゴーストデータの読み込み
+	void GhostDataRead();
+
+	//ゴーストデータのセーブ
+	void GhostDataSave();
 private:
 	const D3DXVECTOR3*			m_pPosition;		//プレイヤーの座標
 	const D3DXQUATERNION*		m_pRotation;		//プレイヤーの回転

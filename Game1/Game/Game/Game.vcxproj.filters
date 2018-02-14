@@ -126,6 +126,9 @@
     <ClCompile Include="Map\MapChip\FallObject2.cpp">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClCompile>
+    <ClCompile Include="Map\MapChip\GoalObject.cpp">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -213,6 +216,9 @@
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClInclude>
     <ClInclude Include="Map\MapChip\FallObject2.h">
+      <Filter>ソース ファイル\Map\MapChip</Filter>
+    </ClInclude>
+    <ClInclude Include="Map\MapChip\GoalObject.h">
       <Filter>ソース ファイル\Map\MapChip</Filter>
     </ClInclude>
   </ItemGroup>

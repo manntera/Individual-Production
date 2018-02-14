@@ -13,6 +13,7 @@
 #include "MapChip\StopTimeItem.h"
 #include "MapChip\FallObject2.h"
 #include "../Scene/GameScene.h"
+#include "MapChip\GoalObject.h"
 
 struct MapChipInfo
 {
@@ -91,6 +92,8 @@ void Map::Init(int stageNum)
 			break;
 		case enMapTagStopTime:
 			mapChip = New<StopTimeItem>(STAGE_GIMMICK_PRIORITY);
+		case enMapTagGoalObject:
+			mapChip = New<GoalObject>(STAGE_GIMMICK_PRIORITY);
 			break;
 		default:
 			mapChip = New<StaticMapObject>(STAGE_GIMMICK_PRIORITY);

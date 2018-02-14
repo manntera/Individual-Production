@@ -24,7 +24,7 @@ MapChip::~MapChip()
 
 }
 
-void MapChip::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
+void MapChip::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const char* modelName, Animation* anim)
 {
 	//ÉâÉCÉgÇÃê›íË
 	float ambientLightColor = 0.4f;

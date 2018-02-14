@@ -22,7 +22,7 @@ Primitive::~Primitive()
 	Release();
 }
 
-void Primitive::Create(D3DVERTEXELEMENT9 *vertexLayout, void *vertexBuffer, int vertexNum, int vertexStride, void *indexBuffer, int indexNum, EnFormatIndex indexFormat, EnPrimitiveType primitiveType)
+void Primitive::Create(const D3DVERTEXELEMENT9 *vertexLayout, const void *vertexBuffer, int vertexNum, int vertexStride,const void *indexBuffer, int indexNum, EnFormatIndex indexFormat, EnPrimitiveType primitiveType)
 {
 	Release();
 	m_vertexNum = vertexNum;

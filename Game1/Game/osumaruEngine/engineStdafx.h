@@ -1,6 +1,6 @@
 #pragma once
 class EffectManager;
-int MakeHash(char* string);
+int MakeHash(const char* string);
 
 #include <d3d9.h>
 #include <d3dx9effect.h>

@@ -13,7 +13,7 @@ SkinModelDataResource::~SkinModelDataResource()
 
 }
 
-void SkinModelDataResource::Load(SkinModelData* modelData, Animation* anim, char* fileName)
+void SkinModelDataResource::Load(SkinModelData* modelData, Animation* anim, const char* fileName)
 {
 	int hash = MakeHash(fileName);
 	auto& map = m_modelDatas.find(hash);

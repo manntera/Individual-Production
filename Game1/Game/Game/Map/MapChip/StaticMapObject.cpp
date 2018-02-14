@@ -13,7 +13,7 @@ StaticMapObject::~StaticMapObject()
 
 }
 
-void StaticMapObject::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation, char* modelName, Animation* anim)
+void StaticMapObject::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
 

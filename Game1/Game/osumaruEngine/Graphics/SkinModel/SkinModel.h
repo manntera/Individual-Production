@@ -50,7 +50,7 @@ public:
 	rot		回転
 	scale	拡大
 	*/
-	void UpdateWorldMatrix(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale);
+	void UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale);
 
 	/*
 	更新。
@@ -58,7 +58,7 @@ public:
 	rot		回転
 	scale	拡大
 	*/
-	void Update(D3DXVECTOR3 trans, D3DXQUATERNION rot, D3DXVECTOR3 scale);
+	void Update(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale);
 
 	//シャドウマップに登録
 	void ShadowMapEntry();
@@ -67,7 +67,7 @@ public:
 	/*
 	ライトを設定
 	*/
-	void SetLight(Light *light)
+	void SetLight(const Light *light)
 	{
 		this->m_pLight = light;
 	}
@@ -83,14 +83,14 @@ public:
 	const LPD3DXMESH GetOrgMeshFirst() const;
 
 	//法線マップをセット
-	void SetNormalMap(Texture* texture)
+	void SetNormalMap(const Texture* texture)
 	{
 		m_pNormalMap = texture;
 		m_isHasNormalMap = true;
 	}
 
 	//スペキュラマップを設定
-	void SetSpecularMap(Texture* texture, const Camera* camera)
+	void SetSpecularMap(const Texture* texture, const Camera* camera)
 	{
 		m_pSpecularMap = texture;
 		m_pCamera = camera;
@@ -167,8 +167,8 @@ private:
 	bool						m_isShadowMapReceiver;						//影を落とされるか？
 	ShaderTechnique				m_shaderTechnique[enShaderTechniqueNum];	//シェーダーテクニックの配列
 	EnSkinModelShaderTechnique	m_currentShaderTechnique;					//現在のシェーダーテクニック
-	Texture*					m_pNormalMap;								//法線マップ
-	Texture*					m_pSpecularMap;								//スペキュラマップ
+	const Texture*				m_pNormalMap;								//法線マップ
+	const Texture*				m_pSpecularMap;								//スペキュラマップ
 	bool						m_isHasNormalMap;							//法線マップを持っているか？
 	bool						m_isHasSpecularMap;							//スペキュラマップを持っているか？	
 	D3DXMATRIX					m_worldMatrix;								//ワールド行列
@@ -176,7 +176,7 @@ private:
 	SkinModelData*				m_pSkinModelData;							//スキンモデルデータ
 	ID3DXEffect*				m_pEffect;									//エフェクト
 	Animation					m_animation;								//アニメーション
-	Light*						m_pLight;									//ライト
+	const Light*				m_pLight;									//ライト
 	const Camera*				m_pCamera;									//スペキュラで使うカメラ
 	bool						m_isShadowCompesation;						//地面に垂直な部分に落ちる影の補正するか？
 	D3DXVECTOR3					m_position;									//モデルの座標

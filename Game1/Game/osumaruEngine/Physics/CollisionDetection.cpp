@@ -58,7 +58,7 @@ CollisionDetection::~CollisionDetection()
 	m_rigidBody.Release();
 }
 
-void CollisionDetection::Init(ICollider* collider, D3DXVECTOR3 position, D3DXQUATERNION rotation)
+void CollisionDetection::Init(const ICollider* collider, const D3DXVECTOR3& position, const D3DXQUATERNION& rotation)
 {
 	
 	//„‘Ì‚ğ‰Šú‰»

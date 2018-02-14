@@ -66,7 +66,7 @@ void TitleScene::Update()
 				break;
 			case enSceneContinue:
 				GetGameScene().Create();
-				GetGameScene().Init(GetGameScene().GetStageNum(), false);
+				GetGameScene().Init(GetGameScene().GetStageMaxNum() % 4, false);
 				break;
 			case enSceneTimeAttack:
 				New<StageSelect>(0);
@@ -107,14 +107,14 @@ void TitleScene::Update()
 		m_choiceNum++;
 	}
 
-	//if (GameScene::GetStageNum() != 0)
+	if (GetGameScene().GetStageMaxNum() != 0)
 	{
-		m_choiceNum %= 3;
+		m_choiceNum %= enSceneNum;
 	}
-	//else
-	//{
-	//	m_choiceNum %= 1;
-	//}
+	else
+	{
+		m_choiceNum %= 1;
+	}
 	m_arrow.SetPosition({ -275.0f, -100.f + -100.0f * m_choiceNum });
 }
 
@@ -124,7 +124,7 @@ void TitleScene::AfterDraw()
 	m_title.Draw();
 	m_start.Draw();
 	m_arrow.Draw();
-	//if (GameScene::GetStageNum() != 0)
+	if (GetGameScene().GetStageMaxNum() != 0)
 	{
 		m_continue.Draw();
 		m_timeAttack.Draw();

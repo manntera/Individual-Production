@@ -8,6 +8,7 @@
 #include "Scene\GameOverScene.h"
 #include "Scene/TimeAttackResult.h"
 
+using namespace std;
 int WINAPI wWinMain(
 	HINSTANCE hInst,
 	HINSTANCE hPrevInstance,
@@ -18,8 +19,11 @@ int WINAPI wWinMain(
 	//Direct3DÇèâä˙âª
 	GetEngine().InitD3D(hInst);
 	New<TitleScene>(0);
-	TimeAttackResult::TimeInit();
+	TimeAttackResult::TimeDataRead();
+	GetGhostDataListManager().GhostDataRead();
 	GetFade().Init();
 	GetEngine().GameLoop();
+	TimeAttackResult::TimeDataSave();
+	GetGhostDataListManager().GhostDataSave();
 	return 0;
 }

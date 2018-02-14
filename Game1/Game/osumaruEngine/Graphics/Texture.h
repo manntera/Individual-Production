@@ -14,7 +14,7 @@ public:
 	テクスチャのロード
 	filePath	読み込むテクスチャのファイルパス
 	*/
-	void Load(char* filePath);
+	void Load(const char* filePath);
 
 	//テクスチャを取得。
 	const LPDIRECT3DTEXTURE9& GetBody() const

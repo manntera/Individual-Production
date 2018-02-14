@@ -65,7 +65,7 @@ public:
 	boneName	ボーンの名前
 	return		ボーンのワールド行列
 	*/
-	const D3DXMATRIX* GetFindBoneWorldMatrix(char *boneName) const;
+	const D3DXMATRIX* GetFindBoneWorldMatrix(const char *boneName) const;
 
 	/*
 	モデルデータのクローンを作る
@@ -79,10 +79,10 @@ private:
 	destFrame	クローン側のフレーム
 	srcFrame	オリジナル側のフレーム
 	*/
-	void CloneSkelton(LPD3DXFRAME& destFrame, LPD3DXFRAME srcFrame);
+	void CloneSkelton(LPD3DXFRAME& destFrame, const LPD3DXFRAME& srcFrame);
 
 	//一番最初に見つかったオリジナルメッシュを取得。
-	const LPD3DXMESH GetOrgMesh(LPD3DXFRAME frame) const;
+	const LPD3DXMESH GetOrgMesh(const LPD3DXFRAME& frame) const;
 
 	/*
 	ボーンを検索してワールド行列を取得(再帰関数)
@@ -90,7 +90,7 @@ private:
 	boneNmae	ボーンの名前
 	return ボーンのワールド行列
 	*/
-	const D3DXMATRIX* FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName) const;
+	const D3DXMATRIX* FindBoneWorldMatrix(const LPD3DXFRAME& frame, const char* boneName) const;
 
 	/*
 	アニメーションとボーンの対応付け(再帰関数)

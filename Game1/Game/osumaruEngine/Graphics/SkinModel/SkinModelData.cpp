@@ -716,7 +716,7 @@ void SkinModelData::SetOutputAnimationRegist(LPD3DXFRAME frame, LPD3DXANIMATIONC
 	}
 }
 
-void SkinModelData::CloneSkelton(LPD3DXFRAME& destFrame, LPD3DXFRAME srcFrame)
+void SkinModelData::CloneSkelton(LPD3DXFRAME& destFrame, const LPD3DXFRAME& srcFrame)
 {
 	destFrame->TransformationMatrix = srcFrame->TransformationMatrix;
 	AllocateName(srcFrame->Name, &destFrame->Name);
@@ -757,7 +757,7 @@ const LPD3DXMESH SkinModelData::GetOrgMeshFirst() const
 	return GetOrgMesh(m_frameRoot);
 }
 
-const LPD3DXMESH SkinModelData::GetOrgMesh(LPD3DXFRAME frame) const 
+const LPD3DXMESH SkinModelData::GetOrgMesh(const LPD3DXFRAME& frame) const 
 {
 	D3DXMESHCONTAINER_DERIVED* pMeshContainer = (D3DXMESHCONTAINER_DERIVED*)(frame->pMeshContainer);
 	if (pMeshContainer != NULL)
@@ -784,12 +784,12 @@ const LPD3DXMESH SkinModelData::GetOrgMesh(LPD3DXFRAME frame) const
 	return NULL;
 }
 
-const D3DXMATRIX* SkinModelData::GetFindBoneWorldMatrix(char* boneName) const
+const D3DXMATRIX* SkinModelData::GetFindBoneWorldMatrix(const char* boneName) const
 {
 	return FindBoneWorldMatrix(m_frameRoot, boneName);
 }
 
-const D3DXMATRIX* SkinModelData::FindBoneWorldMatrix(LPD3DXFRAME frame, char* boneName) const
+const D3DXMATRIX* SkinModelData::FindBoneWorldMatrix(const LPD3DXFRAME& frame, const char* boneName) const
 {
 	if (frame->Name != NULL && !strcmp(frame->Name, boneName))
 	{

@@ -112,6 +112,7 @@ bool Player::Start()
 	m_anim.SetAnimationLoopFlg(enAnimSetJump, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetCliffRise, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetVerticalJump, false);
+	
 
 	m_wallJump.Init(this, &m_characterController);
 	m_isParentRotation = false;
@@ -134,7 +135,7 @@ void Player::Update()
 		//回転を何フレームかに分割して回転
 		DelayRotation(m_characterController.GetMoveSpeed());
 	}
-	if (/*m_position.y < -70.0f*/GetPad().IsTriggerButton(enButtonX))
+	if (m_position.y < -70.0f)
 	{
 		GetGameScene().GameOver();
 	}
@@ -145,12 +146,13 @@ void Player::Update()
 	GetShadowMap().SetLightCameraPosition(lightCameraPos);
 }
 
-void Player::CliffRiseStart(D3DXVECTOR3 moveDirection)
+void Player::CliffRiseStart(const D3DXVECTOR3& moveDirection)
 {
 	//崖を上るアニメーションを再生
 	m_anim.PlayAnimation(enAnimSetCliffRise);
-	moveDirection.y = 0.0f;
-	Rotation(moveDirection);
+	D3DXVECTOR3 direction = moveDirection;
+	direction.y = 0.0f;
+	Rotation(direction);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 }
 
@@ -174,7 +176,7 @@ bool Player::CriffRiseEnd()
 	return true;
 }
 
-void Player::WallShear(D3DXVECTOR3 playerDirection)
+void Player::WallShear(const D3DXVECTOR3& playerDirection)
 {
 	//壁ずりの時は移動速度を0にする
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
@@ -184,7 +186,7 @@ void Player::WallShear(D3DXVECTOR3 playerDirection)
 }
 
 
-void Player::WallJump(D3DXVECTOR3 jumpDirection)
+void Player::WallJump(const D3DXVECTOR3& jumpDirection)
 {
 	//ジャンプのベクトルの大きさを調節
 	D3DXVECTOR3 jumpSpeed = jumpDirection;
@@ -208,7 +210,7 @@ void Player::WallJump(D3DXVECTOR3 jumpDirection)
 	sound->SetVolume(0.3f);
 }
 
-bool Player::SetParent(MapChip* parent, bool parentRotation)
+bool Player::SetParent(const MapChip* parent, bool parentRotation)
 {
 	//親がいる状態で他のマップチップが親になろうとすると失敗
 	if (m_parent != nullptr && parent != nullptr)
@@ -302,8 +304,8 @@ void Player::Move()
 			else//ジャンプ中
 			{
 				D3DXVECTOR3 jumpSpeed = stickDir;
-				speed *= 0.05f;
-				jumpSpeed *= speed * 0.5f;
+				speed *= 0.04f;
+				jumpSpeed *= speed;
 				moveSpeed += jumpSpeed;
 				D3DXVECTOR3 moveDirection = moveSpeed;
 				moveDirection.y = 0.0f;
@@ -328,7 +330,7 @@ void Player::Move()
 		m_isJump = true;
 		m_jumpCount = 1;
 	}
-	if (GetPad().IsTriggerButton(enButtonA) && /*m_jumpCount < 2 &&*/ !m_wallJump.IsWallShear())
+	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallShear())
 	{
 		m_currentAnim = enAnimSetJump;
 		//2断面のジャンプの時
@@ -397,12 +399,12 @@ void Player::Move()
 	m_stageGimmickMoveSpeed = { 0.0f, 0.0f, 0.0f };
 }
 
-void Player::SetStageGimmickMoveSpeed(D3DXVECTOR3 moveSpeed)
+void Player::SetStageGimmickMoveSpeed(const D3DXVECTOR3& moveSpeed)
 {
 	m_stageGimmickMoveSpeed += moveSpeed / GetGameTime().GetDeltaFrameTime();
 }
 
-void Player::DelayRotation(D3DXVECTOR3 rotationDirection)
+void Player::DelayRotation(const D3DXVECTOR3& rotationDirection)
 {
 	D3DXVECTOR3 moveDir = rotationDirection;
 	moveDir.y = 0.0f;
@@ -461,7 +463,7 @@ void Player::DelayRotation(D3DXVECTOR3 rotationDirection)
 	}
 }
 
-void Player::Rotation(D3DXVECTOR3 rotationDirection)
+void Player::Rotation(const D3DXVECTOR3& rotationDirection)
 {
 	D3DXVECTOR3 moveDir = rotationDirection;
 	moveDir.y = 0.0f;

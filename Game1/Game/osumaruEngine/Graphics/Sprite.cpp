@@ -20,7 +20,7 @@ Sprite::~Sprite()
 	Release();
 }
 
-void Sprite::Init(Texture* texture)
+void Sprite::Init(const Texture* texture)
 {
 	Release();
 	//テクスチャを読み込み

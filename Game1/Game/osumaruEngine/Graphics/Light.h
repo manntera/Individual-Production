@@ -61,7 +61,7 @@ public:
 	アンビエントライトを設定。
 	ambient		色
 	*/
-	void SetAmbiemtLight(D3DXVECTOR4 ambient)
+	void SetAmbiemtLight(const D3DXVECTOR4& ambient)
 	{
 		m_ambientLight = ambient;
 	}

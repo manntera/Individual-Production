@@ -27,31 +27,31 @@ public:
 	float GetNear() const;
 
 	//視点を設定
-	void SetTarget(D3DXVECTOR3 target);
+	void SetTarget(const D3DXVECTOR3& target);
 
 	//視点を取得
 	const D3DXVECTOR3& GetTarget() const;
 
 	//座標を設定
-	void SetPosition(D3DXVECTOR3 position);
+	void SetPosition(const D3DXVECTOR3& position);
 
 	//座標を取得
 	const D3DXVECTOR3& GetPosition() const;
 
 	//カメラの上方向を設定
-	void SetUp(D3DXVECTOR3 up);
+	void SetUp(const D3DXVECTOR3& up);
 
 	//カメラの上方向を取得
 	const D3DXVECTOR3& GetUp() const;
 
 	//ビュー行列の設定。
-	void SetViewMatrix(D3DXMATRIX view);
+	void SetViewMatrix(const D3DXMATRIX& view);
 
 	//ビュー行列の取得
 	const D3DXMATRIX& GetViewMatrix() const;
 
 	//プロジェクション行列の設定。
-	void SetProjectionMatrix(D3DXMATRIX projection);
+	void SetProjectionMatrix(const D3DXMATRIX& projection);
 
 	//プロジェクション行列の取得。
 	const D3DXMATRIX& GetProjectionMatrix() const;

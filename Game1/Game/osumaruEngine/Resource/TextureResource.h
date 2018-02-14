@@ -12,7 +12,7 @@ public:
 	~TextureResource();
 
 	//テクスチャを取得
-	Texture* LoadTexture(char* filePath);
+	Texture* LoadTexture(const char* filePath);
 private:
 	std::map<int, Texture*> m_textures;	//テクスチャ
 };

@@ -9,6 +9,7 @@ public:
 		enSceneStart,
 		enSceneContinue,
 		enSceneTimeAttack,
+		enSceneNum
 	};
 	//コンストラクタ
 	TitleScene();

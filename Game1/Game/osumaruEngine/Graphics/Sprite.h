@@ -12,13 +12,13 @@ public:
 	~Sprite();
 
 	//初期化
-	void Init(Texture* texture);
+	void Init(const Texture* texture);
 
 	//描画
 	void Draw();
 
 	//座標をセット
-	void SetPosition(D3DXVECTOR2 position)
+	void SetPosition(const D3DXVECTOR2& position)
 	{
 		m_position = position;
 	}
@@ -30,7 +30,7 @@ public:
 	}
 
 	//サイズを設定
-	void SetSize(D3DXVECTOR2 size)
+	void SetSize(const D3DXVECTOR2& size)
 	{
 		m_size = size;
 	}
@@ -50,14 +50,14 @@ public:
 	//メモリを解放
 	void Release();
 
-	void SetTexture(Texture* pTexture)
+	void SetTexture(const Texture* pTexture)
 	{
 		m_pTexture = pTexture;
 	}
 
 private:
 	float			m_alpha;
-	Texture*		m_pTexture;			//テクスチャ
+	const Texture*	m_pTexture;			//テクスチャ
 	D3DXVECTOR2		m_position;			//スプライトのウィンドウ上での座標
 	D3DXVECTOR2		m_centerPosition;	//スプライトの基点を表す座標
 	D3DXVECTOR2		m_size;				//スプライトのサイズ

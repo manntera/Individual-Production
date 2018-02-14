@@ -18,12 +18,12 @@ public:
 	position	座標
 	rotation	回転
 	*/
-	void Init(ICollider* collider, D3DXVECTOR3 position, D3DXQUATERNION rotation);
+	void Init(const ICollider* collider, const D3DXVECTOR3& position, const D3DXQUATERNION& rotation);
 
 	/*
 	座標を設定
 	*/
-	void SetPosition(D3DXVECTOR3 position)
+	void SetPosition(const D3DXVECTOR3& position)
 	{
 		m_position = position;
 		m_rigidBody.SetPosition(position);
@@ -32,7 +32,7 @@ public:
 	/*
 	回転を設定
 	*/
-	void SetRotation(D3DXQUATERNION rotation)
+	void SetRotation(const D3DXQUATERNION& rotation)
 	{
 		m_rotation = rotation;
 		m_rigidBody.SetRotation(m_rotation);
@@ -89,12 +89,12 @@ public:
 		m_judgmentType = judgmentType;
 	}
 private:
-	RigidBody		m_rigidBody;			//剛体
-	ICollider*		m_pCollider;			//コライダー
-	D3DXVECTOR3		m_position;				//座標
-	D3DXQUATERNION	m_rotation;				//回転
-	bool			m_isHit;				//当たってるか？
-	D3DXVECTOR3		m_hitCollisionNormal;	//テスト用
-	int				m_collisionType;		//ヒットしたｺﾘｼﾞｮﾝの属性
-	int				m_judgmentType;			//このコリジョンの属性
+	RigidBody				m_rigidBody;			//剛体
+	const ICollider*		m_pCollider;			//コライダー
+	D3DXVECTOR3				m_position;				//座標
+	D3DXQUATERNION			m_rotation;				//回転
+	bool					m_isHit;				//当たってるか？
+	D3DXVECTOR3				m_hitCollisionNormal;	//テスト用
+	int						m_collisionType;		//ヒットしたｺﾘｼﾞｮﾝの属性
+	int						m_judgmentType;			//このコリジョンの属性
 };
