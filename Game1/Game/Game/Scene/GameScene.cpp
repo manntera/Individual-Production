@@ -61,8 +61,16 @@ bool GameScene::Start()
 		m_pMap->Init(m_stageNum);
 		m_pCamera->Init();
 		m_pBgm = New<SoundSource>(0);
-		m_pBgm->Init("Assets/sound/GameBgm.wav");
-		m_pBgm->SetVolume(0.1f);
+		if (m_isTimeAttack)
+		{
+			m_pBgm->Init("Assets/sound/FootRace.wav");
+			m_pBgm->SetVolume(0.1f);
+		}
+		else
+		{
+			m_pBgm->Init("Assets/sound/candybuke.wav");
+			m_pBgm->SetVolume(0.3f);
+		}
 		m_pBgm->Play(true);
 		if (m_isTimeAttack)
 		{

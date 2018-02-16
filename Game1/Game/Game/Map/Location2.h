@@ -50,21 +50,21 @@
 //GroundBrock2
 {
 	"GroundBrock2",
-	D3DXVECTOR3(-28.60f, 85.70f, 0.00f),             //平行移動
+	D3DXVECTOR3(-37.80f, 85.70f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, -0.71f, 0.00f, -0.71f ),  //回転
 	enMapTagFall, //タグ
 },
 //GroundBrock
 {
 	"GroundBrock",
-	D3DXVECTOR3(-69.20f, 91.60f, 0.00f),             //平行移動
+	D3DXVECTOR3(-83.30f, 91.60f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, -0.71f, 0.00f, -0.71f ),  //回転
 	enMapTagGoal, //タグ
 },
 //star
 {
 	"star",
-	D3DXVECTOR3(-68.90f, 118.80f, 0.00f),             //平行移動
+	D3DXVECTOR3(-85.30f, 118.80f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagGoalObject, //タグ
 },
