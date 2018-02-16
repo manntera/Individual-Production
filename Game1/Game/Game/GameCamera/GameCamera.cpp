@@ -40,7 +40,7 @@ void GameCamera::Init()
 	D3DXVECTOR3 target = player->GetPosition();
 	target.y += m_targetManip;
 	m_springCamera.Init(target, position, 120.0f);
-	m_springCamera.SetDampingRate(10.0f);
+	m_springCamera.SetDampingRate(1.3f);
 }
 
 bool GameCamera::Start()
