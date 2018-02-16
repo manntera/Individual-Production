@@ -52,7 +52,7 @@ bool TimeSprite::Start()
 
 void TimeSprite::Update()
 {
-	m_time += GetGameTime().GetDeltaFrameTime();
+	m_time += 1.0f / 60.0f;
 	//60•bˆÈãŒo‚Á‚Ä‚¢‚½‚ç1•ª‚É‚·‚é‚½‚ß‚ÉŒ…‚ğŒJ‚èã‚°
 	int minute = (int)m_time / 10 % 10 / 6;
 	if (1 <= minute)
@@ -60,6 +60,8 @@ void TimeSprite::Update()
 		m_time += minute * 100.0f;
 		m_time -= minute * 60.0f;
 	}
+
+
 	int time = (int)(m_time * 100.0f);
 	for (int i = DIGIT_MAX * TIME_MAX - 1; 0 <= i; i--)
 	{

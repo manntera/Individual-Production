@@ -4,11 +4,10 @@
 #include "../Player/Player.h"
 
 GameCamera::GameCamera() :
-	m_rotation(0.0f, 0.0f, 0.0f, 1.0f),
 	m_camera(),
 	m_angleX(0.0f),
 	m_position(0.0f, 0.0f, 0.0f),
-	m_playerBoneMat(nullptr)
+	m_targetManip(5.0f)
 {
 }
 
@@ -26,7 +25,6 @@ void GameCamera::Init()
 	m_camera.SetNear(3.0f);
 	m_camera.SetFar(1000.0f);
 	m_camera.Update();
-	D3DXQuaternionIdentity(&m_rotation);
 	GetPhysicsWorld().SetCamera(&m_camera);
 	//プレイヤーのワールド行列からカメラの初期座標を設定
 	const Player*	player = GetGameScene().GetPlayer();
@@ -36,12 +34,17 @@ void GameCamera::Init()
 	m_position.z = -mat.m[2][2];
 	D3DXVec3Normalize(&m_position, &m_position);
 	m_position *= 50.0f;
+	D3DXVECTOR3 position = m_position + player->GetPosition();
+	m_camera.SetTarget(player->GetPosition());
+	m_camera.SetPosition(position);
+	D3DXVECTOR3 target = player->GetPosition();
+	target.y += m_targetManip;
+	m_springCamera.Init(target, position, 120.0f);
+	m_springCamera.SetDampingRate(10.0f);
 }
 
 bool GameCamera::Start()
 {
-
-	m_playerBoneMat = GetGameScene().GetPlayer()->FindBoneWorldMatrix("center");
 	return true;
 }
 
@@ -51,6 +54,7 @@ void GameCamera::Update()
 	{
 		return;
 	}
+	//m_springCamera.SetTarget(m_camera.GetTarget());
 	float angleY = GetPad().GetRightStickX() * GetGameTime().GetDeltaFrameTime() * 30.0f / 180.0f * cPI * 3.0f;
 	float angleX = 0.0f;
 	float stickY = GetPad().GetRightStickY();
@@ -61,31 +65,34 @@ void GameCamera::Update()
 		angleX = stickY * GetGameTime().GetDeltaFrameTime() * 30.0f / 180.0f * cPI * 3.0f;
 		m_angleX += angleX;
 	}
-
 	D3DXQUATERNION multi;
-	D3DXVECTOR3 axisX = m_camera.GetTarget() - m_camera.GetPosition();
+	D3DXVECTOR3 axisX = m_springCamera.GetTarget() - m_springCamera.GetTarPosition();
 	//前方向と上方向のベクトルの外積を取り横方向のベクトルを求める
 	D3DXVec3Cross(&axisX, &axisX, &D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 	D3DXVec3Normalize(&axisX, &axisX);
+	D3DXQUATERNION rotation;
+	D3DXQuaternionIdentity(&rotation);
 	//Y軸のクォータニオンを作りカメラの回転に掛ける
 	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), angleY);
-	D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
+	D3DXQuaternionMultiply(&rotation, &rotation, &multi);
 	//カメラの横方向を軸にクォータニオンを作りカメラの回転に掛ける
 	D3DXQuaternionRotationAxis(&multi, &axisX, angleX);
-	D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
+	D3DXQuaternionMultiply(&rotation, &rotation, &multi);
 	//クォータニオンから回転行列を作りカメラの位置をプレイヤーを中心として回す
 	D3DXMATRIX rotMatrix;
-	D3DXMatrixRotationQuaternion(&rotMatrix, &m_rotation);
-	D3DXVECTOR3 position = { 0.0f, 0.0f, 0.0f };
-	position = m_position;
+	D3DXMatrixRotationQuaternion(&rotMatrix, &rotation);
+	D3DXVECTOR3 position;
+	position = m_springCamera.GetPosition() - m_springCamera.GetTarget();
 	D3DXVec3TransformCoord(&position, &position, &rotMatrix);
-	D3DXVECTOR3 target;
-	target.x = m_playerBoneMat->m[3][0];
-	target.y = m_playerBoneMat->m[3][1];
-	target.z = m_playerBoneMat->m[3][2];
+	m_springCamera.SetPosition(position + m_springCamera.GetTarget());
+	D3DXVECTOR3 target = GetGameScene().GetPlayer()->GetPosition();
+	target.y += m_targetManip;
 	//カメラの座標と注視点を設定して更新
-	m_camera.SetTarget(target);
 	position += target;
-	m_camera.SetPosition(position);
+	m_springCamera.SetTarTarget(target);
+	m_springCamera.SetTarPosition(position);
+	m_springCamera.Update();
+	m_camera.SetTarget(m_springCamera.GetTarget());
+	m_camera.SetPosition(m_springCamera.GetPosition());
 	m_camera.Update();
 }

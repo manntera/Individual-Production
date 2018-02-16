@@ -25,9 +25,10 @@ public:
 	}
 
 private:
-	D3DXQUATERNION		m_rotation;			//カメラの回転
 	Camera				m_camera;			//カメラ
 	float				m_angleX;			//カメラがX方向を軸に回転している角度	
 	D3DXVECTOR3			m_position;			//プレイヤーのローカルでの初期座標
 	const D3DXMATRIX*	m_playerBoneMat;	//カメラの注視点を決めるのに使うプレイヤーのボーンのワールド行列
+	SpringCamera		m_springCamera;		//バネカメラ
+	const float			m_targetManip;		//注視点を高めにするための補正値
 };

@@ -10,6 +10,7 @@
 #include "../osumaruEngine/Graphics/SkinModel/SkinModelData.h"
 #include "../osumaruEngine/Graphics/SkinModel/Animation.h"
 #include "../osumaruEngine/Camera/Camera.h"
+#include "../osumaruEngine/Camera/SpringCamera.h"
 #include "../osumaruEngine/Graphics/Light.h"
 #include "../osumaruEngine/Physics/Physics.h"
 #include "../osumaruEngine/Physics/RigidBody.h"

@@ -347,19 +347,19 @@ void Player::Move()
 		}
 		else
 		{
-			//地面にいる時だけ地面を蹴る音を再生する
+			//地面にいる時だけ地面を蹴る音を再生するる
 			SoundSource* jumpSound;
 			jumpSound = New<SoundSource>(0);
 			jumpSound->Init("Assets/sound/Jump.wav");
 			jumpSound->Play(false);
 			jumpSound->SetVolume(0.3f);
-			//垂直飛びの時だけそのアニメーションを再生
+			//垂直飛びの時だけそのアニメーションを再生生
 			if (stickDir.x == 0.0f && stickDir.z == 0.0f)
 			{
 				m_currentAnim = enAnimSetVerticalJump;
 			}
 		}
-		//上方向に移動速度を与える
+		//上方向に移動速度を与えるる
 		moveSpeed.y = m_jumpSpeed;
 		m_anim.PlayAnimation(m_currentAnim);
 		Rotation(moveSpeed);
@@ -368,7 +368,7 @@ void Player::Move()
 		sound->Play(false);
 		sound->SetVolume(0.8f);
 		m_jumpCount++;
-
+		
 	}
 
 	if (m_wallJump.IsWallShear())

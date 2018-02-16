@@ -92,6 +92,7 @@ void Map::Init(int stageNum)
 			break;
 		case enMapTagStopTime:
 			mapChip = New<StopTimeItem>(STAGE_GIMMICK_PRIORITY);
+			break;
 		case enMapTagGoalObject:
 			mapChip = New<GoalObject>(STAGE_GIMMICK_PRIORITY);
 			break;
