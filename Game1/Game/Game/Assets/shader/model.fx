@@ -12,12 +12,14 @@ float4x4	g_worldMatrix;			//ワールド行列
 float4x4	g_rotationMatrix;		//回転行列。
 float4x4	g_viewMatrixRotInv;		//カメラの回転行列
 float3		g_cameraPos;			//スペキュラ用のカメラ視点
+float3		g_cameraDir;
 float4x4	g_invWorldMatrix;
 float4x4	g_lightViewProjMatrix;
 float3		g_lightCameraDir;
 int			g_screenWidth;
 int			g_screenHeight;
 float		g_ditheringRate;
+
 
 bool	g_isShadowMapCaster;
 bool	g_isShadowMapReceiver;
@@ -97,6 +99,8 @@ struct VS_OUTPUT
 	float3 WorldPos				: TEXCOORD3; 
 	float4 ShadowSpacePos		: TEXCOORD4;
 	float4 ScreenSpacePos		: TEXCOORD5;
+	bool isHasSkin				: TEXCOORD6;
+
 };
 
 struct PS_OUTPUT
@@ -149,8 +153,8 @@ Tangent	ワールド接ベクトルの格納先。
 void CalcWorldPosAndNormal(VS_INPUT In, out float3 Pos, out float3 Normal, out float3 Tangent)
 {
 	Pos = mul(In.Pos, g_worldMatrix);
-	Normal = mul(In.Normal, g_rotationMatrix);
-	Tangent = mul(In.Tangent, g_rotationMatrix);
+	Normal = mul(In.Normal, g_worldMatrix);
+	Tangent = mul(In.Tangent, g_worldMatrix);
 }
 
 /*
@@ -193,6 +197,7 @@ VS_OUTPUT VSMain(VS_INPUT In, uniform bool hasSkin)
 	Out.WorldPos = Pos.xyz;
 	Out.ScreenSpacePos = Out.Pos;
 	Out.ShadowSpacePos = mul(float4(Pos.xyz, 1.0f), g_lightViewProjMatrix);
+	Out.isHasSkin = hasSkin;
 	return Out;
 }
 
@@ -205,14 +210,28 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 	if (g_isHasNormalMap)
 	{
 		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
-
+		lig = float4(0.0f, 0.0f, 0.0f, 1.0f);
 		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
 		float3 normalVector = normalColor * 2.0f - 1.0f;
 		normalVector = normalize(normalVector);
 
-		//法線マップからとってきたベクトルとライトの方向の内積を取る
-		float3 light = max(0, dot(In.LightDir.xyz, normalVector)) * g_light.diffuseLightColor[0].xyz;
-		lig.xyz *= light;
+		//法線マップからとってきたベクトルとライトの方向の内積を取る		
+		float3 lightDir = g_light.diffuseLightDir[0].xyz;
+		lightDir = normalize(lightDir);
+		float3 light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[0].xyz;
+		lig.xyz += light;
+		lightDir = g_light.diffuseLightDir[1].xyz;
+		lightDir = normalize(lightDir);
+		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[1].xyz;
+		lig.xyz += light;
+		lightDir = g_light.diffuseLightDir[2].xyz;
+		lightDir = normalize(lightDir);
+		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[2].xyz;
+		lig.xyz += light;
+		lightDir = g_light.diffuseLightDir[3].xyz;
+		lightDir = normalize(lightDir);
+		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[3].xyz;
+		lig.xyz += light;
 		lig += g_light.ambient;
 		lig.w = 1.0f;
 	}
@@ -226,14 +245,23 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 		textureNormal *= dot(textureNormal, -gaze);
 		gaze += textureNormal * 2.0f;
 		gaze = normalize(gaze);
-		float3 lightDir = -g_light.diffuseLightDir[0].xyz;
-		lightDir = normalize(lightDir);
+
 		float3 specColor = tex2D(g_specularMapSampler, In.Tex0).xyz;
 		//スペキュラマップを張って絞り(pow)計算をする。
-		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[0].xyz * length(specColor) * 3.0f;
+		float3 lightDir = g_light.diffuseLightDir[0].xyz;
+		lightDir = normalize(lightDir);
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[0].xyz * length(specColor) * g_light.diffuseLightColor[0].w;
+		lightDir = g_light.diffuseLightDir[1].xyz;
+		lightDir = normalize(lightDir);
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[1].xyz * length(specColor) * g_light.diffuseLightColor[1].w;
+		lightDir = g_light.diffuseLightDir[2].xyz;
+		lightDir = normalize(lightDir);
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[2].xyz * length(specColor) * g_light.diffuseLightColor[0].w;
+		lightDir = g_light.diffuseLightDir[3].xyz;
+		lightDir = normalize(lightDir);
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[3].xyz * length(specColor) * g_light.diffuseLightColor[0].w;
 		lig.w = 1.0f;
 	}
-
 	if (g_isShadowMapReceiver)
 	{
 		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
@@ -254,6 +282,91 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
 			}
 		}
+	}
+	color *= lig;
+	PS_OUTPUT Out;
+	Out.color = color;
+	float depth = In.ScreenSpacePos.z / In.ScreenSpacePos.w;
+	Out.depth = float4(depth, 0.0f, 0.0f, 1.0f);
+	return Out;
+}
+
+//プレイヤー用のピクセルシェーダー
+PS_OUTPUT PlayerPSMain(VS_OUTPUT In)
+{
+	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
+	float3 normal = In.Normal;
+	float4 lig = DiffuseLight(normal);
+	if (g_isHasNormalMap)
+	{
+		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
+		lig = float4(0.0f, 0.0f, 0.0f, 1.0f);
+		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
+		float3 normalVector = normalColor * 2.0f - 1.0f;
+		normalVector = normalize(normalVector);
+
+		//法線マップからとってきたベクトルとライトの方向の内積を取る
+		for (int i = 0;i < NUM_DIFFUSE_LIGHT;i++)
+		{
+			float3 lightDir = g_light.diffuseLightDir[i].xyz;
+			lightDir = normalize(lightDir);
+			float3 light = max(0, -dot(normal, lightDir)) * g_light.diffuseLightColor[i].xyz;
+			lig.xyz += light * max(0, dot(lightDir, normalVector));
+		}
+		lig += g_light.ambient;
+		lig.w = 1.0f;
+	}
+	if (g_isHasSpecularMap)
+
+	{
+		//反射ベクトルを求める
+		float3 textureNormal = In.Normal;
+		textureNormal = normalize(textureNormal);
+		float3 gaze = In.WorldPos - g_cameraPos;
+		textureNormal *= dot(textureNormal, -gaze);
+		gaze += textureNormal * 2.0f;
+		gaze = normalize(gaze);
+
+		float3 specColor = tex2D(g_specularMapSampler, In.Tex0).xyz;
+		//スペキュラマップを張って絞り(pow)計算をする。
+		for (int i = 0;i < NUM_DIFFUSE_LIGHT;i++)
+		{
+			float3 lightDir = g_light.diffuseLightDir[i].xyz;
+			lightDir = normalize(lightDir);
+			lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[i].xyz * length(specColor) * g_light.diffuseLightColor[i].w;
+		}
+		lig.w = 1.0f;
+	}
+	if (g_isShadowMapReceiver)
+	{
+		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
+		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
+		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
+		{
+			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+			uv += 1.0f;
+			uv *= 0.5f;
+			uv.y = 1.0f - uv.y;
+			float4 shadow = tex2D(g_shadowMapSampler, uv);
+			//ライトカメラから見た深度値を計算
+			float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+			shadowDepth = min(1.0f, shadowDepth);
+			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+			if (shadow.x < shadowDepth - 0.005f)
+			{
+				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+			}
+		}
+	}
+	float3 cameraDir = g_cameraDir;
+	cameraDir = normalize(cameraDir);
+	float poligonDot = dot(normal, g_cameraDir);
+	poligonDot = 1.0f - abs(poligonDot);
+	for (int i = 0;i < NUM_DIFFUSE_LIGHT;i++)
+	{
+		float3 lightDir = g_light.diffuseLightDir[i].xyz;
+		lightDir = normalize(lightDir);
+		lig += g_light.diffuseLightColor[i] * pow(poligonDot, 3.0f) * 3.0f * max(0.0f, dot(-lightDir, cameraDir));
 	}
 	color *= lig;
 	PS_OUTPUT Out;
@@ -394,7 +507,97 @@ PS_OUTPUT DitheringPSMain(VS_OUTPUT In)
 	return Out;
 }
 
+//ピクセルシェーダー
+PS_OUTPUT GhostPSMain(VS_OUTPUT In)
+{
+	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
+	float3 normal = In.Normal;
+	float4 lig = DiffuseLight(normal);
+	if (g_isHasNormalMap)
+	{
+		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
+		lig = float4(0.0f, 0.0f, 0.0f, 1.0f);
+		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
+		float3 normalVector = normalColor * 2.0f - 1.0f;
+		normalVector = normalize(normalVector);
 
+		//法線マップからとってきたベクトルとライトの方向の内積を取る		
+		float3 lightDir = g_light.diffuseLightDir[0].xyz;
+		lightDir = normalize(lightDir);
+		float3 light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[0].xyz;
+		lig.xyz += light;
+		lightDir = g_light.diffuseLightDir[1].xyz;
+		lightDir = normalize(lightDir);
+		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[1].xyz;
+		lig.xyz += light;
+		lightDir = g_light.diffuseLightDir[2].xyz;
+		lightDir = normalize(lightDir);
+		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[2].xyz;
+		lig.xyz += light;
+		lightDir = g_light.diffuseLightDir[3].xyz;
+		lightDir = normalize(lightDir);
+		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[3].xyz;
+		lig.xyz += light;
+		lig += g_light.ambient;
+		lig.w = 1.0f;
+	}
+	if (g_isHasSpecularMap)
+
+	{
+		//反射ベクトルを求める
+		float3 textureNormal = In.Normal;
+		textureNormal = normalize(textureNormal);
+		float3 gaze = In.WorldPos - g_cameraPos;
+		textureNormal *= dot(textureNormal, -gaze);
+		gaze += textureNormal * 2.0f;
+		gaze = normalize(gaze);
+
+		float3 specColor = tex2D(g_specularMapSampler, In.Tex0).xyz;
+		//スペキュラマップを張って絞り(pow)計算をする。
+		float3 lightDir = g_light.diffuseLightDir[0].xyz;
+		lightDir = normalize(lightDir);
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[0].xyz * length(specColor) * 3.0f;
+		lightDir = g_light.diffuseLightDir[1].xyz;
+		lightDir = normalize(lightDir);
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[1].xyz * length(specColor) * 3.0f;
+		lightDir = g_light.diffuseLightDir[2].xyz;
+		lightDir = normalize(lightDir);
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[2].xyz * length(specColor) * 3.0f;
+		lightDir = g_light.diffuseLightDir[3].xyz;
+		lightDir = normalize(lightDir);
+		lig.xyz += pow(max(0, dot(gaze, lightDir)), 10.0f) * g_light.diffuseLightColor[3].xyz * length(specColor) * 3.0f;
+		lig.w = 1.0f;
+	}
+
+	if (g_isShadowMapReceiver)
+	{
+		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
+		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
+		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
+		{
+			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+			uv += 1.0f;
+			uv *= 0.5f;
+			uv.y = 1.0f - uv.y;
+			float4 shadow = tex2D(g_shadowMapSampler, uv);
+			//ライトカメラから見た深度値を計算
+			float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+			shadowDepth = min(1.0f, shadowDepth);
+			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+			if (shadow.x < shadowDepth - 0.005f)
+			{
+				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+			}
+		}
+	}
+	color *= lig;
+	PS_OUTPUT Out;
+	float lightColor = length(color.xyz);
+	Out.color = float4(lightColor, lightColor, lightColor, 1.0f);
+	float depth = In.ScreenSpacePos.z / In.ScreenSpacePos.w;
+	Out.depth = float4(depth, 0.0f, 0.0f, 1.0f);
+	return Out;
+}
 //スキンありモデル用のテクニック。
 technique SkinModel
 {
@@ -472,5 +675,45 @@ technique DitheringNoSkinModel
 	{
 		VertexShader = compile vs_3_0 VSMain(false);
 		PixelShader = compile ps_3_0 DitheringPSMain();
+	}
+}
+
+//スキンありモデル用のディザリングテクニック
+technique GhostSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(true);
+		PixelShader = compile ps_3_0 GhostPSMain();
+	}
+}
+
+//スキンなしモデル用のディザリングテクニック
+technique GhostNoSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(false);
+		PixelShader = compile ps_3_0 GhostPSMain();
+	}
+}
+
+//スキンありモデル用のテクニック。
+technique PlayerSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(true);
+		PixelShader = compile ps_3_0 PlayerPSMain();
+	}
+}
+
+//スキンなしモデル用テクニック。
+technique PlayerNoSkinModel
+{
+	pass p0
+	{
+		VertexShader = compile vs_3_0 VSMain(false);
+		PixelShader = compile ps_3_0 PlayerPSMain();
 	}
 }

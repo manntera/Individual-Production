@@ -10,6 +10,7 @@ SoundSource::SoundSource()
 	memset(m_coefficients, 0, sizeof(m_coefficients));
 	memset(m_emitterAzimuths, 0, sizeof(m_emitterAzimuths));
 	m_position = { 0.0f, 0.0f, 0.0f };
+	m_is3DSound = false;
 }
 
 SoundSource::~SoundSource()
@@ -17,6 +18,10 @@ SoundSource::~SoundSource()
 	if (m_sourceVoice != nullptr)
 	{
 		m_sourceVoice->DestroyVoice();
+	}
+	if (m_is3DSound)
+	{
+		GetSoundEngine().Delete3dSound(this);
 	}
 }
 
@@ -31,6 +36,11 @@ void SoundSource::Init(char* filePath, bool is3DSound)
 	m_dspSettings.pDelayTimes = nullptr;
 	m_dspSettings.SrcChannelCount = INPUTCHANNELS;
 	m_dspSettings.DstChannelCount = GetSoundEngine().GetChannelNum();
+	m_is3DSound = is3DSound;
+	if (m_is3DSound)
+	{
+		GetSoundEngine().Add3dSound(this);
+	}
 }
 
 void SoundSource::Update()

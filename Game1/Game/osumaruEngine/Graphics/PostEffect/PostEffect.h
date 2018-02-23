@@ -24,6 +24,7 @@ public:
 	{
 		return m_dof;
 	}
+
 private:
 	Bloom				m_bloom;		//ブルーム
 	MonochromeFilter	m_monochrome;	//モノクロフィルター

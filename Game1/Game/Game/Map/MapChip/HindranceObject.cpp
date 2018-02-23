@@ -56,6 +56,7 @@ void HindranceObject::Update()
 	MapChip::Update();
 	if (!m_isActive)
 	{
+		m_rigidBody.SetPosition(m_position);
 		return;
 	}
 	if (m_timerLimit <= m_timer)

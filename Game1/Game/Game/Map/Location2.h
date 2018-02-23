@@ -52,7 +52,7 @@
 	"GroundBrock2",
 	D3DXVECTOR3(-37.80f, 85.70f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, -0.71f, 0.00f, -0.71f ),  //回転
-	enMapTagFall, //タグ
+	enMapTagFall2, //タグ
 },
 //GroundBrock
 {

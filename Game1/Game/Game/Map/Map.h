@@ -6,7 +6,9 @@ enum EnMapChipTag
 {
 	enMapTagUntagged,
 	enMapTagPlayer,
-	enMapTagFall,
+	enMapTagFall1,
+	enMapTagFall2,
+	enMapTagFall3,
 	enMapTagGoal,
 	enMapTagMapChip,
 	enMapTagMoveFloor,
@@ -16,6 +18,9 @@ enum EnMapChipTag
 	enMapTagScoreUp,
 	enMapTagStopTime,
 	enMapTagGoalObject,
+	enMapTagBlowObstacle,
+	enMapTagInvincibleItem,
+	enMapTagPlayerDelayItem,
 	enMapTagNum,
 };
 

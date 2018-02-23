@@ -31,7 +31,12 @@ Player::Player() :
 	m_rotationFrameNum(3),
 	m_frameAngle(0.0f),
 	m_rotationCount(0),
-	m_jumpSpeed(27.0f)
+	m_jumpSpeed(27.0f),
+	m_delayTime(-1.0f),
+	m_isInvincible(false),
+	m_invincibleTime(-1.0f),
+	m_isObstacle(false),
+	m_obstacleTime(-1.0f)
 
 {
 }
@@ -54,27 +59,27 @@ void Player::GhostDataStart() const
 void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 {
 	//ライトの設定
-	float ambientLightColor = 0.6f;
-	float diffuseLightColor0 = 0.3f;
-	float diffuseLightColor1 = 0.3f;
+	float ambientLightColor = 0.4f;
+	float diffuseLightColor0 = 0.7f;
+	float diffuseLightColor1 = 0.2f;
 	float diffuseLightColor2 = 0.2f;
-	float diffuseLightColor3 = 0.15f;
+	float diffuseLightColor3 = 0.2f;
 	m_light.SetAmbiemtLight({ ambientLightColor, ambientLightColor, ambientLightColor, 1.0f });
-	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(diffuseLightColor0, diffuseLightColor0, diffuseLightColor0, 1.0f));
-	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(diffuseLightColor1, diffuseLightColor1, diffuseLightColor1, 1.0f));
-	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(diffuseLightColor2, diffuseLightColor2, diffuseLightColor2, 1.0f));
-	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(diffuseLightColor3, diffuseLightColor3, diffuseLightColor3, 1.0f));
+	m_light.SetDiffuseLightColor(0, D3DXVECTOR4(diffuseLightColor0, diffuseLightColor0, diffuseLightColor0, 5.0f));
+	m_light.SetDiffuseLightColor(1, D3DXVECTOR4(diffuseLightColor1, diffuseLightColor1, diffuseLightColor1, 5.0f));
+	m_light.SetDiffuseLightColor(2, D3DXVECTOR4(diffuseLightColor2, diffuseLightColor2, diffuseLightColor2, 5.0f));
+	m_light.SetDiffuseLightColor(3, D3DXVECTOR4(diffuseLightColor3, diffuseLightColor3, diffuseLightColor3, 5.0f));
 	D3DXVECTOR3 lightDirection;
-	lightDirection = { -7.0f, -4.5f, -5.0f };
+	lightDirection = { 7.0f, -10.0f, 5.0f };
 	D3DXVec3Normalize(&lightDirection, &lightDirection);
 	m_light.SetDiffuseLightDirection(0, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
-	lightDirection = { 2.0f, 0.0f, 10.0f };
+	lightDirection = { -2.0f, 0.0f, -10.0f };
 	D3DXVec3Normalize(&lightDirection, &lightDirection);
 	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
-	lightDirection = { 10.0f, -3.0f, -4.0f };
+	lightDirection = { -10.0f, -3.0f, 4.0f };
 	D3DXVec3Normalize(&lightDirection, &lightDirection);
 	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
-	lightDirection = { -5.0f, -5.0f, 5.0f };
+	lightDirection = { 5.0f, -5.0f, -5.0f };
 	D3DXVec3Normalize(&lightDirection, &lightDirection);
 	m_light.SetDiffuseLightDirection(3, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
 
@@ -102,6 +107,7 @@ bool Player::Start()
 	m_skinModel.SetNormalMap(texture);
 	texture = GetTextureResource().LoadTexture("Assets/modelData/utc_spec.tga");
 	m_skinModel.SetSpecularMap(texture, &GetGameScene().GetCamera());
+	m_skinModel.SetShaderTechnique(enShaderTechniquePlayer);
 
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, m_scale);
 	//アニメーションの初期化
@@ -112,8 +118,6 @@ bool Player::Start()
 	m_anim.SetAnimationLoopFlg(enAnimSetJump, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetCliffRise, false);
 	m_anim.SetAnimationLoopFlg(enAnimSetVerticalJump, false);
-	
-
 	m_wallJump.Init(this, &m_characterController);
 	m_isParentRotation = false;
 	return true;
@@ -126,9 +130,25 @@ void Player::Update()
 	{
 		return;
 	}
-	Move();
-	m_wallJump.Update();
-	m_anim.Update(GetGameTime().GetDeltaFrameTime());
+	float deltaTime = GetGameTime().GetDeltaFrameTime();
+	if (0.0f < m_delayTime)
+	{
+		deltaTime *= 1.0f / 6.0f;
+	}
+	Move(deltaTime);
+	if (!m_isObstacle)
+	{
+		m_wallJump.Update();
+	}
+	else
+	{
+		m_obstacleTime -= GetGameTime().GetDeltaFrameTime();
+		if (m_obstacleTime < 0.0f)
+		{
+			m_isObstacle = false;
+		}
+	}
+	m_anim.Update(deltaTime);
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 	if (m_characterController.IsOnGround())
 	{
@@ -139,17 +159,36 @@ void Player::Update()
 	{
 		GetGameScene().GameOver();
 	}
+	if (GetPad().IsTriggerButton(enButtonY))
+	{
+		//SoundSource* sound = New<SoundSource>(0);
+		//sound->Init("Assets/sound/enter.wav", true);
+		//sound->Play(false);
+		//sound->SetPosition(m_position);
+	}
 	//シャドウマップのライトカメラを更新
 	GetShadowMap().SetLightCameraTarget(m_characterController.GetPosition());
 	D3DXVECTOR3 lightCameraPos = m_characterController.GetPosition();
 	lightCameraPos += {0.0f, 40.0f, 0.0f};
 	GetShadowMap().SetLightCameraPosition(lightCameraPos);
+	if (0.0f < m_delayTime)
+	{
+		m_delayTime -= GetGameTime().GetDeltaFrameTime();
+	}
+	if (m_isInvincible)
+	{
+		m_invincibleTime -= GetGameTime().GetDeltaFrameTime();
+		if (m_invincibleTime < 0.0f)
+		{
+			m_isInvincible = false;
+		}
+	}
 }
 
 void Player::CliffRiseStart(const D3DXVECTOR3& moveDirection)
 {
 	//崖を上るアニメーションを再生
-	m_anim.PlayAnimation(enAnimSetCliffRise);
+	PlayAnimation(enAnimSetCliffRise);
 	D3DXVECTOR3 direction = moveDirection;
 	direction.y = 0.0f;
 	Rotation(direction);
@@ -171,7 +210,7 @@ bool Player::CriffRiseEnd()
 	m_characterController.SetPosition(m_position);
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
 	m_skinModel.UpdateWorldMatrix(m_position, m_rotation, { 1.0f, 1.0f, 1.0f });
-	m_anim.PlayAnimation(enAnimSetWait);
+	PlayAnimation(enAnimSetWait);
 	m_currentAnim = enAnimSetWait;
 	return true;
 }
@@ -180,8 +219,7 @@ void Player::WallShear(const D3DXVECTOR3& playerDirection)
 {
 	//壁ずりの時は移動速度を0にする
 	m_characterController.SetMoveSpeed({ 0.0f, 0.0f, 0.0f });
-	m_currentAnim = enAnimSetWallShear;
-	m_anim.PlayAnimation(enAnimSetWallShear);
+	PlayAnimation(enAnimSetWallShear);
 	Rotation(playerDirection);
 }
 
@@ -197,8 +235,7 @@ void Player::WallJump(const D3DXVECTOR3& jumpDirection)
 	m_characterController.SetMoveSpeed(jumpSpeed);
 	Rotation(jumpSpeed);
 	m_jumpCount = 1;
-	m_currentAnim = enAnimSetWallJump;
-	m_anim.PlayAnimation(enAnimSetWallJump);
+	PlayAnimation(enAnimSetWallJump);
 	//ジャンプ音を再生
 	SoundSource* sound = New<SoundSource>(0);
 	sound->Init("Assets/sound/univ0001.wav");
@@ -240,8 +277,46 @@ bool Player::SetParent(const MapChip* parent, bool parentRotation)
 	return true;
 }
 
+void Player::PlayAnimation(EnAnimationSet animationSet)
+{
+	if (m_isObstacle)
+	{
+		return;
+	}
+	if (m_currentAnim != animationSet)
+	{
+		m_currentAnim = animationSet;
+		m_anim.PlayAnimation(m_currentAnim);
+	}
+}
 
-void Player::Move()
+void Player::BlowObstacle()
+{
+	if (m_isInvincible)
+	{
+		return;
+	}
+	D3DXMATRIX matrix = m_skinModel.GetWorldMatrix();
+	D3DXVECTOR3 backVector;
+	backVector.x = -matrix.m[2][0];
+	backVector.y = -matrix.m[2][1];
+	backVector.z = -matrix.m[2][2];
+	D3DXVec3Normalize(&backVector, &backVector);
+	backVector *= 10.0f;
+	backVector.y = 30.0f;
+	m_characterController.SetMoveSpeed(backVector);
+	m_isObstacle = true;
+	m_obstacleTime = 4.0f;
+}
+
+void Player::Invincible()
+{
+	m_isInvincible = true;
+	m_invincibleTime = 4.0f;
+}
+
+
+void Player::Move(float deltaTime)
 {
 	D3DXVECTOR3 moveSpeed = m_characterController.GetMoveSpeed();
 	if (m_characterController.IsOnGround())
@@ -269,10 +344,9 @@ void Player::Move()
 	//動いていない時
 	if (stickDir.x == 0.0f && stickDir.z == 0.0f)
 	{
-		if (m_characterController.IsOnGround() && m_currentAnim != enAnimSetWait)
+		if (m_characterController.IsOnGround())
 		{
-			m_currentAnim = enAnimSetWait;
-			m_anim.PlayAnimation(enAnimSetWait);
+			PlayAnimation(enAnimSetWait);
 		}
 		m_acceleration = 0.0f;
 		m_moveSpeed = 0.0f;
@@ -293,11 +367,7 @@ void Player::Move()
 			//地面についてる時
 			if (m_characterController.IsOnGround())
 			{
-				if (m_currentAnim != enAnimSetRun)
-				{
-					m_currentAnim = enAnimSetRun;
-					m_anim.PlayAnimation(enAnimSetRun);
-				}
+				PlayAnimation(enAnimSetRun);
 				moveSpeed += stickDir;
 				moveSpeed *= speed;
 			}
@@ -332,7 +402,7 @@ void Player::Move()
 	}
 	if (GetPad().IsTriggerButton(enButtonA) && m_jumpCount < 2 && !m_wallJump.IsWallShear())
 	{
-		m_currentAnim = enAnimSetJump;
+		PlayAnimation(enAnimSetJump);
 		//2断面のジャンプの時
 		if (m_jumpCount != 0)
 		{
@@ -342,7 +412,6 @@ void Player::Move()
 				D3DXVec3Normalize(&jumpDir, &jumpDir);
 				jumpDir *= D3DXVec3Length(&moveSpeed);
 				moveSpeed = jumpDir;
-
 			}
 		}
 		else
@@ -356,12 +425,11 @@ void Player::Move()
 			//垂直飛びの時だけそのアニメーションを再生生
 			if (stickDir.x == 0.0f && stickDir.z == 0.0f)
 			{
-				m_currentAnim = enAnimSetVerticalJump;
+				PlayAnimation(enAnimSetVerticalJump);
 			}
 		}
 		//上方向に移動速度を与えるる
 		moveSpeed.y = m_jumpSpeed;
-		m_anim.PlayAnimation(m_currentAnim);
 		Rotation(moveSpeed);
 		SoundSource* sound = New<SoundSource>(0);
 		sound->Init("Assets/sound/univ0002.wav");
@@ -377,13 +445,16 @@ void Player::Move()
 	}
 
 	moveSpeed += m_stageGimmickMoveSpeed;
-	m_characterController.SetMoveSpeed(moveSpeed);
+	if (!m_isObstacle)
+	{
+		m_characterController.SetMoveSpeed(moveSpeed);
+	}
 	if (m_parent != nullptr)
 	{
 		D3DXVECTOR3 position;
 		D3DXVec3TransformCoord(&position, &m_localPosition, &m_parent->GetWorldMatrix());
 		m_characterController.SetPosition(position);
-		m_characterController.Execute();
+		m_characterController.Execute(deltaTime);
 		position = m_characterController.GetPosition();
 		D3DXMATRIX inverseMatrix;
 		D3DXMatrixInverse(&inverseMatrix, NULL, &m_parent->GetWorldMatrix());
@@ -391,7 +462,7 @@ void Player::Move()
 	}
 	else
 	{
-		m_characterController.Execute();
+		m_characterController.Execute(deltaTime);
 	}
 
 	m_movement = m_characterController.GetPosition() - m_position;

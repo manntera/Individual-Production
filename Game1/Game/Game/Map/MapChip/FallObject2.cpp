@@ -10,13 +10,16 @@ FallObject2::FallObject2() :
 	m_timer(0.0f),
 	m_animationTimer(0.0f),
 	m_animationMove(0.0f, 0.0f, 0.0f),
-	m_frameNum(0)
+	m_frameNum(0),
+	m_pSound(nullptr),
+	m_soundVolume(1.0f)
 {
 }
 
 FallObject2::~FallObject2()
 {
 	ParticleDelete();
+	SoundDelete();
 }
 
 void FallObject2::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const char* modelName, Animation* anim)
@@ -69,14 +72,19 @@ void FallObject2::Update()
 		return;
 	}
 	//プレイヤーが上に乗ったら落ち始める
-	if (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg())
+	if (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg() && !m_isFall)
 	{
 		m_isFall = true;
 		ParticleDelete();
+		m_pSound = New<SoundSource>(0);
+		m_pSound->Init("Assets/sound/seismic.wav");
+		m_pSound->SetVolume(m_soundVolume);
+		m_pSound->Play(true);
 	}
 	if (m_isFall)
 	{
-		if (m_animationTimer < 1.2f)
+		const float animationLimit = 1.2f;
+		if (m_animationTimer < animationLimit)
 		{
 
 			m_position += m_animationMove;
@@ -96,6 +104,15 @@ void FallObject2::Update()
 			{
 				MapChipDelete();
 			}
+			if (0.0f < m_soundVolume)
+			{
+				m_pSound->SetVolume(m_soundVolume);
+				m_soundVolume -= GetGameTime().GetDeltaFrameTime() * 0.5f;
+			}
+			else
+			{
+				SoundDelete();
+			}
 		}
 	}
 	//剛体を移動
@@ -111,6 +128,15 @@ void FallObject2::ParticleDelete()
 	{
 		Delete(m_particle);
 		m_particle = nullptr;
+	}
+}
+
+void FallObject2::SoundDelete()
+{
+	if (m_pSound != nullptr)
+	{
+		Delete(m_pSound);
+		m_pSound = nullptr;
 	}
 }
 

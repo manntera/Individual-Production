@@ -19,6 +19,7 @@ public:
 	//描画関数
 	void Draw();
 
+
 private:
 	Primitive		m_primitive;	//プリミティブ
 	LPD3DXEFFECT	m_pEffect;		//エフェクト

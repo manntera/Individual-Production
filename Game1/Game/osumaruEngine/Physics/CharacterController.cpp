@@ -4,6 +4,7 @@
 #include "CollisionAttr.h"
 #include "../Engine.h"
 
+
 //衝突したときに呼ばれる関数オブジェクト(地面用)
 struct SweepResultGround : public btCollisionWorld::ConvexResultCallback
 {
@@ -140,7 +141,7 @@ struct SweepResultWall : public btCollisionWorld::ConvexResultCallback
 			btVector3 btMoveSpeed = hitObject->getWorldTransform().getOrigin() - hitObject->getOneBeforeWorldTransform().getOrigin();
 			D3DXVECTOR3 moveSpeed = { btMoveSpeed.x(), btMoveSpeed.y(), btMoveSpeed.z() };
 			distance = D3DXVec3Length(&moveSpeed);
-			if (0.1 <= distance)
+			if (FLT_EPSILON <= distance)
 			{
 				D3DXVec3Normalize(&moveSpeed, &moveSpeed);
 				if (D3DXVec3Dot(&ray, &moveSpeed) < 0.0f)
@@ -210,18 +211,18 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 	m_rigidBody.SetCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
 }
 
-void CharacterController::Execute()
+void CharacterController::Execute(float deltaTime)
 {
 
 	StaticExecute();
 	PhysicsWorld& physicsWorld = GetPhysicsWorld();
 	//速度に重力加速度を加える。
-	m_moveSpeed.y += m_gravity * GetGameTime().GetDeltaFrameTime();
+	m_moveSpeed.y += m_gravity * deltaTime;
 	//次の移動先となる座標を計算する。
 	D3DXVECTOR3 nextPosition = m_position;
 	//速度からこのフレームでの移動量を求める。オイラー積分。
 	D3DXVECTOR3 addPos = m_moveSpeed;
-	addPos *= GetGameTime().GetDeltaFrameTime();
+	addPos *= deltaTime;
 	nextPosition += addPos;
 	D3DXVECTOR3 originalXZDir = addPos;
 	originalXZDir.y = 0.0f;
@@ -442,7 +443,7 @@ void CharacterController::Execute()
 void CharacterController::StaticExecute()
 {
 	const int rayNum = 4;
-	const float rayLength = 10.0f;
+	const float rayLength = 5.0f;
 	D3DXVECTOR3 ray[rayNum] =
 	{
 		{ rayLength,	0.0f, 0.0f},

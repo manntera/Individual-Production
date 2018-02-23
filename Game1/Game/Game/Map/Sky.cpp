@@ -6,7 +6,11 @@
 Sky::Sky() :
 	m_skinModel(),
 	m_skinModelData(),
-	m_light()
+	m_position(0.0f, 0.0, 0.0f),
+	m_rotation(0.0f, 0.0f, 0.0f, 1.0f),
+	m_scale(1.0f, 1.0f, 1.0f),
+	m_light(),
+	m_stageNum(0)
 {
 
 }
@@ -16,24 +20,48 @@ Sky::~Sky()
 
 }
 
+void Sky::Init(int stageNum)
+{
+	m_stageNum = stageNum;
+}
+
 bool Sky::Start()
 {
-
-	GetModelDataResource().Load(&m_skinModelData, nullptr, "Assets/modelData/SkyBox1.X");
+	char* filePath;
+	switch (m_stageNum)
+	{
+	case 0:
+		filePath = "Assets/modelData/SkyBox3.X";
+		break;
+	case 1:
+		filePath = "Assets/modelData/SkyBox3.X";
+		break;
+	case 2:
+		filePath = "Assets/modelData/SkyBox3.X";
+		break;
+	case 3:
+		filePath = "Assets/modelData/EveningSkyBox3.X";
+		break;
+	case 4:
+		filePath = "Assets/modelData/NightSkyBox3.X";
+		break;
+	}
+	GetModelDataResource().Load(&m_skinModelData, nullptr, filePath);
 	m_skinModel.Init(&m_skinModelData);
 	m_light.SetAmbiemtLight({ 1.0f, 1.0f, 1.0f, 1.0f });
 	m_skinModel.SetLight(&m_light);
+	m_position = { 0.0f, -60.0f, 0.0f };
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 	return true;
 }
 
 void Sky::Update()
 {
-	D3DXQUATERNION rotation;
-	D3DXQuaternionIdentity(&rotation);
-	D3DXVECTOR3 position = { 0.0f, 0.0f, 0.0f };
-	float scaleValue = 1.0f;
-	D3DXVECTOR3 scale = { scaleValue, scaleValue, scaleValue };
-	m_skinModel.Update(position, rotation, scale);
+	float radAngle = cPI / 180.0f * 0.03f;
+	D3DXQUATERNION multi;
+	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), radAngle);
+	D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
+	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
 
 void Sky::Draw()

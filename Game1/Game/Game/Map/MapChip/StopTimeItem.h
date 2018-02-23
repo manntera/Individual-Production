@@ -5,8 +5,16 @@
 class StopTimeItem : public MapChip
 {
 public:
+	//コンストラクタ
+	StopTimeItem();
+
+
 	//更新関数
 	void Update()override;
 
+	void Draw()override;
+
 private:
+	bool	m_isDead;
+	float	m_revivalTime;
 };

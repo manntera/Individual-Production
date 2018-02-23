@@ -20,6 +20,8 @@ enum EnSkinModelShaderTechnique
 	enShaderTechniqueShadow,				//影を書く時のテクニック
 	enShaderTechniqueSilhouette,
 	enShaderTechniqueDithering,
+	enShaderTechniqueGhost,
+	enShaderTechniquePlayer,
 	enShaderTechniqueNum,
 };
 class SkinModel : Uncopyable

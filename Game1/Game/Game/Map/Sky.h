@@ -11,6 +11,8 @@ public:
 	//デストラクタ
 	~Sky();
 
+	void Init(int stageNum);
+
 	//初期化関数
 	bool Start()override;
 
@@ -23,5 +25,9 @@ private:
 
 	SkinModel		m_skinModel;			//スキンモデル
 	SkinModelData	m_skinModelData;		//スキンモデルデータ
+	D3DXVECTOR3		m_position;				//座標
+	D3DXQUATERNION	m_rotation;				//回転
+	D3DXVECTOR3		m_scale;				//拡大
 	Light			m_light;				//モデルのライト
+	int				m_stageNum;
 };

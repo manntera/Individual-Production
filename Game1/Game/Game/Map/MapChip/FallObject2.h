@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "MapChip.h"
 //落ちるオブジェクト
 
@@ -26,9 +25,12 @@ public:
 
 	//描画関数
 	void Draw()override;
-
+private:
 	//パーティクルを消去
 	void ParticleDelete();
+
+	//サウンドを消去
+	void SoundDelete();
 
 private:
 	bool				m_isFall;			//落ち始めたか
@@ -39,4 +41,6 @@ private:
 	float				m_animationTimer;
 	D3DXVECTOR3			m_animationMove;
 	int					m_frameNum;
+	SoundSource*		m_pSound;
+	float				m_soundVolume;
 };

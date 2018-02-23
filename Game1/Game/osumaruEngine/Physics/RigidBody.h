@@ -67,6 +67,10 @@ public:
 		m_rigidBody->getWorldTransform().setRotation(btQuaternion(rotation.x, rotation.y, rotation.z, rotation.w));
 	}
 
+	void PhysicsWorldAddRigidBody();
+
+	void PhysicsWorldRemoveRigidBody();
+
 	
 	void SetUserIndex(int index)
 	{

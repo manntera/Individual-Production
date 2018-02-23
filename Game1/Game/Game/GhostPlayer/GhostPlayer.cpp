@@ -35,7 +35,9 @@ bool GhostPlayer::Start()
 	m_modelData.CloneModelData(player->GetSkinModelData(), &m_animation);
 	m_model.Init(&m_modelData);
 	m_light = player->GetLight();
+	m_light.SetAmbiemtLight({ 0.0f, 0.0f, 0.0f, 1.0f });
 	m_model.SetLight(&m_light);
+	m_model.SetShaderTechnique(enShaderTechniqueGhost);
 	//ゴーストデータの最初のイテレーターを取得
 	m_ghostData = GetGhostDataListManager().GetGhostData().begin();
 	m_animation.PlayAnimation(m_ghostData->currentAnimationNum);

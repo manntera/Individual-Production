@@ -29,7 +29,10 @@ public:
 	void Init(float radius, float height, const D3DXVECTOR3& position);
 
 	//実行関数
-	void Execute();
+	void Execute(float deltaTime);
+
+	//動いてるオブジェクトとのあたり判定をとる
+	void StaticExecute();
 
 	//座標を取得。
 	const D3DXVECTOR3& GetPosition() const
@@ -118,8 +121,6 @@ public:
 	{
 		m_rigidBody.SetUserIndex(userNum);
 	}
-
-	void StaticExecute();
 
 	void Draw();
 private:

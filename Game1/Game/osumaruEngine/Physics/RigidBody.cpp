@@ -22,6 +22,17 @@ void RigidBody::Create(const RigidBodyInfo& rbInfo)
 	m_rigidBody->setUserIndex(enCollisionAttr_MapChip);
 }
 
+void RigidBody::PhysicsWorldAddRigidBody()
+{
+	GetPhysicsWorld().AddRigidBody(m_rigidBody.get());
+}
+
+
+void RigidBody::PhysicsWorldRemoveRigidBody()
+{
+	GetPhysicsWorld().RemoveRigidBody(m_rigidBody.get());
+}
+
 void RigidBody::Release()
 {
 	if (m_rigidBody)

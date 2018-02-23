@@ -119,6 +119,7 @@ void Engine::GameLoop()
 			m_physicsWorld->Update();
 			m_shadowMap.Update();
 			m_pad.Update();
+			m_soundEngine.Update();
 			sw.Stop();
 			if (sw.GetElapsedTime() < 1.0f / 30.0f)
 			{

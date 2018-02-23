@@ -20,7 +20,7 @@ GameScene::GameScene() :
 	m_pSky(nullptr),
 	m_pBgm(nullptr),
 	m_stageNum(0),
-	m_stageMaxNum(4),
+	m_stageMaxNum(5),
 	m_pTimeSprite(nullptr),
 	m_isInit(false),
 	m_isTimeAttack(false),
@@ -56,21 +56,22 @@ bool GameScene::Start()
 	if (isInit)
 	{
 		m_pSky = New<Sky>(0);
+		m_pSky->Init(m_stageNum);
 		m_pMap = New<Map>(0);
 		m_pCamera = New<GameCamera>(CAMERA_PRIORITY);
 		m_pMap->Init(m_stageNum);
 		m_pCamera->Init();
 		m_pBgm = New<SoundSource>(0);
-		if (m_isTimeAttack)
-		{
-			m_pBgm->Init("Assets/sound/FootRace.wav");
-			m_pBgm->SetVolume(0.1f);
-		}
-		else
+		//if (m_isTimeAttack)
 		{
 			m_pBgm->Init("Assets/sound/candybuke.wav");
-			m_pBgm->SetVolume(0.3f);
+			m_pBgm->SetVolume(0.7f);
 		}
+		//else
+		//{
+		//	m_pBgm->Init("Assets/sound/candybuke.wav");
+		//	m_pBgm->SetVolume(0.3f);
+		//}
 		m_pBgm->Play(true);
 		if (m_isTimeAttack)
 		{

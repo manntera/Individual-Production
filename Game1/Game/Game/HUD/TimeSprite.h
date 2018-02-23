@@ -31,7 +31,7 @@ private:
 	static const int	DIGIT_MAX = 2;						//桁の数
 	static const int	TIME_MAX = 3;						//区切りの数
 	Sprite				m_timeSprite;						//タイムスプライト
-	Sprite				m_colonSprite[TIME_MAX];			//区切りのスプライト
+	Sprite				m_colonSprite[TIME_MAX - 1];			//区切りのスプライト
 	Sprite				m_numSprite[TIME_MAX][DIGIT_MAX];	//数字のスプライト
 	Texture*			m_numTexture[NUM_MAX];				//数字のテクスチャ
 	float				m_time;								//タイム

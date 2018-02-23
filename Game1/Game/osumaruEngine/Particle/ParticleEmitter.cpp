@@ -22,11 +22,11 @@ void ParticleEmitter::Init(const SParticleEmittInfo& info, const Camera* camera)
 	m_info = info;
 	m_pCamera = camera;
 	m_lifeTimer = info.emitterLifeTime;
+	m_intervalTime = m_info.emittIntervalTime;
 	if (info.isFirstTimeRandom)
 	{
-		m_lifeTimer *= (float)GetRandom().GetRandDouble();
+		m_intervalTime *= (float)GetRandom().GetRandDouble();
 	}
-	m_intervalTime = m_info.emittIntervalTime;
 	if (1 <= info.particleNum)
 	{
 		m_particleNum = info.particleNum;

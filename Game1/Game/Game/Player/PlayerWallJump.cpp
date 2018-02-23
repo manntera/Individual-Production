@@ -100,10 +100,10 @@ void PlayerWallJump::Update()
 			m_characterController->GetWallCollisionObject() != nullptr)
 		{
 			//壁の法線とプレイヤーの向きで内積を計算
-			D3DXVECTOR3 wallNormal = m_wallDetection.GetCollisionNormal();
+			D3DXVECTOR3 wallNormal = m_characterController->GetWallNormal();
 			wallNormal.y = 0.0f;
 			D3DXVec3Normalize(&wallNormal, &wallNormal);
-			D3DXMATRIX matrix = m_player->GetWorldMatrix();
+			const D3DXMATRIX& matrix = m_player->GetWorldMatrix();
 			D3DXVECTOR3 playerDirection;
 			playerDirection.x = matrix.m[2][0];
 			playerDirection.y = 0.0f;
@@ -111,9 +111,9 @@ void PlayerWallJump::Update()
 			D3DXVec3Normalize(&playerDirection, &playerDirection);				
 			playerDirection *= -1.0f;
 			float dot = D3DXVec3Dot(&playerDirection, &wallNormal);
-			float rad = 30.0f / 180.0f * cPI;
+			float rad = 0.0f / 180.0f * cPI;
 			//壁に対して入射角がある程度あった場合壁に張り付く
-			if (sin(rad) < dot)
+			if (0.0f < dot)
 			{
 				m_wallDetection.SetJudgmentType(enJudgment_Wall);
 				m_isWallShear = true;

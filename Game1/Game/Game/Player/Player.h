@@ -18,6 +18,7 @@ enum EnAnimationSet
 };
 class MapChip;
 
+
 class Player : public GameObject
 {
 public:
@@ -130,15 +131,26 @@ public:
 	{
 		return m_light;
 	}
+
+	void MoveSpeedDelay()
+	{
+		m_delayTime = 6.0f;
+	}
+
+	void Invincible();
+	
+	void BlowObstacle();
 private:
 	//移動処理をする関数
-	void Move();
+	void Move(float deltaTime);
 
 	//モデルを移動方向に合わせてディレイをかけながら回転させる関数
 	void DelayRotation(const D3DXVECTOR3& rotationDirection);
 
 	//モデルを移動方向に合わせて回転させる関数
 	void Rotation(const D3DXVECTOR3& rotationDirection);
+
+	void PlayAnimation(EnAnimationSet animationSet);
 
 private:
 	SkinModel			m_skinModel;			//スキンモデル
@@ -165,4 +177,15 @@ private:
 	float				m_frameAngle;			//1フレームで回転する回転量
 	int					m_rotationCount;		//回転を線形補間するためのカウンター
 	const float			m_jumpSpeed;
+	float				m_delayTime;
+	bool				m_isInvincible;			
+	float				m_invincibleTime;
+	bool				m_isObstacle;
+	float				m_obstacleTime;
 };
+
+
+
+
+
+

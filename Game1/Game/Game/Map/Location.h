@@ -108,5 +108,47 @@
 	"coin",
 	D3DXVECTOR3(42.96f, 4.50f, -60.59f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-	enMapTagScoreUp, //タグ
+	enMapTagPlayerDelayItem, //タグ
+},
+//coin
+{
+	"coin",
+	D3DXVECTOR3(23.10f, -29.80f, -60.60f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagInvincibleItem, //タグ
+},
+//coin
+{
+	"coin",
+	D3DXVECTOR3(42.44f, -29.80f, -60.60f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagBlowObstacle, //タグ
+},
+//coin
+{
+	"coin",
+	D3DXVECTOR3(42.44f, -29.80f, -28.70f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagBlowObstacle, //タグ
+},
+//coin
+{
+	"coin",
+	D3DXVECTOR3(42.44f, -29.80f, 8.20f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagBlowObstacle, //タグ
+},
+//coin
+{
+	"coin",
+	D3DXVECTOR3(23.10f, -29.80f, -41.80f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagInvincibleItem, //タグ
+},
+//coin
+{
+	"coin",
+	D3DXVECTOR3(23.10f, -29.80f, -14.10f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagInvincibleItem, //タグ
 },

@@ -224,3 +224,8 @@ static SkinModelDataResource& GetModelDataResource()
 {
 	return GetEngine().GetModelDataResource();
 }
+
+static PostEffect& GetPostEffect()
+{
+	return GetEngine().GetPostEffect();
+}

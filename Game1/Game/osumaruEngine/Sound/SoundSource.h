@@ -73,4 +73,5 @@ private:
 	WaveFileOpen			m_waveFile;			//WAVEファイルのデータ
 	bool					m_isLoop;			//ループフラグ
 	bool					m_isPlaying;		//再生中か？
+	bool					m_is3DSound;
 };

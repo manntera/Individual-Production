@@ -4,9 +4,27 @@
 #include "../Map.h"
 #include "../../Player/Player.h"
 
+StopTimeItem::StopTimeItem() :
+		m_isDead(false),
+		m_revivalTime(0.0f)
+{
+
+}
+
 void StopTimeItem::Update()
 {
+	if (m_isDead)
+	{
+		m_revivalTime += GetGameTime().GetDeltaFrameTime();
+		if (6.0f < m_revivalTime)
+		{
+			m_isDead = false;
+			m_revivalTime = 0.0f;
+		}
+		return;
+	}
 	MapChip::Update();
+	m_light.SetAmbiemtLight({ 0.3f, 0.3f, 0.3f, 1.0f });
 	D3DXQUATERNION multi;
 	D3DXQuaternionRotationAxis(&multi, &D3DXVECTOR3(0.0f, 1.0f, 0.0f), 3.0f * cPI / 180.0f);
 	D3DXQuaternionMultiply(&m_rotation, &m_rotation, &multi);
@@ -15,7 +33,16 @@ void StopTimeItem::Update()
 	if (D3DXVec3Length(&distance) < 8.0f)
 	{
 		m_pMap->StopTime();
-		MapChipDelete();
+		m_isDead = true;
 	}
 	m_skinModel.Update(m_position, m_rotation, m_scale);
+}
+
+void StopTimeItem::Draw()
+{
+	if (m_isDead)
+	{
+		return;
+	}
+	MapChip::Draw();
 }

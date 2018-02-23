@@ -66,6 +66,13 @@ void DrawMeshContainer(
 		{
 			pEffect->SetTexture("g_specularTexture", specularMap->GetBody());
 			pEffect->SetFloatArray("g_cameraPos", *cameraPos, 3);
+			D3DXMATRIX cameraViewMatrix = *viewMatrix;
+			D3DXMatrixInverse(&cameraViewMatrix, NULL, &cameraViewMatrix);
+ 			D3DXVECTOR3 cameraDir;
+			cameraDir.x = cameraViewMatrix.m[2][0];
+			cameraDir.y = cameraViewMatrix.m[2][1];
+			cameraDir.z = cameraViewMatrix.m[2][2];
+			pEffect->SetFloatArray("g_cameraDir", cameraDir, 3);
 		}
 		pEffect->SetTexture("g_shadowMapTexture", GetShadowMap().GetShadowMapTexture());
 		D3DXMATRIX viewProjMatrix;
@@ -299,6 +306,10 @@ void SkinModel::Init(SkinModelData* modelData)
 	m_shaderTechnique[enShaderTechniqueShadow].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("NoSkinShadowMap");
 	m_shaderTechnique[enShaderTechniqueDithering].SkinModelTechnique = m_pEffect->GetTechniqueByName("DitheringSkinModel");
 	m_shaderTechnique[enShaderTechniqueDithering].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("DitheringNoSkinModel");
+	m_shaderTechnique[enShaderTechniqueGhost].SkinModelTechnique = m_pEffect->GetTechniqueByName("GhostSkinModel");
+	m_shaderTechnique[enShaderTechniqueGhost].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("GhostNoSkinModel");
+	m_shaderTechnique[enShaderTechniquePlayer].SkinModelTechnique = m_pEffect->GetTechniqueByName("PlayerSkinModel");
+	m_shaderTechnique[enShaderTechniquePlayer].NoSkinModelTechnique = m_pEffect->GetTechniqueByName("PlayerNoSkinModel");
 
 }
 
@@ -325,7 +336,6 @@ void SkinModel::UpdateWorldMatrix(const D3DXVECTOR3& trans, const D3DXQUATERNION
 	{
 		m_pSkinModelData->UpdateBoneMatrix(m_worldMatrix);		//ボーン行列を更新
 	}
-	
 }
 
 void SkinModel::Update(const D3DXVECTOR3& trans, const D3DXQUATERNION& rot, const D3DXVECTOR3& scale)

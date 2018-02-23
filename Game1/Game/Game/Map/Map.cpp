@@ -14,6 +14,10 @@
 #include "MapChip\FallObject2.h"
 #include "../Scene/GameScene.h"
 #include "MapChip\GoalObject.h"
+#include "MapChip/BlowObstacle.h"
+#include "MapChip/InvincibleItem.h"
+#include "MapChip/PlayerDelayItem.h"
+#include "MapChip\/FallObject3.h"
 
 struct MapChipInfo
 {
@@ -30,6 +34,9 @@ std::vector<std::vector<MapChipInfo>> mapChipInfo =
 	},
 	{
 #include "Location2.h"
+	},
+	{
+#include "Location3.h"
 	},
 	{
 #include "Location4.h"
@@ -81,8 +88,14 @@ void Map::Init(int stageNum)
 		case enMapTagHindrance:
 			mapChip = New<HindranceObject>(STAGE_GIMMICK_PRIORITY);
 			break;
-		case enMapTagFall:
+		case enMapTagFall1:
+			mapChip = New<FallObject>(STAGE_GIMMICK_PRIORITY);
+			break;
+		case enMapTagFall2:
 			mapChip = New<FallObject2>(STAGE_GIMMICK_PRIORITY);
+			break;
+		case enMapTagFall3:
+			mapChip = New<FallObject3>(STAGE_GIMMICK_PRIORITY);
 			break;
 		case enMapTagMapChip:
 			mapChip = New<MapChip>(STAGE_GIMMICK_PRIORITY);
@@ -95,6 +108,15 @@ void Map::Init(int stageNum)
 			break;
 		case enMapTagGoalObject:
 			mapChip = New<GoalObject>(STAGE_GIMMICK_PRIORITY);
+			break;
+		case enMapTagBlowObstacle:
+			mapChip = New<BlowObstacle>(STAGE_GIMMICK_PRIORITY);
+			break;
+		case enMapTagInvincibleItem:
+			mapChip = New<InvincibleItem>(STAGE_GIMMICK_PRIORITY);
+			break;
+		case enMapTagPlayerDelayItem:
+			mapChip = New<PlayerDelayItem>(STAGE_GIMMICK_PRIORITY);
 			break;
 		default:
 			mapChip = New<StaticMapObject>(STAGE_GIMMICK_PRIORITY);

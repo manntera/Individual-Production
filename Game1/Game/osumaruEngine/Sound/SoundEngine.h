@@ -70,8 +70,6 @@ private:
 	X3DAUDIO_LISTENER		m_3dListener;
 	X3DAUDIO_HANDLE			m_3dAudioHandle;
 	std::list<SoundSource*> m_3dSound;
-	IUnknown*				m_reverbEffect;	
 	IXAudio2*				m_xAudio;			//オーディオ
 	IXAudio2MasteringVoice* m_masteringVoice;	//マスターボイス
-	IXAudio2SubmixVoice*	m_submixVoice;
 };

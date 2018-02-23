@@ -15,7 +15,6 @@ MapChip::MapChip() :
 	m_iterator(),
 	m_isActive(true),
 	m_pPlayer(nullptr)
-
 {
 }
 
