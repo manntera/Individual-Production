@@ -76,7 +76,7 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 	lightDirection = { -2.0f, 0.0f, -10.0f };
 	D3DXVec3Normalize(&lightDirection, &lightDirection);
 	m_light.SetDiffuseLightDirection(1, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
-	lightDirection = { -10.0f, -3.0f, 4.0f };
+	lightDirection = { -10.0f, 3.0f, 4.0f };
 	D3DXVec3Normalize(&lightDirection, &lightDirection);
 	m_light.SetDiffuseLightDirection(2, D3DXVECTOR4(lightDirection.x, lightDirection.y, lightDirection.z, 1.0f));
 	lightDirection = { 5.0f, -5.0f, -5.0f };

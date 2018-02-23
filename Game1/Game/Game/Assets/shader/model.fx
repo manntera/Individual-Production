@@ -207,7 +207,7 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
 	float4 lig = DiffuseLight(normal);
-	if (g_isHasNormalMap)
+/*	if (g_isHasNormalMap)
 	{
 		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
 		lig = float4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -234,7 +234,7 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 		lig.xyz += light;
 		lig += g_light.ambient;
 		lig.w = 1.0f;
-	}
+	}*/
 	if (g_isHasSpecularMap)
 
 	{
@@ -311,7 +311,7 @@ PS_OUTPUT PlayerPSMain(VS_OUTPUT In)
 			float3 lightDir = g_light.diffuseLightDir[i].xyz;
 			lightDir = normalize(lightDir);
 			float3 light = max(0, -dot(normal, lightDir)) * g_light.diffuseLightColor[i].xyz;
-			lig.xyz += light * max(0, dot(lightDir, normalVector));
+			lig.xyz += light;
 		}
 		lig += g_light.ambient;
 		lig.w = 1.0f;
