@@ -95,11 +95,10 @@ struct VS_OUTPUT
 	float3 Normal				: NORMAL;
 	float2 Tex0					: TEXCOORD0;
 	float3 Tangent				: TEXCOORD1;	//接ベクトル
-	float4 LightDir				: TEXCOORD2;
+	float3 BiNormal				: TEXCOORD2;
 	float3 WorldPos				: TEXCOORD3; 
 	float4 ShadowSpacePos		: TEXCOORD4;
 	float4 ScreenSpacePos		: TEXCOORD5;
-	bool isHasSkin				: TEXCOORD6;
 
 };
 
@@ -179,25 +178,13 @@ VS_OUTPUT VSMain(VS_INPUT In, uniform bool hasSkin)
 	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
 	float3 biNormal;
 	biNormal = cross(Normal, Tangent);
-	biNormal = normalize(biNormal);
 	Out.Normal = normalize(Normal);
 	Out.Tangent = normalize(Tangent);
-	float4x4 mat = {
-		float4(Out.Tangent, 0.0f),
-		float4(biNormal, 0.0f),
-		float4(Out.Normal, 0.0f),
-		{0.0f, 0.0f, 0.0f, 1.0f}
-	};
-	mat = transpose(mat);
-	float4 lightDir = -g_light.diffuseLightDir[0];
-	lightDir = mul(lightDir, g_invWorldMatrix);
-	Out.LightDir = mul(lightDir, mat);
-	Out.LightDir.xyz = normalize(Out.LightDir.xyz);
+	Out.BiNormal = normalize(biNormal);
 	Out.Tex0 = In.Tex0;
 	Out.WorldPos = Pos.xyz;
 	Out.ScreenSpacePos = Out.Pos;
 	Out.ShadowSpacePos = mul(float4(Pos.xyz, 1.0f), g_lightViewProjMatrix);
-	Out.isHasSkin = hasSkin;
 	return Out;
 }
 
@@ -206,37 +193,37 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 {
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
-	float4 lig = DiffuseLight(normal);
-/*	if (g_isHasNormalMap)
+	float4 lig = 0.0f;
+	if (g_isHasNormalMap)
 	{
 		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
 		lig = float4(0.0f, 0.0f, 0.0f, 1.0f);
 		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
 		float3 normalVector = normalColor * 2.0f - 1.0f;
 		normalVector = normalize(normalVector);
-
-		//法線マップからとってきたベクトルとライトの方向の内積を取る		
-		float3 lightDir = g_light.diffuseLightDir[0].xyz;
-		lightDir = normalize(lightDir);
-		float3 light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[0].xyz;
-		lig.xyz += light;
-		lightDir = g_light.diffuseLightDir[1].xyz;
-		lightDir = normalize(lightDir);
-		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[1].xyz;
-		lig.xyz += light;
-		lightDir = g_light.diffuseLightDir[2].xyz;
-		lightDir = normalize(lightDir);
-		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[2].xyz;
-		lig.xyz += light;
-		lightDir = g_light.diffuseLightDir[3].xyz;
-		lightDir = normalize(lightDir);
-		light = max(0, dot(lightDir, normalVector)) * g_light.diffuseLightColor[3].xyz;
-		lig.xyz += light;
+		float4x4 mat = {
+			float4(In.Tangent, 0.0f),
+			float4(In.BiNormal, 0.0f),
+			float4(In.Normal, 0.0f),
+			{ 0.0f, 0.0f, 0.0f, 1.0f }
+		};
+		normalVector = mul(normalVector, mat);
+		//法線マップからとってきたベクトルとライトの方向の内積を取る
+		for (int i = 0;i < NUM_DIFFUSE_LIGHT;i++)
+		{
+			float3 lightDir = g_light.diffuseLightDir[i].xyz;
+			lightDir = normalize(lightDir);
+			float3 light = max(0, -dot(normal, lightDir)) * g_light.diffuseLightColor[i].xyz;
+			lig.xyz += light * max(0, -dot(lightDir, normalVector));
+		}
 		lig += g_light.ambient;
 		lig.w = 1.0f;
-	}*/
+	}
+	else
+	{
+		lig = DiffuseLight(normal);
+	}
 	if (g_isHasSpecularMap)
-
 	{
 		//反射ベクトルを求める
 		float3 textureNormal = In.Normal;
@@ -296,7 +283,7 @@ PS_OUTPUT PlayerPSMain(VS_OUTPUT In)
 {
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
-	float4 lig = DiffuseLight(normal);
+	float4 lig = 0.0f;
 	if (g_isHasNormalMap)
 	{
 		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
@@ -304,17 +291,27 @@ PS_OUTPUT PlayerPSMain(VS_OUTPUT In)
 		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
 		float3 normalVector = normalColor * 2.0f - 1.0f;
 		normalVector = normalize(normalVector);
-
+		float4x4 mat = {
+			float4(In.Tangent, 0.0f),
+			float4(In.BiNormal, 0.0f),
+			float4(In.Normal, 0.0f),
+			{ 0.0f, 0.0f, 0.0f, 1.0f }
+		};
+		normalVector = mul(normalVector, mat);
 		//法線マップからとってきたベクトルとライトの方向の内積を取る
 		for (int i = 0;i < NUM_DIFFUSE_LIGHT;i++)
 		{
 			float3 lightDir = g_light.diffuseLightDir[i].xyz;
 			lightDir = normalize(lightDir);
 			float3 light = max(0, -dot(normal, lightDir)) * g_light.diffuseLightColor[i].xyz;
-			lig.xyz += light;
+			lig.xyz += light * max(0, -dot(lightDir, normalVector));
 		}
 		lig += g_light.ambient;
 		lig.w = 1.0f;
+	}
+	else
+	{
+		lig  = DiffuseLight(normal);
 	}
 	if (g_isHasSpecularMap)
 
@@ -445,23 +442,37 @@ PS_OUTPUT DitheringPSMain(VS_OUTPUT In)
 	clip(g_ditheringRate - ditheringMat[screenPos.y][screenPos.x]);
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
-	float4 lig = DiffuseLight(normal);
+	float4 lig = 0.0f;
 	if (g_isHasNormalMap)
 	{
 		float3 normalColor = tex2D(g_normalMapSampler, In.Tex0);
-
+		lig = float4(0.0f, 0.0f, 0.0f, 1.0f);
 		//0.0f～1.0fの値を－1.0f～1.0fの正規化されたベクトルに変換
 		float3 normalVector = normalColor * 2.0f - 1.0f;
 		normalVector = normalize(normalVector);
-
+		float4x4 mat = {
+			float4(In.Tangent, 0.0f),
+			float4(In.BiNormal, 0.0f),
+			float4(In.Normal, 0.0f),
+			{ 0.0f, 0.0f, 0.0f, 1.0f }
+		};
+		normalVector = mul(normalVector, mat);
 		//法線マップからとってきたベクトルとライトの方向の内積を取る
-		float3 light = max(0, dot(In.LightDir.xyz, normalVector)) * g_light.diffuseLightColor[0].xyz;
-		lig.xyz *= light;
+		for (int i = 0;i < NUM_DIFFUSE_LIGHT;i++)
+		{
+			float3 lightDir = g_light.diffuseLightDir[i].xyz;
+			lightDir = normalize(lightDir);
+			float3 light = max(0, -dot(normal, lightDir)) * g_light.diffuseLightColor[i].xyz;
+			lig.xyz += light * max(0, -dot(lightDir, normalVector));
+		}
 		lig += g_light.ambient;
 		lig.w = 1.0f;
 	}
+	else
+	{
+		lig = DiffuseLight(normal);
+	}
 	if (g_isHasSpecularMap)
-
 	{
 		//反射ベクトルを求める
 		float3 textureNormal = In.Normal;
