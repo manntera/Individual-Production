@@ -181,7 +181,8 @@ CharacterController::CharacterController() :
 	m_gravity(-9.8f),
 	m_groundHitObject(nullptr),
 	m_wallHitObject(nullptr),
-	m_wallNormal(0.0f, 0.0f, 0.0f)
+	m_wallNormal(0.0f, 0.0f, 0.0f),
+	m_rigidBodyManip(500.0f)
 {
 }
 
@@ -213,7 +214,6 @@ void CharacterController::Init(float radius, float height, const D3DXVECTOR3& po
 
 void CharacterController::Execute(float deltaTime)
 {
-
 	StaticExecute();
 	PhysicsWorld& physicsWorld = GetPhysicsWorld();
 	//速度に重力加速度を加える。
@@ -432,11 +432,13 @@ void CharacterController::Execute(float deltaTime)
 	}
 	//移動確定。
 	m_position = nextPosition;
+	m_position.y += m_rigidBodyManip;
 	const btRigidBody* btBody = m_rigidBody.GetBody();
 	//剛体を動かす。
 	btBody->setActivationState(DISABLE_DEACTIVATION);
 	//剛体の一を更新
 	m_rigidBody.SetPosition(m_position);
+	m_position.y -= m_rigidBodyManip;
 	//@todo 未対応。 trans.setRotation(btQuaternion(rotation.x, rotation.y, rotation.z));
 }
 
@@ -481,8 +483,6 @@ void CharacterController::StaticExecute()
 			m_position += hitNormal;
 		}
 	}
-	//剛体の位置を更新
-	//m_rigidBody.SetPosition(m_position);
 }
 
 void CharacterController::RemovedRigidBody()

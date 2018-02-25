@@ -136,4 +136,5 @@ private:
 	const btCollisionObject* m_groundHitObject;
 	const btCollisionObject* m_wallHitObject;
 	D3DXVECTOR3		m_wallNormal;
+	const float		m_rigidBodyManip;
 };

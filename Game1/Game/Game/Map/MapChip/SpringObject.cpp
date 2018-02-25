@@ -23,8 +23,8 @@ void SpringObject::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotat
 	//メッシュコライダーを作成してaabbを求める
 	MeshCollider meshCollider;
 	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);
-	D3DXVECTOR3 boxSize = meshCollider.GetAabbMax();
-	m_boxCollider.Create({ boxSize.x, boxSize.y, boxSize.z });
+	D3DXVECTOR3 aabbSize = (meshCollider.GetAabbMax() - meshCollider.GetAabbMin()) / 2;
+	m_boxCollider.Create({ aabbSize.x, aabbSize.y, aabbSize.z });
 
 	RigidBodyInfo rInfo;
 	rInfo.collider = &m_boxCollider;
@@ -56,11 +56,18 @@ void SpringObject::Update()
 		springDirection.y = rotationMat.m[1][1];
 		springDirection.z = rotationMat.m[1][2];
 		D3DXVec3Normalize(&springDirection, &springDirection);
-		springDirection *= 2.0f;
+		springDirection *= 90.0f;
 		m_pPlayer->SetStageGimmickMoveSpeed(springDirection);
 		m_anim.PlayAnimation(1);
 	}
 	m_rigidBody.SetPlayerCollisionGroundFlg(false);
 	m_anim.Update(GetGameTime().GetDeltaFrameTime());
 	m_skinModel.Update(m_position, m_rotation, m_scale);
+}
+
+
+void SpringObject::Draw()
+{
+	MapChip::Draw();
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_rigidBody.GetBody()->getCollisionShape());
 }

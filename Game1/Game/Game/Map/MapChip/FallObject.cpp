@@ -97,5 +97,5 @@ void FallObject::ParticleDelete()
 void FallObject::Draw()
 {
 	MapChip::Draw();
-	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_boxCollider.GetBody());
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_rigidBody.GetBody()->getCollisionShape());
 }

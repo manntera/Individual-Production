@@ -31,6 +31,8 @@ public:
 	*/
 	void Play(bool isLoop);
 
+	void Stop();
+
 	int GetInputChannelNum()
 	{
 		return m_waveFile.GetFormat()->nChannels;

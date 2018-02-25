@@ -43,6 +43,11 @@ void SoundSource::Init(char* filePath, bool is3DSound)
 	}
 }
 
+void SoundSource::Stop()
+{
+	m_sourceVoice->Stop();
+}
+
 void SoundSource::Update()
 {
 	//再生してなければ更新不要

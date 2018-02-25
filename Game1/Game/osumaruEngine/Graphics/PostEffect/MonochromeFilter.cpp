@@ -7,7 +7,8 @@
 MonochromeFilter::MonochromeFilter() :
 	m_primitive(),
 	m_pEffect(nullptr),
-	m_isActive(false)
+	m_isActive(false),
+	m_alpha(0.5f)
 {
 }
 
@@ -59,6 +60,7 @@ void MonochromeFilter::Draw()
 	m_pEffect->Begin(NULL, D3DXFX_DONOTSAVESHADERSTATE);
 	m_pEffect->BeginPass(0);
 	m_pEffect->SetTexture("g_tex", texture);
+	m_pEffect->SetFloat("g_alpha", m_alpha);
 	m_pEffect->CommitChanges();
 	device->SetVertexDeclaration(m_primitive.GetVertexDecaration());
 	device->SetStreamSource(0, m_primitive.GetVertexBuffer(), 0, m_primitive.GetVertexStride());

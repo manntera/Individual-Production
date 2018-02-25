@@ -76,5 +76,5 @@ void RotationObject::Update()
 void RotationObject::Draw()
 {
 	MapChip::Draw();
-	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_meshCollider.GetBody());
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_rigidBody.GetBody()->getCollisionShape());
 }

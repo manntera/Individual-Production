@@ -23,6 +23,9 @@ public:
 	//更新関数
 	void Update()override;
 
+	//描画関数
+	void Draw()override;
+
 private:
 	RigidBody		m_rigidBody;		//剛体
 	BoxCollider		m_boxCollider;		//コライダー

@@ -183,5 +183,5 @@ void FallObject3::Draw()
 		return;
 	}
 	MapChip::Draw();
-	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_boxCollider.GetBody());
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_rigidBody.GetBody()->getCollisionShape());
 }

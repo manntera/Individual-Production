@@ -144,5 +144,5 @@ void FallObject2::SoundDelete()
 void FallObject2::Draw()
 {
 	MapChip::Draw();
-	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_boxCollider.GetBody());
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_rigidBody.GetBody()->getCollisionShape());
 }

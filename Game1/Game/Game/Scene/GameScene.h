@@ -86,6 +86,16 @@ public:
 		m_isLoad = true;
 	}
 
+	void SoundStop()
+	{
+		m_pBgm->Stop();
+	}
+
+	void SoundPlay()
+	{
+		m_pBgm->Play(true);
+	}
+
 private:
 	bool			m_isGameOver;	//ゲームオーバーか？
 	bool			m_isGameClear;	//ゲームクリアか？

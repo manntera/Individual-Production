@@ -65,4 +65,8 @@ private:
 	Player*				m_player;					//プレイヤー
 	float				m_stopTime;					//ステージギミックを止めてる間のカウンター
 	bool				m_isLoad;					//モデルの読み込めたかのフラグ
+	float				m_soundTimer;
+	const float			m_soundTimeLimit;
+	float				m_soundTimeBoundary;
+	const float			m_stopTimeLimit;
 };

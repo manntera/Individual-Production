@@ -33,7 +33,7 @@ void PlayerWallJump::Init(Player* player, CharacterController* characterControll
 	m_player = player;
 	m_characterController = characterController;
 
-	m_groundCollider.Create({ 0.3f, 0.3f, 0.3f });
+	m_groundCollider.Create({ 1.3f, 0.3f, 1.3f });
 	m_wallCollider.Create({ 1.0f, 0.3f, 0.05f });
 	D3DXVECTOR3 position = m_player->GetPosition();
 	D3DXMATRIX worldMatrix = m_player->GetWorldMatrix();

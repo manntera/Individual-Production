@@ -25,6 +25,16 @@ public:
 		return m_dof;
 	}
 
+	void SetIsActiveMonochrome(bool isActive)
+	{
+		m_monochrome.SetIsActive(isActive);
+	}
+
+	void SetAlphaMonochrome(float alpha)
+	{
+		m_monochrome.SetAlpha(alpha);
+	}
+
 private:
 	Bloom				m_bloom;		//ブルーム
 	MonochromeFilter	m_monochrome;	//モノクロフィルター

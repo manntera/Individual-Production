@@ -99,16 +99,16 @@
 //GroundBrock2
 {
 	"GroundBrock2",
-	D3DXVECTOR3(18.10f, 23.00f, -31.00f),             //平行移動
+	D3DXVECTOR3(18.10f, 2.30f, -31.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-	enMapTagFall, //タグ
+	enMapTagUntagged, //タグ
 },
-//coin
+//Spring
 {
-	"coin",
-	D3DXVECTOR3(42.96f, 4.50f, -60.59f),             //平行移動
+	"Spring",
+	D3DXVECTOR3(42.96f, 23.10f, -34.40f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-	enMapTagPlayerDelayItem, //タグ
+	enMapTagSpring, //タグ
 },
 //coin
 {
@@ -151,4 +151,11 @@
 	D3DXVECTOR3(23.10f, -29.80f, -14.10f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagInvincibleItem, //タグ
+},
+//GroundBrock2
+{
+	"GroundBrock2",
+	D3DXVECTOR3(42.40f, 2.30f, -31.00f),             //平行移動
+	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
+	enMapTagFall3, //タグ
 },

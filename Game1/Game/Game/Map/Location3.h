@@ -747,3 +747,24 @@
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, -1.00f ),  //回転
 	enMapTagUntagged, //タグ
 },
+//Spring
+{
+	"Spring",
+	D3DXVECTOR3(105.20f, 62.10f, 182.50f),             //平行移動
+	D3DXQUATERNION(-0.08f, 0.01f, 0.12f, 0.99f ),  //回転
+	enMapTagSpring, //タグ
+},
+//Spring
+{
+	"Spring",
+	D3DXVECTOR3(22.88f, 140.60f, 185.41f),             //平行移動
+	D3DXQUATERNION(-0.16f, -0.02f, 0.04f, 0.99f ),  //回転
+	enMapTagSpring, //タグ
+},
+//Spring
+{
+	"Spring",
+	D3DXVECTOR3(1.50f, -17.20f, -34.70f),             //平行移動
+	D3DXQUATERNION(0.08f, 0.03f, -0.01f, 1.00f ),  //回転
+	enMapTagSpring, //タグ
+},

@@ -472,7 +472,7 @@ void Player::Move(float deltaTime)
 
 void Player::SetStageGimmickMoveSpeed(const D3DXVECTOR3& moveSpeed)
 {
-	m_stageGimmickMoveSpeed += moveSpeed / GetGameTime().GetDeltaFrameTime();
+	m_stageGimmickMoveSpeed += moveSpeed;
 }
 
 void Player::DelayRotation(const D3DXVECTOR3& rotationDirection)
@@ -613,6 +613,6 @@ void Player::Draw()
 	device->SetRenderState(D3DRS_ZENABLE, zEnableStateBackup);
 	device->SetRenderState(D3DRS_ZWRITEENABLE, zwriteEnableStateBackup);
 	m_skinModel.Draw(&GetGameScene().GetCamera().GetViewMatrix(), &GetGameScene().GetCamera().GetProjectionMatrix());
-	m_characterController.Draw();
+	//m_characterController.Draw();
 	m_wallJump.Draw();
 }

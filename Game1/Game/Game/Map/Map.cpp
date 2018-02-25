@@ -30,7 +30,7 @@ struct MapChipInfo
 std::vector<std::vector<MapChipInfo>> mapChipInfo = 
 {
 	{
-#include "Location1.h"
+	#include "Location1.h"
 	},
 	{
 #include "Location2.h"
@@ -53,12 +53,18 @@ Map::Map() :
 	m_mapChip(),
 	m_player(nullptr),
 	m_stopTime(-1.0f),
-	m_isLoad(false)
+	m_isLoad(false),
+	m_soundTimer(0.0f),
+	m_soundTimeLimit(0.8f),
+	m_soundTimeBoundary(0.8f),
+	m_stopTimeLimit(10.0f)
 {
+	GetPostEffect().SetIsActiveMonochrome(false);
 }
 
 Map::~Map()
 {
+	GetPostEffect().SetIsActiveMonochrome(false);
 }
 
 void Map::Init(int stageNum)
@@ -152,8 +158,24 @@ void Map::Update()
 			for (MapChip* mapChip : m_mapChip)
 			{
 				mapChip->SetIsActive(true);
+				GetPostEffect().SetIsActiveMonochrome(false);
+				GetGameScene().SoundPlay();
 			}
 		}
+		m_soundTimer += GetGameTime().GetDeltaFrameTime();
+		if (m_soundTimeBoundary < m_soundTimer)
+		{
+			m_soundTimer = 0.0f;
+			SoundSource* sound = New<SoundSource>(0);
+			sound->Init("Assets/sound/okidokei.wav");
+			sound->Play(false);
+			sound->SetVolume(0.7f);
+			if (0.1f < m_soundTimeBoundary)
+			{
+				m_soundTimeBoundary -= GetGameTime().GetDeltaFrameTime();
+			}
+		}
+		GetPostEffect().SetAlphaMonochrome(m_stopTime / m_stopTimeLimit);
 	}
 	if (!m_isLoad)
 	{
@@ -165,11 +187,19 @@ void Map::Update()
 void Map::StopTime()
 {
 	//マップチップの動きを一時停止
-	m_stopTime = 10.0f;
+	m_stopTime = m_stopTimeLimit;
 	for (MapChip* mapChip : m_mapChip)
 	{
 		mapChip->SetIsActive(false);
 	}
+	GetPostEffect().SetIsActiveMonochrome(true);
+	GetGameScene().SoundStop();
+	m_soundTimeBoundary = m_soundTimeLimit;
+	m_soundTimer = 0.0f;
+	SoundSource* sound = New<SoundSource>(0);
+	sound->Init("Assets/sound/sceneswitch2.wav");
+	sound->Play(false);
+	sound->SetVolume(1.0f);
 }
 
 void Map::MapChipErase(std::list<MapChip*>::iterator iterator)

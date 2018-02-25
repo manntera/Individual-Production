@@ -20,8 +20,19 @@ public:
 	void Draw();
 
 
+	void SetIsActive(bool isActive)
+	{
+		m_isActive = isActive;
+	}
+
+	void SetAlpha(float alpha)
+	{
+		m_alpha = alpha;
+	}
+
 private:
 	Primitive		m_primitive;	//プリミティブ
 	LPD3DXEFFECT	m_pEffect;		//エフェクト
-	bool			m_isActive;	//アクティブか？
+	bool			m_isActive;		//アクティブか？
+	float			m_alpha;		//アルファ値
 };
