@@ -161,10 +161,10 @@ void Player::Update()
 	}
 	if (GetPad().IsTriggerButton(enButtonY))
 	{
-		SoundSource* sound = New<SoundSource>(0);
-		sound->Init("Assets/sound/enter.wav", true);
-		sound->Play(false);
-		sound->SetPosition(m_position);
+		//SoundSource* sound = New<SoundSource>(0);
+		//sound->Init("Assets/sound/enter.wav", true);
+		//sound->Play(false);
+		//sound->SetPosition(m_position);
 	}
 	//シャドウマップのライトカメラを更新
 	GetShadowMap().SetLightCameraTarget(m_characterController.GetPosition());

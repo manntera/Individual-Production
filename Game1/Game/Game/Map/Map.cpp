@@ -30,7 +30,7 @@ struct MapChipInfo
 std::vector<std::vector<MapChipInfo>> mapChipInfo = 
 {
 	{
-#include "Location.h"
+#include "Location1.h"
 	},
 	{
 #include "Location2.h"
