@@ -20,6 +20,7 @@ public:
 	//更新
 	void Update()override;
 
+	//座標を設定(3Dサウンドの時に使う
 	void SetPosition(D3DXVECTOR3 position)
 	{
 		m_position = position;
@@ -31,7 +32,26 @@ public:
 	*/
 	void Play(bool isLoop);
 
+	//一時停止
 	void Stop();
+
+	//ソースボイスを取得
+	IXAudio2SourceVoice* GetBody()
+	{
+		return m_sourceVoice;
+	}
+
+	//座標を取得
+	D3DXVECTOR3& GetPosition()
+	{
+		return m_position;
+	}
+
+	//ボリュームを設定
+	void SetVolume(float volume)
+	{
+		m_sourceVoice->SetVolume(volume, XAUDIO2_COMMIT_NOW);
+	}
 
 	int GetInputChannelNum()
 	{
@@ -53,21 +73,8 @@ public:
 		return m_coefficients;
 	}
 
-	IXAudio2SourceVoice* GetBody()
-	{
-		return m_sourceVoice;
-	}
-	D3DXVECTOR3& GetPosition()
-	{
-		return m_position;
-	}
-
-	void SetVolume(float volume)
-	{
-		m_sourceVoice->SetVolume(volume, XAUDIO2_COMMIT_NOW);
-	}
 private:
-	D3DXVECTOR3				m_position;
+	D3DXVECTOR3				m_position;			//座標
 	FLOAT32					m_coefficients[INPUTCHANNELS * OUTPUTCHANNELS];
 	FLOAT32					m_emitterAzimuths[INPUTCHANNELS];
 	X3DAUDIO_DSP_SETTINGS	m_dspSettings;
@@ -75,5 +82,5 @@ private:
 	WaveFileOpen			m_waveFile;			//WAVEファイルのデータ
 	bool					m_isLoop;			//ループフラグ
 	bool					m_isPlaying;		//再生中か？
-	bool					m_is3DSound;
+	bool					m_is3DSound;		//3Dサウンドか？
 };

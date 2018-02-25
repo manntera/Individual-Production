@@ -36,6 +36,14 @@ void SoundSource::Init(char* filePath, bool is3DSound)
 	m_dspSettings.pDelayTimes = nullptr;
 	m_dspSettings.SrcChannelCount = INPUTCHANNELS;
 	m_dspSettings.DstChannelCount = GetSoundEngine().GetChannelNum();
+	m_dspSettings.DopplerFactor = 1.0f;
+	m_dspSettings.LPFDirectCoefficient = 0.82142854f;
+	m_dspSettings.LPFReverbCoefficient = 0.75f;
+	m_dspSettings.ReverbLevel = 0.69114286f;
+	m_dspSettings.EmitterToListenerAngle = 0.0f;
+	m_dspSettings.EmitterToListenerDistance = 10.0f;
+	m_dspSettings.EmitterVelocityComponent = 0.0f;
+	m_dspSettings.ListenerVelocityComponent = 0.0f;
 	m_is3DSound = is3DSound;
 	if (m_is3DSound)
 	{

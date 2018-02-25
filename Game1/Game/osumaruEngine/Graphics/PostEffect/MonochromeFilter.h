@@ -19,12 +19,13 @@ public:
 	//描画関数
 	void Draw();
 
-
+	//アクティブにするかを設定
 	void SetIsActive(bool isActive)
 	{
 		m_isActive = isActive;
 	}
 
+	//アルファ値を設定
 	void SetAlpha(float alpha)
 	{
 		m_alpha = alpha;
