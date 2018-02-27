@@ -6,6 +6,7 @@
 #include "../Light.h"
 #include "../Texture.h"
 #include "../../Camera/Camera.h"
+#include "../../Engine.h"
 extern UINT                 g_NumBoneMatricesMax;
 extern D3DXMATRIXA16*       g_pBoneMatrices;
 
@@ -92,6 +93,7 @@ void DrawMeshContainer(
 		pEffect->SetInt("g_screenWidth", FRAME_BUFFER_WIDTH);
 		pEffect->SetInt("g_screenHeight", FRAME_BUFFER_HEIGHT);
 		pEffect->SetFloat("g_ditheringRate", ditheringRate);
+		pEffect->SetTexture("g_depthTexture", GetDepthOfField().GetDepthRendertarget().GetTexture());
 	}
 	if (pMeshContainer->pSkinInfo != NULL)
 	{

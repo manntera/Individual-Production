@@ -44,6 +44,9 @@ public:
 	//•`‰æŠÖ”
 	void Draw() override;
 
+	//•`‰æŠÖ”
+	void AfterDraw() override;
+
 	//À•W‚ğæ“¾
 	const D3DXVECTOR3& GetPosition() const
 	{

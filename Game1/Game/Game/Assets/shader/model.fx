@@ -77,6 +77,19 @@ sampler_state
 	AddressV = Wrap;
 };
 
+//シャドウマップ
+texture g_depthTexture;		//スペキュラマップ
+sampler g_depthSampler =
+sampler_state
+{
+	Texture = <g_depthTexture>;
+	MipFilter = NONE;
+	MinFilter = NONE;
+	MagFilter = NONE;
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
 //入力頂点
 struct VS_INPUT
 {
@@ -279,8 +292,17 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 }
 
 //プレイヤー用のピクセルシェーダー
-PS_OUTPUT PlayerPSMain(VS_OUTPUT In)
+float4 PlayerPSMain(VS_OUTPUT In) : COLOR0
 {
+
+	float depth = In.ScreenSpacePos.z / In.ScreenSpacePos.w;
+	float2 uv = In.ScreenSpacePos.xy / In.ScreenSpacePos.w;
+	uv += 1.0f;
+	uv *= 0.5f;
+	uv.y = 1.0f - uv.y;
+
+	float4 depthMap = tex2D(g_depthSampler, uv);
+	clip(depthMap.x - depth);
 	float4 color = tex2D(g_diffuseTextureSampler, In.Tex0);
 	float3 normal = In.Normal;
 	float4 lig = 0.0f;
@@ -366,10 +388,8 @@ PS_OUTPUT PlayerPSMain(VS_OUTPUT In)
 		lig += g_light.diffuseLightColor[i] * pow(poligonDot, 3.0f) * 3.0f * max(0.0f, dot(-lightDir, cameraDir));
 	}
 	color *= lig;
-	PS_OUTPUT Out;
-	Out.color = color;
-	float depth = In.ScreenSpacePos.z / In.ScreenSpacePos.w;
-	Out.depth = float4(depth, 0.0f, 0.0f, 1.0f);
+	float4 Out;
+	Out = color;
 	return Out;
 }
 

@@ -36,7 +36,8 @@ void PostEffect::Init()
 	m_bloom.Init(true);
 	m_bloom.SetWeight(30.0f);
 	m_monochrome.Init(true);
-	m_dof.Init(false);
+	m_dof.Init(true);
+	m_dof.SetIsActive(false);
 	m_monochrome.SetIsActive(false);
 	const int vertexNum = 4;
 	VERTEX_PT vertexBuffer[vertexNum] =

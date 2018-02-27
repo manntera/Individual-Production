@@ -50,7 +50,6 @@ void SpringObject::Update()
 		D3DXQUATERNION rot = m_rigidBody.GetBody()->getWorldTransform().getRotation();
 		D3DXMATRIX rotationMat;
 		D3DXMatrixRotationQuaternion(&rotationMat, &rot);
-
 		D3DXVECTOR3 springDirection;
 		springDirection.x = rotationMat.m[1][0];
 		springDirection.y = rotationMat.m[1][1];
@@ -59,6 +58,10 @@ void SpringObject::Update()
 		springDirection *= 90.0f;
 		m_pPlayer->SetStageGimmickMoveSpeed(springDirection);
 		m_anim.PlayAnimation(1);
+		SoundSource* sound = New<SoundSource>(0);
+		sound->Init("Assets/sound/Spring.wav");
+		sound->Play(false);
+		sound->SetVolume(1.0f);
 	}
 	m_rigidBody.SetPlayerCollisionGroundFlg(false);
 	m_anim.Update(GetGameTime().GetDeltaFrameTime());

@@ -25,6 +25,11 @@ public:
 		return m_depthTarget;
 	}
 
+	void SetIsActive(bool isActive)
+	{
+		m_isActive = isActive;
+	}
+
 private:
 	const static int	BLUR_RANGE = 8;			//ブラーをかけるピクセルの範囲
 	bool				m_isActive;				//アクティブか？

@@ -589,6 +589,36 @@ void Player::Rotation(const D3DXVECTOR3& rotationDirection)
 
 void Player::Draw()
 {
+	//LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
+	//DWORD zStateBackup;
+	//DWORD zEnableStateBackup;
+	//DWORD zwriteEnableStateBackup;
+
+	////ƒVƒ‹ƒGƒbƒg•`‰æ
+	//EnSkinModelShaderTechnique techniqueBackup = m_skinModel.GetCurrentShaderTechnique();
+	//device->GetRenderState(D3DRS_ZFUNC, &zStateBackup);
+	//device->GetRenderState(D3DRS_ZENABLE, &zEnableStateBackup);
+	//device->GetRenderState(D3DRS_ZWRITEENABLE, &zwriteEnableStateBackup);
+
+	//device->SetRenderState(D3DRS_ZENABLE, TRUE);
+	//device->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	//device->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
+	//m_skinModel.SetShaderTechnique(enShaderTechniqueSilhouette);
+
+	//m_skinModel.Draw(&GetGameScene().GetCamera().GetViewMatrix(), &GetGameScene().GetCamera().GetProjectionMatrix());
+
+	////•’Ê‚Ì•`‰æ
+	//m_skinModel.SetShaderTechnique(techniqueBackup);
+	//device->SetRenderState(D3DRS_ZFUNC, zStateBackup);
+	//device->SetRenderState(D3DRS_ZENABLE, zEnableStateBackup);
+	//device->SetRenderState(D3DRS_ZWRITEENABLE, zwriteEnableStateBackup);
+	//m_skinModel.Draw(&GetGameScene().GetCamera().GetViewMatrix(), &GetGameScene().GetCamera().GetProjectionMatrix());
+	////m_characterController.Draw();
+	//m_wallJump.Draw();
+}
+
+void Player::AfterDraw()
+{
 	LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
 	DWORD zStateBackup;
 	DWORD zEnableStateBackup;
@@ -600,7 +630,7 @@ void Player::Draw()
 	device->GetRenderState(D3DRS_ZENABLE, &zEnableStateBackup);
 	device->GetRenderState(D3DRS_ZWRITEENABLE, &zwriteEnableStateBackup);
 
-	device->SetRenderState(D3DRS_ZENABLE, TRUE);
+	device->SetRenderState(D3DRS_ZENABLE, FALSE);
 	device->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	device->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
 	m_skinModel.SetShaderTechnique(enShaderTechniqueSilhouette);
@@ -613,6 +643,6 @@ void Player::Draw()
 	device->SetRenderState(D3DRS_ZENABLE, zEnableStateBackup);
 	device->SetRenderState(D3DRS_ZWRITEENABLE, zwriteEnableStateBackup);
 	m_skinModel.Draw(&GetGameScene().GetCamera().GetViewMatrix(), &GetGameScene().GetCamera().GetProjectionMatrix());
-	//m_characterController.Draw();
+	m_characterController.Draw();
 	m_wallJump.Draw();
 }
