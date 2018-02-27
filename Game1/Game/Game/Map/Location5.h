@@ -659,13 +659,6 @@
 //clock
 {
 	"clock",
-	D3DXVECTOR3(-32.10f, 61.20f, -44.50f),             //平行移動
-	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
-	enMapTagStopTime, //タグ
-},
-//clock
-{
-	"clock",
 	D3DXVECTOR3(-66.80f, 85.20f, -21.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagStopTime, //タグ

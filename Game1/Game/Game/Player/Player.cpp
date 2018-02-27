@@ -444,7 +444,18 @@ void Player::Move(float deltaTime)
 		moveSpeed = { 0.0f, 0.0f, 0.0f };
 	}
 
-	moveSpeed += m_stageGimmickMoveSpeed;
+	if (m_stageGimmickMoveSpeed.x != 0.0f || m_stageGimmickMoveSpeed.y != 0.0f || m_stageGimmickMoveSpeed.z != 0.0f)
+	{
+		D3DXVECTOR3 direction = m_stageGimmickMoveSpeed;
+		direction.y = 0.0f;
+		D3DXVec3Normalize(&direction, &direction);
+		if (0.0f != direction.x || 0.0f != direction.z)
+		{
+			Rotation(direction);
+		}
+		PlayAnimation(enAnimSetJump);
+		moveSpeed = m_stageGimmickMoveSpeed;
+	}
 	if (!m_isObstacle)
 	{
 		m_characterController.SetMoveSpeed(moveSpeed);
@@ -472,7 +483,7 @@ void Player::Move(float deltaTime)
 
 void Player::SetStageGimmickMoveSpeed(const D3DXVECTOR3& moveSpeed)
 {
-	m_stageGimmickMoveSpeed += moveSpeed;
+	m_stageGimmickMoveSpeed = moveSpeed;
 }
 
 void Player::DelayRotation(const D3DXVECTOR3& rotationDirection)

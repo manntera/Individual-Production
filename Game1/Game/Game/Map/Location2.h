@@ -64,7 +64,7 @@
 //star
 {
 	"star",
-	D3DXVECTOR3(-85.30f, 118.80f, 0.00f),             //平行移動
+	D3DXVECTOR3(-83.00f, 118.80f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagGoalObject, //タグ
 },
