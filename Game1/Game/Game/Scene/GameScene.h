@@ -41,6 +41,9 @@ public:
 
 	//死ぬ前に一度だけ呼ばれる関数
 	void BeforeDead()override;
+
+	//描画関数
+	void AfterDraw()override;
 	
 	//カメラの取得
 	const Camera& GetCamera() const;
@@ -71,7 +74,7 @@ public:
 	//ゲームシーンを作成
 	void Create()
 	{
-		Add(this, 0);
+		Add(this, LAST_PRIORITY);
 		m_isActive = true;
 	}
 
@@ -86,31 +89,36 @@ public:
 		m_isLoad = true;
 	}
 
+	//再生を一時停止
 	void SoundStop()
 	{
 		m_pBgm->Stop();
 	}
 
+	//サウンドを再生
 	void SoundPlay()
 	{
 		m_pBgm->Play(true);
 	}
 
-private:
-	bool			m_isGameOver;	//ゲームオーバーか？
-	bool			m_isGameClear;	//ゲームクリアか？
-	Map*			m_pMap;			//マップ
-	GameCamera*		m_pCamera;		//カメラ
-	Sky*			m_pSky;			//スカイボックス
-	SoundSource*	m_pBgm;			//BGM
-	int				m_stageNum;		//現在のステージの番号
-	int				m_stageMaxNum;	//一番進んでいるステージの番号
-	TimeSprite*		m_pTimeSprite;	//タイム表示のスプライト
-	bool			m_isInit;		//初期化したか？
-	bool			m_isTimeAttack;	//タイムアタックか？
-	GhostPlayer*	m_pGhost;		//ゴーストプレイヤー
-	bool			m_isActive;		//生きてるか死んでるか
-	bool			m_isLoad;		//ロードが終わったか
+private:	
+	bool						m_isGameOver;			//ゲームオーバーか？
+	bool						m_isGameClear;			//ゲームクリアか？
+	Map*						m_pMap;					//マップ
+	GameCamera*					m_pCamera;				//カメラ
+	Sky*						m_pSky;					//スカイボックス
+	SoundSource*				m_pBgm;					//BGM
+	int							m_stageNum;				//現在のステージの番号
+	int							m_stageMaxNum;			//一番進んでいるステージの番号
+	TimeSprite*					m_pTimeSprite;			//タイム表示のスプライト
+	bool						m_isInit;				//初期化したか？
+	bool						m_isTimeAttack;			//タイムアタックか？
+	GhostPlayer*				m_pGhost;				//ゴーストプレイヤー
+	bool						m_isActive;				//生きてるか死んでるか
+	bool						m_isLoad;				//ロードが終わったか
+	bool						m_isTimeAttackStart;	//タイムアタックモードの時にゲームがスタートしてるか？
+	std::unique_ptr<Sprite>		m_pSprite;				//タイムアタックが始まる前の準備中表示のスプライト
+	float						m_alpha;				//スプライトのアルファ値
 };
 
 //ゲームシーンを取得。

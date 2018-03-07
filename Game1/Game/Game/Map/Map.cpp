@@ -184,6 +184,11 @@ void Map::Update()
 	}
 }
 
+void Map::SetIsPlayerActive(bool isActive)
+{
+	m_player->SetIsActive(isActive);
+}
+
 void Map::StopTime()
 {
 	//マップチップの動きを一時停止

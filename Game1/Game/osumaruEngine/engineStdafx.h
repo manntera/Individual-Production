@@ -16,6 +16,9 @@ int MakeHash(const char* string);
 #include <map>
 #include <list>
 
+#include <string>
+#include <typeinfo>
+
 #pragma comment ( lib, "winmm.lib" )
 
 #include <stdio.h>

@@ -20,10 +20,16 @@ public:
 	//描画関数
 	void Draw()override;
 
+	void SetBGM(SoundSource* sound)
+	{
+		m_pBgm = sound;
+	}
+
 private:
 	Sprite	m_stageNum[STAGE_NUM];	//ステージ番号のスプライト
 	Sprite	m_arrow;				//矢印のスプライト
 	Sprite	m_back;					//背景のスプライト
 	int		m_choiceNum;			//現在選んでいる選択肢
 	bool	m_isBackScene;			//タイトルへ戻るかのフラグ
+	SoundSource* m_pBgm;
 };

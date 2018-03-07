@@ -495,6 +495,6 @@ void CharacterController::Draw()
 	btTransform transform = m_rigidBody.GetBody()->getWorldTransform();
 
 	btVector3& position = transform.getOrigin();
-	//position.setY(position.y() + m_radius + m_height * 0.5f);
+	position.setY(position.y() + m_radius + m_height * 0.5f - m_rigidBodyManip);
 	GetPhysicsWorld().DebugDraw(transform, const_cast<btCollisionShape*>(m_collider.GetBody()));
 }

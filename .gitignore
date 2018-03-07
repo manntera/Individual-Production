@@ -240,3 +240,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Game1/Game/Game/Assets/sound/TitleBGM.wav

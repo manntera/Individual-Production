@@ -91,15 +91,17 @@ void Particle::Update()
 
 	D3DXMatrixMultiply(&m_worldMatrix, &m_worldMatrix, &scaleMat);
 	D3DXMatrixMultiply(&m_worldMatrix, &m_worldMatrix, &cameraRotMat);
-	//D3DXMatrixMultiply(&m_worldMatrix, &m_worldMatrix, &rotationMat);
+	D3DXMatrixMultiply(&m_worldMatrix, &m_worldMatrix, &rotationMat);
 	D3DXMatrixMultiply(&m_worldMatrix, &m_worldMatrix, &transMat);
 }
 
 void Particle::Draw()
 {
 	D3DXMATRIX worldViewProjMat;
-	D3DXMatrixMultiply(&worldViewProjMat, &m_worldMatrix, &m_camera->GetViewMatrix());
-	D3DXMatrixMultiply(&worldViewProjMat, &worldViewProjMat, &m_camera->GetProjectionMatrix());
+	//D3DXMatrixMultiply(&worldViewProjMat, &m_worldMatrix, &m_camera->GetViewMatrix());
+	//D3DXMatrixMultiply(&worldViewProjMat, &worldViewProjMat, &m_camera->GetProjectionMatrix());
+
+	worldViewProjMat = m_worldMatrix * m_camera->GetViewMatrix() * m_camera->GetProjectionMatrix();
 	LPDIRECT3DDEVICE9& pD3DDevice = GetEngine().GetDevice();
 	DWORD srcBackup, destBackup, alphaBlendBackup, alphaTestBackup, alphaRefBackup, alphaFuncBackup;;
 	pD3DDevice->GetRenderState(D3DRS_ALPHABLENDENABLE, &alphaBlendBackup);

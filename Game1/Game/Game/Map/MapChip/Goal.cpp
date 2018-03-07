@@ -42,3 +42,10 @@ void Goal::Update()
 	}
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
+
+
+void Goal::Draw()
+{
+	MapChip::Draw();
+	GetPhysicsWorld().DebugDraw(m_rigidBody.GetBody()->getWorldTransform(), m_rigidBody.GetBody()->getCollisionShape());
+}

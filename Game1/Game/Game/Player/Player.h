@@ -143,6 +143,11 @@ public:
 	void Invincible();
 	
 	void BlowObstacle();
+
+	void SetIsActive(bool isActive)
+	{
+		m_isActive = isActive;
+	}
 private:
 	//ˆÚ“®ˆ—‚ğ‚·‚éŠÖ”
 	void Move(float deltaTime);
@@ -185,6 +190,7 @@ private:
 	float				m_invincibleTime;
 	bool				m_isObstacle;
 	float				m_obstacleTime;
+	bool				m_isActive;
 };
 
 

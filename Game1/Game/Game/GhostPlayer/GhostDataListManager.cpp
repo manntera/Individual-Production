@@ -76,6 +76,10 @@ void GhostDataListManager::GhostDataRead()
 		char filePath[64];
 		sprintf(filePath, "Assets/SaveData/GhostData%d.txt", i);
 		file = fopen(filePath, "r");
+		if (file == NULL)
+		{
+			continue;
+		}
 		const int rate = 1000000;
 		const int rateNum = 11;
 		char data[rateNum + 2] = { 0 };

@@ -8,7 +8,7 @@
 //Unitychan
 {
 	"Unitychan",
-	D3DXVECTOR3(2.01f, 17.58f, 0.00f),             //平行移動
+	D3DXVECTOR3(2.01f, 11.70f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagPlayer, //タグ
 },

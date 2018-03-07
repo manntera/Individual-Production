@@ -11,7 +11,8 @@ TitleScene::TitleScene() :
 	m_continue(),
 	m_timeAttack(),
 	m_arrow(),
-	m_choiceNum(0)
+	m_choiceNum(0),
+	m_pBgm(nullptr)
 {
 
 }
@@ -25,7 +26,7 @@ bool TitleScene::Start()
 
 	if (GetFade().IsExcute())
 	{
-		true;
+		return false;
 	}
 	//スプライトを初期化
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/TitleBack.png");
@@ -48,6 +49,13 @@ bool TitleScene::Start()
 	m_arrow.SetPosition({ -275.0f, -100.0f });
 	m_arrow.SetSize({ 100.0f, 100.0f });
 	GetFade().FadeIn();
+	if (m_pBgm == nullptr)
+	{
+		m_pBgm = New<SoundSource>(0);
+		m_pBgm->Init("Assets/sound/TitleBGM2.wav");
+		m_pBgm->Play(true);
+		m_pBgm->SetVolume(0.8f);
+	}
 	return true;
 }
 
@@ -63,13 +71,21 @@ void TitleScene::Update()
 			case enSceneStart:
 				GetGameScene().Create();
 				GetGameScene().Init(0, false);
+				if (m_pBgm != nullptr)
+				{
+					Delete(m_pBgm);
+				}
 				break;
 			case enSceneContinue:
 				GetGameScene().Create();
-				GetGameScene().Init(GetGameScene().GetStageMaxNum() % 4, false);
+				GetGameScene().Init(GetGameScene().GetStageMaxNum() % 5, false);
+				if (m_pBgm != nullptr)
+				{
+					Delete(m_pBgm);
+				}
 				break;
 			case enSceneTimeAttack:
-				New<StageSelect>(0);
+				New<StageSelect>(0)->SetBGM(m_pBgm);
 				break;
 			default:
 				break;

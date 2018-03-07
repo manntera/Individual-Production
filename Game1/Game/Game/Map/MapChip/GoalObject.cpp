@@ -24,6 +24,10 @@ void GoalObject::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotatio
 void GoalObject::Update()
 {
 	MapChip::Update();
+	if (!m_isActive)
+	{
+		return;
+	}
 	D3DXQuaternionMultiply(&m_rotation, &m_rotation, &m_multi);
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 }

@@ -28,6 +28,7 @@ void Sky::Init(int stageNum)
 bool Sky::Start()
 {
 	char* filePath;
+	m_position = { 0.0f, -60.0f, 0.0f };
 	switch (m_stageNum)
 	{
 	case 0:
@@ -38,9 +39,11 @@ bool Sky::Start()
 		break;
 	case 2:
 		filePath = "Assets/modelData/SkyBox3.X";
+		m_position.y += 50.0f;
 		break;
 	case 3:
 		filePath = "Assets/modelData/EveningSkyBox3.X";
+		m_position.y += 50.0f;
 		break;
 	case 4:
 		filePath = "Assets/modelData/NightSkyBox3.X";
@@ -50,7 +53,6 @@ bool Sky::Start()
 	m_skinModel.Init(&m_skinModelData);
 	m_light.SetAmbiemtLight({ 1.0f, 1.0f, 1.0f, 1.0f });
 	m_skinModel.SetLight(&m_light);
-	m_position = { 0.0f, -60.0f, 0.0f };
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 	return true;
 }

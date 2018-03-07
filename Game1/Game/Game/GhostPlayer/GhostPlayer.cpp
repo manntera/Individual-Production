@@ -12,7 +12,8 @@ GhostPlayer::GhostPlayer() :
 	m_ghostData(),
 	m_currentAnimationNum(0),
 	m_light(),
-	m_isGoal(false)
+	m_isGoal(false),
+	m_isActive(true)
 
 {
 }
@@ -43,12 +44,17 @@ bool GhostPlayer::Start()
 	m_animation.PlayAnimation(m_ghostData->currentAnimationNum);
 	m_currentAnimationNum = m_ghostData->currentAnimationNum;
 	m_animation.SetAnimationLoopFlg(enAnimSetDelight, true);
+	m_model.Update(m_ghostData->position, m_ghostData->rotation, { 1.0f, 1.0f, 1.0f });
 	return true;
 }
 
 
 void GhostPlayer::Update()
 {
+	if (!m_isActive)
+	{
+		return;
+	}
 	if (!m_isGoal)
 	{
 		if (m_currentAnimationNum != m_ghostData->currentAnimationNum)
@@ -79,6 +85,10 @@ void GhostPlayer::Update()
 
 void GhostPlayer::Draw()
 {
+	if (!m_isActive)
+	{
+		return;
+	}
 	const Camera& camera = GetGameScene().GetCamera();
 	m_model.Draw(&camera.GetViewMatrix(), &camera.GetProjectionMatrix());
 }

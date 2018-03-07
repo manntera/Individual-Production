@@ -8,7 +8,8 @@ StageSelect::StageSelect() :
 	m_arrow(),
 	m_back(),
 	m_choiceNum(0),
-	m_isBackScene(false)
+	m_isBackScene(false),
+	m_pBgm(nullptr)
 {
 }
 
@@ -22,7 +23,7 @@ bool StageSelect::Start()
 
 	if (GetFade().IsExcute())
 	{
-		true;
+		return false;
 	}
 	Texture* texture;
 	D3DXVECTOR2 position = { 0.0f, 250.0f };
@@ -53,12 +54,20 @@ void StageSelect::Update()
 		{
 			if (m_isBackScene)
 			{
-				New<TitleScene>(0);
+				TitleScene* title = New<TitleScene>(0);
+				if (m_pBgm != nullptr)
+				{
+					title->SetBGM(m_pBgm);
+				}
 			}
 			else
 			{
 				GetGameScene().Create();
 				GetGameScene().Init(m_choiceNum, true);
+				if (m_pBgm != nullptr)
+				{
+					Delete(m_pBgm);
+				}
 			}
 			Delete(this);
 		}

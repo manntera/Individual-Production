@@ -60,6 +60,8 @@ public:
 	//時間を止める関数
 	void StopTime();
 
+	void SetIsPlayerActive(bool isActive);
+
 private:
 	std::list<MapChip*> m_mapChip;					//マップチップ
 	Player*				m_player;					//プレイヤー

@@ -1,14 +1,14 @@
 ﻿//GroundBrock
 {
 	"GroundBrock",
-	D3DXVECTOR3(-0.31f, 64.10f, 1.00f),             //平行移動
+	D3DXVECTOR3(-0.31f, 65.00f, 1.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagUntagged, //タグ
 },
 //Unitychan
 {
 	"Unitychan",
-	D3DXVECTOR3(0.00f, 75.01f, 0.00f),             //平行移動
+	D3DXVECTOR3(0.00f, 76.60f, 0.00f),             //平行移動
 	D3DXQUATERNION(0.00f, 0.00f, 0.00f, 1.00f ),  //回転
 	enMapTagPlayer, //タグ
 },
@@ -934,5 +934,12 @@
 	"GroundIsland",
 	D3DXVECTOR3(216.00f, 0.00f, 1.00f),             //平行移動
 	D3DXQUATERNION(0.00f, -0.16f, 0.00f, 0.99f ),  //回転
+	enMapTagMapChip, //タグ
+},
+//GroundIsland
+{
+	"GroundIsland",
+	D3DXVECTOR3(-234.00f, 0.00f, -11.00f),             //平行移動
+	D3DXQUATERNION(0.00f, -0.46f, 0.00f, 0.89f ),  //回転
 	enMapTagMapChip, //タグ
 },

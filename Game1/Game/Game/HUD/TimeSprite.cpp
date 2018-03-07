@@ -6,7 +6,8 @@ TimeSprite::TimeSprite() :
 	m_colonSprite{},
 	m_numSprite{},
 	m_numTexture{},
-	m_time(0.0f)
+	m_time(0.0f),
+	m_isActive(true)
 {
 }
 
@@ -72,6 +73,10 @@ bool TimeSprite::Start()
 
 void TimeSprite::Update()
 {
+	if (!m_isActive)
+	{
+		return;
+	}
 	m_time += 1.0f / 60.0f;
 	//60•bˆÈãŒo‚Á‚Ä‚¢‚½‚ç1•ª‚É‚·‚é‚½‚ß‚ÉŒ…‚ğŒJ‚èã‚°
 	int minute = (int)m_time / 10 % 10 / 6;

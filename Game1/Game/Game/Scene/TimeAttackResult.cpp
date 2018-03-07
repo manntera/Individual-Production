@@ -28,10 +28,7 @@ TimeAttackResult::~TimeAttackResult()
 void TimeAttackResult::Init(float time)
 {
 
-	if (GetFade().IsExcute())
-	{
-		true;
-	}
+
 	//今回のタイムをランキングの中でソート
 	m_times[m_stageNum][RANK_NUM] = (int)(time * 100.0f);
 	int i;
@@ -53,6 +50,10 @@ void TimeAttackResult::Init(float time)
 
 bool TimeAttackResult::Start()
 {
+	if (GetFade().IsExcute())
+	{
+		return false;
+	}
 	//スプライトを初期化
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/TimeAttackBack.png");
 	m_back.Init(texture);

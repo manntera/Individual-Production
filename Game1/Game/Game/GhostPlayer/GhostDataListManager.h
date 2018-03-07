@@ -47,6 +47,12 @@ public:
 
 	//ゴーストデータのセーブ
 	void GhostDataSave();
+
+
+	void SetIsActive(bool isActive)
+	{
+		m_isActive = isActive;
+	}
 private:
 	const D3DXVECTOR3*			m_pPosition;		//プレイヤーの座標
 	const D3DXQUATERNION*		m_pRotation;		//プレイヤーの回転

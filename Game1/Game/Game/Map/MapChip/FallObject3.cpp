@@ -132,6 +132,7 @@ void FallObject3::Reset()
 	SoundDelete();
 	ParticleEmitt();
 	m_position = m_initPos;
+	m_soundVolume = 1.0f;
 	m_rigidBody.PhysicsWorldAddRigidBody();
 	m_rigidBody.SetPosition(m_position);
 }

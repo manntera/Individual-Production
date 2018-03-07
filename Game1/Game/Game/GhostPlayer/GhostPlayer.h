@@ -20,6 +20,11 @@ public:
 	//描画関数
 	void Draw()override;
 
+	void SetIsActive(bool isActive)
+	{
+		m_isActive = isActive;
+	}
+
 private:
 	SkinModelData							m_modelData;			//スキンモデルデータ
 	SkinModel								m_model;				//スキンモデル
@@ -28,4 +33,5 @@ private:
 	int										m_currentAnimationNum;	//現在再生中のアニメーションの番号
 	Light									m_light;				//モデルのライト
 	bool									m_isGoal;				//ゴールしたか？
+	bool									m_isActive;
 };

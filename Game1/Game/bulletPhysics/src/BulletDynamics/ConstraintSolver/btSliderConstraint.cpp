@@ -230,7 +230,7 @@ void btSliderConstraint::testAngLimits(void)
 		const btVector3 axisA0 = m_calculatedTransformA.getBasis().getColumn(1);
 		const btVector3 axisA1 = m_calculatedTransformA.getBasis().getColumn(2);
 		const btVector3 axisB0 = m_calculatedTransformB.getBasis().getColumn(1);
-//		btScalar rot = btAtan2Fast(axisB0.dot(axisA1), axisB0.dot(axisA0));  
+		//btScalar rot = btAtan2Fast(axisB0.dot(axisA1), axisB0.dot(axisA0));  
 		btScalar rot = btAtan2(axisB0.dot(axisA1), axisB0.dot(axisA0));  
 		rot = btAdjustAngleToLimits(rot, m_lowerAngLimit, m_upperAngLimit);
 		m_angPos = rot;
@@ -347,7 +347,7 @@ void btSliderConstraint::getInfo2NonVirtual(btConstraintInfo2* info, const btTra
 	//    angular_velocity  = (erp*fps) * (ax1 x ax2)
 	// ax1 x ax2 is in the plane space of ax1, so we project the angular
 	// velocity to p and q to find the right hand side.
-//	btScalar k = info->fps * info->erp * getSoftnessOrthoAng();
+	//	btScalar k = info->fps * info->erp * getSoftnessOrthoAng();
 	btScalar currERP = (m_flags & BT_SLIDER_FLAGS_ERP_ORTANG) ? m_softnessOrthoAng : m_softnessOrthoAng * info->erp;
 	btScalar k = info->fps * currERP;
 

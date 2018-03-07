@@ -62,6 +62,7 @@ void Bloom::Init(bool isActive)
 
 void Bloom::Draw()
 {
+
 	if (!m_isActive)
 	{
 		return;

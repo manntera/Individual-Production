@@ -36,7 +36,8 @@ Player::Player() :
 	m_isInvincible(false),
 	m_invincibleTime(-1.0f),
 	m_isObstacle(false),
-	m_obstacleTime(-1.0f)
+	m_obstacleTime(-1.0f),
+	m_isActive(true)
 
 {
 }
@@ -99,7 +100,8 @@ void Player::Init(D3DXVECTOR3 position, D3DXQUATERNION rotation)
 bool Player::Start()
 {
 	//モデルの初期化
-	GetModelDataResource().Load(&m_skinModelData, &m_anim, "Assets/modelData/Unitychan.X");
+	//GetModelDataResource().Load(&m_skinModelData, &m_anim, "Assets/modelData/Unitychan.X");
+	m_skinModelData.LoadModelData("Assets/modelData/Unitychan.X", &m_anim);
 	m_skinModel.Init(&m_skinModelData);
 	m_skinModel.SetLight(&m_light);
 	//法線マップとスペキュラマップを読み込み
@@ -120,12 +122,20 @@ bool Player::Start()
 	m_anim.SetAnimationLoopFlg(enAnimSetVerticalJump, false);
 	m_wallJump.Init(this, &m_characterController);
 	m_isParentRotation = false;
+	GetShadowMap().SetLightCameraTarget(m_characterController.GetPosition());
+	D3DXVECTOR3 lightCameraPos = m_characterController.GetPosition();
+	lightCameraPos += {0.0f, 40.0f, 0.0f};
+	GetShadowMap().SetLightCameraPosition(lightCameraPos);
 	return true;
 }
 
 
 void Player::Update()
 {
+	if (!m_isActive)
+	{
+		return;
+	}
 	if (!GetGameScene().IsActive())
 	{
 		return;
@@ -413,6 +423,8 @@ void Player::Move(float deltaTime)
 				jumpDir *= D3DXVec3Length(&moveSpeed);
 				moveSpeed = jumpDir;
 			}
+			m_currentAnim = enAnimSetJump;
+			m_anim.PlayAnimation(m_currentAnim);
 		}
 		else
 		{

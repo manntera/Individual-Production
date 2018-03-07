@@ -13,10 +13,6 @@ StopTimeItem::StopTimeItem() :
 
 void StopTimeItem::Update()
 {
-	if (!m_isActive)
-	{
-		return;
-	}
 	if (m_isDead)
 	{
 		m_revivalTime += GetGameTime().GetDeltaFrameTime();

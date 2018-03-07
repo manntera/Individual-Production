@@ -10,10 +10,12 @@
 #include "../HUD/TimeSprite.h"
 #include "../GhostPlayer/GhostPlayer.h"
 #include "TimeAttackResult.h"
+#include "../GhostPlayer/GhostDataListManager.h"
 
 
 GameScene::GameScene() :
 	m_isGameOver(false),
+
 	m_isGameClear(false),
 	m_pMap(nullptr),
 	m_pCamera(nullptr),
@@ -26,14 +28,16 @@ GameScene::GameScene() :
 	m_isTimeAttack(false),
 	m_pGhost(nullptr),
 	m_isActive(false),
-	m_isLoad(false)
+	m_isLoad(false),
+	m_isTimeAttackStart(true),
+	m_pSprite(nullptr),
+	m_alpha(1.0f)
 	
 {
 }
 
 GameScene::~GameScene()
 {
-	Reset();
 }
 
 void GameScene::Init(int stageNum, bool isTimeAttack)
@@ -52,6 +56,10 @@ void GameScene::Init(int stageNum, bool isTimeAttack)
 
 bool GameScene::Start()
 {
+	if (GetFade().IsExcute())
+	{
+		return false;
+	}
 	static bool isInit = true;
 	if (isInit)
 	{
@@ -64,7 +72,7 @@ bool GameScene::Start()
 		m_pBgm = New<SoundSource>(0);
 		//if (m_isTimeAttack)
 		{
-			m_pBgm->Init("Assets/sound/candybuke.wav");
+			m_pBgm->Init("Assets/sound/candybuke2.wav");
 			m_pBgm->SetVolume(0.7f);
 		}
 		//else
@@ -76,9 +84,16 @@ bool GameScene::Start()
 		if (m_isTimeAttack)
 		{
 			m_pGhost = New<GhostPlayer>(PLAYER_PRIORITY);
-			const Player* player = m_pMap->GetPlayer();
 			m_pTimeSprite = New<TimeSprite>(LAST_PRIORITY);
-			player->GhostDataStart();
+			m_pMap->GetPlayer()->GhostDataStart();
+			GetGhostDataListManager().SetIsActive(false);
+			m_pTimeSprite->SetIsActive(false);
+			m_pMap->SetIsPlayerActive(false);
+			m_pGhost->SetIsActive(false);
+			m_pSprite.reset(new Sprite);
+			Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/TimeAttackStart.png");
+			m_pSprite->Init(texture);
+			
 		}
 		m_isGameClear = false;
 		m_isGameOver = false;
@@ -105,6 +120,31 @@ void GameScene::Update()
 	//フェードアウトの状態でフェードが終わると遷移する
 	if (!GetFade().IsExcute())
 	{
+		if (m_isTimeAttack)
+		{
+			if (m_isTimeAttackStart)
+			{
+				static float alphaSpeed = 0.03f;
+				if (m_alpha < 0.0f && alphaSpeed < 0.0f || 1.0f < m_alpha && 0.0f < alphaSpeed)
+				{
+					alphaSpeed *= -1.0f;
+				}
+				m_alpha += alphaSpeed;
+				m_pSprite->SetAlpha(m_alpha);
+				if (GetPad().IsPressButton(enButtonA))
+				{
+					m_pTimeSprite->SetIsActive(true);
+					m_pMap->SetIsPlayerActive(true);
+					if (m_pGhost != nullptr)
+					{
+						m_pGhost->SetIsActive(true);
+					}
+					GetGhostDataListManager().SetIsActive(true);
+					m_pSprite.release();
+					m_isTimeAttackStart = false;
+				}
+			}
+		}
 		if (GetFade().GetCurrentState() == enFadeOut)
 		{
 			//ゲームクリアしたとき
@@ -172,6 +212,7 @@ void GameScene::BeforeDead()
 	m_isInit = false;
 	m_isLoad = false;
 	m_isTimeAttack = false;
+	m_isTimeAttackStart = true;
 	if (m_pMap != nullptr)
 	{
 		Delete(m_pMap);
@@ -186,6 +227,14 @@ void GameScene::BeforeDead()
 	{
 		Delete(m_pCamera);
 		m_pCamera = nullptr;
+	}
+}
+
+void GameScene::AfterDraw()
+{
+	if (m_pSprite)
+	{
+		m_pSprite->Draw();
 	}
 }
 
@@ -209,6 +258,10 @@ void GameScene::GameClear()
 	SoundSource* sound = New<SoundSource>(0);
 	sound->Init("Assets/sound/univ1018.wav");
 	sound->Play(false);
+	if (m_isTimeAttack)
+	{
+		m_pTimeSprite->SetIsActive(false);
+	}
 }
 
 void GameScene::GameOver()

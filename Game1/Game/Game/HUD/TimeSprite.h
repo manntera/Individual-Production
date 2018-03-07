@@ -26,6 +26,11 @@ public:
 		return m_time;
 	}
 
+	void SetIsActive(bool isActive)
+	{
+		m_isActive = isActive;
+	}
+
 private:
 	static const int	NUM_MAX = 10;						//一桁の数字の数
 	static const int	DIGIT_MAX = 2;						//桁の数
@@ -35,4 +40,5 @@ private:
 	Sprite				m_numSprite[TIME_MAX][DIGIT_MAX];	//数字のスプライト
 	Texture*			m_numTexture[NUM_MAX];				//数字のテクスチャ
 	float				m_time;								//タイム
+	bool				m_isActive;
 };
