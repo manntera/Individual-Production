@@ -5,9 +5,24 @@
 #include "../Camera/Camera.h"
 
 
-CascadedShadowMap::CascadedShadowMap()
+CascadedShadowMap::CascadedShadowMap() : 
+	m_renderTarget{},
+	m_target(0.0f, -1.0f, 0.0f),
+	m_up(0.0f, 0.0f, 1.0f),
+	m_viewMatrix{},
+	m_projMatrix{},
+	m_width(0),
+	m_height(0),
+	m_models(),
+	m_pCamera(nullptr),
+	m_isActive(false),
+	m_lightHeight(100.0f)
 {
-
+	for (int i = 0;i < SHADOWMAP_NUM;i++)
+	{
+		D3DXMatrixIdentity(&m_viewMatrix[i]);
+		D3DXMatrixIdentity(&m_projMatrix[i]);
+	}
 }
 
 CascadedShadowMap::~CascadedShadowMap()
@@ -19,12 +34,8 @@ void CascadedShadowMap::Init(int width, int height, float lightHeight)
 {
 	for (int i = 0;i < SHADOWMAP_NUM;i++)
 	{
-
 		m_renderTarget[i].Create(width >> i, height >> i, D3DFMT_R32F, D3DFMT_D16);
-		D3DXMatrixIdentity(&m_viewMatrix[i]);
-		D3DXMatrixIdentity(&m_projMatrix[i]);
 	}
-	m_isActive = false;
 	m_height = lightHeight;
 	
 }
@@ -35,6 +46,7 @@ void CascadedShadowMap::Update()
 	{
 		return;
 	}
+	//ライトカメラの回転行列を計算
 	D3DXVECTOR3 lightCameraForward = m_target;
 	D3DXVECTOR3 lightCameraUp = m_up;
 	D3DXVec3Normalize(&lightCameraForward, &lightCameraForward);
@@ -57,13 +69,14 @@ void CascadedShadowMap::Update()
 	lightCameraRot.m[2][3] = 0.0f;
 	float _near = 0.0f;
 	float _far;
-	float ZLength = 300.0f;
+	float ZLength = 200.0f;
 	float shadowAreaTable[SHADOWMAP_NUM] =
 	{
-		ZLength * 0.3f,
-		ZLength * 0.6f,
-		ZLength * 1.2f
+		ZLength * 1.0f,
+		ZLength * 2.0f,
+		ZLength * 3.0f
 	};
+	//メインカメラの前方向と上方向と右方向を求める
 	D3DXVECTOR3 cameraForward = m_pCamera->GetTarget() - m_pCamera->GetPosition();
 	cameraForward.y = 0.0f;
 	D3DXVec3Normalize(&cameraForward, &cameraForward);
@@ -76,17 +89,19 @@ void CascadedShadowMap::Update()
 	float halfAngle = m_pCamera->GetAngle() * 0.5f;
 	float t = tan(halfAngle);
 	float _aspect = m_pCamera->GetAspect();
+	//メインカメラの近平面と遠平面の8個の頂点の座標を求める
 	for (int i = 0;i < SHADOWMAP_NUM;i++)
 	{
 		_far = shadowAreaTable[i] + _near;
 		D3DXVECTOR3 cameraCenter = m_pCamera->GetPosition() + cameraForward * _near;
 		D3DXVECTOR3 lightPos = cameraCenter;
-		D3DXVECTOR3 aabbVertex[8];
 		D3DXVECTOR3 cameraUpNear = cameraUp * t * _near;
 		D3DXVECTOR3 cameraUpFar = cameraUp * t * _far;
 		t *= _aspect;
 		D3DXVECTOR3 cameraRightNear = cameraRight * t * _near;
 		D3DXVECTOR3 cameraRightFar = cameraRight * t * _far;
+		const int VERTEX_NUM = 8;
+		D3DXVECTOR3 aabbVertex[VERTEX_NUM];
 		aabbVertex[0] = cameraCenter + cameraUpNear + cameraRightNear;
 		aabbVertex[1] = aabbVertex[0] - cameraUpNear * 2.0f;
 		aabbVertex[2] = aabbVertex[0] - cameraRightNear * 2.0f;
@@ -107,7 +122,8 @@ void CascadedShadowMap::Update()
 		D3DXMatrixInverse(&lightView, NULL, &lightView);
 		D3DXVECTOR3 aabbMin = { FLT_MAX, FLT_MAX, FLT_MAX };
 		D3DXVECTOR3 aabbMax = { -FLT_MAX, -FLT_MAX, -FLT_MAX };
-		for (int i = 0;i < 8;i++)
+		//8個の頂点をライト用のカメラのビュー行列をかけてAABBをもとめライトカメラの写す範囲を決定
+		for (int i = 0;i < VERTEX_NUM;i++)
 		{
 			D3DXVec3TransformCoord(&aabbVertex[i], &aabbVertex[i], &lightView);
 			D3DXVec3Maximize(&aabbMax, &aabbVertex[i], &aabbMax);

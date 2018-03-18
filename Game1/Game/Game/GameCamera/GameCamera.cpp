@@ -13,7 +13,7 @@ GameCamera::GameCamera() :
 
 GameCamera::~GameCamera()
 {
-
+	GetShadowMap().SetGameCamera(nullptr);
 }
 
 void GameCamera::Init()
