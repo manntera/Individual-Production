@@ -84,6 +84,7 @@ public:
 		return m_isActive;
 	}
 
+	//他のロードが終わったらこの関数を呼ぶ
 	void LoadComp()
 	{
 		m_isLoad = true;
@@ -118,7 +119,6 @@ private:
 	bool						m_isLoad;				//ロードが終わったか
 	bool						m_isTimeAttackStart;	//タイムアタックモードの時にゲームがスタートしてるか？
 	std::unique_ptr<Sprite>		m_pSprite;				//タイムアタックが始まる前の準備中表示のスプライト
-	float						m_alpha;				//スプライトのアルファ値
 };
 
 //ゲームシーンを取得。

@@ -5,5 +5,6 @@
 class PlayerDelayItem : public MapChip
 {
 public:
+	//XVŠÖ”
 	void Update()override;
 };

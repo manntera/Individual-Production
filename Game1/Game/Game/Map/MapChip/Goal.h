@@ -23,6 +23,7 @@ public:
 	//XVŠÖ”
 	void Update()override;
 
+	//•`‰æŠÖ”
 	void Draw()override;
 private:
 	RigidBody		m_rigidBody;		//„‘Ì

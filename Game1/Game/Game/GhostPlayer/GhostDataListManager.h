@@ -49,6 +49,7 @@ public:
 	void GhostDataSave();
 
 
+	//アクティブかのフラグを設定する。
 	void SetIsActive(bool isActive)
 	{
 		m_isActive = isActive;

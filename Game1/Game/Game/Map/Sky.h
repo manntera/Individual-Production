@@ -29,5 +29,5 @@ private:
 	D3DXQUATERNION	m_rotation;				//回転
 	D3DXVECTOR3		m_scale;				//拡大
 	Light			m_light;				//モデルのライト
-	int				m_stageNum;
+	int				m_stageNum;				//ステージの番号
 };

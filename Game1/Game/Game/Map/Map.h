@@ -60,6 +60,7 @@ public:
 	//時間を止める関数
 	void StopTime();
 
+	//プレイヤーのアクティブフラグを設定
 	void SetIsPlayerActive(bool isActive);
 
 private:
@@ -67,8 +68,7 @@ private:
 	Player*				m_player;					//プレイヤー
 	float				m_stopTime;					//ステージギミックを止めてる間のカウンター
 	bool				m_isLoad;					//モデルの読み込めたかのフラグ
-	float				m_soundTimer;
-	const float			m_soundTimeLimit;
-	float				m_soundTimeBoundary;
-	const float			m_stopTimeLimit;
+	float				m_soundTimer;				//ステージギミックを止めた時の時計の音のインターバルを測る
+	float				m_soundTimeLimit;			//音を鳴らすまでの時間
+	const float			m_stopTimeLimit;			//ステージギミックを止めてる間の時間
 };

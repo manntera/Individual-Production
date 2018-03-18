@@ -38,9 +38,8 @@ private:
 	BoxCollider			m_boxCollider;		//コライダー
 	ParticleEmitter*	m_particle;			//パーティクル
 	float				m_timer;			//消えるまでの時間
-	float				m_animationTimer;
-	D3DXVECTOR3			m_animationMove;
-	int					m_frameNum;
-	SoundSource*		m_pSound;
-	float				m_soundVolume;
+	float				m_animationTimer;	//揺れるアニメーションをする時間
+	D3DXVECTOR3			m_animationMove;	//揺れるアニメーションをするための移動速度
+	SoundSource*		m_pSound;			//サウンド
+	float				m_soundVolume;		//サウンドのボリューム
 };

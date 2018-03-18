@@ -183,6 +183,9 @@
     <ClCompile Include="Camera\SpringCamera.cpp">
       <Filter>ソース ファイル\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\CascadedShadowMap.cpp">
+      <Filter>ソース ファイル\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="graphics\EffectManager.h">
@@ -319,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="Camera\SpringCamera.h">
       <Filter>ソース ファイル\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\CascadedShadowMap.h">
+      <Filter>ソース ファイル\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

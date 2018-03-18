@@ -26,6 +26,12 @@ public:
 	//ニアを取得
 	float GetNear() const;
 
+	//画角を設定。
+	void SetAngle(float angle);
+
+	//画角を取得
+	float GetAngle() const;
+
 	//視点を設定
 	void SetTarget(const D3DXVECTOR3& target);
 
@@ -71,4 +77,5 @@ private:
 	float				m_Far;					//遠平面
 	float				m_Near;					//近平面
 	float				m_Aspect;				//アスペクト比
+	float				m_angle;				//画角
 };

@@ -26,6 +26,7 @@ public:
 	//描画関数
 	void AfterDraw()override;
 
+	//BGMを設定
 	void SetBGM(SoundSource* sound)
 	{
 		m_pBgm = sound;
@@ -39,5 +40,5 @@ private:
 	Sprite			m_timeAttack;	//ステージ選択へのスプライト
 	Sprite			m_arrow;		//矢印のスプライト
 	int				m_choiceNum;	//現在選んでいる選択肢
-	SoundSource*	m_pBgm;
+	SoundSource*	m_pBgm;			//BGM
 };

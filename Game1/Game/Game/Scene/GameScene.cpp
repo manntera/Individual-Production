@@ -30,8 +30,7 @@ GameScene::GameScene() :
 	m_isActive(false),
 	m_isLoad(false),
 	m_isTimeAttackStart(true),
-	m_pSprite(nullptr),
-	m_alpha(1.0f)
+	m_pSprite(nullptr)
 	
 {
 }
@@ -124,6 +123,8 @@ void GameScene::Update()
 		{
 			if (m_isTimeAttackStart)
 			{
+
+				static float m_alpha = 1.0f;
 				static float alphaSpeed = 0.03f;
 				if (m_alpha < 0.0f && alphaSpeed < 0.0f || 1.0f < m_alpha && 0.0f < alphaSpeed)
 				{

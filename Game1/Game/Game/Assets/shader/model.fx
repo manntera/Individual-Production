@@ -14,11 +14,11 @@ float4x4	g_viewMatrixRotInv;		//カメラの回転行列
 float3		g_cameraPos;			//スペキュラ用のカメラ視点
 float3		g_cameraDir;
 float4x4	g_invWorldMatrix;
-float4x4	g_lightViewProjMatrix;
-float3		g_lightCameraDir;
+float4x4	g_lightViewProjMatrix[3];
 int			g_screenWidth;
 int			g_screenHeight;
 float		g_ditheringRate;
+
 
 
 bool	g_isShadowMapCaster;
@@ -65,11 +65,11 @@ sampler_state
 };
 
 //シャドウマップ
-texture g_shadowMapTexture;		//スペキュラマップ
-sampler g_shadowMapSampler =
+texture g_shadowMapTexture1;		//スペキュラマップ
+sampler g_shadowMapSampler1 =
 sampler_state
 {
-	Texture = <g_shadowMapTexture>;
+	Texture = <g_shadowMapTexture1>;
 	MipFilter = NONE;
 	MinFilter = NONE;
 	MagFilter = NONE;
@@ -78,6 +78,32 @@ sampler_state
 };
 
 //シャドウマップ
+texture g_shadowMapTexture2;		//スペキュラマップ
+sampler g_shadowMapSampler2 =
+sampler_state
+{
+	Texture = <g_shadowMapTexture2>;
+	MipFilter = NONE;
+	MinFilter = NONE;
+	MagFilter = NONE;
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
+//シャドウマップ
+texture g_shadowMapTexture3;		//スペキュラマップ
+sampler g_shadowMapSampler3 =
+sampler_state
+{
+	Texture = <g_shadowMapTexture3>;
+	MipFilter = NONE;
+	MinFilter = NONE;
+	MagFilter = NONE;
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
+//深度マップ
 texture g_depthTexture;		//スペキュラマップ
 sampler g_depthSampler =
 sampler_state
@@ -110,8 +136,10 @@ struct VS_OUTPUT
 	float3 Tangent				: TEXCOORD1;	//接ベクトル
 	float3 BiNormal				: TEXCOORD2;
 	float3 WorldPos				: TEXCOORD3; 
-	float4 ShadowSpacePos		: TEXCOORD4;
-	float4 ScreenSpacePos		: TEXCOORD5;
+	float4 ShadowSpacePos1		: TEXCOORD4;
+	float4 ShadowSpacePos2		: TEXCOORD5;
+	float4 ShadowSpacePos3		: TEXCOORD6;
+	float4 ScreenSpacePos		: TEXCOORD7;
 
 };
 
@@ -197,7 +225,22 @@ VS_OUTPUT VSMain(VS_INPUT In, uniform bool hasSkin)
 	Out.Tex0 = In.Tex0;
 	Out.WorldPos = Pos.xyz;
 	Out.ScreenSpacePos = Out.Pos;
-	Out.ShadowSpacePos = mul(float4(Pos.xyz, 1.0f), g_lightViewProjMatrix);
+
+	float4 shadowSpacePos[3] = { float4(0.0f, 0.0f, 0.0f, 1.0f), float4(0.0f, 0.0f, 0.0f, 1.0f), float4(0.0f, 0.0f, 0.0f, 1.0f) };
+	for (int i = 0;i < 3;i++)
+	{
+		float4 shadowSpacePosTmp = mul(float4(Pos.xyz, 1.0f), g_lightViewProjMatrix[i]);
+		float2 uv = shadowSpacePosTmp.xy / shadowSpacePosTmp.w;
+		//
+		//if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
+		{
+			shadowSpacePos[i] = shadowSpacePosTmp;
+		}
+	}
+
+	Out.ShadowSpacePos1 = shadowSpacePos[0];
+	Out.ShadowSpacePos2 = shadowSpacePos[1];
+	Out.ShadowSpacePos3 = shadowSpacePos[2];
 	return Out;
 }
 
@@ -264,22 +307,38 @@ PS_OUTPUT PSMain(VS_OUTPUT In)
 	}
 	if (g_isShadowMapReceiver)
 	{
-		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
-		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
-		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f) 
+		float4 shadowSpacePos[3] =
 		{
-			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
-			uv += 1.0f;
-			uv *= 0.5f;
-			uv.y = 1.0f - uv.y;
-			float4 shadow = tex2D(g_shadowMapSampler, uv);
-			//ライトカメラから見た深度値を計算
-			float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
-			shadowDepth = min(1.0f, shadowDepth);
-			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-			if (shadow.x < shadowDepth - 0.005f)
+			In.ShadowSpacePos1,
+			In.ShadowSpacePos2,
+			In.ShadowSpacePos3,
+		};
+		sampler shadowSampler[3] =
+		{
+			g_shadowMapSampler1,
+			g_shadowMapSampler2,
+			g_shadowMapSampler3,
+		};
+		for (int i = 0;i < 3;i++)
+		{
+
+			//ライトカメラから見た座標をもとにシャドウマップのuvを計算
+			float2 uv = shadowSpacePos[i].xy / shadowSpacePos[i].w;
+			if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
 			{
-				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+				uv += 1.0f;
+				uv *= 0.5f;
+				uv.y = 1.0f - uv.y;
+				float4 shadow = tex2D(shadowSampler[i], uv);
+				//ライトカメラから見た深度値を計算
+				float shadowDepth = shadowSpacePos[i].z / shadowSpacePos[i].w;
+				shadowDepth = min(1.0f, shadowDepth);
+				//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+				if (shadow.x < shadowDepth - 0.005f)
+				{
+					lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				}
 			}
 		}
 	}
@@ -358,22 +417,39 @@ float4 PlayerPSMain(VS_OUTPUT In) : COLOR0
 	}
 	if (g_isShadowMapReceiver)
 	{
-		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
-		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
-		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
+
+		float4 shadowSpacePos[3] =
 		{
-			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
-			uv += 1.0f;
-			uv *= 0.5f;
-			uv.y = 1.0f - uv.y;
-			float4 shadow = tex2D(g_shadowMapSampler, uv);
-			//ライトカメラから見た深度値を計算
-			float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
-			shadowDepth = min(1.0f, shadowDepth);
-			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-			if (shadow.x < shadowDepth - 0.005f)
+			In.ShadowSpacePos1,
+			In.ShadowSpacePos2,
+			In.ShadowSpacePos3,
+		};
+		sampler shadowSampler[3] =
+		{
+			g_shadowMapSampler1,
+			g_shadowMapSampler2,
+			g_shadowMapSampler3,
+		};
+		for (int i = 0;i < 3;i++)
+		{
+
+			//ライトカメラから見た座標をもとにシャドウマップのuvを計算
+			float2 uv = shadowSpacePos[i].xy / shadowSpacePos[i].w;
+			if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
 			{
-				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+				uv += 1.0f;
+				uv *= 0.5f;
+				uv.y = 1.0f - uv.y;
+				float4 shadow = tex2D(shadowSampler[i], uv);
+				//ライトカメラから見た深度値を計算
+				float shadowDepth = shadowSpacePos[i].z / shadowSpacePos[i].w;
+				shadowDepth = min(1.0f, shadowDepth);
+				//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+				if (shadow.x < shadowDepth - 0.005f)
+				{
+					lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				}
 			}
 		}
 	}
@@ -413,7 +489,7 @@ VS_OUTPUT ShadowMapVSMain(VS_INPUT In, uniform bool hasSkin)
 		CalcWorldPosAndNormal(In, Pos, Normal, Tangent);
 	}
 	Out.Pos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
-	Out.ShadowSpacePos = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
+	Out.ShadowSpacePos1 = mul(float4(Pos.xyz, 1.0f), g_mViewProj);
 	return Out;
 }
 
@@ -423,7 +499,7 @@ float4 ShadowMapPSMain(VS_OUTPUT In) : COLOR0
 {
 	float4 color;
 	//深度値を書き込み
-	color.x = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
+	color.x = In.ShadowSpacePos1.z / In.ShadowSpacePos1.w;
 	color.yz = 0.0f;
 	color.w = 1.0f;
 	return color;
@@ -511,22 +587,38 @@ PS_OUTPUT DitheringPSMain(VS_OUTPUT In)
 
 	if (g_isShadowMapReceiver)
 	{
-		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
-		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
-		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
+		float4 shadowSpacePos[3] =
 		{
-			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
-			uv += 1.0f;
-			uv *= 0.5f;
-			uv.y = 1.0f - uv.y;
-			float4 shadow = tex2D(g_shadowMapSampler, uv);
-			//ライトカメラから見た深度値を計算
-			float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
-			shadowDepth = min(1.0f, shadowDepth);
-			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-			if (shadow.x < shadowDepth - 0.005f)
+			In.ShadowSpacePos1,
+			In.ShadowSpacePos2,
+			In.ShadowSpacePos3,
+		};
+		sampler shadowSampler[3] = 
+		{
+			g_shadowMapSampler1,
+			g_shadowMapSampler2,
+			g_shadowMapSampler3,
+		};
+		for (int i = 0;i < 3;i++)
+		{
+
+			//ライトカメラから見た座標をもとにシャドウマップのuvを計算
+			float2 uv = shadowSpacePos[i].xy / shadowSpacePos[i].w;
+			if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
 			{
-				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+				uv += 1.0f;
+				uv *= 0.5f;
+				uv.y = 1.0f - uv.y;
+				float4 shadow = tex2D(shadowSampler[i], uv);
+				//ライトカメラから見た深度値を計算
+				float shadowDepth = shadowSpacePos[i].z / shadowSpacePos[i].w;
+				shadowDepth = min(1.0f, shadowDepth);
+				//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+				if (shadow.x < shadowDepth - 0.005f)
+				{
+					lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				}
 			}
 		}
 	}
@@ -602,22 +694,38 @@ PS_OUTPUT GhostPSMain(VS_OUTPUT In)
 
 	if (g_isShadowMapReceiver)
 	{
-		//ライトカメラから見た座標をもとにシャドウマップのuvを計算
-		float2 uv = In.ShadowSpacePos.xy / In.ShadowSpacePos.w;
-		if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
+		float4 shadowSpacePos[3] =
 		{
-			//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
-			uv += 1.0f;
-			uv *= 0.5f;
-			uv.y = 1.0f - uv.y;
-			float4 shadow = tex2D(g_shadowMapSampler, uv);
-			//ライトカメラから見た深度値を計算
-			float shadowDepth = In.ShadowSpacePos.z / In.ShadowSpacePos.w;
-			shadowDepth = min(1.0f, shadowDepth);
-			//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-			if (shadow.x < shadowDepth - 0.005f)
+			In.ShadowSpacePos1,
+			In.ShadowSpacePos2,
+			In.ShadowSpacePos3,
+		};
+		sampler shadowSampler[3] =
+		{
+			g_shadowMapSampler1,
+			g_shadowMapSampler2,
+			g_shadowMapSampler3,
+		};
+		for (int i = 0;i < 3;i++)
+		{
+
+			//ライトカメラから見た座標をもとにシャドウマップのuvを計算
+			float2 uv = shadowSpacePos[i].xy / shadowSpacePos[i].w;
+			if (uv.x >= -1.0f && uv.x <= 1.0f && uv.y >= -1.0f && uv.y <= 1.0f)
 			{
-				lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				//－1.0f～1.0fのスクリーン座標から0.0f～1.0fのテクスチャのuv座標に変換
+				uv += 1.0f;
+				uv *= 0.5f;
+				uv.y = 1.0f - uv.y;
+				float4 shadow = tex2D(shadowSampler[i], uv);
+				//ライトカメラから見た深度値を計算
+				float shadowDepth = shadowSpacePos[i].z / shadowSpacePos[i].w;
+				shadowDepth = min(1.0f, shadowDepth);
+				//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
+				if (shadow.x < shadowDepth - 0.005f)
+				{
+					lig *= float4(0.7f, 0.7f, 0.7f, 1.0f);
+				}
 			}
 		}
 	}

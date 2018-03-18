@@ -43,11 +43,13 @@ public:
 	*/
 	void SetIterator(Map* map, std::list<MapChip*>::iterator iterator);
 
+	//アクティブかのフラグを設定する
 	void SetIsActive(bool isActive)
 	{
 		m_isActive = isActive;
 	}
 
+	//プレイヤーのインスタンスを設定する
 	void SetPlayer(Player* player)
 	{
 		m_pPlayer = player;

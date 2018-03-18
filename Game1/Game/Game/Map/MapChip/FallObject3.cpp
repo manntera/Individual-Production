@@ -10,7 +10,6 @@ FallObject3::FallObject3() :
 	m_timer(0.0f),
 	m_animationTimer(0.0f),
 	m_animationMove(0.0f, 0.0f, 0.0f),
-	m_frameNum(0),
 	m_pSound(nullptr),
 	m_soundVolume(1.0f),
 	m_revivalTime(0.0f),
@@ -83,14 +82,14 @@ void FallObject3::Update()
 		const float animationLimit = 1.2f;
 		if (m_animationTimer < animationLimit)
 		{
-
+			static int frameNum = 0;
 			m_position += m_animationMove;
-			if (m_frameNum % 2 == 0)
+			if (frameNum % 2 == 0)
 			{
 				m_animationMove *= -1.0f;
 			}
 			m_animationTimer += GetGameTime().GetDeltaFrameTime();
-			m_frameNum++;
+			frameNum++;
 		}
 		else
 		{
@@ -125,7 +124,6 @@ void FallObject3::Reset()
 	m_isFall = false;
 	m_timer = 0.0f;
 	m_animationTimer = 0.0f;
-	m_frameNum = 0;
 	m_revivalTime = 0.0f;
 	m_isDead = false;
 	ParticleDelete();

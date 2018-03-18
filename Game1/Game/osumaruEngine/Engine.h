@@ -8,6 +8,7 @@
 #include "Resource\TextureResource.h"
 #include "Graphics\PostEffect\PostEffect.h"
 #include "Resource\SkinModelDataResource.h"
+#include "Graphics\CascadedShadowMap.h"
 //エンジンクラス
 
 const int FRAME_BUFFER_WIDTH = 1280;
@@ -59,7 +60,7 @@ public:
 	}
 
 	//シャドウマップを取得
-	ShadowMap& GetShadowMap()
+	CascadedShadowMap& GetShadowMap()
 	{
 		return m_shadowMap;
 	}
@@ -147,7 +148,7 @@ private:
 	GameObjectManager						m_objectManager;			//オブジェクトマネージャー
 	std::unique_ptr<PhysicsWorld>			m_physicsWorld;				//物理ワールド
 	Pad										m_pad;						//パッドの入力
-	ShadowMap								m_shadowMap;				//シャドウマップ
+	CascadedShadowMap								m_shadowMap;				//シャドウマップ
 	SoundEngine								m_soundEngine;				//サウンドエンジン
 	TextureResource							m_textureResource;			//テクスチャーリソース
 	SkinModelDataResource					m_skinModelDataResource;	//モデルデータリソース
@@ -185,7 +186,7 @@ static Pad& GetPad()
 }
 
 //シャドウマップの取得
-static ShadowMap& GetShadowMap()
+static CascadedShadowMap& GetShadowMap()
 {
 	return GetEngine().GetShadowMap();
 }

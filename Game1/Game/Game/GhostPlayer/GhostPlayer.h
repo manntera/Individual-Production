@@ -20,6 +20,7 @@ public:
 	//描画関数
 	void Draw()override;
 
+	//アクティブかのフラグを設定します。
 	void SetIsActive(bool isActive)
 	{
 		m_isActive = isActive;
@@ -33,5 +34,5 @@ private:
 	int										m_currentAnimationNum;	//現在再生中のアニメーションの番号
 	Light									m_light;				//モデルのライト
 	bool									m_isGoal;				//ゴールしたか？
-	bool									m_isActive;
+	bool									m_isActive;				//アクティブか？
 };

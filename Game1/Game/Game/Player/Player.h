@@ -135,15 +135,19 @@ public:
 		return m_light;
 	}
 
+	//移動速度を遅くする。
 	void MoveSpeedDelay()
 	{
 		m_delayTime = 6.0f;
 	}
 
+	//この関数を呼ぶと一部のアイテムを無効化できる
 	void Invincible();
 	
+	//この関数を呼ぶとプレイヤーが吹っ飛ばされる
 	void BlowObstacle();
 
+	//アクティブかのフラグを設定する
 	void SetIsActive(bool isActive)
 	{
 		m_isActive = isActive;
@@ -184,13 +188,13 @@ private:
 	const int			m_rotationFrameNum;		//回転を線形補間する時に使うフレーム数
 	float				m_frameAngle;			//1フレームで回転する回転量
 	int					m_rotationCount;		//回転を線形補間するためのカウンター
-	const float			m_jumpSpeed;
-	float				m_delayTime;
-	bool				m_isInvincible;			
-	float				m_invincibleTime;
-	bool				m_isObstacle;
-	float				m_obstacleTime;
-	bool				m_isActive;
+	const float			m_jumpSpeed;			//ジャンプする時の上方向への移動速度
+	float				m_delayTime;			//プレイヤーが遅延するアイテムを取った時の効果時間
+	bool				m_isInvincible;			//無敵アイテムを取ってるか？
+	float				m_invincibleTime;		//無敵アイテムを取った時の効果時間
+	bool				m_isObstacle;			//邪魔になるアイテムに当たったか？
+	float				m_obstacleTime;			//邪魔になるアイテムを取った時の効果時間
+	bool				m_isActive;				//アクティブか？
 };
 
 

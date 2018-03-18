@@ -445,7 +445,8 @@ void CharacterController::Execute(float deltaTime)
 void CharacterController::StaticExecute()
 {
 	const int rayNum = 4;
-	const float rayLength = 5.0f;
+	const float rayLength = 1.0f;
+	//4方向のXZ平面にレイを飛ばす
 	D3DXVECTOR3 ray[rayNum] =
 	{
 		{ rayLength,	0.0f, 0.0f},
@@ -459,17 +460,20 @@ void CharacterController::StaticExecute()
 		btTransform start, end;
 		start.setIdentity();
 		end.setIdentity();
+		//レイの終点を現在を座標とし外側から現在の座標に向かってレイを飛ばす
 		D3DXVECTOR3 endPos = m_position;
 		end.setOrigin(btVector3(endPos.x, endPos.y + m_height * 0.5f + m_radius , endPos.z));
 		D3DXVECTOR3 startPos = m_position;
 		startPos += ray[i];
+		//高さが違うのでyの値だけ終点と同じものを使う
 		start.setOrigin(btVector3(startPos.x, end.getOrigin().y(), startPos.z));
 		SweepResultWall callback;
 		callback.me = m_rigidBody.GetBody();
 		callback.startPos = startPos;
 		callback.ray = D3DXVECTOR3(end.getOrigin() - start.getOrigin());
 		GetPhysicsWorld().ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
-		if(callback.isHit && callback.isRay/* && rayLength - callback.dist < m_radius - 0.001f*/)
+		//もしレイが当たっていて、さらに押し戻す方向とオブジェクトの移動方向が一致している場合(引っ付き防止)
+		if(callback.isHit && callback.isRay /*&& fabs(rayLength - callback.dist) < m_radius + 0.1f*/)
 		{
 			D3DXVECTOR3 hitNormal = callback.hitNormal;
 			hitNormal.y = 0.0f;

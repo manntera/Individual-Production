@@ -183,6 +183,7 @@
     <ClCompile Include="Font\Font.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
+    <ClCompile Include="Graphics\CascadedShadowMap.cpp" />
     <ClCompile Include="graphics\EffectManager.cpp" />
     <ClCompile Include="Graphics\Light.cpp" />
     <ClCompile Include="Graphics\PostEffect\Bloom.cpp" />
@@ -231,6 +232,7 @@
     <ClInclude Include="Font\Font.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />
+    <ClInclude Include="Graphics\CascadedShadowMap.h" />
     <ClInclude Include="graphics\EffectManager.h" />
     <ClInclude Include="Graphics\Light.h" />
     <ClInclude Include="Graphics\PostEffect\Bloom.h" />

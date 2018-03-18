@@ -41,6 +41,7 @@ void GameCamera::Init()
 	target.y += m_targetManip;
 	m_springCamera.Init(target, position, 120.0f);
 	m_springCamera.SetDampingRate(1.3f);
+	GetShadowMap().SetGameCamera(&m_camera);
 }
 
 bool GameCamera::Start()
@@ -95,4 +96,10 @@ void GameCamera::Update()
 	m_camera.SetTarget(m_springCamera.GetTarget());
 	m_camera.SetPosition(m_springCamera.GetPosition());
 	m_camera.Update();
+
+	GetShadowMap().SetTarget({ 0.0f, -1.0f, 0.0f });
+	D3DXVECTOR3 lightCameraUp = m_camera.GetTarget() - m_camera.GetPosition();
+	lightCameraUp.y = 0.0f;
+	GetShadowMap().SetUp(lightCameraUp);
+
 }

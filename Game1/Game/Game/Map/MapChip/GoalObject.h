@@ -23,5 +23,5 @@ public:
 	//更新関数
 	void Update()override;
 private:
-	D3DXQUATERNION m_multi;
+	D3DXQUATERNION m_multi;	//毎フレーム回転させるのに使うクォーターニオン
 };

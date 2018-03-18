@@ -56,7 +56,6 @@ Map::Map() :
 	m_isLoad(false),
 	m_soundTimer(0.0f),
 	m_soundTimeLimit(0.8f),
-	m_soundTimeBoundary(0.8f),
 	m_stopTimeLimit(10.0f)
 {
 	GetPostEffect().SetIsActiveMonochrome(false);
@@ -162,17 +161,19 @@ void Map::Update()
 				GetGameScene().SoundPlay();
 			}
 		}
+		//音がなるまでタイマーをカウントする
 		m_soundTimer += GetGameTime().GetDeltaFrameTime();
-		if (m_soundTimeBoundary < m_soundTimer)
+		if (m_soundTimeLimit < m_soundTimer)
 		{
 			m_soundTimer = 0.0f;
 			SoundSource* sound = New<SoundSource>(0);
 			sound->Init("Assets/sound/okidokei.wav");
 			sound->Play(false);
 			sound->SetVolume(0.7f);
-			if (0.1f < m_soundTimeBoundary)
+			//音が鳴るごとに間隔を短くするために限界値を下げる
+			if (0.1f < m_soundTimeLimit)
 			{
-				m_soundTimeBoundary -= GetGameTime().GetDeltaFrameTime();
+				m_soundTimeLimit -= GetGameTime().GetDeltaFrameTime();
 			}
 		}
 		GetPostEffect().SetAlphaMonochrome(m_stopTime / m_stopTimeLimit);
@@ -199,7 +200,7 @@ void Map::StopTime()
 	}
 	GetPostEffect().SetIsActiveMonochrome(true);
 	GetGameScene().SoundStop();
-	m_soundTimeBoundary = m_soundTimeLimit;
+	m_soundTimeLimit = 0.8f;
 	m_soundTimer = 0.0f;
 	SoundSource* sound = New<SoundSource>(0);
 	sound->Init("Assets/sound/sceneswitch2.wav");

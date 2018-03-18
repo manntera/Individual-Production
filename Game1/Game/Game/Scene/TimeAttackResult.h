@@ -6,10 +6,16 @@ static const int	RANK_NUM = 5;								//何位まであるかの数
 class TimeAttackResult : public GameObject
 {
 public:
+	//コンストラクタ
 	TimeAttackResult();
 
+	//デストラクタ
 	~TimeAttackResult();
 
+	/*
+	初期化関数
+	time	今回のクリアタイム
+	*/
 	void Init(float time);
 
 	//初期化関数
@@ -27,6 +33,7 @@ public:
 	//タイムの記録をセーブ
 	static void TimeDataSave();
 
+	//タイムを取得
 	const static float GetTime(int stageNum, int rankNum)
 	{
 		return (float)m_times[stageNum][rankNum] / 100.0f;

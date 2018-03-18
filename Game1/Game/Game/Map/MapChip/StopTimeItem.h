@@ -12,9 +12,10 @@ public:
 	//XVŠÖ”
 	void Update()override;
 
+	//•`‰æŠÖ”
 	void Draw()override;
 
 private:
-	bool	m_isDead;
-	float	m_revivalTime;
+	bool	m_isDead;					//€‚ñ‚Å‚é‚©H
+	float	m_revivalTime;				//•œŠˆ‚·‚é‚Ü‚Å‚ÌŠÔ
 };
