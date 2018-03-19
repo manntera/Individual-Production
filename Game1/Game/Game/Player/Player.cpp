@@ -172,11 +172,6 @@ void Player::Update()
 		//sound->Play(false);
 		//sound->SetPosition(m_position);
 	}
-	//シャドウマップのライトカメラを更新
-	//GetShadowMap().SetLightCameraTarget(m_characterController.GetPosition());
-	//D3DXVECTOR3 lightCameraPos = m_characterController.GetPosition();
-	//lightCameraPos += {0.0f, 40.0f, 0.0f};
-	//GetShadowMap().SetLightCameraPosition(lightCameraPos);
 	if (0.0f < m_delayTime)
 	{
 		m_delayTime -= GetGameTime().GetDeltaFrameTime();

@@ -79,25 +79,13 @@ void DrawMeshContainer(
 		D3DXMATRIX viewProjMatrix[3];
 		for (int i = 0;i < 3;i++)
 		{
-			//char variableName[32];
-			//sprintf(variableName, "g_shadowMapTexture%d", i + 1);
-			//pEffect->SetTexture(variableName, GetShadowMap().GetShadowMapTexture(i));
+			char variableName[32];
+			sprintf(variableName, "g_shadowMapTexture%d", i + 1);
+			pEffect->SetTexture(variableName, GetShadowMap().GetShadowMapTexture(i));
 			D3DXMatrixMultiply(&viewProjMatrix[i], &GetShadowMap().GetViewMatrix(i), &GetShadowMap().GetProjectionMatrix(i));
 		}
-
-		pEffect->SetTexture("g_shadowMapTexture1", GetShadowMap().GetShadowMapTexture(0));
-		pEffect->SetTexture("g_shadowMapTexture2", GetShadowMap().GetShadowMapTexture(1));
-		pEffect->SetTexture("g_shadowMapTexture3", GetShadowMap().GetShadowMapTexture(2));
-		pEffect->SetMatrixArray("g_lightViewProjMatrix", viewProjMatrix, 3);
+		pEffect->SetMatrixArray("g_lightViewProjMatrix", viewProjMatrix, GetShadowMap().GetShadowMapNum());
 		pEffect->SetBool("g_isShadowMapReceiver", isShadowReceiver);
-		//D3DXMATRIX cameraViewMatrix = GetShadowMap().GetViewMatrix();
-		//D3DXMatrixInverse(&cameraViewMatrix, NULL, &cameraViewMatrix);
-		//D3DXVECTOR3 cameraDir;
-		//cameraDir.x = cameraViewMatrix.m[2][0];
-		//cameraDir.y = cameraViewMatrix.m[2][1];
-		//cameraDir.z = cameraViewMatrix.m[2][2];
-		//D3DXVec3Normalize(&cameraDir, &cameraDir);
-		//pEffect->SetValue("g_lightCameraDir", &cameraDir, sizeof(D3DXVECTOR3));
 		pEffect->SetBool("g_isHasNormalMap", isHasNormal);
 		pEffect->SetBool("g_isHasSpecularMap", isHasSpecular);
 		pEffect->SetInt("g_screenWidth", FRAME_BUFFER_WIDTH);
