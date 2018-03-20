@@ -18,7 +18,7 @@ float4  CalcShadowMap(sampler shadowMap, float4 position)
 		float shadowDepth = position.z / position.w;
 		shadowDepth = min(1.0f, shadowDepth);
 		//シャドウマップの深度値と比較してシャドウマップのより奥にあれば影を落とす
-		if (shadow.x < shadowDepth - 0.005f)
+		if (shadow.x < shadowDepth - 0.00005f)
 		{
 			color = float4(0.7f, 0.7f, 0.7f, 1.0f);
 		}

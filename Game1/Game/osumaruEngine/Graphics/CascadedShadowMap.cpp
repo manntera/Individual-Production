@@ -69,12 +69,12 @@ void CascadedShadowMap::Update()
 	lightCameraRot.m[2][3] = 0.0f;
 	float _near = 0.0f;
 	float _far;
-	float ZLength = 70.0f;
+	float ZLength = 150.0f;
 	float shadowAreaTable[SHADOWMAP_NUM] =
 	{
-		ZLength * 1.0f,
 		ZLength * 2.0f,
-		ZLength * 3.0f
+		ZLength * 0.7f,
+		ZLength * 0.5f
 	};
 	//メインカメラの前方向と上方向と右方向を求める
 	D3DXVECTOR3 cameraForward = m_pCamera->GetTarget() - m_pCamera->GetPosition();
@@ -130,7 +130,7 @@ void CascadedShadowMap::Update()
 			D3DXVec3Minimize(&aabbMin, &aabbVertex[i], &aabbMin);
 		}
 		D3DXVECTOR3 lightTarget = lightPos + lightCameraForward;
-		float w = aabbMax.x - aabbMin.x;
+		float w = aabbMax.x - aabbMin.x + 50;//ちょっと太らせる
 		float h = aabbMax.y - aabbMin.y;
 		D3DXMatrixLookAtLH(&m_viewMatrix[i], &lightPos, &lightTarget, &lightCameraUp);
 		D3DXMatrixOrthoLH(&m_projMatrix[i], w, h, 10.0f, 1000.0f);

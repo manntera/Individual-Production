@@ -165,13 +165,7 @@ void Player::Update()
 	{
 		GetGameScene().GameOver();
 	}
-	if (GetPad().IsTriggerButton(enButtonY))
-	{
-		//SoundSource* sound = New<SoundSource>(0);
-		//sound->Init("Assets/sound/enter.wav", true);
-		//sound->Play(false);
-		//sound->SetPosition(m_position);
-	}
+
 	if (0.0f < m_delayTime)
 	{
 		m_delayTime -= GetGameTime().GetDeltaFrameTime();
