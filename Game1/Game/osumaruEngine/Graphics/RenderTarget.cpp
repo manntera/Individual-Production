@@ -22,7 +22,7 @@ void RenderTarget::Create(int width, int height, D3DFORMAT format, D3DFORMAT dep
 	Release();
 	m_width = width;
 	m_height = height;
-	//シャドウマップを作成
+	//テクスチャを作成
 	GetEngine().GetDevice()->CreateTexture(
 		m_width,
 		m_height,
