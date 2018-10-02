@@ -55,7 +55,6 @@ void FallObject2::Update()
 	if (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg() && !m_isFall)
 	{
 		m_isFall = true;
-		ParticleDelete();
 		m_pSound = New<SoundSource>(0);
 		m_pSound->Init("Assets/sound/seismic.wav");
 		m_pSound->SetVolume(m_soundVolume);
@@ -102,14 +101,6 @@ void FallObject2::Update()
 	m_skinModel.Update(m_position, m_rotation, m_scale);
 }
 
-void FallObject2::ParticleDelete()
-{
-	if (m_particle != nullptr)
-	{
-		Delete(m_particle);
-		m_particle = nullptr;
-	}
-}
 
 void FallObject2::SoundDelete()
 {
