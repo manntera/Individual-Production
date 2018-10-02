@@ -58,8 +58,6 @@ void Font::Init(char* chara)
 			DWORD Trans;
 		}
 	}
-
-
 	SelectObject(hdc, oldFont);
 	DeleteObject(font);
 	ReleaseDC(NULL, hdc);

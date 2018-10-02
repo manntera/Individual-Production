@@ -55,6 +55,7 @@ void GhostPlayer::Update()
 	{
 		return;
 	}
+	//ゴールしてなければゴーストデータを流す
 	if (!m_isGoal)
 	{
 		if (m_currentAnimationNum != m_ghostData->currentAnimationNum)
@@ -64,6 +65,7 @@ void GhostPlayer::Update()
 		}
 		m_animation.Update(m_ghostData->animationUpdateTime);
 		m_ghostData++;
+		//ゴーストデータを流し終わったらゴールにする。
 		if (GetGhostDataListManager().GetGhostData().end() == m_ghostData)
 		{
 			m_isGoal = true;
@@ -73,6 +75,7 @@ void GhostPlayer::Update()
 	}
 	else
 	{
+		//ゴールしたらジャンプして喜ぶモーションを再生
 		if (m_currentAnimationNum != enAnimSetDelight)
 		{
 			m_currentAnimationNum = enAnimSetDelight;

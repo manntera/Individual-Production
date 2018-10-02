@@ -136,7 +136,9 @@ void Player::Update()
 	{
 		return;
 	}
+
 	float deltaTime = GetGameTime().GetDeltaFrameTime();
+	//プレイヤーがアイテムによって移動速度が遅くなっている場合deltaTimeを小さくする
 	if (0.0f < m_delayTime)
 	{
 		deltaTime *= 1.0f / 6.0f;
@@ -291,6 +293,7 @@ void Player::BlowObstacle()
 	{
 		return;
 	}
+	//吹っ飛ばす方向を求めフラグを立てる
 	D3DXMATRIX matrix = m_skinModel.GetWorldMatrix();
 	D3DXVECTOR3 backVector;
 	backVector.x = -matrix.m[2][0];
@@ -595,35 +598,6 @@ void Player::Rotation(const D3DXVECTOR3& rotationDirection)
 }
 
 
-void Player::Draw()
-{
-	//LPDIRECT3DDEVICE9 device = GetEngine().GetDevice();
-	//DWORD zStateBackup;
-	//DWORD zEnableStateBackup;
-	//DWORD zwriteEnableStateBackup;
-
-	////シルエット描画
-	//EnSkinModelShaderTechnique techniqueBackup = m_skinModel.GetCurrentShaderTechnique();
-	//device->GetRenderState(D3DRS_ZFUNC, &zStateBackup);
-	//device->GetRenderState(D3DRS_ZENABLE, &zEnableStateBackup);
-	//device->GetRenderState(D3DRS_ZWRITEENABLE, &zwriteEnableStateBackup);
-
-	//device->SetRenderState(D3DRS_ZENABLE, TRUE);
-	//device->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
-	//device->SetRenderState(D3DRS_ZFUNC, D3DCMP_GREATER);
-	//m_skinModel.SetShaderTechnique(enShaderTechniqueSilhouette);
-
-	//m_skinModel.Draw(&GetGameScene().GetCamera().GetViewMatrix(), &GetGameScene().GetCamera().GetProjectionMatrix());
-
-	////普通の描画
-	//m_skinModel.SetShaderTechnique(techniqueBackup);
-	//device->SetRenderState(D3DRS_ZFUNC, zStateBackup);
-	//device->SetRenderState(D3DRS_ZENABLE, zEnableStateBackup);
-	//device->SetRenderState(D3DRS_ZWRITEENABLE, zwriteEnableStateBackup);
-	//m_skinModel.Draw(&GetGameScene().GetCamera().GetViewMatrix(), &GetGameScene().GetCamera().GetProjectionMatrix());
-	////m_characterController.Draw();
-	//m_wallJump.Draw();
-}
 
 void Player::AfterDraw()
 {

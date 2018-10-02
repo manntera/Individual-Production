@@ -57,55 +57,6 @@ bool TimeAttackResult::Start()
 	//スプライトを初期化
 	Texture* texture = GetTextureResource().LoadTexture("Assets/sprite/TimeAttackBack.png");
 	m_back.Init(texture);
-	//m_back.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
-	//for (int i = 0; i < NUM_MAX; i++)
-	//{
-	//	char filePath[64];
-	//	sprintf(filePath, "Assets/sprite/%d.png", i);
-	//	m_numTexture[i] = GetTextureResource().LoadTexture(filePath);
-	//}
-	//for (int k = 0;k < RANK_NUM;k++)
-	//{
-	//	D3DXVECTOR2 spritePos = { 100.0f, 270.0f + -120.0f * k};
-	//	for (int i = 0; i < TIME_MAX; i++)
-	//	{
-	//		float addX = 0.0f;
-	//		switch (i)
-	//		{
-	//		case 0:
-	//			texture = m_numTexture[k + 1];
-	//			addX = 100.0f;
-	//			break;
-	//		case 1:
-	//			texture = GetTextureResource().LoadTexture("Assets/sprite/colon.png");
-	//			addX = 40.0f;
-	//			break;
-	//		case 2:
-	//			texture = GetTextureResource().LoadTexture("Assets/sprite/period.png");
-	//			addX = 40.0f;
-	//			break;
-	//		}
-	//		spritePos.x -= 30.0f;
-	//		m_colonSprite[k][i].Init(texture);
-	//		m_colonSprite[k][i].SetSize({ 50.0f, 100.0f });
-	//		m_colonSprite[k][i].SetPosition(spritePos);
-	//		spritePos.x += addX;
-	//		for (int j = 0; j < DIGIT_MAX; j++)
-	//		{
-	//			m_numSprite[k][i][j].Init(m_numTexture[0]);
-	//			m_numSprite[k][i][j].SetPosition(spritePos);
-	//			m_numSprite[k][i][j].SetSize({ 66.0f, 100.0f });
-	//			spritePos.x += 66.0f;
-	//		}
-	//	}
-	//	int time = m_times[m_stageNum][k];
-	//	for (int i = DIGIT_MAX * TIME_MAX - 1; 0 <= i; i--)
-	//	{
-	//		m_numSprite[k][0][i].SetTexture(m_numTexture[time % 10]);
-	//		time /= 10;
-	//	}
-	//}
-
 	m_back.SetSize(D3DXVECTOR2(FRAME_BUFFER_WIDTH, FRAME_BUFFER_HEIGHT));
 	for (int i = 0; i < NUM_MAX; i++)
 	{

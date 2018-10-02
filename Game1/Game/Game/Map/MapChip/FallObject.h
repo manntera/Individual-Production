@@ -26,14 +26,10 @@ public:
 	//描画関数
 	void Draw()override;
 
-	//パーティクルを消去
-	void ParticleDelete();
-
 private:
 	bool				m_isFall;			//落ち始めたか
 	RigidBody			m_rigidBody;		//剛体
 	BoxCollider			m_boxCollider;		//コライダー
-	ParticleEmitter*	m_particle;			//パーティクル
 	float				m_timer;			//消えるまでの時間
 	
 };

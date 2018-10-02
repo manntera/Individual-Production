@@ -26,8 +26,6 @@ public:
 	//描画関数
 	void Draw()override;
 private:
-	//パーティクルを消去
-	void ParticleDelete();
 
 	//サウンドを消去
 	void SoundDelete();
@@ -36,7 +34,6 @@ private:
 	bool				m_isFall;			//落ち始めたか
 	RigidBody			m_rigidBody;		//剛体
 	BoxCollider			m_boxCollider;		//コライダー
-	ParticleEmitter*	m_particle;			//パーティクル
 	float				m_timer;			//消えるまでの時間
 	float				m_animationTimer;	//揺れるアニメーションをする時間
 	D3DXVECTOR3			m_animationMove;	//揺れるアニメーションをするための移動速度

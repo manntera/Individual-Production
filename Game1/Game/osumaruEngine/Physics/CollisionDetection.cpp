@@ -19,10 +19,12 @@ struct ContactSingle : public btCollisionWorld::ContactResultCallback
 		quaternion = D3DXQUATERNION(colObj1Wrap->getCollisionObject()->getWorldTransform().getRotation());
 		D3DXMATRIX rot;
 		D3DXMatrixRotationQuaternion(&rot, &quaternion);
+		//法線を取得
 		hitObjectNormal.x = cp.m_normalWorldOnB.x();
 		hitObjectNormal.y = cp.m_normalWorldOnB.y();
 		hitObjectNormal.z = cp.m_normalWorldOnB.z();
 		collisionType = colObj1Wrap->getCollisionObject()->getUserIndex();
+		//当たっていたのがキャラクターじゃない場合フラグを立てる
 		if (collisionType != enCollisionAttr_Character)
 		{
 			switch (judgmentType)

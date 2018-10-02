@@ -6,7 +6,6 @@ FallObject3::FallObject3() :
 	m_isFall(false),
 	m_rigidBody(),
 	m_boxCollider(),
-	m_particle(nullptr),
 	m_timer(0.0f),
 	m_animationTimer(0.0f),
 	m_animationMove(0.0f, 0.0f, 0.0f),
@@ -19,7 +18,6 @@ FallObject3::FallObject3() :
 
 FallObject3::~FallObject3()
 {
-	ParticleDelete();
 	SoundDelete();
 }
 
@@ -38,7 +36,6 @@ void FallObject3::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotati
 	rbInfo.collider = &m_boxCollider;
 	m_rigidBody.Create(rbInfo);
 	m_rigidBody.SetPlayerCollisionGroundFlg(false);
-	ParticleEmitt();
 	m_skinModel.SetShaderTechnique(enShaderTechniqueDithering);
 	m_animationMove.x = (float)GetRandom().GetRandDouble();
 	m_animationMove.y = (float)GetRandom().GetRandDouble();
@@ -71,7 +68,6 @@ void FallObject3::Update()
 	if (m_rigidBody.GetBody()->getPlayerCollisionGroundFlg() && !m_isFall)
 	{
 		m_isFall = true;
-		ParticleDelete();
 		m_pSound = New<SoundSource>(0);
 		m_pSound->Init("Assets/sound/seismic.wav");
 		m_pSound->SetVolume(m_soundVolume);
@@ -147,22 +143,22 @@ void FallObject3::ParticleDelete()
 void FallObject3::ParticleEmitt()
 {
 	//パーティクルを初期化
-	//m_particle = New<ParticleEmitter>(CAMERA_PRIORITY);
-	//m_particle->Init({
-	//	"Assets/particle/WallDust.png",						//テクスチャのファイルパス
-	//	0.4f,												//パーティクルの横幅
-	//	0.4f,												//パーティクルの縦幅
-	//	{ 0.0f, 0.0f, 1.0f, 1.0f },							//テクスチャのuv。xyが左上のuvでzwが右下のuv
-	//	{ aabb.x, 3.0f, aabb.z },					//パーティクルの座標のランダム幅
-	//	{ 0.0f, -0.5f, 0.0f },								//パーティクルの重力
-	//	1.3f,												//パーティクルの寿命
-	//	1.0f,												//パーティクルが出るまでのインターバル
-	//	0.0f,												//エミッターの寿命
-	//	{ m_position.x, m_position.y - 11.0f, m_position.z },//エミッターの座標
-	//	2,													//1フレームで出るパーティクルの数
-	//	true												//最初にパーティクルをエミットする時だけ時間をランダムにするか
-	//}
-	//, &GetGameScene().GetCamera());
+	m_particle = New<ParticleEmitter>(CAMERA_PRIORITY);
+	m_particle->Init({
+		"Assets/particle/WallDust.png",						//テクスチャのファイルパス
+		0.4f,												//パーティクルの横幅
+		0.4f,												//パーティクルの縦幅
+		{ 0.0f, 0.0f, 1.0f, 1.0f },							//テクスチャのuv。xyが左上のuvでzwが右下のuv
+		{ aabb.x, 3.0f, aabb.z },					//パーティクルの座標のランダム幅
+		{ 0.0f, -0.5f, 0.0f },								//パーティクルの重力
+		1.3f,												//パーティクルの寿命
+		1.0f,												//パーティクルが出るまでのインターバル
+		0.0f,												//エミッターの寿命
+		{ m_position.x, m_position.y - 11.0f, m_position.z },//エミッターの座標
+		2,													//1フレームで出るパーティクルの数
+		true												//最初にパーティクルをエミットする時だけ時間をランダムにするか
+	}
+	, &GetGameScene().GetCamera());
 }
 
 void FallObject3::SoundDelete()

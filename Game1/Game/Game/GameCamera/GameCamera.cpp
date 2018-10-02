@@ -38,6 +38,7 @@ void GameCamera::Init()
 	m_camera.SetTarget(player->GetPosition());
 	m_camera.SetPosition(position);
 	D3DXVECTOR3 target = player->GetPosition();
+	//’‹“X‚Ì‚‚³‚ğ’²®
 	target.y += m_targetManip;
 	m_springCamera.Init(target, position, 120.0f);
 	m_springCamera.SetDampingRate(1.3f);

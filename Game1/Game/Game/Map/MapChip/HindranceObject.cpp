@@ -56,9 +56,11 @@ void HindranceObject::Update()
 	MapChip::Update();
 	if (!m_isActive)
 	{
+		//アクティブでなければ
 		m_rigidBody.SetPosition(m_position);
 		return;
 	}
+	//一定時間で移動方向を反転する
 	if (m_timerLimit <= m_timer)
 	{
 		m_acceleration *= -1.0f;

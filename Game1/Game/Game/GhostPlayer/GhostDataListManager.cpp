@@ -70,6 +70,7 @@ void GhostDataListManager::Update()
 
 void GhostDataListManager::GhostDataRead()
 {
+	//ファイルを開いてゴーストデータの読み込み
 	FILE* file;
 	for (int i = 0;i < STAGE_NUM;i++)
 	{
@@ -82,11 +83,13 @@ void GhostDataListManager::GhostDataRead()
 		}
 		const int rate = 1000000;
 		const int rateNum = 11;
+		//符号の分も含めて2多めに配列を作る
 		char data[rateNum + 2] = { 0 };
 		D3DXVECTOR3 position;
 		D3DXQUATERNION rotation;
 		float animationTime;
 		int animationNum;
+		//読み込むデータの数
 		const int dataNum = 8;
 		const int animationEnumDigit = 2;
 		float* pData[dataNum] = { &position.x, &position.y, &position.z,
@@ -99,6 +102,7 @@ void GhostDataListManager::GhostDataRead()
 			{
 				inNum = 0;
 				fgets(data, rateNum + 2, file);
+				//ファイルが最後までいったら読み込みを終了する
 				if (j == 0)
 				{
 					if (feof(file))
@@ -107,11 +111,13 @@ void GhostDataListManager::GhostDataRead()
 						break;
 					}
 				}
+				//符号用の変数
 				int sign = 1;
 				if (data[0] == '-')
 				{
 					sign *= -1;
 				}
+				//各桁の計算
 				for (int k = 1;k < rateNum;k++)
 				{
 					inNum *= 10;
@@ -140,6 +146,7 @@ void GhostDataListManager::GhostDataRead()
 
 void GhostDataListManager::GhostDataSave()
 {
+	//ファイルを開いてステージ分の数だけセーブデータを作る
 	FILE* file;
 	for (int i = 0;i < STAGE_NUM;i++)
 	{

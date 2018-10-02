@@ -15,7 +15,6 @@ Goal::~Goal()
 void Goal::Init(const D3DXVECTOR3& position, const D3DXQUATERNION& rotation, const char* modelName, Animation* anim)
 {
 	MapChip::Init(position, rotation, modelName);
-	//m_light.SetAmbiemtLight({ 70.0f, 70.0f, 1.0f, 1.0f });
 	//メッシュコライダーからAABBを作成
 	MeshCollider meshCollider;
 	meshCollider.CreateFromSkinModel(&m_skinModel, NULL);

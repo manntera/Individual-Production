@@ -74,7 +74,7 @@ void RigidBodyDraw::Draw(D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix)
 	}
 	pIndexBuffer->Unlock();
 
-	//描画
+	//ビュープロジェクション行列をさｋ末井
 	LPDIRECT3DDEVICE9 pD3DDevice = GetEngine().GetDevice();
 	DWORD cullmodeBackup;
 	D3DXMATRIX viewProjection;

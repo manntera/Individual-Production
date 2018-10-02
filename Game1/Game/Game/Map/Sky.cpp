@@ -29,6 +29,7 @@ bool Sky::Start()
 {
 	char* filePath;
 	m_position = { 0.0f, -60.0f, 0.0f };
+	//ステージによって読み込むモデルを変える
 	switch (m_stageNum)
 	{
 	case 0:

@@ -42,9 +42,6 @@ public:
 	void Update() override;
 
 	//•`‰æŠÖ”
-	void Draw() override;
-
-	//•`‰æŠÖ”
 	void AfterDraw() override;
 
 	//À•W‚ğæ“¾

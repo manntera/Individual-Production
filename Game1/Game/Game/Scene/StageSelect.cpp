@@ -48,10 +48,13 @@ bool StageSelect::Start()
 
 void StageSelect::Update()
 {
+	//フェードが終わっていた時
 	if (!GetFade().IsExcute())
 	{
+		//フェードアウトだった場合
 		if (GetFade().GetCurrentState() == enFadeOut)
 		{
+
 			if (m_isBackScene)
 			{
 				TitleScene* title = New<TitleScene>(0);

@@ -38,6 +38,7 @@ bool TimeSprite::Start()
 	textures[0] = GetTextureResource().LoadTexture("Assets/sprite/colon.png");
 	textures[1] = GetTextureResource().LoadTexture("Assets/sprite/period.png");
 
+	//スプライトの位置を初期化
 	for (int i = 0; i < TIME_MAX; i++)
 	{
 		for (int j = 0; j < DIGIT_MAX; j++)
@@ -86,7 +87,7 @@ void TimeSprite::Update()
 		m_time -= minute * 60.0f;
 	}
 
-
+	//スプライトのタイムを更新
 	int time = (int)(m_time * 100.0f);
 	for (int i = DIGIT_MAX * TIME_MAX - 1; 0 <= i; i--)
 	{

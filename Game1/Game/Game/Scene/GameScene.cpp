@@ -69,17 +69,10 @@ bool GameScene::Start()
 		m_pMap->Init(m_stageNum);
 		m_pCamera->Init();
 		m_pBgm = New<SoundSource>(0);
-		//if (m_isTimeAttack)
-		{
-			m_pBgm->Init("Assets/sound/candybuke2.wav");
-			m_pBgm->SetVolume(0.7f);
-		}
-		//else
-		//{
-		//	m_pBgm->Init("Assets/sound/candybuke.wav");
-		//	m_pBgm->SetVolume(0.3f);
-		//}
+		m_pBgm->Init("Assets/sound/candybuke2.wav");
+		m_pBgm->SetVolume(0.7f);
 		m_pBgm->Play(true);
+		//タイムアタックモードならタイム表示のスプライトとゴーストを出す
 		if (m_isTimeAttack)
 		{
 			m_pGhost = New<GhostPlayer>(PLAYER_PRIORITY);
