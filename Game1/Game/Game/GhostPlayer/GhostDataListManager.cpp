@@ -75,16 +75,15 @@ void GhostDataListManager::GhostDataRead()
 	for (int i = 0;i < STAGE_NUM;i++)
 	{
 		char filePath[64];
-		sprintf(filePath, "Assets/SaveData/GhostData%d.txt", i);
-		file = fopen(filePath, "r");
+		sprintf(filePath, "Assets/SaveData/GhostData%d.bin", i);
+		file = fopen(filePath, "rb");
 		if (file == NULL)
 		{
 			continue;
 		}
 		const int rate = 1000000;
 		const int rateNum = 11;
-		//符号の分も含めて2多めに配列を作る
-		char data[rateNum + 2] = { 0 };
+		char data[rateNum + 1] = { 0 };
 		D3DXVECTOR3 position;
 		D3DXQUATERNION rotation;
 		float animationTime;
@@ -101,7 +100,7 @@ void GhostDataListManager::GhostDataRead()
 			for (int j = 0;j < dataNum;j++)
 			{
 				inNum = 0;
-				fgets(data, rateNum + 2, file);
+				fgets(data, rateNum + 1, file);
 				//ファイルが最後までいったら読み込みを終了する
 				if (j == 0)
 				{
@@ -130,10 +129,11 @@ void GhostDataListManager::GhostDataRead()
 				break;
 			}
 			inNum = 0;
-			fgets(data, animationEnumDigit + 2, file);
+			fgets(data, animationEnumDigit + 1, file);
 			for (int k = 0;k < animationEnumDigit;k++)
 			{
 				inNum *= 10;
+
 				inNum += data[k] - '0';
 			}
 			animationNum = inNum;
@@ -151,8 +151,8 @@ void GhostDataListManager::GhostDataSave()
 	for (int i = 0;i < STAGE_NUM;i++)
 	{
 		char filePath[64];
-		sprintf(filePath, "Assets/SaveData/GhostData%d.txt", i);
-		file = fopen(filePath, "w");
+		sprintf(filePath, "Assets/SaveData/GhostData%d.bin", i);
+		file = fopen(filePath, "wb");
 		std::list<GhostData>::iterator it = m_ghostData[i].ghostData.begin();
 		while (it != m_ghostData[i].ghostData.end())
 		{
@@ -164,14 +164,14 @@ void GhostDataListManager::GhostDataSave()
 			{
 				if (*data[j] < 0.0f)
 				{
-					fprintf(file, "%011d\n", (int)(*data[j] * rate));
+					fprintf(file, "%011d", (int)(*data[j] * rate));
 				}
 				else
 				{
-					fprintf(file, "+%010d\n", (int)(*data[j] * rate));
+					fprintf(file, "+%010d", (int)(*data[j] * rate));
 				}
 			}
-			fprintf(file, "%02d\n", it->currentAnimationNum);
+			fprintf(file, "%02d", it->currentAnimationNum);
 			it++;
 		}
 		fclose(file);
