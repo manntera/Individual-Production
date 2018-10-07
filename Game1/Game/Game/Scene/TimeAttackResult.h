@@ -52,7 +52,7 @@ private:
 	Sprite				m_colonSprite[RANK_NUM][TIME_MAX];			//区切りのスプライト
 	Sprite				m_numSprite[RANK_NUM][TIME_MAX][DIGIT_MAX];	//数字のスプライト
 	Texture*			m_numTexture[NUM_MAX];						//数字のテクスチャ
-	static int			m_times[STAGE_NUM][RANK_NUM + 1];			//タイムの記録
+	static int			m_times[STAGE_NUM][RANK_NUM];			//タイムの記録
 	float				m_alpha;									//今回のタイムのスプライトを点滅させるためのアルファ値
 	int					m_stageNum;									//クリアしたステージの番号
 };

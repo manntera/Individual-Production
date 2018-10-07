@@ -3,7 +3,7 @@
 #include "TitleScene.h"
 #include "Fade.h"
 
-int TimeAttackResult::m_times[STAGE_NUM][RANK_NUM + 1] = {};
+int TimeAttackResult::m_times[STAGE_NUM][RANK_NUM] = {};
 
 TimeAttackResult::TimeAttackResult() :
 	m_choiceNum(0),
@@ -30,21 +30,24 @@ void TimeAttackResult::Init(float time)
 
 
 	//今回のタイムをランキングの中でソート
-	m_times[m_stageNum][RANK_NUM] = (int)(time * 100.0f);
+	int times[RANK_NUM + 1];
+	times[RANK_NUM] = (int)(time * 100.0f);
+	memcpy(times, m_times[m_stageNum], sizeof(m_times[m_stageNum]));
 	int i;
 	for (i = RANK_NUM;0 < i;i--)
 	{
-		if (m_times[m_stageNum][i] < m_times[m_stageNum][i - 1])
+		if (times[i] < times[i - 1])
 		{
-			int swap = m_times[m_stageNum][i];
-			m_times[m_stageNum][i] = m_times[m_stageNum][i - 1];
-			m_times[m_stageNum][i - 1] = swap;
+			int swap = times[i];
+			times[i] = times[i - 1];
+			times[i - 1] = swap;
 		}
 		else
 		{
 			break;
 		}
 	}
+	memcpy(m_times[m_stageNum], times, sizeof(m_times[m_stageNum]));
 	m_rankNum = i;
 }
 
@@ -229,13 +232,13 @@ void TimeAttackResult::TimeDataRead()
 	//ランキングのタイムを初期化
 	FILE* file;
 	const int DATA_MAX = 5;
-	file = fopen("Assets/SaveData/Time.txt", "r");
-	char data[DATA_MAX + 2];
+	file = fopen("Assets/SaveData/Time.bin", "rb");
+	char data[DATA_MAX + 1];
 	for (int i = 0;i < STAGE_NUM;i++)
 	{
-		for (int j = 0;j < RANK_NUM + 1;j++)
+		for (int j = 0;j < RANK_NUM;j++)
 		{
-			fgets(data, DATA_MAX + 2, file);
+			fgets(data, DATA_MAX + 1, file);
 			int inNum = 0;
 			for (int k = 0;k < DATA_MAX;k++)
 			{
@@ -251,12 +254,12 @@ void TimeAttackResult::TimeDataRead()
 void TimeAttackResult::TimeDataSave()
 {
 	FILE* file;
-	file = fopen("Assets/SaveData/Time.txt", "w");
+	file = fopen("Assets/SaveData/Time.bin", "wb");
 	for (int i = 0;i < STAGE_NUM;i++)
 	{
-		for (int j = 0;j < RANK_NUM + 1;j++)
+		for (int j = 0;j < RANK_NUM;j++)
 		{
-			fprintf(file, "%05d\n", m_times[i][j]);
+			fprintf(file, "%05d", m_times[i][j]);
 		}
 	}
 	fclose(file);
