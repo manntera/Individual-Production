@@ -44,10 +44,16 @@ public:
 	オブジェクトを登録
 	object		登録するオブジェクト
 	priority	オブジェクトの優先度
+	ret			オブジェクトの登録に成功したか？
 	*/
-	void Add(GameObject* object, int priority)
+	bool Add(GameObject* object, int priority)
 	{
+		if (priority < 0 || PRIORITY_MAX <= priority)
+		{
+			return false;
+		}
 		m_objectVector[priority].push_back({ object, false });
+		return true;
 	}
 
 
